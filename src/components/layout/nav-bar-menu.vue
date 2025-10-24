@@ -1,20 +1,6 @@
 <script setup lang="ts">
-import type { MenuSelectionDetails } from '@ark-ui/vue'
-import {
-  MenuContent,
-  MenuIndicator,
-  MenuItem,
-  MenuPositioner,
-  MenuRoot,
-  MenuTrigger,
-} from '@ark-ui/vue'
+import { Dialog } from '@ark-ui/vue/dialog'
 import { navigation } from '~/constants'
-
-const router = useRouter()
-
-function onSelect(details: MenuSelectionDetails) {
-  router.push(details.value)
-}
 </script>
 
 <template>
@@ -22,8 +8,8 @@ function onSelect(details: MenuSelectionDetails) {
     relative ml-auto
     class="transform animate-duration-1300 animate-ease-$spring-easing animate-in slide-in-from-top-70px md:hidden"
   >
-    <MenuRoot @select="onSelect">
-      <MenuTrigger
+    <Dialog.Root>
+      <Dialog.Trigger
         bg="zinc-50/50 dark:zinc-950/50"
         px-4 py="2"
         flex="inline items-center gap-1"
@@ -31,32 +17,43 @@ function onSelect(details: MenuSelectionDetails) {
         class="shadow-black/10 shadow-md backdrop-blur-0.5rem transition-background-color"
       >
         前往
-        <MenuIndicator class="i-mingcute:arrows-right-line" />
-      </MenuTrigger>
-      <MenuPositioner
-        bg="zinc-50/50 dark:zinc-950/50"
-        border="~ border rounded-lg"
-        class="w-[calc(100%+6rem)] shadow-black/10 shadow-md backdrop-blur-0.5rem transition-background-color"
-      >
-        <MenuContent flex="~ col gap-1" p-2 outline-none>
-          <header p-2 text-sm op-60>
-            站内导航
-          </header>
-
-          <MenuItem
-            v-for="{ href, label } in navigation"
-            :key="href"
-            :value="href"
-            flex="~ items-center"
-            class="not-last:border-b not-last:border-b-border/30"
-            as-child relative h-8 px-2
+        <div class="i-mingcute:down-line size-4" />
+      </Dialog.Trigger>
+      <Teleport to="body">
+        <Dialog.Backdrop
+          class="fixed inset-0 z-99 bg-zinc-800/40 backdrop-blur dark:bg-black/40"
+        />
+        <Dialog.Positioner>
+          <Dialog.Content
+            class="fixed inset-x-4 top-8 z-100 origin-top rounded-3xl from-zinc-100/75 to-white bg-gradient-to-b p-8 ring-1 ring-zinc-900/5 dark:from-zinc-900/50 dark:to-zinc-900 dark:ring-zinc-800"
           >
-            <RouterLink :to="href">
-              {{ label }}
-            </RouterLink>
-          </MenuItem>
-        </MenuContent>
-      </MenuPositioner>
-    </MenuRoot>
+            <div flex="~ row-reverse items-center justify-between">
+              <Dialog.CloseTrigger>
+                <div class="i-mingcute:close-line size-4" />
+              </Dialog.CloseTrigger>
+              <h2 text="sm font-medium zinc-600 dark:zinc-400">
+                站内导航
+              </h2>
+            </div>
+            <nav mt-6>
+              <ul
+                text="base text-zinc-800 dark:text-zinc-300"
+                class="-my-2 divide-y divide-zinc-500/20 dark:divide-zinc-100/5"
+              >
+                <li v-for="{ href, label } in navigation" :key="href">
+                  <RouterLink v-slot="{ navigate, href }" :to="href" custom block py-2>
+                    <Dialog.CloseTrigger as-child @click="navigate">
+                      <a :href="href">
+                        {{ label }}
+                      </a>
+                    </Dialog.CloseTrigger>
+                  </RouterLink>
+                </li>
+              </ul>
+            </nav>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Teleport>
+    </Dialog.Root>
   </div>
 </template>
