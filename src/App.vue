@@ -1,12 +1,21 @@
 <script setup lang="ts">
+import { description, title } from '~/constants'
 import { PWAManifest } from './modules/pwa'
 
 useHead({
-  title: 'enpitsulin.dev',
+  title,
+  titleTemplate(t) {
+    if (t !== title)
+      return `${t} - ${title}`
+    return `${t} - ${description}`
+  },
+  htmlAttrs: {
+    lang: 'zh-cmn-Hans',
+  },
   meta: [
     {
       name: 'description',
-      content: 'enpitsulin.dev',
+      content: description,
     },
     {
       name: 'theme-color',

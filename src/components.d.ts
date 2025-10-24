@@ -12,6 +12,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    HomeIntro: typeof import('./components/home/intro.vue')['default']
+    HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+    IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
     LayoutFab: typeof import('./components/layout/fab.vue')['default']
     LayoutFooter: typeof import('./components/layout/footer.vue')['default']
     LayoutNavBar: typeof import('./components/layout/nav-bar.vue')['default']
@@ -21,11 +24,15 @@ declare module 'vue' {
     LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ViewTransition: typeof import('./components/view-transition.vue')['default']
   }
 }
 
 // For TSX support
 declare global {
+  const HomeIntro: typeof import('./components/home/intro.vue')['default']
+  const HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+  const IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
   const LayoutFab: typeof import('./components/layout/fab.vue')['default']
   const LayoutFooter: typeof import('./components/layout/footer.vue')['default']
   const LayoutNavBar: typeof import('./components/layout/nav-bar.vue')['default']
@@ -35,4 +42,5 @@ declare global {
   const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const ViewTransition: typeof import('./components/view-transition.vue')['default']
 }

@@ -50,13 +50,13 @@ body {
 }
 
 body,
-#__nuxt {
+#app {
   min-height: 100vh;
   scroll-behavior: smooth;
   position: relative;
 }
 
-#__nuxt {
+#app {
   --at-apply: flex flex-col;
 }
 
