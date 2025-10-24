@@ -66,10 +66,6 @@ catalogs:
     vite-plugin-vue-layouts:
       specifier: ^0.11.0
       version: 0.11.0
-  default:
-    feed:
-      specifier: ^5.1.0
-      version: 5.1.0
   dev:
     '@antfu/eslint-config':
       specifier: ^6.0.0
@@ -157,6 +153,9 @@ catalogs:
       specifier: ^7.3.0
       version: 7.3.0
   server:
+    feed:
+      specifier: ^5.1.0
+      version: 5.1.0
     h3:
       specifier: 2.0.1-rc.3
       version: 2.0.1-rc.3
@@ -193,7 +192,7 @@ importers:
         specifier: catalog:frontend
         version: 14.0.0(vue@3.5.22(typescript@5.9.3))
       feed:
-        specifier: 'catalog:'
+        specifier: catalog:server
         version: 5.1.0
       h3:
         specifier: catalog:server
