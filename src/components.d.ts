@@ -12,6 +12,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    LayoutFab: typeof import('./components/layout/fab.vue')['default']
+    LayoutFooter: typeof import('./components/layout/footer.vue')['default']
+    LayoutNavBar: typeof import('./components/layout/nav-bar.vue')['default']
+    LayoutNavBarLink: typeof import('./components/layout/nav-bar-link.vue')['default']
+    LayoutNavBarMenu: typeof import('./components/layout/nav-bar-menu.vue')['default']
+    LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
+    LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
@@ -19,6 +26,13 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const LayoutFab: typeof import('./components/layout/fab.vue')['default']
+  const LayoutFooter: typeof import('./components/layout/footer.vue')['default']
+  const LayoutNavBar: typeof import('./components/layout/nav-bar.vue')['default']
+  const LayoutNavBarLink: typeof import('./components/layout/nav-bar-link.vue')['default']
+  const LayoutNavBarMenu: typeof import('./components/layout/nav-bar-menu.vue')['default']
+  const LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
+  const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
 }

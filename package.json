@@ -15,6 +15,7 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@ark-ui/vue": "catalog:frontend",
     "@unhead/vue": "catalog:frontend",
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
@@ -33,11 +34,14 @@
     "@cloudflare/vite-plugin": "catalog:dev",
     "@hiogawa/vite-plugin-fullstack": "catalog:dev",
     "@iconify-json/carbon": "catalog:dev",
+    "@iconify-json/mingcute": "catalog:dev",
     "@intlify/unplugin-vue-i18n": "catalog:build",
     "@shikijs/markdown-it": "catalog:build",
     "@types/markdown-it-link-attributes": "catalog:types",
     "@types/nprogress": "catalog:types",
     "@unocss/eslint-config": "catalog:build",
+    "@unocss/preset-mini": "catalog:build",
+    "@unocss/preset-uno": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
     "@vitejs/plugin-vue-jsx": "catalog:build",
     "beasties": "catalog:build",

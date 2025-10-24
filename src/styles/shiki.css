@@ -1,0 +1,25 @@
+.shiki code .highlight {
+  --at-apply: border-l-3 border-x-accent/40;
+  background: hsl(var(--theme-accent) / 0.1) !important;
+  transition: background-color 0.5s;
+  margin: 0 -15px;
+  padding: 0 12px;
+  width: calc(100% + 30px);
+  display: block;
+}
+
+.shiki code .diff {
+  transition: background-color 0.5s;
+  margin: 0 -15px;
+  padding: 0 12px;
+  width: calc(100% + 30px);
+  display: block;
+}
+
+.shiki code .diff.remove {
+  background: rgb(248 113 113 / 0.1) !important;
+}
+
+.shiki code .diff.add {
+  background: rgb(74 222 128 / 0.1) !important;
+}

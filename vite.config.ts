@@ -94,11 +94,13 @@ export default defineConfig({
 
     // https://github.com/antfu/unplugin-vue-components
     Components({
+      directoryAsNamespace: true,
       // allow auto load markdown components under `./src/components/`
-      extensions: ['vue', 'md'],
+      extensions: ['vue', 'md', 'tsx'],
       // allow auto import and register components used in markdown
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.tsx$/],
       dts: 'src/components.d.ts',
+      dtsTsx: true,
     }),
 
     // https://github.com/antfu/unocss
@@ -139,8 +141,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'favicon-dark.svg', 'safari-pinned-tab.svg'],
 
       manifest: {
-        name: 'Vitesse',
-        short_name: 'Vitesse',
+        name: 'enpitsulin.dev',
+        short_name: 'enpitsulin',
         theme_color: '#ffffff',
         icons: [
           {
