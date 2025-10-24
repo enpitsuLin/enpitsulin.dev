@@ -1,0 +1,23 @@
+{
+  "name": "@enpitsulin-dev/workers-server",
+  "private": true,
+  "packageManager": "pnpm@10.21.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wrangler dev --port 8787",
+    "build": "wrangler build",
+    "deploy": "wrangler deploy",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@enpitsulin-dev/service": "workspace:*",
+    "hono": "catalog:server",
+    "hono-openapi": "catalog:server"
+  },
+  "devDependencies": {
+    "typescript": "catalog:dev",
+    "wrangler": "catalog:dev"
+  }
+}
