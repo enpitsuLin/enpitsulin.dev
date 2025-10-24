@@ -12,7 +12,6 @@
     },
     "resolveJsonModule": true,
     "types": [
-      "vitest",
       "vite/client",
       "vite-plugin-vue-layouts/client",
       "vite-plugin-pwa/client",
