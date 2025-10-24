@@ -21,23 +21,24 @@ import { navigation } from '~/constants'
       </Dialog.Trigger>
       <Teleport to="body">
         <Dialog.Backdrop
-          class="fixed inset-0 z-99 bg-zinc-800/40 backdrop-blur dark:bg-black/40"
+          bg="zinc-800/40 dark:bg-black/40"
+          class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
         />
         <Dialog.Positioner>
           <Dialog.Content
-            class="fixed inset-x-4 top-8 z-100 origin-top rounded-3xl from-zinc-100/75 to-white bg-gradient-to-b p-8 ring-1 ring-zinc-900/5 dark:from-zinc-900/50 dark:to-zinc-900 dark:ring-zinc-800"
+            class="fixed inset-x-4 top-8 z-100 origin-top rounded-3xl from-zinc-100/75 to-white bg-gradient-to-b p-8 ring-1 ring-zinc-900/5 dark:from-zinc-900/50 dark:to-zinc-900 dark:ring-zinc-800 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
           >
             <div flex="~ row-reverse items-center justify-between">
               <Dialog.CloseTrigger>
                 <div class="i-mingcute:close-line size-4" />
               </Dialog.CloseTrigger>
-              <h2 text="sm font-medium zinc-600 dark:zinc-400">
+              <h2 un-text="sm font-medium zinc-600 dark:zinc-400">
                 站内导航
               </h2>
             </div>
             <nav mt-6>
               <ul
-                text="base text-zinc-800 dark:text-zinc-300"
+                un-text="base text-zinc-800 dark:text-zinc-300"
                 class="-my-2 divide-y divide-zinc-500/20 dark:divide-zinc-100/5"
               >
                 <li v-for="{ href, label } in navigation" :key="href">

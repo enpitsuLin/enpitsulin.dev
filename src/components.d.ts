@@ -24,7 +24,6 @@ declare module 'vue' {
     LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    ViewTransition: typeof import('./components/view-transition.vue')['default']
   }
 }
 
@@ -42,5 +41,4 @@ declare global {
   const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
-  const ViewTransition: typeof import('./components/view-transition.vue')['default']
 }

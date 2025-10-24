@@ -13,13 +13,14 @@ const route = useRoute()
     px-8 pt-5
   >
     <div pointer-events-none fixed left-0 right-0 top-0 h-25 select-none class="navbar-blur" />
+
     <div
       relative z-2 h-full w-fit
       class="transform animate-duration-1300 animate-ease-$spring-easing animate-in slide-in-from-top-70px"
     >
       <div
         v-if="route.path !== '/'"
-        position="sticky top-4 md:relative md:top-1/2 md:left--12"
+        position="sticky top-4 md:absolute md:top-1/2 md:left--12" md:translate-y="-1/2"
       >
         <motion.img
           layout-id="avatar"
