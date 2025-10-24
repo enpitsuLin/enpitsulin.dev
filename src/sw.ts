@@ -23,5 +23,8 @@ cleanupOutdatedCaches()
 registerRoute(
   new NavigationRoute(
     createHandlerBoundToURL('/'),
+    {
+      denylist: [/^\/api\//, /^\/feed\.xml$/],
+    },
   ),
 )

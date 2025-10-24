@@ -1,5 +1,6 @@
 import type { HeadTag } from '@unhead/vue'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
+import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
 import { serializeState } from '~/lib/state'
@@ -107,10 +108,7 @@ const Template = defineComponent({
   },
 })
 
-export async function render(req: Request, env: Env, ctx: ExecutionContext) {
-  const url = new URL(req.url)
-  const path = url.pathname
-
+export async function render(path: string, env: Cloudflare.Env, context: ExecutionContext) {
   const { app, head, initialState, hooks } = await createApp(path)
 
   const renderContent = {
@@ -118,7 +116,7 @@ export async function render(req: Request, env: Env, ctx: ExecutionContext) {
     modules: new Set<string>(),
     cloudflare: {
       env,
-      ctx,
+      ctx: context,
     },
   }
 
@@ -141,3 +139,10 @@ export async function render(req: Request, env: Env, ctx: ExecutionContext) {
     },
   })
 }
+
+export default defineEventHandler(async (event) => {
+  const url = new URL(event.req.url)
+  const path = url.pathname
+
+  return render(path, event.runtime!.cloudflare!.env, event.runtime!.cloudflare!.context)
+})

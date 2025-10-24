@@ -1,7 +1,6 @@
 packages: []
 
 catalogs:
-
   build:
     '@intlify/unplugin-vue-i18n': ^11.0.1
     '@shikijs/markdown-it': ^3.13.0
@@ -26,7 +25,6 @@ catalogs:
     vite-plugin-pwa: ^1.1.0
     vite-plugin-vue-devtools: ^8.0.3
     vite-plugin-vue-layouts: ^0.11.0
-
   dev:
     '@antfu/eslint-config': ^6.0.0
     '@cloudflare/vite-plugin': ^1.13.15
@@ -42,7 +40,6 @@ catalogs:
     typescript: ^5.9.3
     vue-tsc: ^3.1.1
     wrangler: ^4.45.0
-
   frontend:
     '@ark-ui/vue': ^5.26.2
     '@unhead/vue': ^2.0.19
@@ -58,6 +55,10 @@ catalogs:
     workbox-precaching: ^7.3.0
     workbox-routing: ^7.3.0
     workbox-window: ^7.3.0
+  server:
+    feed: ^5.1.0
+    h3: 2.0.1-rc.3
+    srvx: ^0.9.1
 
   types:
     '@types/markdown-it-link-attributes': ^3.0.5

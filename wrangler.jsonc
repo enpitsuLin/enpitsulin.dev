@@ -5,7 +5,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "enpitsulin-dev",
-  "main": "server.ts",
+  "main": "server/index.ts",
   "compatibility_date": "2025-10-01",
   "observability": {
     "enabled": true
