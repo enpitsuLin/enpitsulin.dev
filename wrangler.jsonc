@@ -1,0 +1,13 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "enpitsulin-dev",
+  "main": "server.ts",
+  "compatibility_date": "2025-10-01",
+  "observability": {
+    "enabled": true
+  }
+}

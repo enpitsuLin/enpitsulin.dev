@@ -1,0 +1,10 @@
+.DS_Store
+
+*.local
+dist
+node_modules
+.idea/
+*.log
+public/assets/fonts
+
+.wrangler

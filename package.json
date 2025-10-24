@@ -1,0 +1,79 @@
+{
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.19.0",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite --port 3333 --open",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "vitest",
+    "typecheck": "vue-tsc --noEmit",
+    "up": "taze major -I",
+    "postinstall": "npx simple-git-hooks",
+    "sizecheck": "npx vite-bundle-visualizer",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@unhead/vue": "catalog:frontend",
+    "@unocss/reset": "catalog:frontend",
+    "@vueuse/core": "catalog:frontend",
+    "hookable": "catalog:frontend",
+    "nprogress": "catalog:frontend",
+    "pinia": "catalog:frontend",
+    "vue": "catalog:frontend",
+    "vue-i18n": "catalog:frontend",
+    "vue-router": "catalog:frontend",
+    "workbox-precaching": "catalog:frontend",
+    "workbox-routing": "catalog:frontend",
+    "workbox-window": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "catalog:dev",
+    "@cloudflare/vite-plugin": "catalog:dev",
+    "@hiogawa/vite-plugin-fullstack": "catalog:dev",
+    "@iconify-json/carbon": "catalog:dev",
+    "@intlify/unplugin-vue-i18n": "catalog:build",
+    "@shikijs/markdown-it": "catalog:build",
+    "@types/markdown-it-link-attributes": "catalog:types",
+    "@types/nprogress": "catalog:types",
+    "@unocss/eslint-config": "catalog:build",
+    "@vitejs/plugin-vue": "catalog:build",
+    "@vitejs/plugin-vue-jsx": "catalog:build",
+    "beasties": "catalog:build",
+    "eslint": "catalog:dev",
+    "eslint-plugin-format": "catalog:dev",
+    "https-localhost": "catalog:dev",
+    "lint-staged": "catalog:dev",
+    "markdown-it-link-attributes": "catalog:build",
+    "rollup": "catalog:build",
+    "shiki": "catalog:build",
+    "simple-git-hooks": "catalog:dev",
+    "taze": "catalog:dev",
+    "typescript": "catalog:dev",
+    "unocss": "catalog:build",
+    "unplugin-auto-import": "catalog:build",
+    "unplugin-vue-components": "catalog:build",
+    "unplugin-vue-markdown": "catalog:build",
+    "unplugin-vue-router": "catalog:build",
+    "vite": "catalog:build",
+    "vite-bundle-visualizer": "catalog:build",
+    "vite-plugin-inspect": "catalog:build",
+    "vite-plugin-pwa": "catalog:build",
+    "vite-plugin-vue-devtools": "catalog:build",
+    "vite-plugin-vue-layouts": "catalog:build",
+    "vue-tsc": "catalog:dev",
+    "wrangler": "catalog:dev"
+  },
+  "resolutions": {
+    "unplugin": "catalog:build",
+    "vite": "catalog:build",
+    "vite-plugin-inspect": "catalog:build"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
+  }
+}
