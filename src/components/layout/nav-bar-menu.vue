@@ -48,10 +48,12 @@ function onSelect(details: MenuSelectionDetails) {
             :key="href"
             :value="href"
             flex="~ items-center"
-            relative h-8 px-2
             class="not-last:border-b not-last:border-b-border/30"
+            as-child relative h-8 px-2
           >
-            {{ label }}
+            <RouterLink :to="href">
+              {{ label }}
+            </RouterLink>
           </MenuItem>
         </MenuContent>
       </MenuPositioner>

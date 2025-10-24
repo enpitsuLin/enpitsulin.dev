@@ -20,6 +20,7 @@
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "hookable": "catalog:frontend",
+    "motion-v": "catalog:frontend",
     "nprogress": "catalog:frontend",
     "pinia": "catalog:frontend",
     "vue": "catalog:frontend",

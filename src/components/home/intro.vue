@@ -77,12 +77,4 @@ const links = [
     transform: rotate(0deg);
   }
 }
-
-::view-transition-group(avatar) {
-  animation-duration: 300ms;
-}
-
-::view-transition-group(avatar-wave-hand) {
-  animation-duration: 1ms;
-}
 </style>

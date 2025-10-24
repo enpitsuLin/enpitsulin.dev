@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ClientOnly } from '@ark-ui/vue'
+import { motion } from 'motion-v'
 import { navigation } from '~/constants'
 
 const route = useRoute()
@@ -18,15 +18,16 @@ const route = useRoute()
     >
       <div
         v-if="route.path !== '/'"
-        absolute top="1/2" class="left--12 translate-y--1/2 view-transition-avatar"
+        absolute top="1/2" class="left--12 translate-y--1/2"
       >
-        <img
+        <motion.img
+          layout-id="avatar"
           alt="avatar"
           width="250" height="250"
           decoding="async"
           class="size-9 border-2 border-white rounded-full object-cover shadow-xl"
           src="https://avatars.githubusercontent.com/enpitsuLin"
-        >
+        />
       </div>
       <nav
         bg="zinc-50/50 dark:zinc-950/50"
@@ -51,22 +52,23 @@ const route = useRoute()
       </nav>
     </div>
 
-    <RouterLink
+    <!-- <RouterLink
       v-if="route.path !== '/'"
       to="/"
-      relative class="view-transition-avatar md:hidden"
+      relative class="md:hidden"
     >
-      <img
+      <motion.img
+        layout-id="avatar"
         alt="avatar"
         width="250" height="250"
         decoding="async"
         class="size-9 border-2 border-white rounded-full object-cover shadow-xl"
         src="https://avatars.githubusercontent.com/enpitsuLin"
-      >
+      />
     </RouterLink>
     <ClientOnly>
       <LayoutNavBarMenu />
-    </ClientOnly>
+    </ClientOnly> -->
   </header>
 </template>
 
