@@ -1,11 +1,7 @@
-import { drizzle } from 'drizzle-orm/sqlite-proxy'
+import { env } from 'cloudflare:workers'
+import { drizzle } from 'drizzle-orm/d1'
 import * as schema from '../database/schema'
 
 export function useDrizzle() {
-  return drizzle(
-    async () => {
-      return { rows: [] }
-    },
-    { schema },
-  )
+  return drizzle(env.DB, { schema })
 }

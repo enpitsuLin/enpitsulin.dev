@@ -61,8 +61,24 @@ for (const [path, handler] of Object.entries(routeFiles)) {
   registerRoute(path, handler)
 }
 
+app.use((event) => {
+  if (!event.runtime?.cloudflare) {
+    throw new Error('Cloudflare runtime not found')
+  }
+  event.context.cloudflare = event.runtime!.cloudflare!
+})
+
 app.get('/*', entryServerHandler)
 
 export default serve({
   fetch: app.fetch,
 })
+
+declare module 'h3' {
+  interface H3EventContext {
+    cloudflare: {
+      env: Cloudflare.Env
+      context: ExecutionContext
+    }
+  }
+}
