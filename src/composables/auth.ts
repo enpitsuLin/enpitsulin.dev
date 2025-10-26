@@ -1,15 +1,13 @@
 // app/composables/useAuth.ts
 import type { RouteLocationRaw } from 'vue-router'
-import { client } from '~~/lib/auth-client'
+import { client, useSession } from '~~/lib/auth-client'
 
 export interface RuntimeAuthConfig {
   redirectUserTo: RouteLocationRaw | string
   redirectGuestTo: RouteLocationRaw | string
 }
-const { useSession } = client
-export function useAuth() {
-  const router = useRouter()
 
+export function useAuth() {
   const options: RuntimeAuthConfig = {
     redirectUserTo: '/',
     redirectGuestTo: '/',
@@ -36,13 +34,7 @@ export function useAuth() {
     loggedIn: computed(() => !!session.value.data?.session),
     signIn: client.signIn,
     signUp: client.signUp,
-    async signOut({ redirectTo }: { redirectTo?: RouteLocationRaw } = {}) {
-      const res = await client.signOut()
-      if (redirectTo) {
-        await router.push(redirectTo)
-      }
-      return res
-    },
+    signOut: client.signOut,
     options,
     fetchSession,
     client,

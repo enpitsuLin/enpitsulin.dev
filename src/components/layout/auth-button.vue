@@ -6,9 +6,14 @@ import { useAuth } from '~/composables/auth'
 const { loggedIn, user, signOut } = useAuth()
 
 const authModalRef = useTemplateRef('authModalRef')
+const manageModalRef = useTemplateRef('manageModalRef')
 
 function openAuthModal() {
   authModalRef.value?.open()
+}
+
+function openAccountModal() {
+  manageModalRef.value?.open()
 }
 
 async function handleSignOut() {
@@ -19,6 +24,9 @@ async function handleSignOut() {
 <template>
   <!-- Auth Modal -->
   <AuthModal ref="authModalRef" />
+
+  <!-- Account Management Modal -->
+  <AuthManageModal ref="manageModalRef" />
 
   <!-- 未登录状态：显示登录按钮 -->
   <button
@@ -82,6 +90,17 @@ async function handleSignOut() {
           </div>
         </div>
         <Menu.Separator my-1 border="zinc-400 dark:zinc-600" />
+        <Menu.Item
+          value="account"
+          p="x2 y1.5"
+          flex="~ items-center gap-2"
+          bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+          cursor-pointer
+          rounded text-xs @click="openAccountModal"
+        >
+          <div class="i-mingcute:settings-3-line size-4" />
+          <span>账户管理</span>
+        </Menu.Item>
         <Menu.Item
           value="signout"
           p="x2 y1.5"
