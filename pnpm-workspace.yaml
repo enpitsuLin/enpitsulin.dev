@@ -31,17 +31,19 @@ catalogs:
     '@hiogawa/vite-plugin-fullstack': ^0.0.5
     '@iconify-json/carbon': ^1.2.14
     '@iconify-json/mingcute': ^1.2.5
+    '@libsql/client': ^0.15.15
     drizzle-kit: ^0.31.5
     eslint: ^9.38.0
     eslint-plugin-format: ^1.0.2
     https-localhost: ^4.7.1
     lint-staged: ^16.2.6
+    prettier: ^3.6.2
     simple-git-hooks: ^2.13.1
     taze: ^19.8.1
+    tsx: ^4.20.6
     typescript: ^5.9.3
     vue-tsc: ^3.1.1
     wrangler: ^4.45.0
-
   frontend:
     '@ark-ui/vue': ^5.26.2
     '@unhead/vue': ^2.0.19
@@ -63,7 +65,6 @@ catalogs:
     h3: 2.0.1-rc.3
     jstoxml: ^0.0.0
     srvx: ^0.9.1
-
   types:
     '@types/markdown-it-link-attributes': ^3.0.5
     '@types/nprogress': ^0.2.3

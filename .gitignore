@@ -8,3 +8,7 @@ node_modules
 public/assets/fonts
 
 .wrangler
+
+.env
+
+*.local

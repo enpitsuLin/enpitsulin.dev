@@ -15,10 +15,12 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply db-enpitsulin-dev --local",
     "db:migrate:remote": "wrangler d1 migrations apply db-enpitsulin-dev",
-    "generate-auth-schema": " npx @better-auth/cli generate --output server/database/auth-schema.ts"
+    "db:studio": "DATABASE_URL=\"$(ls -t ./.wrangler/state/v3/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio",
+    "generate-auth-schema": "tsx scripts/generate-auth-schema.ts"
   },
   "dependencies": {
     "@ark-ui/vue": "catalog:frontend",
+    "@libsql/client": "catalog:dev",
     "@unhead/vue": "catalog:frontend",
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
@@ -60,10 +62,12 @@
     "https-localhost": "catalog:dev",
     "lint-staged": "catalog:dev",
     "markdown-it-link-attributes": "catalog:build",
+    "prettier": "catalog:dev",
     "rollup": "catalog:build",
     "shiki": "catalog:build",
     "simple-git-hooks": "catalog:dev",
     "taze": "catalog:dev",
+    "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "unocss": "catalog:build",
     "unplugin-auto-import": "catalog:build",

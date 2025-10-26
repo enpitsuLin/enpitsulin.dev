@@ -1,6 +1,5 @@
 import type { EventHandlerWithFetch } from 'h3'
 import { H3 } from 'h3'
-import { serve } from 'srvx/cloudflare'
 import entryServerHandler from '~/entry-server'
 
 // Create an app instance
@@ -70,9 +69,32 @@ app.use((event) => {
 
 app.get('/*', entryServerHandler)
 
-export default serve({
-  fetch: app.fetch,
-})
+export default {
+  async fetch(request, env, context) {
+    Object.defineProperties(request, {
+      waitUntil: { value: context.waitUntil.bind(context) },
+      runtime: {
+        enumerable: true,
+        value: {
+          name: 'cloudflare',
+          cloudflare: {
+            env,
+            context,
+          },
+        },
+      },
+      ip: {
+        enumerable: true,
+        get() {
+          return request.headers.get('cf-connecting-ip')
+        },
+      },
+    })
+
+    return app.fetch(request)
+  },
+
+} satisfies ExportedHandler<Cloudflare.Env, ExecutionContext>
 
 declare module 'h3' {
   interface H3EventContext {
