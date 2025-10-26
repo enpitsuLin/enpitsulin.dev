@@ -7,8 +7,8 @@ import { createSSRApp } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 
 import { routes } from 'vue-router/auto-routes'
-import { documentReady } from '~/lib/document-ready'
-import { deserializeState } from '~/lib/state'
+import { documentReady } from '~~/lib/document-ready'
+import { deserializeState } from '~~/lib/state'
 import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'

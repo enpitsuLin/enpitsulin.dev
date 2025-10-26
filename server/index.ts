@@ -6,7 +6,7 @@ import entryServerHandler from '~/entry-server'
 // Create an app instance
 const app = new H3()
 
-const routeFiles = import.meta.glob<EventHandlerWithFetch>('./routes/*.ts', { eager: true, import: 'default' })
+const routeFiles = import.meta.glob<EventHandlerWithFetch>('./routes/**/*.ts', { eager: true, import: 'default' })
 
 function registerRoute(path: string, handler: EventHandlerWithFetch) {
   const pathMatch = path.match(/^\.\/routes\/(?<routePath>.+?)(?:\.(?<method>get|post|put|delete|patch|head|options))?\.ts$/)
@@ -14,7 +14,14 @@ function registerRoute(path: string, handler: EventHandlerWithFetch) {
     return
 
   let routePath = pathMatch.groups?.routePath || ''
-  const method = pathMatch.groups?.method || 'get'
+  const method = pathMatch.groups?.method || 'all'
+
+  // Convert dynamic route patterns to H3 format
+  // [...param] -> *param
+  // [param] -> :param
+  routePath = routePath
+    .replace(/\[\.\.\.(\w+)\]/g, '**') // [...param] -> **
+    .replace(/\[(\w+)\]/g, ':$1') // [param] -> :param
 
   if (!routePath.startsWith('/')) {
     routePath = `/${routePath}`

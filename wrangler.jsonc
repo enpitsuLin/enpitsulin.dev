@@ -9,5 +9,13 @@
   "compatibility_date": "2025-10-01",
   "observability": {
     "enabled": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "db_enpitsulin_dev",
+      "database_name": "db-enpitsulin-dev",
+      "database_id": "aa4d9bc0-c6a9-425d-9af3-01e103a65d35",
+      "migrations_dir": "server/database/migrations"
+    }
+  ]
 }

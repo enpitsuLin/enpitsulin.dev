@@ -3,7 +3,7 @@ import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
 import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
-import { serializeState } from '~/lib/state'
+import { serializeState } from '~~/lib/state'
 import clientEntryAssets from './entry-client?assets=client'
 import { createApp } from './main'
 

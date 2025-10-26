@@ -11,13 +11,19 @@
     "up": "taze major -I",
     "postinstall": "npx simple-git-hooks",
     "sizecheck": "npx vite-bundle-visualizer",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply db-enpitsulin-dev --local",
+    "db:migrate:remote": "wrangler d1 migrations apply db-enpitsulin-dev",
+    "generate-auth-schema": " npx @better-auth/cli generate --output server/database/auth-schema.ts"
   },
   "dependencies": {
     "@ark-ui/vue": "catalog:frontend",
     "@unhead/vue": "catalog:frontend",
     "@unocss/reset": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
+    "better-auth": "catalog:server",
+    "drizzle-orm": "catalog:server",
     "h3": "catalog:server",
     "hookable": "catalog:frontend",
     "jstoxml": "catalog:server",
@@ -48,6 +54,7 @@
     "@vitejs/plugin-vue": "catalog:build",
     "@vitejs/plugin-vue-jsx": "catalog:build",
     "beasties": "catalog:build",
+    "drizzle-kit": "catalog:dev",
     "eslint": "catalog:dev",
     "eslint-plugin-format": "catalog:dev",
     "https-localhost": "catalog:dev",
