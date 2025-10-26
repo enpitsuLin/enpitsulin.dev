@@ -23,6 +23,7 @@
     "@libsql/client": "catalog:dev",
     "@unhead/vue": "catalog:frontend",
     "@unocss/reset": "catalog:frontend",
+    "@vee-validate/zod": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "better-auth": "catalog:server",
     "drizzle-orm": "catalog:server",
@@ -33,12 +34,14 @@
     "nprogress": "catalog:frontend",
     "pinia": "catalog:frontend",
     "srvx": "catalog:server",
+    "vee-validate": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-i18n": "catalog:frontend",
     "vue-router": "catalog:frontend",
     "workbox-precaching": "catalog:frontend",
     "workbox-routing": "catalog:frontend",
-    "workbox-window": "catalog:frontend"
+    "workbox-window": "catalog:frontend",
+    "zod": "catalog:frontend"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
