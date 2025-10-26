@@ -1,13 +1,15 @@
 <script setup lang="tsx">
-import { Collapsible } from '@ark-ui/vue/collapsible'
-
+import { Avatar } from '@ark-ui/vue'
 import { Dialog } from '@ark-ui/vue/dialog'
 import { useQuery } from '@pinia/colada'
 import { useAuth } from '~/composables/auth'
-import SessionInfo from './/session-info.vue'
+import AccountInfo from './account-info.vue'
+import AccountSkeleton from './account-skeleton.vue'
+import Section from './section.vue'
+import SessionInfo from './session-info.vue'
 import SessionSkeleton from './session-skeleton.vue'
 
-const { client, loggedIn, session } = useAuth()
+const { client, loggedIn, session, user } = useAuth()
 
 const isOpen = ref(false)
 
@@ -24,7 +26,7 @@ const { data: sessions, isLoading: isLoadingDevices } = useQuery({
   enabled: () => loggedIn.value,
 })
 
-const { data: accounts, isLoading: _isLoadingAccounts } = useQuery({
+const { data: accounts, isLoading: isLoadingAccounts } = useQuery({
   key: () => ['accounts', loggedIn.value],
   query: async () => client
     .listAccounts({ fetchOptions: { throw: true } })
@@ -109,51 +111,50 @@ defineExpose({
                     管理您的账户信息
                   </p>
                 </div>
-                <section space-y-4>
-                  <h4 op-70>
-                    已连接的账户
-                  </h4>
-
-                  <div flex="~ col items-center gap-1">
-                    <Collapsible.Root
+                <Section title="个人资料">
+                  <button
+                    type="button"
+                    class="group"
+                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                    flex="inline items-center justify-between gap-2"
+                    p="x4 y3" w-full rounded-lg
+                  >
+                    <Avatar.Root size-15 of-hidden rounded-full>
+                      <Avatar.Fallback
+                        size-full border="~ rounded-full" text-3xl
+                        flex="inline items-center justify-center"
+                      >
+                        {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
+                      </Avatar.Fallback>
+                      <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
+                    </Avatar.Root>
+                    <div flex-1 text-left>
+                      {{ user?.name }}
+                    </div>
+                    <div
+                      i-mingcute:arrow-right-line
+                      invisible size-4 transition-transform
+                      duration-200 group-hover:visible
+                      translate-x="-1"
+                      group-hover:translate-x-0
+                    />
+                  </button>
+                </Section>
+                <Section title="已连接的账户">
+                  <template v-if="isLoadingAccounts">
+                    <AccountSkeleton
+                      v-for="i in 1"
+                      :key="`skeleton-${i}`"
+                    />
+                  </template>
+                  <template v-else>
+                    <AccountInfo
                       v-for="account in accounts"
-                      :key="account.id"
-                      w-full
-                    >
-                      <Collapsible.Trigger
-                        bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                        flex="inline items-center justify-between gap-2"
-                        p="x4 y3" w-full rounded-lg
-                      >
-                        <div class="i-mingcute:github-line size-4" />
-                        <div flex-1 text-left text-xs>
-                          <span capitalize> {{ account.providerId }}</span>
-                        </div>
-                        <Collapsible.Indicator
-                          class="transition-transform duration-200 data-[state=open]:rotate-180"
-                        >
-                          <div class="i-mingcute:down-line size-4" />
-                        </Collapsible.Indicator>
-                      </Collapsible.Trigger>
-                      <Collapsible.Content
-                        of-hidden p-4 space-y-2
-                        class="data-[state=closed]:animate-[accordion-up_200ms] data-[state=open]:animate-[accordion-down_250ms]"
-                      >
-                        <div flex="~ col items-start gap-1">
-                          <div text-sm>
-                            移除
-                          </div>
-                          <p text-xs op-70>
-                            从您的账户中移除此已连接的账户
-                          </p>
-                        </div>
-                        <button text-xs class="hover:underline">
-                          移除
-                        </button>
-                      </Collapsible.Content>
-                    </Collapsible.Root>
-                  </div>
-                </section>
+                      :key="account.accountId"
+                      :account="account"
+                    />
+                  </template>
+                </Section>
               </div>
 
               <!-- 安全部分 -->
@@ -166,29 +167,26 @@ defineExpose({
                     管理您的安全设置
                   </p>
                 </div>
-                <section space-y-4>
-                  <h4 op-70>
-                    活动设备
-                  </h4>
-
-                  <div flex="~ col items-center gap-1">
-                    <!-- 加载状态时显示 skeleton -->
-                    <template v-if="isLoadingDevices">
-                      <SessionSkeleton
-                        v-for="i in 1"
-                        :key="`skeleton-${i}`"
-                      />
-                    </template>
-                    <!-- 加载完成后显示实际数据 -->
-                    <template v-else>
-                      <SessionInfo
-                        v-for="s in sessions"
-                        :key="s.id"
-                        :session="s"
-                      />
-                    </template>
-                  </div>
-                </section>
+                <Section title="密码">
+                  TODO
+                </Section>
+                <Section title="活动设备">
+                  <!-- 加载状态时显示 skeleton -->
+                  <template v-if="isLoadingDevices">
+                    <SessionSkeleton
+                      v-for="i in 1"
+                      :key="`skeleton-${i}`"
+                    />
+                  </template>
+                  <!-- 加载完成后显示实际数据 -->
+                  <template v-else>
+                    <SessionInfo
+                      v-for="s in sessions"
+                      :key="s.id"
+                      :session="s"
+                    />
+                  </template>
+                </Section>
               </div>
             </div>
           </div>

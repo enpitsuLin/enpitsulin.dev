@@ -1,7 +1,5 @@
 packages: []
 
-catalog:
-  '@iconify-json/logos': ^1.2.9
 catalogs:
   build:
     '@intlify/unplugin-vue-i18n': ^11.0.1
@@ -32,6 +30,7 @@ catalogs:
     '@cloudflare/vite-plugin': ^1.13.15
     '@hiogawa/vite-plugin-fullstack': ^0.0.5
     '@iconify-json/carbon': ^1.2.14
+    '@iconify-json/logos': ^1.2.9,
     '@iconify-json/mingcute': ^1.2.5
     '@libsql/client': ^0.15.15
     drizzle-kit: ^0.31.5

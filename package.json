@@ -51,7 +51,7 @@
     "@cloudflare/vite-plugin": "catalog:dev",
     "@hiogawa/vite-plugin-fullstack": "catalog:dev",
     "@iconify-json/carbon": "catalog:dev",
-    "@iconify-json/logos": "catalog:",
+    "@iconify-json/logos": "catalog:dev",
     "@iconify-json/mingcute": "catalog:dev",
     "@intlify/unplugin-vue-i18n": "catalog:build",
     "@shikijs/markdown-it": "catalog:build",

@@ -5,7 +5,7 @@ import { useMutation, useQueryCache } from '@pinia/colada'
 import AccountIcon from './account-icon.vue'
 
 const props = defineProps<{
-  account: Account
+  account: Omit<Account, 'userId'>
 }>()
 
 const { client } = useAuth()
@@ -23,7 +23,7 @@ const formatAccount = computed(() => {
 const queryCache = useQueryCache()
 
 const { mutate: unlinkAccount, isLoading } = useMutation({
-  mutation(vars: Account) {
+  mutation(vars: Pick<Account, 'providerId' | 'accountId'>) {
     return client.unlinkAccount({
       providerId: vars.providerId,
       accountId: vars.accountId,
@@ -56,9 +56,11 @@ function getProviderDisplayName(providerId: string): string {
       flex="inline items-center justify-between gap-2"
       p="x4 y3" w-full rounded-lg
     >
-      <div>
-        <AccountIcon :provider-id="account.providerId" size-20 />
-      </div>
+      <AccountIcon
+        size-8
+        text="black dark:white"
+        :provider-id="account.providerId"
+      />
       <div flex="~ col items-start gap-1 1" text-left text-xs>
         <div flex="~ items-center gap-2">
           <span>{{ formatAccount.providerName }}</span>
