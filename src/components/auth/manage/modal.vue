@@ -55,6 +55,26 @@ const { mutate: changeEmail, isLoading: isLoadingChangeEmail } = useMutation({
   },
 })
 
+const { data: passkeys, isPending: isPasskeysPending } = useQuery({
+  key: () => ['passkeys', loggedIn.value],
+  query: async () => client.passkey.listUserPasskeys({
+    fetchOptions: { throw: true },
+  }),
+  enabled: () => loggedIn.value,
+})
+
+const { mutate: addPasskey, isLoading: isLoadingAddPasskey } = useMutation({
+  mutation(name: string) {
+    return client.passkey.addPasskey({
+      name,
+      authenticatorAttachment: 'cross-platform',
+    })
+  },
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['passkeys'] })
+  },
+})
+
 function openModal() {
   isOpen.value = true
 }
@@ -238,6 +258,47 @@ defineExpose({
                 </div>
                 <Section title="密码">
                   TODO
+                </Section>
+                <Section title="通行密钥">
+                  <template v-if="isPasskeysPending">
+                    Loading...
+                  </template>
+                  <template v-else>
+                    <div
+                      v-for="passkey in passkeys"
+                      :key="passkey.id"
+                      class="group"
+                      bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                      flex="inline items-center justify-between gap-2"
+                      p="x3 y2" w-full rounded-lg
+                    >
+                      <div>{{ passkey.name }}</div>
+                      <time :datetime="passkey.createdAt.toISOString()">
+                        {{ new Date(passkey.createdAt).toLocaleString() }}
+                      </time>
+                    </div>
+                  </template>
+                  <button
+                    type="button"
+                    class="group"
+                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                    flex="inline items-center justify-between gap-2"
+                    p="x3 y2" w-full rounded-lg
+                    :disabled="isLoadingAddPasskey"
+                    @click="addPasskey('example-passkey-name')"
+                  >
+                    <div class="i-mingcute:add-line size-4" />
+                    <div flex-1 text-left text-xs font-medium op-70>
+                      添加通行密钥
+                    </div>
+                    <div
+                      i-mingcute:arrow-right-line
+                      invisible size-4 transition-transform
+                      duration-200 group-hover:visible
+                      translate-x="-1"
+                      group-hover:translate-x-0
+                    />
+                  </button>
                 </Section>
                 <Section title="活动设备">
                   <!-- 加载状态时显示 skeleton -->

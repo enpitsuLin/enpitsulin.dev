@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Dialog } from '@ark-ui/vue/dialog'
+import { useMutation } from '@pinia/colada'
 import LoginForm from '~/components/auth/login-form.vue'
 import SignupForm from '~/components/auth/signup-form.vue'
 import { useAuth } from '~/composables/auth'
@@ -9,74 +10,39 @@ const { signIn } = useAuth()
 const isOpen = ref(false)
 const isSignUp = ref(false)
 const errorMessage = ref('')
-const isLoading = ref(false)
-
-// Reset form when modal opens/closes
-watch(isOpen, (newValue) => {
-  if (newValue) {
-    resetForm()
-  }
-})
-
-function resetForm() {
-  errorMessage.value = ''
-}
 
 function toggleMode() {
   isSignUp.value = !isSignUp.value
-  resetForm()
 }
 
 function handleSuccess() {
   isOpen.value = false
-  resetForm()
 }
 
-function handleError(message: string) {
-  errorMessage.value = message
-}
+const { mutate: signInPasskey, isLoading: isLoadingSignInPasskey } = useMutation({
+  mutation() {
+    return signIn.passkey({ })
+  },
+  onSuccess() {
+    isOpen.value = false
+  },
+})
 
-// 处理 GitHub 登录
-async function handleGithubAuth() {
-  if (isLoading.value)
-    return
-
-  isLoading.value = true
-  errorMessage.value = ''
-
-  try {
-    const result = await signIn.social({
-      provider: 'github',
+const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
+  mutation(provider: string) {
+    return signIn.social({
+      provider,
     })
-    if (result.data) {
-      isOpen.value = false
-      resetForm()
-    }
-    else {
-      errorMessage.value = 'GitHub 登录失败，请重试'
-    }
-  }
-  catch (error) {
-    console.error('GitHub login error:', error)
-    errorMessage.value = 'GitHub 登录失败，请重试'
-  }
-  finally {
-    isLoading.value = false
-  }
-}
+  },
+  onSuccess() {
+    isOpen.value = false
+  },
+})
 
 // Expose methods for parent component
 defineExpose({
   open: () => { isOpen.value = true },
   close: () => { isOpen.value = false },
-})
-
-// 监听 Modal 状态，确保与其他 Dialog 不冲突
-watch(isOpen, (newValue) => {
-  if (newValue) {
-    // 当登录 Modal 打开时，关闭可能存在的其他 Dialog
-    // 这里可以添加全局状态管理来关闭其他 Dialog
-  }
 })
 </script>
 
@@ -119,7 +85,7 @@ watch(isOpen, (newValue) => {
             <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
           </Dialog.CloseTrigger>
 
-          <div mt-6>
+          <div mt-6 space-y-1>
             <!-- Error Message -->
             <div
               v-if="errorMessage"
@@ -134,21 +100,41 @@ watch(isOpen, (newValue) => {
 
             <!-- GitHub Login Button -->
             <button
-              :disabled="isLoading"
+              :disabled="isLoadingSignInSocial"
               w="full"
               p="x5 y2.5"
               flex="~ items-center gap-2"
               border="~ zinc-200 dark:zinc-700 rounded-lg"
               bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
               class="group transition-all duration-200"
-              @click="handleGithubAuth"
+              @click="signInSocial('github')"
             >
               <div class="i-mingcute:github-line size-5 text-zinc-700 transition-colors dark:text-white" />
               <div
                 flex-1 text-left
                 un-text="xs font-medium text-zinc-700 dark:text-white transition-colors"
               >
-                {{ isLoading ? '处理中...' : '使用 GitHub 登录' }}
+                {{ isLoadingSignInSocial ? '处理中...' : '使用 GitHub 登录' }}
+              </div>
+              <div class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1" />
+            </button>
+
+            <button
+              :disabled="isLoadingSignInPasskey"
+              w="full"
+              p="x5 y2.5"
+              flex="~ items-center gap-2"
+              border="~ zinc-200 dark:zinc-700 rounded-lg"
+              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+              class="group transition-all duration-200"
+              @click="signInPasskey()"
+            >
+              <div class="i-mingcute:key-2-line size-5 text-zinc-700 transition-colors dark:text-white" />
+              <div
+                flex-1 text-left
+                un-text="xs font-medium text-zinc-700 dark:text-white transition-colors"
+              >
+                {{ isLoadingSignInPasskey ? '处理中...' : '使用 Passkey 登录' }}
               </div>
               <div class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1" />
             </button>
@@ -164,12 +150,12 @@ watch(isOpen, (newValue) => {
             <LoginForm
               v-if="!isSignUp"
               @success="handleSuccess"
-              @error="handleError"
+              @error="console.error($event)"
             />
             <SignupForm
               v-else
               @success="handleSuccess"
-              @error="handleError"
+              @error="console.error($event)"
             />
 
             <!-- Toggle mode -->
