@@ -16,7 +16,7 @@ const isOpen = ref(false)
 
 const queryCache = useQueryCache()
 
-const { data: sessions, isLoading: isLoadingDevices } = useQuery({
+const { data: sessions, isPending: isDevicesPending } = useQuery({
   key: () => ['sessions', loggedIn.value],
   query: async () => client.listSessions({ fetchOptions: { throw: true } })
     .then(res => res.sort((a, b) => {
@@ -29,7 +29,7 @@ const { data: sessions, isLoading: isLoadingDevices } = useQuery({
   enabled: () => loggedIn.value,
 })
 
-const { data: accounts, isLoading: isLoadingAccounts } = useQuery({
+const { data: accounts, isPending: isAccountsPending } = useQuery({
   key: () => ['accounts', loggedIn.value],
   query: async () => client
     .listAccounts({ fetchOptions: { throw: true } })
@@ -189,7 +189,7 @@ defineExpose({
                   </button>
                 </Section>
                 <Section title="已连接的账户">
-                  <template v-if="isLoadingAccounts">
+                  <template v-if="isAccountsPending">
                     <AccountSkeleton
                       v-for="i in 1"
                       :key="`skeleton-${i}`"
@@ -241,7 +241,7 @@ defineExpose({
                 </Section>
                 <Section title="活动设备">
                   <!-- 加载状态时显示 skeleton -->
-                  <template v-if="isLoadingDevices">
+                  <template v-if="isDevicesPending">
                     <SessionSkeleton
                       v-for="i in 1"
                       :key="`skeleton-${i}`"
