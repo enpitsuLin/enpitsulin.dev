@@ -6,7 +6,7 @@ export interface RuntimeAuthConfig {
   redirectUserTo: RouteLocationRaw | string
   redirectGuestTo: RouteLocationRaw | string
 }
-
+const { useSession } = client
 export function useAuth() {
   const router = useRouter()
 
@@ -15,36 +15,29 @@ export function useAuth() {
     redirectGuestTo: '/',
   }
 
-  const session = shallowRef<typeof client.$Infer.Session.session | null>(null)
-  const user = shallowRef<typeof client.$Infer.Session.user | null>(null)
+  const session = useSession()
+
   const sessionFetching = shallowRef(false)
 
   const fetchSession = async () => {
     if (sessionFetching.value) {
       return
     }
+
     sessionFetching.value = true
     const { data } = await client.getSession()
-    session.value = data?.session || null
-    user.value = data?.user || null
     sessionFetching.value = false
     return data
   }
 
-  onMounted(async () => {
-    await fetchSession()
-  })
-
   return {
     session,
-    user,
-    loggedIn: computed(() => !!session.value),
+    user: computed(() => session.value.data?.user || null),
+    loggedIn: computed(() => !!session.value.data?.session),
     signIn: client.signIn,
     signUp: client.signUp,
     async signOut({ redirectTo }: { redirectTo?: RouteLocationRaw } = {}) {
       const res = await client.signOut()
-      session.value = null
-      user.value = null
       if (redirectTo) {
         await router.push(redirectTo)
       }
