@@ -9,6 +9,9 @@ import { ClientOnly } from '@ark-ui/vue'
     border="~ border rounded-lg" bg=" slate-50/40 dark:black/40"
     class="shadow-black/10 shadow-md backdrop-blur-10px transition-all" fixed z-99 p-1
   >
+    <ClientOnly>
+      <LayoutAuthButton />
+    </ClientOnly>
     <LayoutThemeButton />
     <ClientOnly>
       <LayoutToTopButton />

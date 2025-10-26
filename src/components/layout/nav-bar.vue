@@ -9,13 +9,13 @@ const route = useRoute()
 <template>
   <header
     flex="~ items-center justify-between md:justify-center"
-    sticky top-0 z-99 w-full
+    sticky top-0 z-99 w="full"
     px-8 pt-5
   >
     <div pointer-events-none fixed left-0 right-0 top-0 h-25 select-none class="navbar-blur" />
 
     <div
-      relative z-2 h-full w-fit
+      relative z-2 h="full" w="fit"
       class="transform animate-duration-1300 animate-ease-$spring-easing animate-in slide-in-from-top-70px"
     >
       <div

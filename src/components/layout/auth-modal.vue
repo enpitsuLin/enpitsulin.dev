@@ -1,0 +1,336 @@
+<script setup lang="ts">
+import { Dialog } from '@ark-ui/vue/dialog'
+import { useAuth } from '~/composables/auth'
+
+const { signUp, signIn } = useAuth()
+
+const isOpen = ref(false)
+const isSignUp = ref(false)
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+// Form data
+const formData = reactive({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  name: '',
+})
+
+// Reset form when modal opens/closes
+watch(isOpen, (newValue) => {
+  if (newValue) {
+    resetForm()
+  }
+})
+
+function resetForm() {
+  Object.assign(formData, {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+  })
+  errorMessage.value = ''
+}
+
+function toggleMode() {
+  isSignUp.value = !isSignUp.value
+  resetForm()
+}
+
+async function handleEmailAuth() {
+  if (isLoading.value)
+    return
+
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    if (isSignUp.value) {
+      // Validation
+      if (formData.password !== formData.confirmPassword) {
+        errorMessage.value = '密码确认不匹配'
+        return
+      }
+      if (formData.password.length < 6) {
+        errorMessage.value = '密码至少需要6个字符'
+        return
+      }
+      if (!formData.name.trim()) {
+        errorMessage.value = '请输入用户名'
+        return
+      }
+
+      const result = await signUp.email({
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+      })
+      if (result.data) {
+        isOpen.value = false
+        resetForm()
+      }
+      else {
+        errorMessage.value = '注册失败，请检查邮箱是否已被使用'
+      }
+    }
+    else {
+      const result = await signIn.email({
+        email: formData.email,
+        password: formData.password,
+      })
+      if (result.data) {
+        isOpen.value = false
+        resetForm()
+      }
+      else {
+        errorMessage.value = '登录失败，请检查邮箱和密码'
+      }
+    }
+  }
+  catch (error) {
+    console.error(error)
+    errorMessage.value = '操作失败，请重试'
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+async function handleGithubAuth() {
+  if (isLoading.value)
+    return
+
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    const result = await signIn.social({
+      provider: 'github',
+    })
+    if (result.data) {
+      isOpen.value = false
+      resetForm()
+    }
+    else {
+      errorMessage.value = 'GitHub 登录失败，请重试'
+    }
+  }
+  catch (error) {
+    console.error(error)
+    errorMessage.value = 'GitHub 登录失败，请重试'
+  }
+  finally {
+    isLoading.value = false
+  }
+}
+
+// Expose methods for parent component
+defineExpose({
+  open: () => { isOpen.value = true },
+  close: () => { isOpen.value = false },
+})
+
+// 监听 Modal 状态，确保与其他 Dialog 不冲突
+watch(isOpen, (newValue) => {
+  if (newValue) {
+    // 当登录 Modal 打开时，关闭可能存在的其他 Dialog
+    // 这里可以添加全局状态管理来关闭其他 Dialog
+  }
+})
+</script>
+
+<template>
+  <Dialog.Root v-model:open="isOpen">
+    <Teleport to="body">
+      <Dialog.Backdrop
+        bg="zinc-800/40 dark:bg-black/40"
+        class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
+      />
+      <Dialog.Positioner>
+        <Dialog.Content
+          fixed
+          p="6 sm:p-8"
+          border="~ zinc-200 dark:zinc-700 rounded-3xl"
+          bg="white/95 dark:zinc-900/95"
+          class="left-1/2 top-4 z-100 max-w-sm w-[calc(100vw-2rem)] origin-top backdrop-blur-xl sm:top-8 sm:max-w-sm sm:w-full -translate-x-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
+        >
+          <!-- Header with Avatar and Title -->
+          <div mb="8" space-y-2>
+            <!-- Title -->
+            <h2 un-text="2xl font-bold zinc-900 dark:white mb-2">
+              {{ isSignUp ? '注册' : '登录' }}
+            </h2>
+
+            <!-- Subtitle -->
+            <p un-text="xs zinc-500 dark:text-zinc-400">
+              {{ isSignUp ? '创建新账户开始使用' : '继续使用 enpitsulin.dev' }}
+            </p>
+          </div>
+
+          <!-- Close Button -->
+          <Dialog.CloseTrigger
+            top="4"
+            right="4"
+            absolute rounded-lg p-2
+            bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+            class="transition-colors"
+          >
+            <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
+          </Dialog.CloseTrigger>
+
+          <div mt-6>
+            <!-- Error Message -->
+            <div
+              v-if="errorMessage"
+              un-text="xs text-red-600 dark:text-red-400"
+              class="mb-4 border border-red-200 rounded-lg bg-red-50 p-3 dark:border-red-800/50 dark:bg-red-900/20"
+            >
+              <div flex="~ items-center gap-2">
+                <div class="i-mingcute:warning-line size-4" />
+                {{ errorMessage }}
+              </div>
+            </div>
+
+            <!-- GitHub Login Button -->
+            <button
+              :disabled="isLoading"
+              w="full"
+              p="x5 y2.5"
+              flex="~ items-center gap-2"
+              border="~ zinc-200 dark:zinc-700 rounded-lg"
+              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+              class="group transition-all duration-200"
+              @click="handleGithubAuth"
+            >
+              <div class="i-mingcute:github-line size-5 text-zinc-700 transition-colors dark:text-white" />
+              <div
+                flex-1 text-left
+                un-text="xs font-medium text-zinc-700 dark:text-white transition-colors"
+              >
+                {{ isLoading ? '处理中...' : '使用 GitHub 登录' }}
+              </div>
+              <div class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1" />
+            </button>
+
+            <!-- Divider -->
+            <div flex="~ items-center gap-3" my="6">
+              <div flex="1" h="1px" bg="zinc-300 dark:bg-zinc-600" />
+              <span un-text="xs text-zinc-500 dark:text-zinc-400">或者</span>
+              <div flex="1" h="1px" bg="zinc-300 dark:bg-zinc-600" />
+            </div>
+
+            <!-- Email/Password Form -->
+            <form flex="~ col gap-4" @submit.prevent="handleEmailAuth">
+              <!-- Name field (only for sign up) -->
+              <div v-if="isSignUp">
+                <label un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block mb="2">
+                  用户名
+                </label>
+                <input
+                  v-model="formData.name"
+                  type="text"
+                  placeholder="请输入用户名"
+                  required
+                  w="full"
+                  px="4"
+                  py="2"
+                  border="~ zinc-200 dark:zinc-700 rounded-lg"
+                  bg="transparent"
+                  class="text-xs text-zinc-900 outline-none transition-all focus:border-blue-500 placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+                >
+              </div>
+
+              <!-- Email field -->
+              <div>
+                <label un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block mb="2">
+                  邮箱地址
+                </label>
+                <input
+                  v-model="formData.email"
+                  type="email"
+                  placeholder="请输入邮箱地址"
+                  required
+                  w="full"
+                  px="4"
+                  py="2"
+                  border="~ zinc-200 dark:zinc-700 rounded-lg"
+                  bg="transparent"
+                  class="text-xs text-zinc-900 outline-none transition-all focus:border-blue-500 placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+                >
+              </div>
+
+              <!-- Password field -->
+              <div>
+                <label un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block mb="2">
+                  密码
+                </label>
+                <input
+                  v-model="formData.password"
+                  type="password"
+                  placeholder="请输入密码"
+                  required
+                  w="full"
+                  px="4"
+                  py="2"
+                  border="~ zinc-200 dark:zinc-700 rounded-lg"
+                  bg="transparent"
+                  class="text-xs text-zinc-900 outline-none transition-all focus:border-blue-500 placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+                >
+              </div>
+
+              <!-- Confirm Password field (only for sign up) -->
+              <div v-if="isSignUp">
+                <label un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block mb="2">
+                  确认密码
+                </label>
+                <input
+                  v-model="formData.confirmPassword"
+                  type="password"
+                  placeholder="请再次输入密码"
+                  required
+                  w-full
+                  p="x4 y2"
+                  border="~ zinc-200 dark:zinc-700 rounded-lg"
+                  bg="transparent"
+                  class="text-xs text-zinc-900 outline-none transition-all focus:border-blue-500 placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+                >
+              </div>
+
+              <!-- Submit button -->
+              <button
+                type="submit"
+                :disabled="isLoading"
+                w-full
+                p="x3 y2"
+                bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
+                un-text="zinc-50 xs dark:zinc-900 font-medium"
+                rounded="lg"
+                class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span flex="~ items-center justify-center gap-2">
+                  {{ isLoading ? '处理中...' : (isSignUp ? '注册' : '继续') }}
+                </span>
+              </button>
+            </form>
+
+            <!-- Toggle mode -->
+            <div mt="6" text="center">
+              <span un-text="xs text-zinc-500 dark:text-zinc-400">
+                {{ isSignUp ? '还没有账户？' : '还没有账户？' }}
+              </span>
+              <button
+                un-text="xs text-zinc-700 dark:text-white underline hover:text-blue-600 dark:hover:text-blue-400"
+                class="ml-1 underline transition-colors"
+                @click="toggleMode"
+              >
+                {{ isSignUp ? '登录' : '注册' }}
+              </button>
+            </div>
+          </div>
+        </Dialog.Content>
+      </Dialog.Positioner>
+    </Teleport>
+  </Dialog.Root>
+</template>

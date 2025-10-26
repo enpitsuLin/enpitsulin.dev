@@ -3,7 +3,7 @@ import { navigation } from '~/constants'
 </script>
 
 <template>
-  <footer px="8 sm:12" border="t border" mt-50 w-full pb-20 pt-10>
+  <footer px="8 sm:12" border="t border" mt-50 w="full" pb-20 pt-10>
     <div flex="~ col items-center justify-between gap-6 sm:row">
       <div class="flex gap-6 text-sm text-zinc-800 font-medium dark:text-zinc-200">
         <a

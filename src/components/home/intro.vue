@@ -14,7 +14,7 @@ const links = [
 </script>
 
 <template>
-  <section w-full flex="~ col items-center" class="mb-10 sm:mb-0">
+  <section w="full" flex="~ col items-center" class="mb-10 sm:mb-0">
     <div flex="~ col-reverse md:row md:justify-between gap-8" class="w-full md:my-16">
       <div
         flex="~ col gap-4"

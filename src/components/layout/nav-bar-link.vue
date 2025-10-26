@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <RouterLink
     flex="~ items-center justify-center"
-    h-full w-full cursor-pointer px-3
+    h="full" w="full" cursor-pointer px-3
     :to="href"
     class="navbar-link relative transition-color hover:text-zinc-9 dark:hover:text-zinc-6"
   >
