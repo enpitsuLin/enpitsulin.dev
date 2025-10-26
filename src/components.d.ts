@@ -12,6 +12,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AuthAuthModal: typeof import('./components/auth/auth-modal.vue')['default']
+    AuthLoginForm: typeof import('./components/auth/login-form.vue')['default']
+    AuthModal: typeof import('./components/auth/modal.vue')['default']
+    AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
     HomeIntro: typeof import('./components/home/intro.vue')['default']
     HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
     IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
@@ -31,6 +35,10 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AuthAuthModal: typeof import('./components/auth/auth-modal.vue')['default']
+  const AuthLoginForm: typeof import('./components/auth/login-form.vue')['default']
+  const AuthModal: typeof import('./components/auth/modal.vue')['default']
+  const AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
   const HomeIntro: typeof import('./components/home/intro.vue')['default']
   const HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
   const IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']

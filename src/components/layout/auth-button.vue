@@ -3,7 +3,7 @@ import { useAuth } from '~/composables/auth'
 
 const { loggedIn, user, signOut } = useAuth()
 
-const authModalRef = ref()
+const authModalRef = useTemplateRef('authModalRef')
 
 function openAuthModal() {
   authModalRef.value?.open()
@@ -31,7 +31,7 @@ function UserIcon() {
 
 <template>
   <!-- Auth Modal -->
-  <LayoutAuthModal ref="authModalRef" />
+  <AuthModal ref="authModalRef" />
 
   <!-- 未登录状态：显示登录按钮 -->
   <button
