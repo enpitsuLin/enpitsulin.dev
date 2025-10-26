@@ -56,7 +56,7 @@ async function handleSignOut() {
       <Avatar.Root of-hidden rounded-full>
         <Avatar.Fallback
           size-full
-          flex="inline items-center justify-center"
+          flex="data-[state=visible]:inline items-center justify-center"
         >
           {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
         </Avatar.Fallback>
@@ -77,7 +77,7 @@ async function handleSignOut() {
             <Avatar.Root size-6 of-hidden rounded-full>
               <Avatar.Fallback
                 size-full
-                flex="inline items-center justify-center"
+                flex="data-[state=visible]:inline items-center justify-center"
               >
                 {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
               </Avatar.Fallback>

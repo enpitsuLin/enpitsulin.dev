@@ -5,11 +5,12 @@ import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { useAuth } from '~/composables/auth'
 import AccountInfo from './account-info.vue'
 import AccountSkeleton from './account-skeleton.vue'
+import EmailInfo from './email-info.vue'
 import Section from './section.vue'
 import SessionInfo from './session-info.vue'
 import SessionSkeleton from './session-skeleton.vue'
 
-const { client, loggedIn, session, user } = useAuth()
+const { client, loggedIn, session, user, fetchSession } = useAuth()
 
 const isOpen = ref(false)
 
@@ -42,6 +43,15 @@ const { mutate: linkSocial, isLoading: isLoadingLinkSocial } = useMutation({
   },
   onSuccess() {
     queryCache.invalidateQueries({ key: ['accounts'] })
+  },
+})
+
+const { mutate: changeEmail, isLoading: isLoadingChangeEmail } = useMutation({
+  mutation(vars: string) {
+    return client.changeEmail({ newEmail: vars })
+  },
+  async onSuccess() {
+    await fetchSession()
   },
 })
 
@@ -133,7 +143,7 @@ defineExpose({
                     <Avatar.Root size-15 of-hidden rounded-full>
                       <Avatar.Fallback
                         size-full border="~ rounded-full" text-3xl
-                        flex="inline items-center justify-center"
+                        flex="data-[state=visible]:inline items-center justify-center"
                       >
                         {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
                       </Avatar.Fallback>
@@ -141,6 +151,33 @@ defineExpose({
                     </Avatar.Root>
                     <div flex-1 text-left>
                       {{ user?.name }}
+                    </div>
+                    <div
+                      i-mingcute:arrow-right-line
+                      invisible size-4 transition-transform
+                      duration-200 group-hover:visible
+                      translate-x="-1"
+                      group-hover:translate-x-0
+                    />
+                  </button>
+                </Section>
+                <Section title="电子邮件地址">
+                  <template v-if="user?.email">
+                    <EmailInfo :user />
+                  </template>
+                  <button
+                    v-else
+                    type="button"
+                    class="group"
+                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                    flex="inline items-center justify-between gap-2"
+                    p="x3 y2" w-full rounded-lg
+                    :disabled="isLoadingChangeEmail"
+                    @click="changeEmail('test@example.com')"
+                  >
+                    <div class="i-mingcute:add-line size-4" />
+                    <div flex-1 text-left text-xs font-medium op-70>
+                      添加电子邮件地址
                     </div>
                     <div
                       i-mingcute:arrow-right-line
@@ -175,7 +212,7 @@ defineExpose({
                     @click="linkSocial('github')"
                   >
                     <div class="i-mingcute:add-line size-4" />
-                    <div flex-1 text-left text-xs font-medium>
+                    <div flex-1 text-left text-xs font-medium op-70>
                       连接账户
                     </div>
                     <div

@@ -8,6 +8,12 @@ export const baseServerOptions = {
   emailAndPassword: {
     enabled: true,
   },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url, token }, _request) => {
+      // eslint-disable-next-line no-console
+      console.log('发送邮件验证:', { user, url, token })
+    },
+  },
   account: {
     accountLinking: {
       enabled: true,
