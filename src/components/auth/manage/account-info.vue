@@ -74,9 +74,6 @@ function getProviderDisplayName(providerId: string): string {
           </div>
         </div>
         <div op-60>
-          账户 ID: {{ account.accountId }}
-        </div>
-        <div op-60>
           连接时间: {{ formatAccount.date }}
         </div>
       </div>

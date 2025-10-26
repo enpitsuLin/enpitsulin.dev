@@ -40,7 +40,7 @@ const { mutate: revokeSession, isLoading } = useMutation({
       flex="inline items-center justify-between gap-2"
       p="x4 y3" w-full rounded-lg
     >
-      <div>
+      <div px-5>
         <template v-if="formatSession.device.type === 'mobile'">
           <SessionIconMobile size-20 />
         </template>

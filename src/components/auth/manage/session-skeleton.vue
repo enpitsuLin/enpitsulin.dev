@@ -6,9 +6,8 @@
     w-full animate-pulse rounded-lg
   >
     <div
-      size-20
       bg="zinc-200 dark:zinc-700"
-      rounded-lg
+      size-20 rounded-lg px-5
     />
 
     <div flex="~ col items-start gap-1 1" text-left text-xs>

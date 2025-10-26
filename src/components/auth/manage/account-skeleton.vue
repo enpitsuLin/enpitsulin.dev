@@ -11,7 +11,6 @@
       <div flex="~ items-center gap-2">
         <div h-4 w-16 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700 />
       </div>
-      <div h-3 w-24 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700 />
       <div h-3 w-32 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700 />
     </div>
     <div class="i-mingcute:down-line size-4" />

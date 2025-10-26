@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { Avatar } from '@ark-ui/vue'
 import { Dialog } from '@ark-ui/vue/dialog'
-import { useQuery } from '@pinia/colada'
+import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
 import { useAuth } from '~/composables/auth'
 import AccountInfo from './account-info.vue'
 import AccountSkeleton from './account-skeleton.vue'
@@ -12,6 +12,8 @@ import SessionSkeleton from './session-skeleton.vue'
 const { client, loggedIn, session, user } = useAuth()
 
 const isOpen = ref(false)
+
+const queryCache = useQueryCache()
 
 const { data: sessions, isLoading: isLoadingDevices } = useQuery({
   key: () => ['sessions', loggedIn.value],
@@ -32,6 +34,15 @@ const { data: accounts, isLoading: isLoadingAccounts } = useQuery({
     .listAccounts({ fetchOptions: { throw: true } })
     .then(res => res.filter(account => account.providerId !== 'credential')),
   enabled: () => loggedIn.value,
+})
+
+const { mutate: linkSocial, isLoading: isLoadingLinkSocial } = useMutation({
+  mutation(provider: string) {
+    return client.linkSocial({ provider })
+  },
+  onSuccess() {
+    queryCache.invalidateQueries({ key: ['accounts'] })
+  },
 })
 
 function openModal() {
@@ -154,6 +165,27 @@ defineExpose({
                       :account="account"
                     />
                   </template>
+                  <button
+                    type="button"
+                    class="group"
+                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                    flex="inline items-center justify-between gap-2"
+                    p="x3 y2" w-full rounded-lg
+                    :disabled="isLoadingLinkSocial"
+                    @click="linkSocial('github')"
+                  >
+                    <div class="i-mingcute:add-line size-4" />
+                    <div flex-1 text-left text-xs font-medium>
+                      连接账户
+                    </div>
+                    <div
+                      i-mingcute:arrow-right-line
+                      invisible size-4 transition-transform
+                      duration-200 group-hover:visible
+                      translate-x="-1"
+                      group-hover:translate-x-0
+                    />
+                  </button>
                 </Section>
               </div>
 
