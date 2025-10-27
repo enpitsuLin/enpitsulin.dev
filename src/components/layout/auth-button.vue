@@ -66,8 +66,10 @@ async function handleSignOut() {
     <Menu.Positioner>
       <Menu.Content
         min-w-32 p-2
-        border="~ border rounded-lg" bg=" slate-50/40 dark:black/40"
+        border="~ border rounded-lg"
+        bg="white/50 dark:zinc-900/50"
         class="shadow-black/10 shadow-md backdrop-blur-10px transition-all"
+        backdrop-blur-2xl
       >
         <div px-1 space-y-1>
           <h4 text-xs op-70>
@@ -89,7 +91,7 @@ async function handleSignOut() {
             </span>
           </div>
         </div>
-        <Menu.Separator my-1 border="zinc-400 dark:zinc-600" />
+        <Menu.Separator my-1 border="~ border" />
         <Menu.Item
           v-if="user?.role === 'admin'"
           value="account"

@@ -38,6 +38,7 @@ declare module 'vue' {
     LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UiFormField: typeof import('./components/ui/form/field.vue')['default']
   }
 }
 
@@ -69,4 +70,5 @@ declare global {
   const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const UiFormField: typeof import('./components/ui/form/field.vue')['default']
 }

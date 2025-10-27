@@ -53,7 +53,7 @@ const { mutate: revokeSession, isLoading } = useMutation({
           <span>{{ formatSession.device.toString() }}</span>
           <div
             v-if="isCurrentSession"
-            border="~ zinc-200 dark:zinc-700 rounded-lg" p="x1.5 y0.5" text-xs
+            border="~ border rounded-lg" p="x1.5 y0.5" text-xs
             bg="zinc-100 dark:zinc-800"
           >
             此设备

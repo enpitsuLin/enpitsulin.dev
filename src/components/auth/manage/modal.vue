@@ -100,7 +100,7 @@ defineExpose({
       <Dialog.Positioner>
         <Dialog.Content
           fixed h-2xl w-4xl
-          border="~ zinc-200 dark:zinc-700 rounded-3xl"
+          border="~ border rounded-3xl"
           bg="white/50 dark:zinc-900/50"
           un-text="zinc-900 dark:white"
           class="left-1/2 top-1/2 z-100 origin-center backdrop-blur-xl -translate-x-1/2 -translate-y-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
@@ -117,7 +117,7 @@ defineExpose({
 
           <div flex="~" size-full py-2>
             <!-- 左侧导航 -->
-            <div w="64" border-r="~ zinc-200 dark:zinc-700" flex="shrink-0">
+            <div w="64" border-r="~ border" flex="shrink-0">
               <nav p="4" space-y="2">
                 <button
                   flex="inline items-center gap-3"
