@@ -37,6 +37,11 @@ export const baseServerOptions = {
       maximumSessions: 5, // 最多允许 5 个并发会话
     }),
   ],
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ['cf-connecting-ip', 'x-real-ip'],
+    },
+  },
 } satisfies BetterAuthOptions
 
 export const baseClientOptions = {
