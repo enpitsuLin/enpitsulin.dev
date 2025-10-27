@@ -5,7 +5,7 @@ import LoginForm from '~/components/auth/login-form.vue'
 import SignupForm from '~/components/auth/signup-form.vue'
 import { useAuth } from '~/composables/auth'
 
-const { signIn } = useAuth()
+const { signIn, client } = useAuth()
 
 const isOpen = ref(false)
 const isSignUp = ref(false)
@@ -22,6 +22,8 @@ function handleSuccess() {
 function handleError(message: string) {
   errorMessage.value = message
 }
+
+const { openOauthPopup: openPopup } = useOauthPopup()
 
 const { mutate: signInPasskey, isLoading: isLoadingSignInPasskey } = useMutation({
   async mutation() {
@@ -41,10 +43,20 @@ const { mutate: signInPasskey, isLoading: isLoadingSignInPasskey } = useMutation
 })
 
 const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
-  mutation(provider: string) {
-    return signIn.social({ provider, fetchOptions: { throw: true } })
+  async mutation(provider: string) {
+    const res = await signIn.social({
+      provider,
+      disableRedirect: true,
+      fetchOptions: { throw: true },
+    })
+    if (!res.url) {
+      return Promise.reject(new Error('Unexpected error'))
+    }
+
+    await openPopup(res.url)
+    client.$store.notify('$sessionSignal')
   },
-  onSuccess() {
+  onSuccess: async () => {
     isOpen.value = false
   },
   onError(error) {

@@ -1,5 +1,6 @@
-// app/composables/useAuth.ts
 import type { RouteLocationRaw } from 'vue-router'
+// app/composables/useAuth.ts
+import { useMutation } from '@pinia/colada'
 import { client, useSession } from '~~/lib/auth-client'
 
 export interface RuntimeAuthConfig {
@@ -15,18 +16,16 @@ export function useAuth() {
 
   const session = useSession()
 
-  const sessionFetching = shallowRef(false)
+  const { mutateAsync } = useMutation({
+    mutation: async () => {
+      const { data } = await client.getSession()
+      return data
+    },
+    onError: (error) => {
+      console.error(error)
+    },
 
-  const fetchSession = async () => {
-    if (sessionFetching.value) {
-      return
-    }
-
-    sessionFetching.value = true
-    const { data } = await client.getSession()
-    sessionFetching.value = false
-    return data
-  }
+  })
 
   return {
     session,
@@ -36,7 +35,7 @@ export function useAuth() {
     signUp: client.signUp,
     signOut: client.signOut,
     options,
-    fetchSession,
+    fetchSession: mutateAsync,
     client,
   }
 }
