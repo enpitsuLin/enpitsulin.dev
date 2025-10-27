@@ -2,6 +2,7 @@
 import { Avatar } from '@ark-ui/vue'
 import { Dialog } from '@ark-ui/vue/dialog'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { useInView } from 'motion-v'
 import { useAuth } from '~/composables/auth'
 import AccountInfo from './account-info.vue'
 import AccountSkeleton from './account-skeleton.vue'
@@ -15,6 +16,12 @@ import SessionSkeleton from './session-skeleton.vue'
 const { client, loggedIn, session, user } = useAuth()
 
 const isOpen = ref(false)
+
+const accountSectionTitle = useTemplateRef('accountSectionTitle')
+const securitySectionTitle = useTemplateRef('securitySectionTitle')
+
+const isAccountSectionInView = useInView(accountSectionTitle)
+const isSecuritySectionInView = useInView(securitySectionTitle)
 
 const queryCache = useQueryCache()
 
@@ -64,6 +71,16 @@ function closeModal() {
   isOpen.value = false
 }
 
+function scrollToSection(sectionId: string) {
+  const targetRef = sectionId === 'account' ? accountSectionTitle : securitySectionTitle
+
+  if (targetRef.value) {
+    targetRef.value.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
+}
+
 // 暴露方法给父组件
 defineExpose({
   open: openModal,
@@ -103,8 +120,11 @@ defineExpose({
                 <button
                   flex="inline items-center gap-3"
                   rounded-lg px-3 py-2.5
-                  bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                  :data-active="isAccountSectionInView"
+                  bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
+                  hover:bg="zinc-200/50 dark:hover:zinc-700/50"
                   class="w-full rounded-lg text-left transition-all"
+                  @click="scrollToSection('account')"
                 >
                   <div class="i-mingcute:user-4-line size-5" />
                   <span text-sm font-medium>账户</span>
@@ -112,8 +132,11 @@ defineExpose({
                 <button
                   flex="inline items-center gap-3"
                   rounded-lg px-3 py-2.5
-                  bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                  :data-active="!isAccountSectionInView && isSecuritySectionInView"
+                  bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
+                  hover:bg="zinc-200/50 dark:hover:zinc-700/50"
                   class="w-full rounded-lg text-left transition-all"
+                  @click="scrollToSection('security')"
                 >
                   <div class="i-mingcute:shield-line size-5" />
                   <span text-sm font-medium>安全</span>
@@ -125,7 +148,7 @@ defineExpose({
             <div flex="1" p="y6 x8" h-full of-y-auto>
               <!-- 账户部分 -->
               <div pb-5 space-y-4>
-                <div space-y-1>
+                <div ref="accountSectionTitle" space-y-1>
                   <h3 text="3xl font-semibold">
                     账户
                   </h3>
@@ -207,7 +230,7 @@ defineExpose({
 
               <!-- 安全部分 -->
               <div pb-5 space-y-4>
-                <div space-y-1>
+                <div ref="securitySectionTitle" space-y-1>
                   <h3 text="3xl font-semibold">
                     安全
                   </h3>
