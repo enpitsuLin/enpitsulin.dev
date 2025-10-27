@@ -5,6 +5,12 @@ import { multiSession } from 'better-auth/plugins/multi-session'
 import { passkey } from 'better-auth/plugins/passkey'
 
 export const baseServerOptions = {
+  appName: 'enpitsulin.dev',
+  trustedOrigins: [
+    'http://localhost:3000',
+    'https://enpitsulin.dev',
+    '*.enpitsulin.workers.dev',
+  ],
   emailAndPassword: {
     enabled: true,
   },

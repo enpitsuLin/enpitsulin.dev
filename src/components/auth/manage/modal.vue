@@ -6,11 +6,13 @@ import { useAuth } from '~/composables/auth'
 import AccountInfo from './account-info.vue'
 import AccountSkeleton from './account-skeleton.vue'
 import EmailInfo from './email-info.vue'
+import PasskeyInfo from './passkey-info.vue'
+import PasskeySkeleton from './passkey-skeleton.vue'
 import Section from './section.vue'
 import SessionInfo from './session-info.vue'
 import SessionSkeleton from './session-skeleton.vue'
 
-const { client, loggedIn, session, user, fetchSession } = useAuth()
+const { client, loggedIn, session, user } = useAuth()
 
 const isOpen = ref(false)
 
@@ -46,33 +48,12 @@ const { mutate: linkSocial, isLoading: isLoadingLinkSocial } = useMutation({
   },
 })
 
-const { mutate: changeEmail, isLoading: isLoadingChangeEmail } = useMutation({
-  mutation(vars: string) {
-    return client.changeEmail({ newEmail: vars })
-  },
-  async onSuccess() {
-    await fetchSession()
-  },
-})
-
 const { data: passkeys, isPending: isPasskeysPending } = useQuery({
   key: () => ['passkeys', loggedIn.value],
   query: async () => client.passkey.listUserPasskeys({
     fetchOptions: { throw: true },
   }),
   enabled: () => loggedIn.value,
-})
-
-const { mutate: addPasskey, isLoading: isLoadingAddPasskey } = useMutation({
-  mutation(name: string) {
-    return client.passkey.addPasskey({
-      name,
-      authenticatorAttachment: 'cross-platform',
-    })
-  },
-  onSuccess() {
-    queryCache.invalidateQueries({ key: ['passkeys'] })
-  },
 })
 
 function openModal() {
@@ -185,28 +166,6 @@ defineExpose({
                   <template v-if="user?.email">
                     <EmailInfo :user />
                   </template>
-                  <button
-                    v-else
-                    type="button"
-                    class="group"
-                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                    flex="inline items-center justify-between gap-2"
-                    p="x3 y2" w-full rounded-lg
-                    :disabled="isLoadingChangeEmail"
-                    @click="changeEmail('test@example.com')"
-                  >
-                    <div class="i-mingcute:add-line size-4" />
-                    <div flex-1 text-left text-xs font-medium op-70>
-                      添加电子邮件地址
-                    </div>
-                    <div
-                      i-mingcute:arrow-right-line
-                      invisible size-4 transition-transform
-                      duration-200 group-hover:visible
-                      translate-x="-1"
-                      group-hover:translate-x-0
-                    />
-                  </button>
                 </Section>
                 <Section title="已连接的账户">
                   <template v-if="isAccountsPending">
@@ -261,54 +220,27 @@ defineExpose({
                 </Section>
                 <Section title="通行密钥">
                   <template v-if="isPasskeysPending">
-                    Loading...
+                    <PasskeySkeleton
+                      v-for="i in 1"
+                      :key="`skeleton-${i}`"
+                    />
                   </template>
                   <template v-else>
-                    <div
+                    <PasskeyInfo
                       v-for="passkey in passkeys"
                       :key="passkey.id"
-                      class="group"
-                      bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                      flex="inline items-center justify-between gap-2"
-                      p="x3 y2" w-full rounded-lg
-                    >
-                      <div>{{ passkey.name }}</div>
-                      <time :datetime="passkey.createdAt.toISOString()">
-                        {{ new Date(passkey.createdAt).toLocaleString() }}
-                      </time>
-                    </div>
-                  </template>
-                  <button
-                    type="button"
-                    class="group"
-                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                    flex="inline items-center justify-between gap-2"
-                    p="x3 y2" w-full rounded-lg
-                    :disabled="isLoadingAddPasskey"
-                    @click="addPasskey('example-passkey-name')"
-                  >
-                    <div class="i-mingcute:add-line size-4" />
-                    <div flex-1 text-left text-xs font-medium op-70>
-                      添加通行密钥
-                    </div>
-                    <div
-                      i-mingcute:arrow-right-line
-                      invisible size-4 transition-transform
-                      duration-200 group-hover:visible
-                      translate-x="-1"
-                      group-hover:translate-x-0
+                      :passkey="passkey"
                     />
-                  </button>
+                  </template>
+                  <AuthManageAddPasskey />
                 </Section>
                 <Section title="活动设备">
-                  <!-- 加载状态时显示 skeleton -->
                   <template v-if="isDevicesPending">
                     <SessionSkeleton
                       v-for="i in 1"
                       :key="`skeleton-${i}`"
                     />
                   </template>
-                  <!-- 加载完成后显示实际数据 -->
                   <template v-else>
                     <SessionInfo
                       v-for="s in sessions"
