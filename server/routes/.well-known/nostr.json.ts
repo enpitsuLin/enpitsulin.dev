@@ -1,10 +1,10 @@
 import { defineEventHandler } from 'h3'
 
 export default defineEventHandler(async (event) => {
-  setHeader(event, 'Content-Type', 'application/json')
-  setHeader(event, 'Access-Control-Allow-Origin', '*')
-  setHeader(event, 'Access-Control-Allow-Methods', 'GET, OPTIONS')
-  setHeader(event, 'Access-Control-Allow-Headers', 'Upgrade, Accept, Content-Type, User-Agent')
+  event.res.headers.set('Content-Type', 'application/json')
+  event.res.headers.set('Access-Control-Allow-Origin', '*')
+  event.res.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
+  event.res.headers.set('Access-Control-Allow-Headers', 'Upgrade, Accept, Content-Type, User-Agent')
 
   return {
     names: {
