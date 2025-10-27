@@ -2,7 +2,6 @@
 import type { Account } from 'better-auth'
 import { Collapsible } from '@ark-ui/vue/collapsible'
 import { useMutation, useQueryCache } from '@pinia/colada'
-import AccountIcon from './account-icon.vue'
 
 const props = defineProps<{
   account: Omit<Account, 'userId'>
@@ -56,7 +55,7 @@ function getProviderDisplayName(providerId: string): string {
       flex="inline items-center justify-between gap-2"
       p="x4 y3" w-full rounded-lg
     >
-      <AccountIcon
+      <AuthManageAccountIcon
         size-8
         text="black dark:white"
         :provider-id="account.providerId"

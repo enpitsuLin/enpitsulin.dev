@@ -47,7 +47,14 @@ const { mutate: sendVerificationEmail, isLoading } = useMutation({
       class="data-[state=closed]:animate-[accordion-up_200ms] data-[state=open]:animate-[accordion-down_250ms]"
     >
       <template v-if="user.emailVerified">
-        TODO
+        <div flex="~ col items-start gap-1">
+          <div text-sm>
+            绑定电子邮件地址
+          </div>
+          <p text-xs op-70>
+            {{ user.email }} 已绑定
+          </p>
+        </div>
       </template>
       <template v-else>
         <div flex="~ col items-start gap-1">

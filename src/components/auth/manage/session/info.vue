@@ -3,8 +3,6 @@ import type { Session } from 'better-auth'
 import { Collapsible } from '@ark-ui/vue/collapsible'
 import { useMutation, useQueryCache } from '@pinia/colada'
 import { UAParser } from 'ua-parser-js'
-import SessionIconLaptop from './session-icon-laptop.vue'
-import SessionIconMobile from './session-icon-mobile.vue'
 
 const props = defineProps<{
   session: Session
@@ -42,10 +40,10 @@ const { mutate: revokeSession, isLoading } = useMutation({
     >
       <div px-5>
         <template v-if="formatSession.device.type === 'mobile'">
-          <SessionIconMobile size-20 />
+          <AuthManageSessionIconMobile size-20 />
         </template>
         <template v-else>
-          <SessionIconLaptop size-20 />
+          <AuthManageSessionIconLaptop size-20 />
         </template>
       </div>
       <div flex="~ col items-start gap-1 1" text-left text-xs>
