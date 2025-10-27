@@ -6,6 +6,7 @@ import type { AppSSRContext } from './types'
 import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
+import { createEApp } from '~~/lib/application'
 import { serializeState } from '~~/lib/state'
 import clientEntryAssets from './entry-client?assets=client'
 import { createApp } from './main'
@@ -125,6 +126,7 @@ export async function render(
   const { app, head, initialState, hooks } = await createApp(path)
 
   const renderContent: AppSSRContext = {
+    url: url.toString(),
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
     event,
@@ -132,7 +134,16 @@ export async function render(
       env,
       ctx: context,
     },
-  }
+    payload: {},
+    $eApp: {},
+  } as AppSSRContext
+
+  const $e = createEApp({
+    vueApp: app,
+    ssrContext: renderContent,
+    initialState,
+  })
+  renderContent.$eApp = $e
 
   await hooks.callHook('app:before-render', path)
   const content = await renderToString(app, renderContent)

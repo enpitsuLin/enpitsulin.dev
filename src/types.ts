@@ -23,10 +23,27 @@ export interface AppContext {
 export type UserModule = (ctx: AppContext) => void
 
 export interface AppSSRContext extends SSRContext {
-  event: H3Event
+  event: H3Event<Request>
   modules: Set<string>
   cloudflare: {
     env: Cloudflare.Env
     ctx: ExecutionContext
   }
+  url: string
+  payload: Partial<AppPayload>
+  $eApp: Application
+}
+
+export interface AppPayload {
+  path?: string
+  data?: Record<string, any>
+  error?: Error | undefined
+  state: Record<string, any>
+}
+
+export interface Application {
+  id: string
+  vueApp: App<Element>
+  ssrContext?: AppSSRContext
+  payload: AppPayload
 }

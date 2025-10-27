@@ -1,3 +1,4 @@
+import type { Application } from '~/types'
 import 'vue-router'
 
 declare module 'vue-router' {
@@ -6,3 +7,11 @@ declare module 'vue-router' {
     requireAuth?: boolean
   }
 }
+
+declare module 'vue' {
+  interface App<HostElement> {
+    $eApp: Application
+  }
+}
+
+export {}
