@@ -79,6 +79,9 @@ catalogs:
     '@iconify-json/carbon':
       specifier: ^1.2.14
       version: 1.2.14
+    '@iconify-json/logos':
+      specifier: ^1.2.9
+      version: 1.2.9
     '@iconify-json/mingcute':
       specifier: ^1.2.5
       version: 1.2.5
@@ -307,7 +310,7 @@ importers:
         specifier: catalog:dev
         version: 1.2.14
       '@iconify-json/logos':
-        specifier: ^1.2.9
+        specifier: catalog:dev
         version: 1.2.9
       '@iconify-json/mingcute':
         specifier: catalog:dev
