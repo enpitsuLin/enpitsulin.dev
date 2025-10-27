@@ -16,6 +16,15 @@ import SessionSkeleton from './session-skeleton.vue'
 const { client, loggedIn, session, user } = useAuth()
 
 const isOpen = ref(false)
+const isSidebarOpen = ref(false)
+const isMobile = useMediaQuery('(max-width: 768px)')
+
+// 监听屏幕尺寸变化，桌面端自动展开侧边栏
+watch(isMobile, (mobile) => {
+  if (!mobile) {
+    isSidebarOpen.value = false
+  }
+})
 
 const accountSectionTitle = useTemplateRef('accountSectionTitle')
 const securitySectionTitle = useTemplateRef('securitySectionTitle')
@@ -79,6 +88,11 @@ function scrollToSection(sectionId: string) {
       behavior: 'smooth',
     })
   }
+
+  // 移动端点击后关闭侧边栏
+  if (isMobile.value) {
+    isSidebarOpen.value = false
+  }
 }
 
 // 暴露方法给父组件
@@ -93,59 +107,95 @@ defineExpose({
     <Teleport to="body">
       <Dialog.Backdrop
         bg="zinc-800/40 dark:bg-black/40"
-        class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
+        class="fixed inset-0 z-$z-index backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
       />
-      <Dialog.Positioner>
+      <Dialog.Positioner
+        fixed
+        class="left-1/2 top-1/2 z-$z-index -translate-x-1/2 -translate-y-1/2"
+      >
         <Dialog.Content
-          fixed h-2xl w-4xl
-          border="~ border rounded-3xl"
+          of-hidden
+          h="xl md:2xl" w="90vw md:4xl"
+          border="~ border rounded-xl md:rounded-3xl"
           bg="white/50 dark:zinc-900/50"
           un-text="zinc-900 dark:white"
-          class="left-1/2 top-1/2 z-100 origin-center backdrop-blur-xl -translate-x-1/2 -translate-y-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
+          class="z-100 origin-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
         >
-          <Dialog.CloseTrigger
-            top="4"
-            right="4"
-            absolute rounded-lg p-2
-            bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-            class="transition-colors"
+          <!-- 汉堡菜单按钮（仅移动端显示） -->
+          <div
+            flex="~ items-center"
+            pointer-events-none absolute inset-x-0 top-0 p="2 md:4"
+            class="[&>*]:pointer-events-auto"
           >
-            <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
-          </Dialog.CloseTrigger>
+            <button
+              v-if="isMobile"
+              z-10 rounded-lg p-2
+              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+              class="transition-colors md:hidden"
+              @click="isSidebarOpen = !isSidebarOpen"
+            >
+              <div class="i-mingcute:menu-line size-5 text-zinc-500 dark:text-zinc-400" />
+            </button>
+
+            <Dialog.CloseTrigger
+              ml-auto
+              rounded-lg p-2
+              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+              class="transition-colors"
+            >
+              <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
+            </Dialog.CloseTrigger>
+          </div>
 
           <div flex="~" size-full py-2>
+            <!-- 移动端遮罩层 -->
+            <Transition name="fade">
+              <div
+                v-if="isMobile && isSidebarOpen"
+                class="absolute inset-0 z-10 bg-black/20"
+                @click="isSidebarOpen = false"
+              />
+            </Transition>
+
             <!-- 左侧导航 -->
-            <div w="64" border-r="~ border" flex="shrink-0">
-              <nav p="4" space-y="2">
-                <button
-                  flex="inline items-center gap-3"
-                  rounded-lg px-3 py-2.5
-                  :data-active="isAccountSectionInView"
-                  bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
-                  hover:bg="zinc-200/50 dark:hover:zinc-700/50"
-                  class="w-full rounded-lg text-left transition-all"
-                  @click="scrollToSection('account')"
-                >
-                  <div class="i-mingcute:user-4-line size-5" />
-                  <span text-sm font-medium>账户</span>
-                </button>
-                <button
-                  flex="inline items-center gap-3"
-                  rounded-lg px-3 py-2.5
-                  :data-active="!isAccountSectionInView && isSecuritySectionInView"
-                  bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
-                  hover:bg="zinc-200/50 dark:hover:zinc-700/50"
-                  class="w-full rounded-lg text-left transition-all"
-                  @click="scrollToSection('security')"
-                >
-                  <div class="i-mingcute:shield-line size-5" />
-                  <span text-sm font-medium>安全</span>
-                </button>
-              </nav>
-            </div>
+            <Transition name="sidebar">
+              <div
+                v-show="!isMobile || isSidebarOpen"
+                border="r border"
+                class="w-64 flex-shrink-0"
+                :class="isMobile && 'absolute inset-y-0 left-0 z-20 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl'"
+              >
+                <nav p="4" space-y="2">
+                  <button
+                    flex="inline items-center gap-3"
+                    rounded-lg px-3 py-2.5
+                    :data-active="isAccountSectionInView"
+                    bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
+                    hover:bg="zinc-200/50 dark:hover:zinc-700/50"
+                    class="w-full rounded-lg text-left transition-all"
+                    @click="scrollToSection('account')"
+                  >
+                    <div class="i-mingcute:user-4-line size-5" />
+                    <span text-sm font-medium>账户</span>
+                  </button>
+                  <button
+                    flex="inline items-center gap-3"
+                    rounded-lg px-3 py-2.5
+                    :data-active="!isAccountSectionInView && isSecuritySectionInView"
+                    bg="data-[active=true]:zinc-200/50 data-[active=true]:dark:zinc-700/50 transparent'"
+                    hover:bg="zinc-200/50 dark:hover:zinc-700/50"
+                    class="w-full rounded-lg text-left transition-all"
+                    @click="scrollToSection('security')"
+                  >
+                    <div class="i-mingcute:shield-line size-5" />
+                    <span text-sm font-medium>安全</span>
+                  </button>
+                </nav>
+              </div>
+            </Transition>
 
             <!-- 右侧内容区域 -->
-            <div flex="1" p="y6 x8" h-full of-y-auto>
+            <div flex="1" p="y6 x4 md:x8" h-full of-y-auto mt="10 md:0">
               <!-- 账户部分 -->
               <div pb-5 space-y-4>
                 <div ref="accountSectionTitle" space-y-1>
@@ -298,5 +348,25 @@ defineExpose({
   to {
     height: 0;
   }
+}
+
+.sidebar-enter-active,
+.sidebar-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.sidebar-enter-from,
+.sidebar-leave-to {
+  transform: translateX(-100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

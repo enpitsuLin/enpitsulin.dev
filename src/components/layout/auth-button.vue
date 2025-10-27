@@ -63,74 +63,77 @@ async function handleSignOut() {
         <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
       </Avatar.Root>
     </Menu.Trigger>
-    <Menu.Positioner>
-      <Menu.Content
-        min-w-32 p-2
-        border="~ border rounded-lg"
-        bg="white/50 dark:zinc-900/50"
-        class="shadow-black/10 shadow-md backdrop-blur-10px transition-all"
-        backdrop-blur-2xl
-      >
-        <div px-1 space-y-1>
-          <h4 text-xs op-70>
-            账户
-          </h4>
-          <div flex="~ items-center justify-center gap-1" of-hidden>
-            <Avatar.Root size-6 of-hidden rounded-full>
-              <Avatar.Fallback
-                size-full
-                flex="data-[state=visible]:inline items-center justify-center"
-              >
-                {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
-              </Avatar.Fallback>
-              <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
-            </Avatar.Root>
 
-            <span flex-1 text-xs>
-              {{ user?.name }}
-            </span>
-          </div>
-        </div>
-        <Menu.Separator my-1 border="~ border" />
-        <Menu.Item
-          v-if="user?.role === 'admin'"
-          value="account"
-          as-child
+    <Teleport to="body">
+      <Menu.Positioner>
+        <Menu.Content
+          min-w-32 p-2
+          border="~ border rounded-lg"
+          bg="white/50 dark:zinc-900/50"
+          class="shadow-black/10 shadow-md transition-all"
+          backdrop-blur
         >
-          <RouterLink
+          <div px-1 space-y-1>
+            <h4 text-xs op-70>
+              账户
+            </h4>
+            <div flex="~ items-center justify-center gap-1" of-hidden>
+              <Avatar.Root size-6 of-hidden rounded-full>
+                <Avatar.Fallback
+                  size-full
+                  flex="data-[state=visible]:inline items-center justify-center"
+                >
+                  {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
+                </Avatar.Fallback>
+                <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
+              </Avatar.Root>
+
+              <span flex-1 text-xs>
+                {{ user?.name }}
+              </span>
+            </div>
+          </div>
+          <Menu.Separator my-1 border="~ border" />
+          <Menu.Item
+            v-if="user?.role === 'admin'"
+            value="account"
+            as-child
+          >
+            <RouterLink
+              p="x2 y1.5"
+              flex="~ items-center gap-2"
+              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+              cursor-pointer rounded text-xs
+              to="/dashboard"
+            >
+              <div class="i-mingcute:dashboard-2-line size-4" />
+              <span>后台管理</span>
+            </RouterLink>
+          </Menu.Item>
+          <Menu.Item
+            value="account"
             p="x2 y1.5"
             flex="~ items-center gap-2"
             bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-            cursor-pointer rounded text-xs
-            to="/dashboard"
+            cursor-pointer
+            rounded text-xs @click="openAccountModal"
           >
-            <div class="i-mingcute:dashboard-2-line size-4" />
-            <span>后台管理</span>
-          </RouterLink>
-        </Menu.Item>
-        <Menu.Item
-          value="account"
-          p="x2 y1.5"
-          flex="~ items-center gap-2"
-          bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-          cursor-pointer
-          rounded text-xs @click="openAccountModal"
-        >
-          <div class="i-mingcute:settings-3-line size-4" />
-          <span>账户管理</span>
-        </Menu.Item>
-        <Menu.Item
-          value="signout"
-          p="x2 y1.5"
-          flex="~ items-center gap-2"
-          bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-          cursor-pointer
-          rounded text-xs @click="handleSignOut"
-        >
-          <div class="i-mingcute:exit-line size-4" />
-          <span>退出登录</span>
-        </Menu.Item>
-      </Menu.Content>
-    </Menu.Positioner>
+            <div class="i-mingcute:settings-3-line size-4" />
+            <span>账户管理</span>
+          </Menu.Item>
+          <Menu.Item
+            value="signout"
+            p="x2 y1.5"
+            flex="~ items-center gap-2"
+            bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+            cursor-pointer
+            rounded text-xs @click="handleSignOut"
+          >
+            <div class="i-mingcute:exit-line size-4" />
+            <span>退出登录</span>
+          </Menu.Item>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Teleport>
   </Menu.Root>
 </template>

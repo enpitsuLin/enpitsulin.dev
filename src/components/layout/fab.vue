@@ -8,8 +8,8 @@ import { ClientOnly } from '@ark-ui/vue'
     flex="~ col items-center justify-between gap-y-2"
     border="~ border rounded-lg"
     bg="white/50 dark:zinc-900/50"
-    class="shadow-black/10 shadow-md backdrop-blur-10px transition-all" fixed z-99 p-1
-    backdrop-blur-2xl
+    class="shadow-black/10 shadow-md transition-all" fixed z-99 p-1
+    backdrop-blur
   >
     <ClientOnly>
       <LayoutAuthButton />

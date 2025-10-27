@@ -1,5 +1,6 @@
 import type { HeadTag } from '@unhead/vue'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
+import type { SSRContext } from 'vue/server-renderer'
 import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
@@ -42,6 +43,10 @@ const Template = defineComponent({
     },
     content: {
       type: String,
+      required: true,
+    },
+    renderContent: {
+      type: Object as PropType<SSRContext>,
       required: true,
     },
   },
@@ -111,7 +116,7 @@ const Template = defineComponent({
 export async function render(path: string, env: Cloudflare.Env, context: ExecutionContext) {
   const { app, head, initialState, hooks } = await createApp(path)
 
-  const renderContent = {
+  const renderContent: SSRContext = {
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
     cloudflare: {
@@ -131,6 +136,7 @@ export async function render(path: string, env: Cloudflare.Env, context: Executi
       tags={tags}
       content={content}
       initialState={initialState}
+      renderContent={renderContent}
     />,
   )
   return new Response(stream, {
