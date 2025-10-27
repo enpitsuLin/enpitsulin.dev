@@ -61,24 +61,27 @@ const { mutate: removePasskey, isLoading } = useMutation({
     </Collapsible.Trigger>
     <Collapsible.Content
       of-hidden p-4 space-y-2
-      class="data-[state=closed]:animate-[accordion-up_200ms] data-[state=open]:animate-[accordion-down_250ms]"
+      class="data-[state=closed]:animate-[accordion-up_100ms_ease-in-out] data-[state=open]:animate-[accordion-down_150ms_ease-in-out]"
     >
-      <div flex="~ col items-start gap-1">
-        <div text-sm>
-          删除通行密钥
+      <div flex="~ items-center gap-1" px-2>
+        <div flex-1 space-y-1>
+          <div text-sm>
+            删除通行密钥
+          </div>
+          <p text-xs op-70>
+            从您的账户中移除此通行密钥
+          </p>
         </div>
-        <p text-xs op-70>
-          从您的账户中移除此通行密钥
-        </p>
+        <button
+          inline-block
+          text-xs class="hover:underline"
+          :disabled="isLoading"
+          text-red-500
+          @click="removePasskey({ id: passkey.id })"
+        >
+          删除
+        </button>
       </div>
-      <button
-        text-xs class="hover:underline"
-        :disabled="isLoading"
-        text-red-500
-        @click="removePasskey({ id: passkey.id })"
-      >
-        删除
-      </button>
     </Collapsible.Content>
   </Collapsible.Root>
 </template>

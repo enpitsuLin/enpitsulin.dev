@@ -44,7 +44,7 @@ const { mutate: sendVerificationEmail, isLoading } = useMutation({
     </Collapsible.Trigger>
     <Collapsible.Content
       of-hidden p-4 space-y-2
-      class="data-[state=closed]:animate-[accordion-up_200ms] data-[state=open]:animate-[accordion-down_250ms]"
+      class="data-[state=closed]:animate-[accordion-up_100ms_ease-in-out] data-[state=open]:animate-[accordion-down_150ms_ease-in-out]"
     >
       <template v-if="user.emailVerified">
         <div flex="~ col items-start gap-1">

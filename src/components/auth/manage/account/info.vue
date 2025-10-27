@@ -84,24 +84,26 @@ function getProviderDisplayName(providerId: string): string {
     </Collapsible.Trigger>
     <Collapsible.Content
       of-hidden p-4 space-y-2
-      class="data-[state=closed]:animate-[accordion-up_200ms] data-[state=open]:animate-[accordion-down_250ms]"
+      class="data-[state=closed]:animate-[accordion-up_100ms_ease-in-out] data-[state=open]:animate-[accordion-down_150ms_ease-in-out]"
     >
-      <div flex="~ col items-start gap-1">
-        <div text-sm>
-          取消链接
+      <div flex="~ items-center gap-1" px-2>
+        <div flex-1 space-y-1>
+          <div text-sm>
+            取消链接
+          </div>
+          <p text-xs op-70>
+            从您的账户中移除此已连接的账户
+          </p>
         </div>
-        <p text-xs op-70>
-          从您的账户中移除此已连接的账户
-        </p>
+        <button
+          text-xs class="hover:underline"
+          :disabled="isLoading"
+          text-red-500
+          @click="unlinkAccount(account)"
+        >
+          取消链接
+        </button>
       </div>
-      <button
-        text-xs class="hover:underline"
-        :disabled="isLoading"
-        text-red-500
-        @click="unlinkAccount(account)"
-      >
-        取消链接
-      </button>
     </Collapsible.Content>
   </Collapsible.Root>
 </template>
