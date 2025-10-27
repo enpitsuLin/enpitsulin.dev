@@ -2,7 +2,7 @@
 import { Avatar } from '@ark-ui/vue'
 import { Dialog } from '@ark-ui/vue/dialog'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
-import { useInView } from 'motion-v'
+import { motion, useInView } from 'motion-v'
 import { useAuth } from '~/composables/auth'
 import AccountInfo from './account-info.vue'
 import AccountSkeleton from './account-skeleton.vue'
@@ -26,9 +26,11 @@ watch(isMobile, (mobile) => {
   }
 })
 
+const scrollContainer = useTemplateRef('scrollContainer')
 const accountSectionTitle = useTemplateRef('accountSectionTitle')
 const securitySectionTitle = useTemplateRef('securitySectionTitle')
 
+const { y: scrollY } = useScroll(scrollContainer)
 const isAccountSectionInView = useInView(accountSectionTitle)
 const isSecuritySectionInView = useInView(securitySectionTitle)
 
@@ -114,40 +116,14 @@ defineExpose({
         class="left-1/2 top-1/2 z-$z-index -translate-x-1/2 -translate-y-1/2"
       >
         <Dialog.Content
-          of-hidden
+          relative of-hidden
           h="xl md:2xl" w="90vw md:4xl"
           border="~ border rounded-xl md:rounded-3xl"
           bg="white/50 dark:zinc-900/50"
           un-text="zinc-900 dark:white"
           class="z-100 origin-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
         >
-          <!-- 汉堡菜单按钮（仅移动端显示） -->
-          <div
-            flex="~ items-center"
-            pointer-events-none absolute inset-x-0 top-0 p="2 md:4"
-            class="[&>*]:pointer-events-auto"
-          >
-            <button
-              v-if="isMobile"
-              z-10 rounded-lg p-2
-              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-              class="transition-colors md:hidden"
-              @click="isSidebarOpen = !isSidebarOpen"
-            >
-              <div class="i-mingcute:menu-line size-5 text-zinc-500 dark:text-zinc-400" />
-            </button>
-
-            <Dialog.CloseTrigger
-              ml-auto
-              rounded-lg p-2
-              bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-              class="transition-colors"
-            >
-              <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
-            </Dialog.CloseTrigger>
-          </div>
-
-          <div flex="~" size-full py-2>
+          <div flex="~" size-full of-hidden>
             <!-- 移动端遮罩层 -->
             <Transition name="fade">
               <div
@@ -195,136 +171,165 @@ defineExpose({
             </Transition>
 
             <!-- 右侧内容区域 -->
-            <div flex="1" p="y6 x4 md:x8" h-full of-y-auto mt="10 md:0">
-              <!-- 账户部分 -->
-              <div pb-5 space-y-4>
-                <div ref="accountSectionTitle" space-y-1>
-                  <h3 text="3xl font-semibold">
-                    账户
-                  </h3>
-                  <p text-sm op-70>
-                    管理您的账户信息
-                  </p>
+            <div ref="scrollContainer" flex="1" h-full of-y-auto>
+              <!-- 汉堡菜单按钮（仅移动端显示） -->
+              <motion.div
+                flex="~ items-center"
+                class="[&>*]:pointer-events-auto md:hidden"
+                pointer-events-none sticky top-0 w-full p="2 md:4" backdrop-blur
+                :style="{
+                  backdropFilter: `blur(${scrollY > 100 ? '10px' : '0px'})`,
+                }"
+              >
+                <button
+                  v-if="isMobile"
+                  z-10 rounded-lg p-2
+                  bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                  class="transition-colors md:hidden"
+                  @click="isSidebarOpen = !isSidebarOpen"
+                >
+                  <div class="i-mingcute:menu-line size-4 text-zinc-500 dark:text-zinc-400" />
+                </button>
+              </motion.div>
+              <div p="y6 x4 md:x8">
+                <!-- 账户部分 -->
+                <div role="group" pb-5 space-y-4>
+                  <div ref="accountSectionTitle" space-y-1>
+                    <h3 text="3xl font-semibold">
+                      账户
+                    </h3>
+                    <p text-sm op-70>
+                      管理您的账户信息
+                    </p>
+                  </div>
+                  <Section title="个人资料">
+                    <button
+                      type="button"
+                      class="group"
+                      bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                      flex="inline items-center justify-between gap-2"
+                      p="x4 y3" w-full rounded-lg
+                    >
+                      <Avatar.Root size-15 of-hidden rounded-full>
+                        <Avatar.Fallback
+                          size-full border="~ rounded-full" text-3xl
+                          flex="data-[state=visible]:inline items-center justify-center"
+                        >
+                          {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
+                        </Avatar.Fallback>
+                        <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
+                      </Avatar.Root>
+                      <div flex-1 text-left>
+                        {{ user?.name }}
+                      </div>
+                      <div
+                        i-mingcute:arrow-right-line
+                        invisible size-4 transition-transform
+                        duration-200 group-hover:visible
+                        translate-x="-1"
+                        group-hover:translate-x-0
+                      />
+                    </button>
+                  </Section>
+                  <Section title="电子邮件地址">
+                    <template v-if="user?.email">
+                      <EmailInfo :user />
+                    </template>
+                  </Section>
+                  <Section title="已连接的账户">
+                    <template v-if="isAccountsPending">
+                      <AccountSkeleton
+                        v-for="i in 1"
+                        :key="`skeleton-${i}`"
+                      />
+                    </template>
+                    <template v-else>
+                      <AccountInfo
+                        v-for="account in accounts"
+                        :key="account.accountId"
+                        :account="account"
+                      />
+                    </template>
+                    <button
+                      type="button"
+                      class="group"
+                      bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                      flex="inline items-center justify-between gap-2"
+                      p="x3 y2" w-full rounded-lg
+                      :disabled="isLoadingLinkSocial"
+                      @click="linkSocial('github')"
+                    >
+                      <div class="i-mingcute:add-line size-4" />
+                      <div flex-1 text-left text-xs font-medium op-70>
+                        连接账户
+                      </div>
+                      <div
+                        i-mingcute:arrow-right-line
+                        invisible size-4 transition-transform
+                        duration-200 group-hover:visible
+                        translate-x="-1"
+                        group-hover:translate-x-0
+                      />
+                    </button>
+                  </Section>
                 </div>
-                <Section title="个人资料">
-                  <button
-                    type="button"
-                    class="group"
-                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                    flex="inline items-center justify-between gap-2"
-                    p="x4 y3" w-full rounded-lg
-                  >
-                    <Avatar.Root size-15 of-hidden rounded-full>
-                      <Avatar.Fallback
-                        size-full border="~ rounded-full" text-3xl
-                        flex="data-[state=visible]:inline items-center justify-center"
-                      >
-                        {{ user?.name?.charAt(0).toUpperCase() ?? 'U' }}
-                      </Avatar.Fallback>
-                      <Avatar.Image :src="user?.image ?? ''" alt="avatar" />
-                    </Avatar.Root>
-                    <div flex-1 text-left>
-                      {{ user?.name }}
-                    </div>
-                    <div
-                      i-mingcute:arrow-right-line
-                      invisible size-4 transition-transform
-                      duration-200 group-hover:visible
-                      translate-x="-1"
-                      group-hover:translate-x-0
-                    />
-                  </button>
-                </Section>
-                <Section title="电子邮件地址">
-                  <template v-if="user?.email">
-                    <EmailInfo :user />
-                  </template>
-                </Section>
-                <Section title="已连接的账户">
-                  <template v-if="isAccountsPending">
-                    <AccountSkeleton
-                      v-for="i in 1"
-                      :key="`skeleton-${i}`"
-                    />
-                  </template>
-                  <template v-else>
-                    <AccountInfo
-                      v-for="account in accounts"
-                      :key="account.accountId"
-                      :account="account"
-                    />
-                  </template>
-                  <button
-                    type="button"
-                    class="group"
-                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-                    flex="inline items-center justify-between gap-2"
-                    p="x3 y2" w-full rounded-lg
-                    :disabled="isLoadingLinkSocial"
-                    @click="linkSocial('github')"
-                  >
-                    <div class="i-mingcute:add-line size-4" />
-                    <div flex-1 text-left text-xs font-medium op-70>
-                      连接账户
-                    </div>
-                    <div
-                      i-mingcute:arrow-right-line
-                      invisible size-4 transition-transform
-                      duration-200 group-hover:visible
-                      translate-x="-1"
-                      group-hover:translate-x-0
-                    />
-                  </button>
-                </Section>
-              </div>
 
-              <!-- 安全部分 -->
-              <div pb-5 space-y-4>
-                <div ref="securitySectionTitle" space-y-1>
-                  <h3 text="3xl font-semibold">
-                    安全
-                  </h3>
-                  <p text-sm op-70>
-                    管理您的安全设置
-                  </p>
+                <!-- 安全部分 -->
+                <div role="group" pb-5 space-y-4>
+                  <div ref="securitySectionTitle" space-y-1>
+                    <h3 text="3xl font-semibold">
+                      安全
+                    </h3>
+                    <p text-sm op-70>
+                      管理您的安全设置
+                    </p>
+                  </div>
+                  <Section title="密码">
+                    TODO
+                  </Section>
+                  <Section title="通行密钥">
+                    <template v-if="isPasskeysPending">
+                      <PasskeySkeleton
+                        v-for="i in 1"
+                        :key="`skeleton-${i}`"
+                      />
+                    </template>
+                    <template v-else>
+                      <PasskeyInfo
+                        v-for="passkey in passkeys"
+                        :key="passkey.id"
+                        :passkey="passkey"
+                      />
+                    </template>
+                    <AuthManageAddPasskey />
+                  </Section>
+                  <Section title="活动设备">
+                    <template v-if="isDevicesPending">
+                      <SessionSkeleton
+                        v-for="i in 1"
+                        :key="`skeleton-${i}`"
+                      />
+                    </template>
+                    <template v-else>
+                      <SessionInfo
+                        v-for="s in sessions"
+                        :key="s.id"
+                        :session="s"
+                      />
+                    </template>
+                  </Section>
                 </div>
-                <Section title="密码">
-                  TODO
-                </Section>
-                <Section title="通行密钥">
-                  <template v-if="isPasskeysPending">
-                    <PasskeySkeleton
-                      v-for="i in 1"
-                      :key="`skeleton-${i}`"
-                    />
-                  </template>
-                  <template v-else>
-                    <PasskeyInfo
-                      v-for="passkey in passkeys"
-                      :key="passkey.id"
-                      :passkey="passkey"
-                    />
-                  </template>
-                  <AuthManageAddPasskey />
-                </Section>
-                <Section title="活动设备">
-                  <template v-if="isDevicesPending">
-                    <SessionSkeleton
-                      v-for="i in 1"
-                      :key="`skeleton-${i}`"
-                    />
-                  </template>
-                  <template v-else>
-                    <SessionInfo
-                      v-for="s in sessions"
-                      :key="s.id"
-                      :session="s"
-                    />
-                  </template>
-                </Section>
               </div>
             </div>
           </div>
+
+          <Dialog.CloseTrigger
+            absolute right="2 md:4" top="2 md:4" rounded-lg p-2
+            bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+            class="transition-colors"
+          >
+            <div class="i-mingcute:close-line size-4 text-zinc-500 dark:text-zinc-400" />
+          </Dialog.CloseTrigger>
         </Dialog.Content>
       </Dialog.Positioner>
     </Teleport>
