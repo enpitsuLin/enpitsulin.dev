@@ -171,7 +171,7 @@ defineExpose({
             </Transition>
 
             <!-- 右侧内容区域 -->
-            <div ref="scrollContainer" flex="1" h-full of-y-auto>
+            <div ref="scrollContainer" flex="1" h-full scroll-pt-13 of-y-auto>
               <!-- 汉堡菜单按钮（仅移动端显示） -->
               <motion.div
                 flex="~ items-center"
