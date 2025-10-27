@@ -8,26 +8,10 @@ export const baseServerOptions = {
   emailAndPassword: {
     enabled: true,
   },
-  emailVerification: {
-    sendVerificationEmail: async ({ user, url, token }, _request) => {
-      // eslint-disable-next-line no-console
-      console.log('发送邮件验证:', { user, url, token })
-    },
-  },
   account: {
     accountLinking: {
       enabled: true,
       allowDifferentEmails: true,
-    },
-  },
-  user: {
-    changeEmail: {
-      enabled: true,
-      sendChangeEmailVerification: async ({ user, newEmail, url, token }) => {
-        // TODO: 实现发送邮件验证逻辑
-        // eslint-disable-next-line no-console
-        console.log('发送邮件验证:', { user, newEmail, url, token })
-      },
     },
   },
   plugins: [

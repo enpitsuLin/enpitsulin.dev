@@ -71,6 +71,7 @@ catalogs:
     drizzle-orm: ^0.44.7
     h3: 2.0.1-rc.3
     jstoxml: ^0.0.0
+    mimetext: ^3.0.27
     srvx: ^0.9.1
   types:
     '@types/markdown-it-link-attributes': ^3.0.5

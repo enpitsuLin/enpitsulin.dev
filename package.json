@@ -32,6 +32,7 @@
     "h3": "catalog:server",
     "hookable": "catalog:frontend",
     "jstoxml": "catalog:server",
+    "mimetext": "catalog:server",
     "motion-v": "catalog:frontend",
     "nprogress": "catalog:frontend",
     "pinia": "catalog:frontend",

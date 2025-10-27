@@ -17,5 +17,10 @@
       "database_id": "aa4d9bc0-c6a9-425d-9af3-01e103a65d35",
       "migrations_dir": "server/database/migrations"
     }
+  ],
+  "send_email": [
+    {
+      "name": "SEB"
+    }
   ]
 }
