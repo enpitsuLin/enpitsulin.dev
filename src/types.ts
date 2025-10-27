@@ -1,7 +1,9 @@
 import type { VueHeadClient } from '@unhead/vue/client'
+import type { H3Event } from 'h3'
 import type { Hookable } from 'hookable'
 import type { App } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
+import type { SSRContext } from 'vue/server-renderer'
 
 export interface AppContext {
   app: App<Element>
@@ -19,3 +21,12 @@ export interface AppContext {
   routePath?: string
 }
 export type UserModule = (ctx: AppContext) => void
+
+export interface AppSSRContext extends SSRContext {
+  event: H3Event
+  modules: Set<string>
+  cloudflare: {
+    env: Cloudflare.Env
+    ctx: ExecutionContext
+  }
+}

@@ -1,6 +1,8 @@
 import type { HeadTag } from '@unhead/vue'
+import type { H3Event } from 'h3'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
 import type { SSRContext } from 'vue/server-renderer'
+import type { AppSSRContext } from './types'
 import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
@@ -113,12 +115,19 @@ const Template = defineComponent({
   },
 })
 
-export async function render(path: string, env: Cloudflare.Env, context: ExecutionContext) {
+export async function render(
+  event: H3Event,
+) {
+  const url = new URL(event.req.url)
+  const path = url.pathname
+  const env = event.runtime!.cloudflare!.env
+  const context = event.runtime!.cloudflare!.context
   const { app, head, initialState, hooks } = await createApp(path)
 
-  const renderContent: SSRContext = {
+  const renderContent: AppSSRContext = {
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
+    event,
     cloudflare: {
       env,
       ctx: context,
@@ -147,8 +156,5 @@ export async function render(path: string, env: Cloudflare.Env, context: Executi
 }
 
 export default defineEventHandler(async (event) => {
-  const url = new URL(event.req.url)
-  const path = url.pathname
-
-  return render(path, event.runtime!.cloudflare!.env, event.runtime!.cloudflare!.context)
+  return render(event)
 })
