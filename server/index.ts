@@ -5,7 +5,7 @@ import entryServerHandler from '~/entry-server'
 // Create an app instance
 const app = new H3()
 
-const routeFiles = import.meta.glob<EventHandlerWithFetch>('./routes/**/*.ts', { eager: true, import: 'default' })
+const routeFiles = import.meta.glob<EventHandlerWithFetch>('./routes/**/*.ts', { eager: true, import: 'default', exhaustive: true })
 
 function registerRoute(path: string, handler: EventHandlerWithFetch) {
   const pathMatch = path.match(/^\.\/routes\/(?<routePath>.+?)(?:\.(?<method>get|post|put|delete|patch|head|options))?\.ts$/)
