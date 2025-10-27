@@ -19,23 +19,36 @@ function handleSuccess() {
   isOpen.value = false
 }
 
+function handleError(message: string) {
+  errorMessage.value = message
+}
+
 const { mutate: signInPasskey, isLoading: isLoadingSignInPasskey } = useMutation({
-  mutation() {
-    return signIn.passkey({ })
+  async mutation() {
+    return signIn.passkey({ }).then((res) => {
+      if (res.error) {
+        return Promise.reject(new Error(res.error.message))
+      }
+      return res.data
+    })
   },
   onSuccess() {
     isOpen.value = false
+  },
+  onError(error) {
+    handleError(error.message)
   },
 })
 
 const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
   mutation(provider: string) {
-    return signIn.social({
-      provider,
-    })
+    return signIn.social({ provider, fetchOptions: { throw: true } })
   },
   onSuccess() {
     isOpen.value = false
+  },
+  onError(error) {
+    handleError(error.message)
   },
 })
 
@@ -151,12 +164,12 @@ defineExpose({
             <LoginForm
               v-if="!isSignUp"
               @success="handleSuccess"
-              @error="console.error($event)"
+              @error="handleError"
             />
             <SignupForm
               v-else
               @success="handleSuccess"
-              @error="console.error($event)"
+              @error="handleError"
             />
 
             <!-- Toggle mode -->

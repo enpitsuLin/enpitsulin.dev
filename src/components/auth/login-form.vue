@@ -17,10 +17,13 @@ const formSchema = toTypedSchema(loginSchema)
 
 const { mutate, isLoading } = useMutation({
   mutation(values: LoginFormData) {
-    return signIn.email({
-      email: values.email,
-      password: values.password,
-    })
+    return signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      { throw: true },
+    )
   },
   onSuccess() {
     emit('success')
