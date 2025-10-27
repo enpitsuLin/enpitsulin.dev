@@ -97,6 +97,7 @@ defineExpose({
         />
       </template>
       <button
+        v-if="accounts?.length === 0"
         type="button"
         class="group"
         bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
