@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "enpitsulin-dev-vite",
+  "name": "enpitsulin-dev",
   "main": "server/index.ts",
   "compatibility_date": "2025-10-01",
   "observability": {
