@@ -19,7 +19,7 @@ const { mutate: addPasskey, isLoading: isLoadingAddPasskey } = useMutation({
 <template>
   <div relative w-full>
     <motion.button
-      v-if="expanded"
+      v-if="!expanded"
       type="button"
       class="group"
       bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
