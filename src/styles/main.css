@@ -15,6 +15,10 @@
     u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
 }
 
+* {
+  outline: none;
+}
+
 :root {
   color-scheme: light only;
   font-family: 'HarmonyOS_Medium';
