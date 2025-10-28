@@ -67,7 +67,7 @@ app.use((event) => {
   event.context.cloudflare = event.runtime!.cloudflare!
 })
 
-app.get('/*', entryServerHandler)
+app.get('/**', entryServerHandler)
 
 export default {
   async fetch(request, env, context) {

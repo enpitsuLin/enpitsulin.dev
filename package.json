@@ -27,6 +27,7 @@
     "@vee-validate/zod": "catalog:frontend",
     "@vueuse/core": "catalog:frontend",
     "better-auth": "catalog:server",
+    "consola": "catalog:dev",
     "devalue": "catalog:frontend",
     "drizzle-orm": "catalog:server",
     "h3": "catalog:server",
