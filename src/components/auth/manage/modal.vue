@@ -4,7 +4,7 @@ import { motion } from 'motion-v'
 
 const isOpen = ref(false)
 const isSidebarOpen = ref(false)
-const isMobile = useMediaQuery('(max-width: 768px)')
+const isMobile = useMediaQuery('(max-width: 768px)', { ssrWidth: 1440 })
 
 // 监听屏幕尺寸变化，桌面端自动展开侧边栏
 watch(isMobile, (mobile) => {
