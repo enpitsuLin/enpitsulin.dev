@@ -12,9 +12,9 @@ const { data: sessions, isPending: isDevicesPending } = useQuery({
   key: () => ['sessions', loggedIn.value],
   query: async () => client.listSessions({ fetchOptions: { throw: true } })
     .then(res => res.sort((a, b) => {
-      if (a.id === session.value.data?.session.id)
+      if (a.id === session.value?.id)
         return -1
-      if (b.id === session.value.data?.session.id)
+      if (b.id === session.value?.id)
         return 1
       return 0
     })),

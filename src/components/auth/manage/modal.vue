@@ -49,7 +49,7 @@ defineExpose({
 
 <template>
   <Dialog.Root v-model:open="isOpen">
-    <Teleport to="body">
+    <Teleport to="#teleports">
       <Dialog.Backdrop
         bg="zinc-800/40 dark:bg-black/40"
         class="fixed inset-0 z-$z-index backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
@@ -134,7 +134,7 @@ defineExpose({
                   <div class="i-mingcute:menu-line size-4 text-zinc-500 dark:text-zinc-400" />
                 </button>
               </motion.div>
-              <div p="y6 x4 md:x8">
+              <div p="y6 x4 md:x8" data-allow-mismatch>
                 <AuthManageUserInfo ref="accountSectionTitle" />
                 <AuthManageSecurityInfo ref="securitySectionTitle" />
               </div>

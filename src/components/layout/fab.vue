@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ClientOnly } from '@ark-ui/vue'
 </script>
 
 <template>
@@ -11,12 +10,8 @@ import { ClientOnly } from '@ark-ui/vue'
     class="shadow-black/10 shadow-md transition-all" fixed z-99 p-1
     backdrop-blur
   >
-    <ClientOnly>
-      <LayoutAuthButton />
-    </ClientOnly>
+    <LayoutAuthButton />
     <LayoutThemeButton />
-    <ClientOnly>
-      <LayoutToTopButton />
-    </ClientOnly>
+    <LayoutToTopButton />
   </div>
 </template>

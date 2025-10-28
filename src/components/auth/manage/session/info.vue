@@ -8,7 +8,7 @@ const props = defineProps<{
   session: Session
 }>()
 const { session: currentSession, client } = useAuth()
-const isCurrentSession = computed(() => props.session.id === currentSession.value.data?.session.id)
+const isCurrentSession = computed(() => props.session.id === currentSession.value?.id)
 
 const formatSession = computed(() => {
   const { browser, device } = UAParser(props.session.userAgent ?? '')

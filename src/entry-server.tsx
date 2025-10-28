@@ -52,7 +52,7 @@ const Template = defineComponent({
       required: true,
     },
   },
-  setup: ({ tags, initialState, content }) => {
+  setup: ({ tags, initialState, content, renderContent: { teleports } }) => {
     const schema = {
       htmlAttrs: {} as IntrinsicElementAttributes['html'],
       bodyAttrs: {} as IntrinsicElementAttributes['body'],
@@ -106,6 +106,7 @@ const Template = defineComponent({
           {schema.tags.bodyOpen.map(tag => cloneVNode(tag))}
           <div id="app" innerHTML={content}>
           </div>
+          {teleports && <div id="teleports" innerHTML={Reflect.get(teleports, '#teleports') ?? ''}></div>}
           <script type="application/json" id="__INITIAL_STATE__" innerHTML={serializeState(initialState) ?? ''}></script>
           <noscript> This website requires JavaScript to function properly. Please enable JavaScript to continue. </noscript>
           {schema.tags.bodyClose.map(tag => cloneVNode(tag))}
