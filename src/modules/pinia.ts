@@ -1,3 +1,4 @@
+import type { StateTree } from 'pinia'
 import type { UserModule } from '~/types'
 import { hydrateQueryCache, isQueryCache, PiniaColada, serializeQueryCache, useQueryCache } from '@pinia/colada'
 import * as devalue from 'devalue'
@@ -24,13 +25,19 @@ export const install: UserModule = ({ initialState, app, hooks }) => {
 
   else {
     initialState.pinia = pinia.state.value
-
-    hooks.hook('app:after-render', () => {
+    hooks.hook('app:mounted', () => {
       const queryCache = useQueryCache(pinia)
 
       initialState.queryCache = devalue.stringify(queryCache, {
         PiniaColada_TreeMapNode: (data: unknown) => isQueryCache(data) && serializeQueryCache(data),
       })
     })
+  }
+}
+
+declare module '~/types' {
+  interface AppInitialState {
+    pinia: Record<string, StateTree>
+    queryCache: any
   }
 }

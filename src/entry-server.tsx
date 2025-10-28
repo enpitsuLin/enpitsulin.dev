@@ -124,8 +124,9 @@ export async function render(
   const env = event.runtime!.cloudflare!.env
   const context = event.runtime!.cloudflare!.context
   const { app, head, initialState, hooks } = await createApp(path)
+  await hooks.callHook('app:created', app)
 
-  const renderContent: AppSSRContext = {
+  const ssrContext: AppSSRContext = {
     url: url.toString(),
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
@@ -135,21 +136,24 @@ export async function render(
       ctx: context,
     },
   }
+  await hooks.callHook('app:beforeMount', app)
+  const renderResult = await renderToString(app, ssrContext)
 
-  await hooks.callHook('app:before-render', path)
-  const content = await renderToString(app, renderContent)
-  await hooks.callHook('app:after-render', path, content)
+  await hooks.callHook('app:mounted', app)
 
   const tags = await head.resolveTags()
 
   const stream = renderToWebStream(
     <Template
       tags={tags}
-      content={content}
+      content={renderResult}
       initialState={initialState}
-      renderContent={renderContent}
+      renderContent={ssrContext}
     />,
   )
+
+  await hooks.callHook('app:rendered', { ssrContext, renderResult })
+
   return new Response(stream, {
     headers: {
       'content-type': 'text/html',

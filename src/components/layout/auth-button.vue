@@ -34,6 +34,7 @@ async function handleSignOut() {
     title="登录"
     @click="openAuthModal"
   >
+    <span class="sr-only">登录</span>
     <div class="i-mingcute:user-4-line size-4" />
   </button>
 
