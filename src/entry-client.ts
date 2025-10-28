@@ -1,9 +1,7 @@
-import { createEApp } from '~~/lib/application'
 import { createApp } from '~/main'
 
-createApp().then(({ app, router, initialState }) => {
+createApp().then(({ app, router }) => {
   router.isReady().then(() => {
-    createEApp({ vueApp: app, initialState })
     app.mount('#app')
   })
 })

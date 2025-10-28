@@ -30,20 +30,4 @@ export interface AppSSRContext extends SSRContext {
     ctx: ExecutionContext
   }
   url: string
-  payload: Partial<AppPayload>
-  $eApp: Application
-}
-
-export interface AppPayload {
-  path?: string
-  data?: Record<string, any>
-  error?: Error | undefined
-  state: Record<string, any>
-}
-
-export interface Application {
-  id: string
-  vueApp: App<Element>
-  ssrContext?: AppSSRContext
-  payload: AppPayload
 }

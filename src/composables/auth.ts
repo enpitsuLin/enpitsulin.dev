@@ -1,7 +1,7 @@
 import type { RouteLocationRaw } from 'vue-router'
-// app/composables/useAuth.ts
 import { useMutation } from '@pinia/colada'
-import { client, useSession } from '~~/lib/auth-client'
+import { createAuthClient } from 'better-auth/vue'
+import { baseClientOptions } from '~~/lib/auth-options'
 
 export interface RuntimeAuthConfig {
   redirectUserTo: RouteLocationRaw | string
@@ -14,7 +14,19 @@ export function useAuth() {
     redirectGuestTo: '/',
   }
 
-  const session = useSession()
+  const url = useRequestURL()
+
+  const headers = useRequestHeaders()
+
+  const client = createAuthClient({
+    baseURL: url.toString(),
+    fetchOptions: {
+      headers,
+    },
+    ...baseClientOptions,
+  })
+
+  const session = client.useSession()
 
   const { mutateAsync } = useMutation({
     mutation: async () => {
