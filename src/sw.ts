@@ -12,8 +12,6 @@ self.addEventListener('message', (event) => {
 
 const entries = self.__WB_MANIFEST
 
-entries.push({ url: '/', revision: Math.random().toString() })
-
 precacheAndRoute(entries)
 
 // clean old assets

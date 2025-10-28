@@ -15,7 +15,6 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import { VitePWA } from 'vite-plugin-pwa'
 import Layouts from 'vite-plugin-vue-layouts'
 
 export default defineConfig({
@@ -136,41 +135,6 @@ export default defineConfig({
             dark: 'vitesse-dark',
           },
         }))
-      },
-    }),
-
-    // https://github.com/antfu/vite-plugin-pwa
-    VitePWA({
-      scope: '/',
-      base: '/',
-      srcDir: 'src',
-      filename: 'sw.ts',
-      strategies: 'injectManifest',
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'favicon-dark.svg', 'safari-pinned-tab.svg'],
-
-      manifest: {
-        name: 'enpitsulin.dev',
-        short_name: 'enpitsulin',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: '/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: '/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
-          },
-        ],
       },
     }),
 

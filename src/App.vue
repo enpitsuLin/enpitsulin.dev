@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { description, title } from '~/constants'
-import { PWAManifest } from './modules/pwa'
 
 useHead({
   title,
@@ -46,6 +45,5 @@ useHead({
 </script>
 
 <template>
-  <PWAManifest />
   <RouterView />
 </template>
