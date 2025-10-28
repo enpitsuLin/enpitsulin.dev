@@ -1,4 +1,4 @@
-import type { AppContext, UserModule } from '~/types'
+import type { AppContext, AppInitialState, UserModule } from '~/types'
 import { createHead as createClientHead } from '@unhead/vue/client'
 import { createHead as createSSRHead } from '@unhead/vue/server'
 import { createHooks } from 'hookable'
@@ -30,12 +30,16 @@ export async function createApp(routePath?: string) {
 
   const hooks: AppContext['hooks'] = createHooks()
 
+  app.config.errorHandler = (err, instance, info) => {
+    hooks.callHook('vue:error', err, instance, info)
+  }
+
   const context: AppContext = {
     app,
     head,
     routes,
     router,
-    initialState: {} as Record<string, any>,
+    initialState: {} as AppInitialState,
     routePath,
     hooks,
   }
@@ -68,7 +72,7 @@ export async function createApp(routePath?: string) {
     router.push(route)
 
     await router.isReady()
-    context.initialState = router.currentRoute.value.meta.state as Record<string, any> || {} as Record<string, any>
+    context.initialState = router.currentRoute.value.meta.state as AppInitialState || {} as AppInitialState
   }
 
   const initialState = context.initialState

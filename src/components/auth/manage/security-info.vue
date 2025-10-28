@@ -23,9 +23,10 @@ const { data: sessions, isPending: isDevicesPending } = useQuery({
 
 const { data: passkeys, isPending: isPasskeysPending } = useQuery({
   key: () => ['passkeys', loggedIn.value],
-  query: async () => client.passkey.listUserPasskeys({
-    fetchOptions: { throw: true },
-  }),
+  query: async () => {
+    const res = await client.passkey.listUserPasskeys({ fetchOptions: { throw: true } })
+    return res
+  },
   enabled: () => loggedIn.value,
 })
 

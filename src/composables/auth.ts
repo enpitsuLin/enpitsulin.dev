@@ -1,20 +1,11 @@
-import type { Session, User } from '~~/lib/auth-client'
-import { createBaseAuthClient } from '~~/lib/auth-client'
+import { useAuthContext } from '~/modules/auth'
 
 export function useAuth() {
-  const url = useRequestURL()
+  const $auth = useAuthContext()
 
-  const headers = useRequestHeaders()
-
-  const client = createBaseAuthClient({
-    baseURL: url.toString(),
-    fetchOptions: {
-      headers,
-    },
-  })
-
-  const session = shallowRef<Session | null>(null)
-  const user = shallowRef<User | null>(null)
+  const client = $auth.client
+  const session = $auth.session
+  const user = $auth.user
 
   const isFetchingSession = ref(false)
 

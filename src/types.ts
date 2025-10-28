@@ -9,7 +9,10 @@ export interface RuntimeHooks {
   'app:created': (app: App<Element>) => Promise<void> | void
   'app:beforeMount': (app: App<Element>) => Promise<void> | void
   'app:mounted': (app: App<Element>) => Promise<void> | void
+  'app:beforeRender': (app: App<Element>, ssrContext: AppSSRContext) => Promise<void> | void
   'app:rendered': (ctx: AppRenderedContext) => Promise<void> | void
+
+  'vue:error': (...args: Parameters<Parameters<typeof onErrorCaptured>[0]>) => Promise<void> | void
 }
 
 export interface AppInitialState {

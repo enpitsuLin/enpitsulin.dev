@@ -1,6 +1,4 @@
 <script setup lang="tsx">
-import { ClientOnly } from '@ark-ui/vue'
-
 const { y } = useWindowScroll()
 
 const links = [
@@ -52,16 +50,15 @@ const links = [
       </div>
       <HomeIntroAvatar class="size-28 md:size-34" />
     </div>
-    <ClientOnly>
-      <div
-        class="mt-auto hidden pb-6 pt-8 transition-opacity duration-500 sm:flex sm:justify-center"
-        :class=" y > 20 ? 'op-0' : 'op-100'"
-      >
-        <span class="animate-bounce text-gray-500">
-          <i inline-block class="i-mingcute:right-line rotate-90" />
-        </span>
-      </div>
-    </ClientOnly>
+
+    <div
+      class="mt-auto hidden pb-6 pt-8 transition-opacity duration-500 sm:flex sm:justify-center"
+      :class=" y > 20 ? 'op-0' : 'op-100'"
+    >
+      <span class="animate-bounce text-gray-500">
+        <i inline-block class="i-mingcute:right-line rotate-90" />
+      </span>
+    </div>
   </section>
 </template>
 

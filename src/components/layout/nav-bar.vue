@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ClientOnly } from '@ark-ui/vue'
 import { motion } from 'motion-v'
 import { navigation } from '~/constants'
 
@@ -54,9 +53,7 @@ const route = useRoute()
       </nav>
     </div>
 
-    <ClientOnly>
-      <LayoutNavBarMenu />
-    </ClientOnly>
+    <LayoutNavBarMenu />
   </header>
 </template>
 

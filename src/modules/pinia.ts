@@ -25,7 +25,7 @@ export const install: UserModule = ({ initialState, app, hooks }) => {
 
   else {
     initialState.pinia = pinia.state.value
-    hooks.hook('app:mounted', () => {
+    hooks.hook('app:rendered', () => {
       const queryCache = useQueryCache(pinia)
 
       initialState.queryCache = devalue.stringify(queryCache, {

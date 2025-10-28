@@ -122,8 +122,11 @@ export async function render(
   const url = new URL(event.req.url)
   const path = url.pathname
   const env = event.runtime!.cloudflare!.env
-  const context = event.runtime!.cloudflare!.context
+  const context = event.runtime!.cloudflare!.context as ExecutionContext
   const { app, head, initialState, hooks } = await createApp(path)
+  hooks.hook('vue:error', (err, _instance, _info) => {
+    console.error(err)
+  })
   await hooks.callHook('app:created', app)
 
   const ssrContext: AppSSRContext = {
@@ -136,11 +139,10 @@ export async function render(
       ctx: context,
     },
   }
-  await hooks.callHook('app:beforeMount', app)
+  await hooks.callHook('app:beforeRender', app, ssrContext)
   const renderResult = await renderToString(app, ssrContext)
 
-  await hooks.callHook('app:mounted', app)
-
+  await hooks.callHook('app:rendered', { ssrContext, renderResult })
   const tags = await head.resolveTags()
 
   const stream = renderToWebStream(
@@ -151,8 +153,6 @@ export async function render(
       renderContent={ssrContext}
     />,
   )
-
-  await hooks.callHook('app:rendered', { ssrContext, renderResult })
 
   return new Response(stream, {
     headers: {

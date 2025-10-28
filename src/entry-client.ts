@@ -1,6 +1,9 @@
 import { createApp } from '~/main'
 
 createApp().then(async ({ app, router, hooks }) => {
+  hooks.hook('vue:error', (err, _instance, _info) => {
+    console.error(err)
+  })
   await hooks.callHook('app:created', app)
   await router.isReady()
   await hooks.callHook('app:beforeMount', app)
