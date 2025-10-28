@@ -33,6 +33,7 @@ catalogs:
     '@iconify-json/logos': ^1.2.9
     '@iconify-json/mingcute': ^1.2.5
     '@libsql/client': ^0.15.15
+    consola: ^3.4.2
     drizzle-kit: ^0.31.5
     eslint: ^9.38.0
     eslint-plugin-format: ^1.0.2

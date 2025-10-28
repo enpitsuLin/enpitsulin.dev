@@ -1,41 +1,41 @@
-import type { RouteLocationRaw } from 'vue-router'
-// app/composables/useAuth.ts
-import { useMutation } from '@pinia/colada'
-import { client, useSession } from '~~/lib/auth-client'
-
-export interface RuntimeAuthConfig {
-  redirectUserTo: RouteLocationRaw | string
-  redirectGuestTo: RouteLocationRaw | string
-}
+import { useAuthContext } from '~/modules/auth'
 
 export function useAuth() {
-  const options: RuntimeAuthConfig = {
-    redirectUserTo: '/',
-    redirectGuestTo: '/',
+  const $auth = useAuthContext()
+
+  const client = $auth.client
+  const session = $auth.session
+  const user = $auth.user
+
+  const isFetchingSession = ref(false)
+
+  const fetchSession = async () => {
+    if (isFetchingSession.value)
+      return
+    isFetchingSession.value = true
+    const res = await client.getSession()
+    if (res.error) {
+      return
+    }
+    session.value = res.data?.session ?? null
+    user.value = res.data?.user ?? null
+
+    isFetchingSession.value = false
+
+    return {
+      session: session.value,
+      user: user.value,
+    }
   }
-
-  const session = useSession()
-
-  const { mutateAsync } = useMutation({
-    mutation: async () => {
-      const { data } = await client.getSession()
-      return data
-    },
-    onError: (error) => {
-      console.error(error)
-    },
-
-  })
 
   return {
     session,
-    user: computed(() => session.value.data?.user || null),
-    loggedIn: computed(() => !!session.value.data?.session),
+    user,
+    loggedIn: computed(() => !!session.value),
     signIn: client.signIn,
     signUp: client.signUp,
     signOut: client.signOut,
-    options,
-    fetchSession: mutateAsync,
+    fetchSession,
     client,
   }
 }

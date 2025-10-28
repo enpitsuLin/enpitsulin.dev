@@ -12,9 +12,9 @@ const { data: sessions, isPending: isDevicesPending } = useQuery({
   key: () => ['sessions', loggedIn.value],
   query: async () => client.listSessions({ fetchOptions: { throw: true } })
     .then(res => res.sort((a, b) => {
-      if (a.id === session.value.data?.session.id)
+      if (a.id === session.value?.id)
         return -1
-      if (b.id === session.value.data?.session.id)
+      if (b.id === session.value?.id)
         return 1
       return 0
     })),
@@ -23,9 +23,10 @@ const { data: sessions, isPending: isDevicesPending } = useQuery({
 
 const { data: passkeys, isPending: isPasskeysPending } = useQuery({
   key: () => ['passkeys', loggedIn.value],
-  query: async () => client.passkey.listUserPasskeys({
-    fetchOptions: { throw: true },
-  }),
+  query: async () => {
+    const res = await client.passkey.listUserPasskeys({ fetchOptions: { throw: true } })
+    return res
+  },
   enabled: () => loggedIn.value,
 })
 

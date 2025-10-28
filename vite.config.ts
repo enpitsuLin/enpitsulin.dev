@@ -61,6 +61,14 @@ export default defineConfig({
     VueRouter({
       extensions: ['.vue', '.md'],
       dts: 'src/typed-router.d.ts',
+      extendRoute(route) {
+        // workaround for https://github.com/JohnCampionJr/vite-plugin-vue-layouts/issues/144
+        if (route.name === '/(admin)') {
+          route.addToMeta({
+            layout: false,
+          })
+        }
+      },
     }),
 
     Vue({

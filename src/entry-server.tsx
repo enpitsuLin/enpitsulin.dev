@@ -1,6 +1,8 @@
 import type { HeadTag } from '@unhead/vue'
+import type { H3Event } from 'h3'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
 import type { SSRContext } from 'vue/server-renderer'
+import type { AppSSRContext } from './types'
 import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
@@ -50,7 +52,7 @@ const Template = defineComponent({
       required: true,
     },
   },
-  setup: ({ tags, initialState, content }) => {
+  setup: ({ tags, initialState, content, renderContent: { teleports } }) => {
     const schema = {
       htmlAttrs: {} as IntrinsicElementAttributes['html'],
       bodyAttrs: {} as IntrinsicElementAttributes['body'],
@@ -104,6 +106,7 @@ const Template = defineComponent({
           {schema.tags.bodyOpen.map(tag => cloneVNode(tag))}
           <div id="app" innerHTML={content}>
           </div>
+          {teleports && <div id="teleports" innerHTML={Reflect.get(teleports, '#teleports') ?? ''}></div>}
           <script type="application/json" id="__INITIAL_STATE__" innerHTML={serializeState(initialState) ?? ''}></script>
           <noscript> This website requires JavaScript to function properly. Please enable JavaScript to continue. </noscript>
           {schema.tags.bodyClose.map(tag => cloneVNode(tag))}
@@ -113,32 +116,44 @@ const Template = defineComponent({
   },
 })
 
-export async function render(path: string, env: Cloudflare.Env, context: ExecutionContext) {
+export async function render(
+  event: H3Event,
+) {
+  const url = new URL(event.req.url)
+  const path = url.pathname
+  const env = event.runtime!.cloudflare!.env
+  const context = event.runtime!.cloudflare!.context as ExecutionContext
   const { app, head, initialState, hooks } = await createApp(path)
+  hooks.hook('vue:error', (err, _instance, _info) => {
+    console.error(err)
+  })
+  await hooks.callHook('app:created', app)
 
-  const renderContent: SSRContext = {
+  const ssrContext: AppSSRContext = {
+    url: url.toString(),
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
+    event,
     cloudflare: {
       env,
       ctx: context,
     },
   }
+  await hooks.callHook('app:beforeRender', app, ssrContext)
+  const renderResult = await renderToString(app, ssrContext)
 
-  await hooks.callHook('app:before-render', path)
-  const content = await renderToString(app, renderContent)
-  await hooks.callHook('app:after-render', path, content)
-
+  await hooks.callHook('app:rendered', { ssrContext, renderResult })
   const tags = await head.resolveTags()
 
   const stream = renderToWebStream(
     <Template
       tags={tags}
-      content={content}
+      content={renderResult}
       initialState={initialState}
-      renderContent={renderContent}
+      renderContent={ssrContext}
     />,
   )
+
   return new Response(stream, {
     headers: {
       'content-type': 'text/html',
@@ -147,8 +162,5 @@ export async function render(path: string, env: Cloudflare.Env, context: Executi
 }
 
 export default defineEventHandler(async (event) => {
-  const url = new URL(event.req.url)
-  const path = url.pathname
-
-  return render(path, event.runtime!.cloudflare!.env, event.runtime!.cloudflare!.context)
+  return render(event)
 })

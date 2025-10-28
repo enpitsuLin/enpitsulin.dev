@@ -22,10 +22,7 @@ async function handleSignOut() {
 </script>
 
 <template>
-  <!-- Auth Modal -->
   <AuthModal ref="authModalRef" />
-
-  <!-- Account Management Modal -->
   <AuthManageModal ref="manageModalRef" />
 
   <!-- 未登录状态：显示登录按钮 -->
@@ -37,6 +34,7 @@ async function handleSignOut() {
     title="登录"
     @click="openAuthModal"
   >
+    <span class="sr-only">登录</span>
     <div class="i-mingcute:user-4-line size-4" />
   </button>
 
@@ -64,7 +62,7 @@ async function handleSignOut() {
       </Avatar.Root>
     </Menu.Trigger>
 
-    <Teleport to="body">
+    <Teleport to="#teleports">
       <Menu.Positioner>
         <Menu.Content
           min-w-32 p-2

@@ -10,6 +10,8 @@ declare global {
   const OauthPopup: typeof import('./composables/popup').OauthPopup
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
+  const clearNuxtState: typeof import('./composables/state').clearState
+  const clearState: typeof import('./composables/state').clearState
   const computed: typeof import('vue').computed
   const computedAsync: typeof import('@vueuse/core').computedAsync
   const computedEager: typeof import('@vueuse/core').computedEager
@@ -18,6 +20,7 @@ declare global {
   const controlledComputed: typeof import('@vueuse/core').controlledComputed
   const controlledRef: typeof import('@vueuse/core').controlledRef
   const createApp: typeof import('vue').createApp
+  const createBaseAuthClient: typeof import('./composables/auth').createBaseAuthClient
   const createEventHook: typeof import('@vueuse/core').createEventHook
   const createGlobalState: typeof import('@vueuse/core').createGlobalState
   const createInjectionState: typeof import('@vueuse/core').createInjectionState
@@ -38,6 +41,7 @@ declare global {
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
+  const getNuxtAppCtx: typeof import('./composables/app').getNuxtAppCtx
   const h: typeof import('vue').h
   const ignorableWatch: typeof import('@vueuse/core').ignorableWatch
   const inject: typeof import('vue').inject
@@ -68,6 +72,7 @@ declare global {
   const onKeyStroke: typeof import('@vueuse/core').onKeyStroke
   const onLongPress: typeof import('@vueuse/core').onLongPress
   const onMounted: typeof import('vue').onMounted
+  const onPrehydrate: typeof import('./composables/ssr').onPrehydrate
   const onRenderTracked: typeof import('vue').onRenderTracked
   const onRenderTriggered: typeof import('vue').onRenderTriggered
   const onScopeDispose: typeof import('vue').onScopeDispose
@@ -78,6 +83,7 @@ declare global {
   const onWatcherCleanup: typeof import('vue').onWatcherCleanup
   const pausableWatch: typeof import('@vueuse/core').pausableWatch
   const preferredDark: typeof import('./composables/dark').preferredDark
+  const prerenderRoutes: typeof import('./composables/ssr').prerenderRoutes
   const provide: typeof import('vue').provide
   const provideLocal: typeof import('@vueuse/core').provideLocal
   const provideNavigation: typeof import('./composables/navigation').provideNavigation
@@ -97,6 +103,7 @@ declare global {
   const refWithControl: typeof import('@vueuse/core').refWithControl
   const resolveComponent: typeof import('vue').resolveComponent
   const resolveRef: typeof import('@vueuse/core').resolveRef
+  const setResponseStatus: typeof import('./composables/ssr').setResponseStatus
   const shallowReactive: typeof import('vue').shallowReactive
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
@@ -117,11 +124,13 @@ declare global {
   const tryOnMounted: typeof import('@vueuse/core').tryOnMounted
   const tryOnScopeDispose: typeof import('@vueuse/core').tryOnScopeDispose
   const tryOnUnmounted: typeof import('@vueuse/core').tryOnUnmounted
+  const tryUseNuxtApp: typeof import('./composables/app').tryUseNuxtApp
   const unref: typeof import('vue').unref
   const unrefElement: typeof import('@vueuse/core').unrefElement
   const until: typeof import('@vueuse/core').until
   const useActiveElement: typeof import('@vueuse/core').useActiveElement
   const useAnimate: typeof import('@vueuse/core').useAnimate
+  const useApp: typeof import('./composables/app').useApp
   const useArrayDifference: typeof import('@vueuse/core').useArrayDifference
   const useArrayEvery: typeof import('@vueuse/core').useArrayEvery
   const useArrayFilter: typeof import('@vueuse/core').useArrayFilter
@@ -138,6 +147,7 @@ declare global {
   const useAsyncState: typeof import('@vueuse/core').useAsyncState
   const useAttrs: typeof import('vue').useAttrs
   const useAuth: typeof import('./composables/auth').useAuth
+  const useAuthStore: typeof import('./stores/auth').useAuthStore
   const useBase64: typeof import('@vueuse/core').useBase64
   const useBattery: typeof import('@vueuse/core').useBattery
   const useBluetooth: typeof import('@vueuse/core').useBluetooth
@@ -240,7 +250,13 @@ declare global {
   const usePrevious: typeof import('@vueuse/core').usePrevious
   const useRafFn: typeof import('@vueuse/core').useRafFn
   const useRefHistory: typeof import('@vueuse/core').useRefHistory
+  const useRequestEvent: typeof import('./composables/ssr').useRequestEvent
+  const useRequestFetch: typeof import('./composables/ssr').useRequestFetch
+  const useRequestHeader: typeof import('./composables/ssr').useRequestHeader
+  const useRequestHeaders: typeof import('./composables/ssr').useRequestHeaders
+  const useRequestURL: typeof import('./composables/url').useRequestURL
   const useResizeObserver: typeof import('@vueuse/core').useResizeObserver
+  const useResponseHeader: typeof import('./composables/ssr').useResponseHeader
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
   const useSSRWidth: typeof import('@vueuse/core').useSSRWidth
@@ -259,6 +275,7 @@ declare global {
   const useSorted: typeof import('@vueuse/core').useSorted
   const useSpeechRecognition: typeof import('@vueuse/core').useSpeechRecognition
   const useSpeechSynthesis: typeof import('@vueuse/core').useSpeechSynthesis
+  const useState: typeof import('./composables/state').useState
   const useStepper: typeof import('@vueuse/core').useStepper
   const useStorage: typeof import('@vueuse/core').useStorage
   const useStorageAsync: typeof import('@vueuse/core').useStorageAsync
@@ -320,9 +337,6 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
-  // @ts-ignore
-  export type { RuntimeAuthConfig } from './composables/auth'
-  import('./composables/auth')
 }
 
 // for vue template auto import
@@ -560,7 +574,12 @@ declare module 'vue' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
+    readonly useRequestEvent: UnwrapRef<typeof import('./composables/ssr')['useRequestEvent']>
+    readonly useRequestHeader: UnwrapRef<typeof import('./composables/ssr')['useRequestHeader']>
+    readonly useRequestHeaders: UnwrapRef<typeof import('./composables/ssr')['useRequestHeaders']>
+    readonly useRequestURL: UnwrapRef<typeof import('./composables/url')['useRequestURL']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
+    readonly useResponseHeader: UnwrapRef<typeof import('./composables/ssr')['useResponseHeader']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSSRWidth: UnwrapRef<typeof import('@vueuse/core')['useSSRWidth']>

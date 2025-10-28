@@ -73,7 +73,7 @@ defineExpose({
 
 <template>
   <Dialog.Root v-model:open="isOpen">
-    <Teleport to="body">
+    <Teleport to="#teleports">
       <Dialog.Backdrop
         bg="zinc-800/40 dark:bg-black/40"
         class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
