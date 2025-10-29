@@ -45,6 +45,9 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
     UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
+    UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
+    UiTooltipRoot: typeof import('./components/ui/tooltip/root.vue')['default']
+    UiTooltipTrigger: typeof import('./components/ui/tooltip/trigger.vue')['default']
   }
 }
 
@@ -83,4 +86,7 @@ declare global {
   const RouterView: typeof import('vue-router')['RouterView']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
   const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
+  const UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
+  const UiTooltipRoot: typeof import('./components/ui/tooltip/root.vue')['default']
+  const UiTooltipTrigger: typeof import('./components/ui/tooltip/trigger.vue')['default']
 }

@@ -30,20 +30,25 @@ const links = [
         <div mt-4>
           <ul flex="~ gap-2">
             <li v-for="link in links" :key="link.name">
-              <a
-                flex="~ items-center justify-center"
-                inline-block aspect-square size-9
-                rounded-full text-white
-                rel="noreferrer"
-                class="group"
-                :href="link.href"
-                :title="link.name"
-                :class="link.class"
-              >
-                <span class="sr-only">{{ link.name }}</span>
-                <i v-if="typeof link.icon === 'string'" inline-block class="transition-transform group-hover:scale-110" :class="link.icon" />
-                <component :is="link.icon" v-else class="transition-transform group-hover:scale-110" />
-              </a>
+              <UiTooltip>
+                <a
+                  flex="~ items-center justify-center"
+                  inline-block aspect-square size-9
+                  rounded-full text-white
+                  rel="noreferrer"
+                  class="group"
+                  :href="link.href"
+                  :title="link.name"
+                  :class="link.class"
+                >
+                  <span class="sr-only">{{ link.name }}</span>
+                  <i v-if="typeof link.icon === 'string'" inline-block class="transition-transform group-hover:scale-110" :class="link.icon" />
+                  <component :is="link.icon" v-else class="transition-transform group-hover:scale-110" />
+                </a>
+                <template #content>
+                  {{ link.name }}
+                </template>
+              </UiTooltip>
             </li>
           </ul>
         </div>
