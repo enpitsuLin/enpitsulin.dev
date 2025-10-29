@@ -1,6 +1,5 @@
 export function useOauthPopup(pollInterval = 1000) {
   const popup = ref<Window | null>(null)
-  const popupInterval = ref<ReturnType<typeof setInterval> | null>(null)
   const locationURL = shallowRef('')
 
   const { promise, resolve, reject } = Promise.withResolvers<void>()
@@ -13,15 +12,17 @@ export function useOauthPopup(pollInterval = 1000) {
       const popupOrigin = new URL(popup.value?.location.href).origin
       const isDone = popupOrigin === locationURL.value
       try {
-        if (popup.value && (popup.value.closed || isDone)) {
-          if (popupInterval.value) {
-            clearInterval(popupInterval.value)
-          }
-          if (!popup.value.closed) {
-            popup.value.close()
-          }
+        if (popup.value) {
           if (isDone) {
-            resolve()
+            if (!popup.value.closed) {
+              popup.value.close()
+            }
+            if (isDone) {
+              resolve()
+            }
+          }
+          else if (popup.value.closed) {
+            reject(new Error('Popup closed'))
           }
         }
       }
@@ -50,15 +51,6 @@ export function useOauthPopup(pollInterval = 1000) {
 
     return promise
   }
-
-  onScopeDispose(() => {
-    if (popupInterval.value) {
-      clearInterval(popupInterval.value)
-    }
-    if (popup.value) {
-      popup.value.close()
-    }
-  })
 
   return {
     openOauthPopup,

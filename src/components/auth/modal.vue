@@ -23,7 +23,7 @@ function handleError(message: string) {
   errorMessage.value = message
 }
 
-const { openOauthPopup: openPopup } = useOauthPopup()
+const { openOauthPopup: openPopup } = useOauthPopup(500)
 
 const { mutate: signInPasskey, isLoading: isLoadingSignInPasskey } = useMutation({
   async mutation() {
