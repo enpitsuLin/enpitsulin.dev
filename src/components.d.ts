@@ -44,6 +44,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
+    UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
   }
 }
 
@@ -81,4 +82,5 @@ declare global {
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
+  const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
 }

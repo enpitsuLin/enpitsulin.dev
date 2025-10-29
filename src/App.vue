@@ -45,5 +45,7 @@ useHead({
 </script>
 
 <template>
-  <RouterView />
+  <UiToastToaster>
+    <RouterView />
+  </UiToastToaster>
 </template>

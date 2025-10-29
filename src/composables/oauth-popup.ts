@@ -2,32 +2,37 @@ export function useOauthPopup(pollInterval = 1000) {
   const popup = ref<Window | null>(null)
   const locationURL = shallowRef('')
 
-  const { promise, resolve, reject } = Promise.withResolvers<void>()
+  let { promise, resolve, reject } = Promise.withResolvers<void>()
 
   const { resume } = useIntervalFn(
     () => {
-      if (!popup.value?.location.href) {
-        return
-      }
-      const popupOrigin = new URL(popup.value?.location.href).origin
-      const isDone = popupOrigin === locationURL.value
       try {
-        if (popup.value) {
-          if (isDone) {
-            if (!popup.value.closed) {
-              popup.value.close()
-            }
-            if (isDone) {
-              resolve()
-            }
-          }
-          else if (popup.value.closed) {
-            reject(new Error('Popup closed'))
-          }
+        if (!popup.value)
+          return
+
+        // 检查弹窗是否被关闭
+        if (popup.value.closed) {
+          reject(new Error('Popup closed'))
+          return
+        }
+
+        let popupOrigin: string
+        try {
+          popupOrigin = new URL(popup.value.location.href).origin
+        }
+        catch {
+          return
+        }
+
+        const isDone = popupOrigin === locationURL.value
+        if (isDone) {
+          popup.value.close()
+          popup.value = null
+          resolve()
         }
       }
       catch (e) {
-        console.error(e)
+        console.error('OAuth popup error:', e)
         reject(e)
       }
     },
@@ -36,6 +41,8 @@ export function useOauthPopup(pollInterval = 1000) {
   )
 
   function openOauthPopup(url: string) {
+    ;({ promise, resolve, reject } = Promise.withResolvers<void>())
+
     const st = 'toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=1,resizable=0,'
     const left = screen.width / 2 - 300
     const top = screen.height / 2 - 350
@@ -45,6 +52,11 @@ export function useOauthPopup(pollInterval = 1000) {
     }
 
     popup.value = window.open(url, '', `${st}top=${top},left=${left},width=560,height=620`)
+
+    popup.value?.addEventListener('close', () => {
+      reject(new Error('Popup closed'))
+    }, { once: true })
+
     locationURL.value = new URL(window.location.href).origin
 
     resume()

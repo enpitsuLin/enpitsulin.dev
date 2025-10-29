@@ -4,12 +4,12 @@ import { useMutation } from '@pinia/colada'
 import LoginForm from '~/components/auth/login-form.vue'
 import SignupForm from '~/components/auth/signup-form.vue'
 import { useAuth } from '~/composables/auth'
+import { useToast } from '../ui/toast/use-toast'
 
 const { signIn, client } = useAuth()
 
 const isOpen = ref(false)
 const isSignUp = ref(false)
-const errorMessage = ref('')
 
 function toggleMode() {
   isSignUp.value = !isSignUp.value
@@ -19,8 +19,12 @@ function handleSuccess() {
   isOpen.value = false
 }
 
+const toast = useToast()
 function handleError(message: string) {
-  errorMessage.value = message
+  toast.error({
+    title: '操作失败',
+    description: message,
+  })
 }
 
 const { openOauthPopup: openPopup } = useOauthPopup(500)
@@ -111,18 +115,6 @@ defineExpose({
           </Dialog.CloseTrigger>
 
           <div mt-6>
-            <!-- Error Message -->
-            <div
-              v-if="errorMessage"
-              un-text="xs text-red-600 dark:text-red-400"
-              class="mb-4 border border-red-200 rounded-lg bg-red-50 p-3 dark:border-red-800/50 dark:bg-red-900/20"
-            >
-              <div flex="~ items-center gap-2">
-                <div class="i-mingcute:warning-line size-4" />
-                {{ errorMessage }}
-              </div>
-            </div>
-
             <div space-y-2>
               <button
                 :disabled="isLoadingSignInSocial"
