@@ -28,12 +28,6 @@ export function useAuth() {
     }
   }
 
-  if (!import.meta.env.SSR) {
-    client.$store.listen('$sessionSignal', () => {
-      fetchSession()
-    })
-  }
-
   return {
     session,
     user,

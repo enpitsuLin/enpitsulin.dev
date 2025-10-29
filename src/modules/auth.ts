@@ -65,12 +65,30 @@ function fetchLoggerPlugin() {
 export const install: UserModule = ({ app, initialState, hooks }) => {
   if (!import.meta.env.SSR) {
     const url = new URL(globalThis.location.href)
+    const client = createBaseAuthClient({
+      baseURL: url.origin,
+    })
     const $auth: Auth = {
-      client: createBaseAuthClient({
-        baseURL: url.origin,
-      }),
+      client,
       session: shallowRef<Session | null>(null),
       user: shallowRef<User | null>(null),
+    }
+
+    const isFetchingSession = ref(false)
+
+    if (!import.meta.env.SSR) {
+      client.$store.listen('$sessionSignal', async () => {
+        if (isFetchingSession.value)
+          return
+        isFetchingSession.value = true
+        const res = await client.getSession()
+        if (res.error) {
+          return
+        }
+        $auth.session.value = res.data?.session ?? null
+        $auth.user.value = res.data?.user ?? null
+        isFetchingSession.value = false
+      })
     }
 
     app.config.globalProperties.$auth = $auth
