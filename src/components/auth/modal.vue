@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Dialog } from '@ark-ui/vue/dialog'
 import { useMutation } from '@pinia/colada'
-import LoginForm from '~/components/auth/login-form.vue'
+import SigninForm from '~/components/auth/signin-form.vue'
 import SignupForm from '~/components/auth/signup-form.vue'
 import { useAuth } from '~/composables/auth'
 import { useToast } from '../ui/toast/use-toast'
@@ -165,7 +165,7 @@ defineExpose({
             </div>
 
             <!-- Form Components -->
-            <LoginForm
+            <SigninForm
               v-if="!isSignUp"
               @success="handleSuccess"
               @error="handleError"
