@@ -15,6 +15,13 @@
       "when": 1761468732906,
       "tag": "0001_noisy_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1761838032658,
+      "tag": "0002_whole_stature",
+      "breakpoints": true
     }
   ]
 }
