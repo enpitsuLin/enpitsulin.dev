@@ -8,13 +8,13 @@ const tag = sqliteTable(
   {
     id: text('id').primaryKey(),
     name: text('name').notNull().unique(),
-    createdAt: integer('created_at')
-      .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: integer('updated_at')
-      .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
   },
   table => [
     index('tag_name_idx').on(table.name),
@@ -30,13 +30,13 @@ const post = sqliteTable(
     content: text('content').notNull(),
     status: text('status', { enum: ['draft', 'published', 'archived'] }).notNull().default('draft'),
     publishedAt: integer('published_at'),
-    createdAt: integer('created_at')
-      .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`),
-    updatedAt: integer('updated_at')
-      .notNull()
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
   },
   table => [
     index('post_slug_idx').on(table.slug),
