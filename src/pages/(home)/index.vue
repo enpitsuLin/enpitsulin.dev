@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineOptions({
-  name: 'GuestbookPage',
+  name: 'IndexPage',
 })
 </script>
 
 <template>
-  <h1>Home</h1>
+  <HomeIntro />
 </template>

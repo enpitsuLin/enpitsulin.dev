@@ -14,9 +14,9 @@ defineProps<{
     :to="href"
     class="navbar-link relative transition-color hover:text-zinc-9 dark:hover:text-zinc-6"
   >
-    <template #default="{ isActive }">
+    <template #default="{ href, isActive, isExactActive }">
       <motion.div
-        v-if="isActive"
+        v-if="href === '/' ? isExactActive : isActive"
         layout-id="navbar-link"
         class="absolute inset-0 rounded-full bg-white shadow-md dark:bg-zinc-200"
       />

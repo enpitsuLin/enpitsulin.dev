@@ -28,7 +28,61 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
+      | '/(home)/'
+      | '/(home)/about'
+      | '/(home)/blog/'
+      | '/(home)/blog/[slug]'
+      | '/(home)/guestbook'
+      | '/(home)/projects'
+    >,
+    '/(home)/': RouteRecordInfo<
+      '/(home)/',
+      '/',
+      Record<never, never>,
+      Record<never, never>,
       | never
+    >,
+    '/(home)/about': RouteRecordInfo<
+      '/(home)/about',
+      '/about',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(home)/blog/': RouteRecordInfo<
+      '/(home)/blog/',
+      '/blog',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(home)/blog/[slug]': RouteRecordInfo<
+      '/(home)/blog/[slug]',
+      '/blog/:slug',
+      { slug: ParamValue<true> },
+      { slug: ParamValue<false> },
+      | never
+    >,
+    '/(home)/guestbook': RouteRecordInfo<
+      '/(home)/guestbook',
+      '/guestbook',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(home)/projects': RouteRecordInfo<
+      '/(home)/projects',
+      '/projects',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(admin)/dashboard': RouteRecordInfo<
+      '/(admin)/dashboard',
+      '/dashboard',
+      Record<never, never>,
+      Record<never, never>,
+      | '/(admin)/dashboard/'
     >,
     '/(admin)/dashboard/': RouteRecordInfo<
       '/(admin)/dashboard/',
@@ -42,34 +96,6 @@ declare module 'vue-router/auto-routes' {
       '/:404(.*)',
       { 404: ParamValue<true> },
       { 404: ParamValue<false> },
-      | never
-    >,
-    '/about': RouteRecordInfo<
-      '/about',
-      '/about',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/blog': RouteRecordInfo<
-      '/blog',
-      '/blog',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/guestbook': RouteRecordInfo<
-      '/guestbook',
-      '/guestbook',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/projects': RouteRecordInfo<
-      '/projects',
-      '/projects',
-      Record<never, never>,
-      Record<never, never>,
       | never
     >,
   }
@@ -88,8 +114,76 @@ declare module 'vue-router/auto-routes' {
     'src/pages/(home).vue': {
       routes:
         | '/(home)'
+        | '/(home)/'
+        | '/(home)/about'
+        | '/(home)/blog/'
+        | '/(home)/blog/[slug]'
+        | '/(home)/guestbook'
+        | '/(home)/projects'
+      views:
+        | 'banner'
+        | 'default'
+    }
+    'src/pages/(home)/index.vue': {
+      routes:
+        | '/(home)/'
       views:
         | never
+    }
+    'src/pages/(home)/about.md': {
+      routes:
+        | '/(home)/about'
+      views:
+        | never
+    }
+    'src/pages/(home)/blog/index.vue': {
+      routes:
+        | '/(home)/blog/'
+      views:
+        | never
+    }
+    'src/pages/(home)/blog/index@banner.vue': {
+      routes:
+        | '/(home)/blog/'
+      views:
+        | never
+    }
+    'src/pages/(home)/blog/[slug].vue': {
+      routes:
+        | '/(home)/blog/[slug]'
+      views:
+        | never
+    }
+    'src/pages/(home)/guestbook.vue': {
+      routes:
+        | '/(home)/guestbook'
+      views:
+        | never
+    }
+    'src/pages/(home)/guestbook@banner.vue': {
+      routes:
+        | '/(home)/guestbook'
+      views:
+        | never
+    }
+    'src/pages/(home)/projects.md': {
+      routes:
+        | '/(home)/projects'
+      views:
+        | never
+    }
+    'src/pages/(home)/projects@banner.vue': {
+      routes:
+        | '/(home)/projects'
+      views:
+        | never
+    }
+    'src/pages/(admin)/dashboard.vue': {
+      routes:
+        | '/(admin)/dashboard'
+        | '/(admin)/dashboard/'
+      views:
+        | 'default'
     }
     'src/pages/(admin)/dashboard/index.vue': {
       routes:
@@ -100,30 +194,6 @@ declare module 'vue-router/auto-routes' {
     'src/pages/[...404].vue': {
       routes:
         | '/[...404]'
-      views:
-        | never
-    }
-    'src/pages/about.md': {
-      routes:
-        | '/about'
-      views:
-        | never
-    }
-    'src/pages/blog.vue': {
-      routes:
-        | '/blog'
-      views:
-        | never
-    }
-    'src/pages/guestbook.vue': {
-      routes:
-        | '/guestbook'
-      views:
-        | never
-    }
-    'src/pages/projects.md': {
-      routes:
-        | '/projects'
       views:
         | never
     }
