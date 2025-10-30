@@ -15,7 +15,6 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import Layouts from 'vite-plugin-vue-layouts'
 
 export default defineConfig({
   environments: {
@@ -74,9 +73,6 @@ export default defineConfig({
       include: [/\.vue$/, /\.md$/],
     }),
     VueJsx(),
-
-    // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
-    Layouts(),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({

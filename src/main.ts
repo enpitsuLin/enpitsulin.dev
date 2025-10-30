@@ -2,7 +2,6 @@ import type { AppContext, AppInitialState, UserModule } from '~/types'
 import { createHead as createClientHead } from '@unhead/vue/client'
 import { createHead as createSSRHead } from '@unhead/vue/server'
 import { createHooks } from 'hookable'
-import { setupLayouts } from 'layouts-generated'
 import { createSSRApp } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 
@@ -24,8 +23,7 @@ export async function createApp(routePath?: string) {
 
   const router = createRouter({
     history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
-    // @ts-expect-error: ignore readonly
-    routes: setupLayouts(routes),
+    routes,
   })
 
   const hooks: AppContext['hooks'] = createHooks()

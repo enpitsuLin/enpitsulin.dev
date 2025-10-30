@@ -87,7 +87,6 @@
     "vite-bundle-visualizer": "catalog:build",
     "vite-plugin-inspect": "catalog:build",
     "vite-plugin-vue-devtools": "catalog:build",
-    "vite-plugin-vue-layouts": "catalog:build",
     "vue-tsc": "catalog:dev",
     "wrangler": "catalog:dev"
   },
