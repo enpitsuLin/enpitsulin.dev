@@ -67,3 +67,11 @@ body,
 html {
   scroll-padding-top: 4rem;
 }
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  --at-apply: bg-accent op-75 fixed z-99 top-0 left-0 w-full h-3px;
+}
