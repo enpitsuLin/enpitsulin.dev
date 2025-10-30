@@ -83,10 +83,42 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '/(admin)/dashboard/'
+      | '/(admin)/dashboard/posts/'
+      | '/(admin)/dashboard/posts/[id]'
+      | '/(admin)/dashboard/posts/new'
+      | '/(admin)/dashboard/sign-in'
     >,
     '/(admin)/dashboard/': RouteRecordInfo<
       '/(admin)/dashboard/',
       '/dashboard',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(admin)/dashboard/posts/': RouteRecordInfo<
+      '/(admin)/dashboard/posts/',
+      '/dashboard/posts',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(admin)/dashboard/posts/[id]': RouteRecordInfo<
+      '/(admin)/dashboard/posts/[id]',
+      '/dashboard/posts/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/(admin)/dashboard/posts/new': RouteRecordInfo<
+      '/(admin)/dashboard/posts/new',
+      '/dashboard/posts/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/(admin)/dashboard/sign-in': RouteRecordInfo<
+      '/(admin)/dashboard/sign-in',
+      '/dashboard/sign-in',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -182,12 +214,40 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/(admin)/dashboard'
         | '/(admin)/dashboard/'
+        | '/(admin)/dashboard/posts/'
+        | '/(admin)/dashboard/posts/[id]'
+        | '/(admin)/dashboard/posts/new'
+        | '/(admin)/dashboard/sign-in'
       views:
         | 'default'
     }
     'src/pages/(admin)/dashboard/index.vue': {
       routes:
         | '/(admin)/dashboard/'
+      views:
+        | never
+    }
+    'src/pages/(admin)/dashboard/posts/index.vue': {
+      routes:
+        | '/(admin)/dashboard/posts/'
+      views:
+        | never
+    }
+    'src/pages/(admin)/dashboard/posts/[id].vue': {
+      routes:
+        | '/(admin)/dashboard/posts/[id]'
+      views:
+        | never
+    }
+    'src/pages/(admin)/dashboard/posts/new.vue': {
+      routes:
+        | '/(admin)/dashboard/posts/new'
+      views:
+        | never
+    }
+    'src/pages/(admin)/dashboard/sign-in.vue': {
+      routes:
+        | '/(admin)/dashboard/sign-in'
       views:
         | never
     }

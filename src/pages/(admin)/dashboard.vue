@@ -9,3 +9,8 @@
     </main>
   </div>
 </template>
+
+<route lang="yaml">
+meta:
+  requireAuth: 'admin'
+</route>

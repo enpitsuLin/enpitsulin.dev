@@ -1,10 +1,11 @@
 import type { BetterFetchPlugin } from 'better-auth/client'
+import type { RouteLocationRaw } from 'vue-router'
 import type { Session, User } from '~~/lib/auth'
 import type { Client } from '~~/lib/auth-client'
 import type { UserModule } from '~/types'
-import { createConsola } from 'consola'
 import * as devalue from 'devalue'
 import { createBaseAuthClient } from '~~/lib/auth-client'
+import { logger } from '~~/lib/logger'
 
 export interface Auth {
   session: ShallowRef<Session | null>
@@ -23,19 +24,18 @@ export function useAuthContext() {
 }
 
 function fetchLoggerPlugin() {
-  const consola = createConsola()
   return {
     id: 'logger',
     name: 'logger',
     hooks: {
       onRequest(context) {
-        consola.log('Request being sent to:', context.url.toString())
+        logger.log('Request being sent to:', context.url.toString())
       },
       async onSuccess(context) {
-        consola.success('Request succeeded', context.data)
+        logger.success('Request succeeded', context.request.url.toString())
       },
       onRetry(response) {
-        consola.log(
+        logger.log(
           'Retrying request...',
           'Attempt:',
           (response.request.retryAttempt || 0) + 1,
@@ -52,18 +52,23 @@ function fetchLoggerPlugin() {
         }
         // eslint-disable-next-line unused-imports/no-unused-vars
         catch (e) {}
-        consola.log(
+        logger.log(
           'Request failed with status: ',
           context.response.status,
           `(${context.response.statusText || context.response.status})`,
         )
-        obj && consola.error(obj)
+        obj && logger.error(obj)
       },
     },
   } as BetterFetchPlugin
 }
 
-export const install: UserModule = ({ app, initialState, hooks }) => {
+const whiteList: RouteLocationRaw[] = ['/dashboard/sign-in']
+
+export const install: UserModule = ({ app, initialState, hooks, router }) => {
+  const session = shallowRef<Session | null>(null)
+  const user = shallowRef<User | null>(null)
+
   if (!import.meta.env.SSR) {
     const url = new URL(globalThis.location.href)
     const client = createBaseAuthClient({
@@ -71,8 +76,8 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
     })
     const $auth: Auth = {
       client,
-      session: shallowRef<Session | null>(null),
-      user: shallowRef<User | null>(null),
+      session,
+      user,
     }
 
     const isFetchingSession = ref(false)
@@ -94,13 +99,13 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
 
     app.config.globalProperties.$auth = $auth
     app.provide(AuthContextSymbol, $auth)
-    const { session, user } = devalue.parse(initialState.authContext) as {
+    const authContext = devalue.parse(initialState.authContext) as {
       session: Session | null
       user: User | null
     }
 
-    $auth.session.value = session
-    $auth.user.value = user
+    $auth.session.value = authContext.session
+    $auth.user.value = authContext.user
   }
   else {
     hooks.hook('app:beforeRender', async (app, ssrContext) => {
@@ -122,8 +127,8 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
 
       const $auth: Auth = {
         client,
-        session: shallowRef<Session | null>(null),
-        user: shallowRef<User | null>(null),
+        session,
+        user,
       }
 
       app.config.globalProperties.$auth = $auth
@@ -141,6 +146,27 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
       })
     })
   }
+
+  router.beforeEach((to, _, next) => {
+    const requireAuth = to.meta.requireAuth
+    if (requireAuth && !whiteList.includes(to.path)) {
+      const redirectTo = () => {
+        return next({
+          path: '/dashboard/sign-in',
+          query: {
+            redirect: encodeURIComponent(to.fullPath),
+          },
+        })
+      }
+      if (typeof requireAuth === 'string' && user.value?.role !== requireAuth) {
+        return redirectTo()
+      }
+      else {
+        return redirectTo()
+      }
+    }
+    next()
+  })
 }
 
 declare module '~/types' {
