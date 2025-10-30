@@ -150,6 +150,7 @@ export const install: UserModule = ({ app, initialState, hooks, router }) => {
   router.beforeEach((to, _, next) => {
     const requireAuth = to.meta.requireAuth
     if (requireAuth && !whiteList.includes(to.path)) {
+      logger.info('redirectTo', to.fullPath)
       const redirectTo = () => {
         return next({
           path: '/dashboard/sign-in',
@@ -161,7 +162,7 @@ export const install: UserModule = ({ app, initialState, hooks, router }) => {
       if (typeof requireAuth === 'string' && user.value?.role !== requireAuth) {
         return redirectTo()
       }
-      else {
+      else if (!user.value) {
         return redirectTo()
       }
     }
