@@ -1,5 +1,6 @@
 import type { BetterFetchPlugin } from 'better-auth/client'
-import type { Client, Session, User } from '~~/lib/auth-client'
+import type { Session, User } from '~~/lib/auth'
+import type { Client } from '~~/lib/auth-client'
 import type { UserModule } from '~/types'
 import { createConsola } from 'consola'
 import * as devalue from 'devalue'
