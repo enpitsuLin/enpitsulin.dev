@@ -57,3 +57,11 @@ const postTag = sqliteTable(
 
 // Export all tables
 export { post, postTag, tag }
+
+// Export types
+export type SelectPost = typeof post.$inferSelect
+export type InsertPost = typeof post.$inferInsert
+export type SelectTag = typeof tag.$inferSelect
+export type InsertTag = typeof tag.$inferInsert
+export type SelectPostTag = typeof postTag.$inferSelect
+export type InsertPostTag = typeof postTag.$inferInsert

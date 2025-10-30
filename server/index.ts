@@ -1,6 +1,8 @@
 import type { EventHandlerWithFetch } from 'h3'
+import type { Session, User } from '~~/lib/auth'
 import { H3 } from 'h3'
 import entryServerHandler from '~/entry-server'
+import authMiddleware from './middleware/auth'
 
 // Create an app instance
 const app = new H3()
@@ -21,6 +23,7 @@ function registerRoute(path: string, handler: EventHandlerWithFetch) {
   routePath = routePath
     .replace(/\[\.\.\.(\w+)\]/g, '**') // [...param] -> **
     .replace(/\[(\w+)\]/g, ':$1') // [param] -> :param
+    .replace(/\/index$/, '') // /index -> /
 
   if (!routePath.startsWith('/')) {
     routePath = `/${routePath}`
@@ -67,6 +70,8 @@ app.use((event) => {
   event.context.cloudflare = event.runtime!.cloudflare!
 })
 
+app.use(authMiddleware)
+
 app.get('/**', entryServerHandler)
 
 export default {
@@ -98,6 +103,11 @@ export default {
 
 declare module 'h3' {
   interface H3EventContext {
+    auth: {
+      user: User | null
+      session: Session | null
+      assertAuth: (role?: 'user' | 'admin') => void
+    }
     cloudflare: {
       env: Cloudflare.Env
       context: ExecutionContext
