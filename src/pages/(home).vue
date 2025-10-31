@@ -1,4 +1,7 @@
 <script setup lang="ts">
+defineOptions({
+  name: 'HomeLayout',
+})
 </script>
 
 <template>
