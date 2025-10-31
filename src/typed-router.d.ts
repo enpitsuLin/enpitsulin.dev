@@ -29,6 +29,7 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '/(home)/'
+      | '/(home)/[...404]'
       | '/(home)/about'
       | '/(home)/blog/'
       | '/(home)/blog/[slug]'
@@ -40,6 +41,13 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
+      | never
+    >,
+    '/(home)/[...404]': RouteRecordInfo<
+      '/(home)/[...404]',
+      '/:404(.*)',
+      { 404: ParamValue<true> },
+      { 404: ParamValue<false> },
       | never
     >,
     '/(home)/about': RouteRecordInfo<
@@ -75,13 +83,6 @@ declare module 'vue-router/auto-routes' {
       '/projects',
       Record<never, never>,
       Record<never, never>,
-      | never
-    >,
-    '/[...404]': RouteRecordInfo<
-      '/[...404]',
-      '/:404(.*)',
-      { 404: ParamValue<true> },
-      { 404: ParamValue<false> },
       | never
     >,
     '/admin': RouteRecordInfo<
@@ -158,6 +159,7 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/(home)'
         | '/(home)/'
+        | '/(home)/[...404]'
         | '/(home)/about'
         | '/(home)/blog/'
         | '/(home)/blog/[slug]'
@@ -170,6 +172,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/(home)/index.vue': {
       routes:
         | '/(home)/'
+      views:
+        | never
+    }
+    'src/pages/(home)/[...404].vue': {
+      routes:
+        | '/(home)/[...404]'
       views:
         | never
     }
@@ -218,12 +226,6 @@ declare module 'vue-router/auto-routes' {
     'src/pages/(home)/projects@banner.vue': {
       routes:
         | '/(home)/projects'
-      views:
-        | never
-    }
-    'src/pages/[...404].vue': {
-      routes:
-        | '/[...404]'
       views:
         | never
     }
