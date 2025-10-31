@@ -5,7 +5,7 @@ import SigninForm from '~/components/auth/signin-form.vue'
 import { useToast } from '~/components/ui/toast/use-toast'
 import { useAuth } from '~/composables/auth'
 
-const { signIn, client, user } = useAuth()
+const { signIn, signOut, client, user } = useAuth()
 
 const route = useRoute('/admin/sign-in')
 const router = useRouter()
@@ -81,60 +81,108 @@ const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
         </div>
         <span>enpitsulin.dev</span>
       </a>
-      <div border="~ border rounded-lg" p="4" flex="~ col gap-2">
-        <div
-          grid="~ auto-rows-min rows-[auto_auto] items-start gap-2 "
-          class="@container/card-header [.border-b]:pb-6 px-6 text-center has-data-[slot=card-action]:grid-cols-[1fr_auto]"
-        >
-          <h2 un-text="2xl font-bold zinc-900 dark:white">
-            欢迎回来
-          </h2>
-          <div un-text="xs zinc-500 dark:text-zinc-400">
-            使用 GitHub 账户或 Passkey 登录管理员账户
+
+      <template v-if="!user">
+        <div border="~ border rounded-lg" p="4" flex="~ col gap-2">
+          <div
+            grid="~ auto-rows-min rows-[auto_auto] items-start gap-2 "
+            class="@container/card-header [.border-b]:pb-6 px-6 text-center has-data-[slot=card-action]:grid-cols-[1fr_auto]"
+          >
+            <h2 un-text="2xl font-bold zinc-900 dark:white">
+              欢迎回来
+            </h2>
+            <div un-text="xs zinc-500 dark:text-zinc-400">
+              使用 GitHub 账户或 Passkey 登录管理员账户
+            </div>
+          </div>
+
+          <div mt-6>
+            <div space-y-2>
+              <button
+                :disabled="isLoadingSignInSocial" w="full" p="x5 y2.5" flex="~ items-center gap-2"
+                border="~ border rounded-lg" bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                class="group transition-all duration-200" @click="signInSocial('github')"
+              >
+                <div class="i-mingcute:github-line size-5 text-zinc-700 transition-colors dark:text-white" />
+                <div flex-1 text-left un-text="xs font-medium text-zinc-700 dark:text-white transition-colors">
+                  {{ isLoadingSignInSocial ? '处理中...' : '使用 GitHub 登录' }}
+                </div>
+                <div
+                  class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1"
+                />
+              </button>
+
+              <button
+                :disabled="isLoadingSignInPasskey" w="full" p="x5 y2.5" flex="~ items-center gap-2"
+                border="~ border rounded-lg" bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
+                class="group transition-all duration-200" @click="signInPasskey()"
+              >
+                <div class="i-mingcute:key-2-line size-5 text-zinc-700 transition-colors dark:text-white" />
+                <div flex-1 text-left un-text="xs font-medium text-zinc-700 dark:text-white transition-colors">
+                  {{ isLoadingSignInPasskey ? '处理中...' : '使用 Passkey 登录' }}
+                </div>
+                <div
+                  class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1"
+                />
+              </button>
+            </div>
+
+            <!-- Divider -->
+            <div flex="~ items-center gap-3" py="4">
+              <div flex="1" h="1px" bg="border" />
+              <span un-text="xs text-zinc-500 dark:text-zinc-400">或者</span>
+              <div flex="1" h="1px" bg="border" />
+            </div>
+
+            <SigninForm @error="handleError" />
           </div>
         </div>
+      </template>
+      <template v-else-if="user?.role !== 'admin'">
+        <!-- Main Card -->
+        <div border="~ border rounded-lg" p="4" flex="~ col gap-2">
+          <!-- Title and Description -->
+          <div text="center" space-y-2>
+            <h1 un-text="2xl font-bold zinc-900 dark:white">
+              访问受限
+            </h1>
+            <p un-text="sm zinc-600 dark:zinc-400">
+              此页面仅限管理员访问。您当前以普通用户身份登录。
+            </p>
+          </div>
 
-        <div mt-6>
+          <!-- Actions -->
           <div space-y-2>
-            <button
-              :disabled="isLoadingSignInSocial" w="full" p="x5 y2.5" flex="~ items-center gap-2"
-              border="~ border rounded-lg" bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-              class="group transition-all duration-200" @click="signInSocial('github')"
+            <RouterLink
+              role="button"
+              to="/"
+              flex="inline items-center justify-center gap-2"
+              w-full
+              p="x3 y2"
+              bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
+              un-text="zinc-50 xs dark:zinc-900 font-medium"
+              rounded="lg"
+              class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <div class="i-mingcute:github-line size-5 text-zinc-700 transition-colors dark:text-white" />
-              <div flex-1 text-left un-text="xs font-medium text-zinc-700 dark:text-white transition-colors">
-                {{ isLoadingSignInSocial ? '处理中...' : '使用 GitHub 登录' }}
-              </div>
-              <div
-                class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1"
-              />
-            </button>
-
+              <div class="i-mingcute:home-3-line size-4" />
+              <span>返回首页</span>
+            </RouterLink>
             <button
-              :disabled="isLoadingSignInPasskey" w="full" p="x5 y2.5" flex="~ items-center gap-2"
-              border="~ border rounded-lg" bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
-              class="group transition-all duration-200" @click="signInPasskey()"
+              flex="~ items-center justify-center gap-2"
+              w-full
+              p="x3 y2"
+              bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
+              un-text="zinc-50 xs dark:zinc-900 font-medium"
+              rounded="lg"
+              class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
+              @click="() => signOut()"
             >
-              <div class="i-mingcute:key-2-line size-5 text-zinc-700 transition-colors dark:text-white" />
-              <div flex-1 text-left un-text="xs font-medium text-zinc-700 dark:text-white transition-colors">
-                {{ isLoadingSignInPasskey ? '处理中...' : '使用 Passkey 登录' }}
-              </div>
-              <div
-                class="i-mingcute:arrow-right-line invisible size-4 text-zinc-500 transition-all group-hover:visible group-hover:translate-x-1"
-              />
+              <div class="i-mingcute:exit-line size-4" />
+              <span>退出登录</span>
             </button>
           </div>
-
-          <!-- Divider -->
-          <div flex="~ items-center gap-3" py="4">
-            <div flex="1" h="1px" bg="border" />
-            <span un-text="xs text-zinc-500 dark:text-zinc-400">或者</span>
-            <div flex="1" h="1px" bg="border" />
-          </div>
-
-          <SigninForm @error="handleError" />
         </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
