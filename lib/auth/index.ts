@@ -4,11 +4,14 @@ import { EmailMessage } from 'cloudflare:email'
 import { env } from 'cloudflare:workers'
 import { createMimeMessage } from 'mimetext/browser'
 import { useDrizzle } from '~~/server/utils/drizzle'
-import { baseServerOptions } from './auth-options'
+import { baseServerOptions } from './options'
 
 const senderEmail = 'sender@enpitsulin.dev'
 
 export const auth = betterAuth({
+  trustedOrigins: (import.meta.env.DEV)
+    ? ['*']
+    : ['https://enpitsulin.dev', '*.enpitsulin.workers.dev'],
   database: drizzleAdapter(useDrizzle(), {
     provider: 'sqlite',
   }),

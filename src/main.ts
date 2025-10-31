@@ -43,10 +43,10 @@ export async function createApp(routePath?: string) {
     context.initialState = deserializeState(stateStrFromDom)
   }
 
+  app.use(router)
+
   Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
     .forEach(i => i.install?.(context))
-
-  app.use(router)
 
   let entryRoutePath: string | undefined
   let isFirstRoute = true

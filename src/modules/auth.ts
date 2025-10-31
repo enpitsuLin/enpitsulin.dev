@@ -1,9 +1,9 @@
 import type { BetterFetchPlugin } from 'better-auth/client'
 import type { Session, User } from '~~/lib/auth'
-import type { Client } from '~~/lib/auth-client'
+import type { Client } from '~~/lib/auth/client'
 import type { UserModule } from '~~/lib/types/app'
 import * as devalue from 'devalue'
-import { createBaseAuthClient } from '~~/lib/auth-client'
+import { createBaseAuthClient } from '~~/lib/auth/client'
 import { logger } from '~~/lib/logger'
 
 export interface Auth {

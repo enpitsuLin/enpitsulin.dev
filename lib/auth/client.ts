@@ -1,6 +1,6 @@
 import type { BetterAuthClientOptions } from 'better-auth'
 import { createAuthClient } from 'better-auth/vue'
-import { baseClientOptions } from './auth-options'
+import { baseClientOptions } from './options'
 
 export type Client = ReturnType<typeof createBaseAuthClient>
 

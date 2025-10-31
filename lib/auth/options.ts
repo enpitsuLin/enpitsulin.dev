@@ -4,13 +4,8 @@ import { admin } from 'better-auth/plugins/admin'
 import { multiSession } from 'better-auth/plugins/multi-session'
 import { passkey } from 'better-auth/plugins/passkey'
 
-const trustedOrigins = (import.meta.env.DEV)
-  ? ['*']
-  : ['https://enpitsulin.dev', '*.enpitsulin.workers.dev']
-
 export const baseServerOptions = {
   appName: 'enpitsulin.dev',
-  trustedOrigins,
   emailAndPassword: {
     enabled: true,
   },

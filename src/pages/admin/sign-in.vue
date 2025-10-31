@@ -10,15 +10,17 @@ const { signIn, signOut, client, user } = useAuth()
 const route = useRoute('/admin/sign-in')
 const router = useRouter()
 
-if (user.value && user.value.role === 'admin') {
-  logger.info('redirect to', user.value, route.query.redirect)
-  if (route.query.redirect) {
-    await router.push(decodeURIComponent(route.query.redirect as string))
+watch(user, (user) => {
+  if (user && user.role === 'admin') {
+    logger.info('redirect to', user, route.query.redirect)
+    if (route.query.redirect) {
+      router.push(decodeURIComponent(route.query.redirect as string))
+    }
+    else {
+      router.push('/admin')
+    }
   }
-  else {
-    await router.push('/dashboard')
-  }
-}
+})
 
 const toast = useToast()
 function handleError(message: string) {
