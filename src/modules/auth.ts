@@ -104,11 +104,9 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
   }
   else {
     hooks.hook('app:beforeRender', async (app, ssrContext) => {
-      const url = new URL(ssrContext.event.req.url)
+      const url = new URL(ssrContext.context.req.url)
 
-      const headers = import.meta.env.SSR
-        ? Object.fromEntries(ssrContext.event.req.headers)
-        : useRequestHeaders()
+      const headers = ssrContext.context.req.header()
 
       const client = createBaseAuthClient({
         baseURL: url.origin,
@@ -143,7 +141,7 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
   }
 }
 
-declare module '~/types' {
+declare module '~~/lib/types/app' {
   interface AppInitialState {
     authContext: string
   }

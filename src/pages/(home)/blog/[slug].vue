@@ -1,28 +1,26 @@
-<script lang="ts">
-import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
-
-type PostData = Awaited<ReturnType<typeof import('~~/server/routes/api/post/slug/[slug].get')['default']>>
-
-export const usePostData = defineColadaLoader('/(home)/blog/[slug]', {
-  async query(to, { signal }) {
-    const res = await fetch(`http://localhost:3333/api/post/slug/${to.params.slug}`, {
-      signal,
-    })
-    return res.json() as Promise<PostData>
-  },
-  key: to => ['posts', to.params.slug],
-  staleTime: 12 * 60 * 60 * 1000,
-})
-</script>
-
 <script setup lang="ts">
+import { useQuery } from '@pinia/colada'
+
 defineOptions({
   name: 'BlogPage',
 })
 
+const $hc = useHC()
+
 const route = useRoute('/(home)/blog/[slug]')
 
-const { data } = usePostData()
+const { data } = useQuery({
+  key: ['post', route.params.slug],
+  query: async () => {
+    const res = await $hc.api.post.slug[':slug'].$get(
+      {
+        param: { slug: route.params.slug },
+      },
+    )
+    return res.json()
+  },
+  staleTime: 1000 * 60 * 60 * 24,
+})
 </script>
 
 <template>

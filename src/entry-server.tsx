@@ -1,9 +1,9 @@
 import type { HeadTag } from '@unhead/vue'
-import type { H3Event } from 'h3'
+import type { Context } from 'hono'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
 import type { SSRContext } from 'vue/server-renderer'
+import type { Env } from '~~/server/middleware/context'
 import type { AppSSRContext } from '../lib/types/app'
-import { defineEventHandler } from 'h3'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
 import { serializeState } from '~~/lib/state'
@@ -115,13 +115,9 @@ const Template = defineComponent({
   },
 })
 
-export async function render(
-  event: H3Event,
-) {
-  const url = new URL(event.req.url)
+export async function render(c: Context<Env>) {
+  const url = new URL(c.req.url)
   const path = url.pathname
-  const env = event.runtime!.cloudflare!.env
-  const context = event.runtime!.cloudflare!.context as ExecutionContext
   const { app, head, initialState, hooks } = await createApp(path)
   hooks.hook('vue:error', (err, _instance, _info) => {
     console.error(err)
@@ -132,11 +128,7 @@ export async function render(
     url: url.toString(),
     teleports: {} as Record<string, string>,
     modules: new Set<string>(),
-    event,
-    cloudflare: {
-      env,
-      ctx: context,
-    },
+    context: c,
   }
   await hooks.callHook('app:beforeRender', app, ssrContext)
   const renderResult = await renderToString(app, ssrContext)
@@ -159,7 +151,3 @@ export async function render(
     },
   })
 }
-
-export default defineEventHandler(async (event) => {
-  return render(event)
-})

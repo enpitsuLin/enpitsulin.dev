@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@ark-ui/vue": "catalog:frontend",
+    "@hono/zod-validator": "catalog:server",
     "@libsql/client": "catalog:dev",
     "@pinia/colada": "catalog:frontend",
     "@shikijs/langs": "catalog:frontend",
@@ -32,7 +33,7 @@
     "consola": "catalog:dev",
     "devalue": "catalog:frontend",
     "drizzle-orm": "catalog:server",
-    "h3": "catalog:server",
+    "hono": "catalog:server",
     "hookable": "catalog:frontend",
     "jstoxml": "catalog:server",
     "markdown-it": "catalog:frontend",

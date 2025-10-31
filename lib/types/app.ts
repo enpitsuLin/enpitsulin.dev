@@ -1,9 +1,10 @@
 import type { VueHeadClient } from '@unhead/vue/client'
-import type { H3Event } from 'h3'
+import type { Context } from 'hono'
 import type { Hookable } from 'hookable'
 import type { App } from 'vue'
 import type { Router, RouteRecordRaw } from 'vue-router'
 import type { SSRContext } from 'vue/server-renderer'
+import type { Env } from '~~/server/middleware/context'
 
 export interface RuntimeHooks {
   'app:created': (app: App<Element>) => Promise<void> | void
@@ -39,11 +40,7 @@ interface AppRenderedContext {
 }
 
 export interface AppSSRContext extends SSRContext {
-  event: H3Event<Request>
+  context: Context<Env>
   modules: Set<string>
-  cloudflare: {
-    env: Cloudflare.Env
-    ctx: ExecutionContext
-  }
   url: string
 }

@@ -7,6 +7,7 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
+  const HCInjectionKey: typeof import('./composables/hc').HCInjectionKey
   const OauthPopup: typeof import('./composables/popup').OauthPopup
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
@@ -85,6 +86,7 @@ declare global {
   const preferredDark: typeof import('./composables/dark').preferredDark
   const prerenderRoutes: typeof import('./composables/ssr').prerenderRoutes
   const provide: typeof import('vue').provide
+  const provideHC: typeof import('./composables/hc').provideHC
   const provideLocal: typeof import('@vueuse/core').provideLocal
   const provideNavigation: typeof import('./composables/navigation').provideNavigation
   const reactify: typeof import('@vueuse/core').reactify
@@ -199,6 +201,7 @@ declare global {
   const useFullscreen: typeof import('@vueuse/core').useFullscreen
   const useGamepad: typeof import('@vueuse/core').useGamepad
   const useGeolocation: typeof import('@vueuse/core').useGeolocation
+  const useHC: typeof import('./composables/hc').useHC
   const useHead: typeof import('@unhead/vue').useHead
   const useHeadSafe: typeof import('@unhead/vue').useHeadSafe
   const useI18n: typeof import('vue-i18n').useI18n
@@ -250,7 +253,8 @@ declare global {
   const usePrevious: typeof import('@vueuse/core').usePrevious
   const useRafFn: typeof import('@vueuse/core').useRafFn
   const useRefHistory: typeof import('@vueuse/core').useRefHistory
-  const useRequestEvent: typeof import('./composables/ssr').useRequestEvent
+  const useRequestContext: typeof import('./composables/ssr').useRequestContext
+  const useRequestEvent: typeof import('./composables/ssr').useRequestContext
   const useRequestFetch: typeof import('./composables/ssr').useRequestFetch
   const useRequestHeader: typeof import('./composables/ssr').useRequestHeader
   const useRequestHeaders: typeof import('./composables/ssr').useRequestHeaders
@@ -524,6 +528,7 @@ declare module 'vue' {
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>
     readonly useGeolocation: UnwrapRef<typeof import('@vueuse/core')['useGeolocation']>
+    readonly useHC: UnwrapRef<typeof import('./composables/hc')['useHC']>
     readonly useHead: UnwrapRef<typeof import('@unhead/vue')['useHead']>
     readonly useHeadSafe: UnwrapRef<typeof import('@unhead/vue')['useHeadSafe']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
@@ -574,7 +579,7 @@ declare module 'vue' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
-    readonly useRequestEvent: UnwrapRef<typeof import('./composables/ssr')['useRequestEvent']>
+    readonly useRequestContext: UnwrapRef<typeof import('./composables/ssr')['useRequestContext']>
     readonly useRequestHeader: UnwrapRef<typeof import('./composables/ssr')['useRequestHeader']>
     readonly useRequestHeaders: UnwrapRef<typeof import('./composables/ssr')['useRequestHeaders']>
     readonly useRequestURL: UnwrapRef<typeof import('./composables/url')['useRequestURL']>

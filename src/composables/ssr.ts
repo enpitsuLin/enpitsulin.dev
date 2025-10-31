@@ -1,12 +1,12 @@
 import type { AppSSRContext } from '~~/lib/types/app'
 import { computed, ref, useSSRContext } from 'vue'
 
-export function useRequestEvent() {
+export function useRequestContext() {
   if (!import.meta.env.SSR) {
     return
   }
   const ssrContext = useSSRContext<AppSSRContext>()
-  return ssrContext!.event
+  return ssrContext!.context
 }
 
 export function useRequestHeaders<K extends string = string>(include: K[]): { [key in Lowercase<K>]?: string }
@@ -15,10 +15,10 @@ export function useRequestHeaders(include?: any[]) {
   if (!import.meta.env.SSR) {
     return {}
   }
-  const event = useRequestEvent()
+  const c = useRequestContext()!
 
-  const _headers = event ? Object.fromEntries(event.req.headers.entries()) : {}
-  if (!include || !event) {
+  const _headers = c ? c.req.header() : {}
+  if (!include || !c) {
     return _headers
   }
   const headers = Object.create(null)
@@ -36,8 +36,8 @@ export function useRequestHeader(header: string) {
   if (!import.meta.env.SSR) {
     return undefined
   }
-  const event = useRequestEvent()
-  return event ? event.req.headers.get(header) : undefined
+  const event = useRequestContext()
+  return event ? event.req.header(header) : undefined
 }
 
 export function useResponseHeader(header: string) {
@@ -51,7 +51,7 @@ export function useResponseHeader(header: string) {
     return ref()
   }
 
-  const event = useRequestEvent()!
+  const event = useRequestContext()!
 
   return computed({
     get() {
