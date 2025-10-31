@@ -47,12 +47,15 @@ catalogs:
   frontend:
     '@ark-ui/vue': ^5.26.2
     '@pinia/colada': ^0.17.6
+    '@shikijs/langs': ^3.14.0
+    '@shikijs/themes': ^3.14.0
     '@unhead/vue': ^2.0.19
     '@unocss/reset': ^66.5.4
     '@vee-validate/zod': ^4.15.1
     '@vueuse/core': ^14.0.0
     devalue: ^5.4.2
     hookable: ^5.5.3
+    markdown-it: ^14.1.0
     motion-v: ^1.7.4
     nprogress: ^0.2.0
     pinia: ^3.0.3
@@ -73,6 +76,7 @@ catalogs:
     mimetext: ^3.0.27
     srvx: ^0.9.2
   types:
+    '@types/markdown-it': ^14.1.2
     '@types/markdown-it-link-attributes': ^3.0.5
     '@types/nprogress': ^0.2.3
 

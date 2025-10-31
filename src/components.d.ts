@@ -12,7 +12,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AuthLoginForm: typeof import('./components/auth/login-form.vue')['default']
     AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
     AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
     AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -42,20 +41,18 @@ declare module 'vue' {
     LayoutNavBarMenu: typeof import('./components/layout/nav-bar-menu.vue')['default']
     LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
     LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
+    MarkdownRender: typeof import('./components/markdown/render.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UiButton: typeof import('./components/ui/button.vue')['default']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
     UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
     UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
-    UiTooltipRoot: typeof import('./components/ui/tooltip/root.vue')['default']
-    UiTooltipTrigger: typeof import('./components/ui/tooltip/trigger.vue')['default']
   }
 }
 
 // For TSX support
 declare global {
-  const AuthLoginForm: typeof import('./components/auth/login-form.vue')['default']
   const AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
   const AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
   const AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -85,12 +82,11 @@ declare global {
   const LayoutNavBarMenu: typeof import('./components/layout/nav-bar-menu.vue')['default']
   const LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
   const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
+  const MarkdownRender: typeof import('./components/markdown/render.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
   const UiButton: typeof import('./components/ui/button.vue')['default']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
   const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
   const UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
-  const UiTooltipRoot: typeof import('./components/ui/tooltip/root.vue')['default']
-  const UiTooltipTrigger: typeof import('./components/ui/tooltip/trigger.vue')['default']
 }

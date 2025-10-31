@@ -10,10 +10,6 @@ import { documentReady } from '~~/lib/document-ready'
 import { deserializeState } from '~~/lib/state'
 import App from './App.vue'
 
-import '@unocss/reset/tailwind.css'
-import 'uno.css'
-import './styles/main.css'
-
 export async function createApp(routePath?: string) {
   const app = createSSRApp(App)
 

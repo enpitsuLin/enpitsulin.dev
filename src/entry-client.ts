@@ -1,5 +1,9 @@
 import { createApp } from '~/main'
 
+import '@unocss/reset/tailwind.css'
+import 'uno.css'
+import './styles/main.css'
+
 createApp().then(async ({ app, router, hooks }) => {
   hooks.hook('vue:error', (err, _instance, _info) => {
     console.error(err)

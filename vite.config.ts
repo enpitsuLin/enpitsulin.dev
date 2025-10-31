@@ -20,8 +20,6 @@ export default defineConfig({
   environments: {
     client: {
       build: {
-        ssrManifest: true,
-        manifest: true,
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'src/entry-client.ts'),
