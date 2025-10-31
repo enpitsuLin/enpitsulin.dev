@@ -94,7 +94,7 @@ async function handleSignOut() {
           <Menu.Separator my-1 border="~ border" />
           <Menu.Item
             v-if="user?.role === 'admin'"
-            value="account"
+            value="admin"
             as-child
           >
             <RouterLink

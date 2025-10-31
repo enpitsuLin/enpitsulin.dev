@@ -1,5 +1,4 @@
 import type { BetterFetchPlugin } from 'better-auth/client'
-import type { RouteLocationRaw } from 'vue-router'
 import type { Session, User } from '~~/lib/auth'
 import type { Client } from '~~/lib/auth-client'
 import type { UserModule } from '~/types'
@@ -63,9 +62,7 @@ function fetchLoggerPlugin() {
   } as BetterFetchPlugin
 }
 
-const whiteList: RouteLocationRaw[] = ['/dashboard/sign-in']
-
-export const install: UserModule = ({ app, initialState, hooks, router }) => {
+export const install: UserModule = ({ app, initialState, hooks }) => {
   const session = shallowRef<Session | null>(null)
   const user = shallowRef<User | null>(null)
 
@@ -82,20 +79,18 @@ export const install: UserModule = ({ app, initialState, hooks, router }) => {
 
     const isFetchingSession = ref(false)
 
-    if (!import.meta.env.SSR) {
-      client.$store.listen('$sessionSignal', async () => {
-        if (isFetchingSession.value)
-          return
-        isFetchingSession.value = true
-        const res = await client.getSession()
-        if (res.error) {
-          return
-        }
-        $auth.session.value = res.data?.session ?? null
-        $auth.user.value = res.data?.user ?? null
-        isFetchingSession.value = false
-      })
-    }
+    client.$store.listen('$sessionSignal', async () => {
+      if (isFetchingSession.value)
+        return
+      isFetchingSession.value = true
+      const res = await client.getSession()
+      if (res.error) {
+        return
+      }
+      $auth.session.value = res.data?.session ?? null
+      $auth.user.value = res.data?.user ?? null
+      isFetchingSession.value = false
+    })
 
     app.config.globalProperties.$auth = $auth
     app.provide(AuthContextSymbol, $auth)
@@ -146,28 +141,6 @@ export const install: UserModule = ({ app, initialState, hooks, router }) => {
       })
     })
   }
-
-  router.beforeEach((to, _, next) => {
-    const requireAuth = to.meta.requireAuth
-    if (requireAuth && !whiteList.includes(to.path)) {
-      logger.info('redirectTo', to.fullPath)
-      const redirectTo = () => {
-        return next({
-          path: '/dashboard/sign-in',
-          query: {
-            redirect: encodeURIComponent(to.fullPath),
-          },
-        })
-      }
-      if (typeof requireAuth === 'string' && user.value?.role !== requireAuth) {
-        return redirectTo()
-      }
-      else if (!user.value) {
-        return redirectTo()
-      }
-    }
-    next()
-  })
 }
 
 declare module '~/types' {

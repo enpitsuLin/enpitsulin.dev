@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import { useAuth } from '~/composables/auth'
+
+const { user } = useAuth()
+const router = useRouter()
+const route = useRoute()
+
+if (user.value?.role !== 'admin' && route.path !== '/dashboard/sign-in') {
+  await router.push({
+    path: '/dashboard/sign-in',
+    query: {
+      redirect: encodeURIComponent(route.fullPath),
+    },
+  })
+}
 </script>
 
 <template>

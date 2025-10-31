@@ -46,6 +46,13 @@ useHead({
 
 <template>
   <UiToastToaster>
-    <RouterView />
+    <Suspense>
+      <RouterView />
+      <template #fallback>
+        <div>
+          <h1>Loading...</h1>
+        </div>
+      </template>
+    </Suspense>
   </UiToastToaster>
 </template>
