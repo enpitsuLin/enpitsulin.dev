@@ -75,20 +75,11 @@ const { mutate, isLoading } = useMutation({
       >
     </UiFormField>
 
-    <!-- Submit button -->
-    <button
+    <UiButton
       type="submit"
       :disabled="isLoading"
-      w-full
-      p="x3 y2"
-      bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
-      un-text="zinc-50 xs dark:zinc-900 font-medium"
-      rounded="lg"
-      class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <span flex="~ items-center justify-center gap-2">
-        {{ isLoading ? '登录中...' : '登录' }}
-      </span>
-    </button>
+      {{ isLoading ? '登录中...' : '登录' }}
+    </UiButton>
   </Form>
 </template>

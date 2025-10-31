@@ -142,7 +142,7 @@ const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
         <!-- Main Card -->
         <div border="~ border rounded-lg" p="4" flex="~ col gap-2">
           <!-- Title and Description -->
-          <div text="center" space-y-2>
+          <div text="center" pb-4 space-y-2>
             <h1 un-text="2xl font-bold zinc-900 dark:white">
               访问受限
             </h1>
@@ -152,34 +152,20 @@ const { mutate: signInSocial, isLoading: isLoadingSignInSocial } = useMutation({
           </div>
 
           <!-- Actions -->
-          <div space-y-2>
-            <RouterLink
-              role="button"
-              to="/"
-              flex="inline items-center justify-center gap-2"
-              w-full
-              p="x3 y2"
-              bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
-              un-text="zinc-50 xs dark:zinc-900 font-medium"
-              rounded="lg"
-              class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <div class="i-mingcute:home-3-line size-4" />
-              <span>返回首页</span>
-            </RouterLink>
-            <button
-              flex="~ items-center justify-center gap-2"
-              w-full
-              p="x3 y2"
-              bg="zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100"
-              un-text="zinc-50 xs dark:zinc-900 font-medium"
-              rounded="lg"
-              class="group transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
-              @click="() => signOut()"
-            >
+          <div grid="~ cols-2 gap-2">
+            <UiButton as-child w-full>
+              <RouterLink
+                role="button"
+                to="/"
+              >
+                <div class="i-mingcute:home-3-line size-4" />
+                <span>返回首页</span>
+              </RouterLink>
+            </UiButton>
+            <UiButton variant="outline" w-full @click="() => signOut()">
               <div class="i-mingcute:exit-line size-4" />
               <span>退出登录</span>
-            </button>
+            </UiButton>
           </div>
         </div>
       </template>
