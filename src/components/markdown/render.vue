@@ -9,8 +9,8 @@ defineOptions({
   name: 'MarkdownRender',
 })
 
-const { content } = defineProps<{
-  content: string
+const { content = '' } = defineProps<{
+  content?: string
 }>()
 
 const createHighlighter = createdBundledHighlighter({

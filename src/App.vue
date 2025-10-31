@@ -39,7 +39,7 @@ useHead({
     },
   ],
   bodyAttrs: {
-    class: 'font-sans',
+    class: 'font-sans bg-background',
   },
 })
 </script>

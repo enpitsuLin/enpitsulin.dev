@@ -7,8 +7,16 @@ const { user } = useAuth()
 </script>
 
 <template>
-  <h1>Dashboard</h1>
-  <div flex="~ col gap-2">
-    {{ user }}
+  <div class="px-4 lg:px-6">
+    <div
+      flex="~ col gap-6"
+      border="~ border rounded-xl"
+      class="p-6 shadow @container/card"
+    >
+      <h1>Dashboard</h1>
+      <div flex="~ col gap-2">
+        {{ user }}
+      </div>
+    </div>
   </div>
 </template>

@@ -102,7 +102,7 @@ async function handleSignOut() {
               flex="~ items-center gap-2"
               bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
               cursor-pointer rounded text-xs
-              to="/dashboard"
+              to="/admin"
             >
               <div class="i-mingcute:dashboard-2-line size-4" />
               <span>后台管理</span>
