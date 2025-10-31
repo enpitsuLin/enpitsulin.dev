@@ -1,4 +1,4 @@
-import type { AppContext, AppInitialState, UserModule } from '~/types'
+import type { AppContext, AppInitialState, UserModule } from '~~/lib/types/app'
 import { createHead as createClientHead } from '@unhead/vue/client'
 import { createHead as createSSRHead } from '@unhead/vue/server'
 import { createHooks } from 'hookable'

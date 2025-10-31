@@ -1,5 +1,5 @@
 import type { StateTree } from 'pinia'
-import type { UserModule } from '~/types'
+import type { UserModule } from '~~/lib/types/app'
 import { hydrateQueryCache, isQueryCache, PiniaColada, serializeQueryCache, useQueryCache } from '@pinia/colada'
 import * as devalue from 'devalue'
 import { createPinia } from 'pinia'

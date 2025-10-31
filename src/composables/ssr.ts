@@ -1,4 +1,4 @@
-import type { AppSSRContext } from '~/types'
+import type { AppSSRContext } from '~~/lib/types/app'
 import { computed, ref, useSSRContext } from 'vue'
 
 export function useRequestEvent() {
