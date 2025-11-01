@@ -1,5 +1,7 @@
 packages: []
 
+patchedDependencies:
+  hono: patches/hono.patch
 catalogs:
   build:
     '@intlify/unplugin-vue-i18n': ^11.0.1
@@ -49,9 +51,9 @@ catalogs:
     '@pinia/colada': ^0.17.6
     '@shikijs/langs': ^3.14.0
     '@shikijs/themes': ^3.14.0
+    '@tanstack/vue-form': ^1.23.8
     '@unhead/vue': ^2.0.19
     '@unocss/reset': ^66.5.4
-    '@vee-validate/zod': ^4.15.1
     '@vueuse/core': ^14.0.0
     devalue: ^5.4.2
     hookable: ^5.5.3
@@ -62,7 +64,6 @@ catalogs:
     ua-parser-js: ^2.0.6
     ufo: ^1.6.1
     unctx: ^2.4.1
-    vee-validate: ^4.15.1
     vue: ^3.5.22
     vue-i18n: ^11.1.12
     vue-router: ^4.6.3

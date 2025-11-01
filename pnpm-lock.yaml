@@ -134,15 +134,15 @@ catalogs:
     '@shikijs/themes':
       specifier: ^3.14.0
       version: 3.14.0
+    '@tanstack/vue-form':
+      specifier: ^1.23.8
+      version: 1.23.8
     '@unhead/vue':
       specifier: ^2.0.19
       version: 2.0.19
     '@unocss/reset':
       specifier: ^66.5.4
       version: 66.5.4
-    '@vee-validate/zod':
-      specifier: ^4.15.1
-      version: 4.15.1
     '@vueuse/core':
       specifier: ^14.0.0
       version: 14.0.0
@@ -173,9 +173,6 @@ catalogs:
     unctx:
       specifier: ^2.4.1
       version: 2.4.1
-    vee-validate:
-      specifier: ^4.15.1
-      version: 4.15.1
     vue:
       specifier: ^3.5.22
       version: 3.5.22
@@ -235,6 +232,11 @@ overrides:
   vite: ^7.1.12
   vite-plugin-inspect: ^11.3.3
 
+patchedDependencies:
+  hono:
+    hash: 1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb
+    path: patches/hono.patch
+
 importers:
 
   .:
@@ -244,7 +246,7 @@ importers:
         version: 5.26.2(vue@3.5.22(typescript@5.9.3))
       '@hono/zod-validator':
         specifier: catalog:server
-        version: 0.7.4(hono@4.10.4)(zod@4.1.12)
+        version: 0.7.4(hono@4.10.4(patch_hash=1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb))(zod@4.1.12)
       '@libsql/client':
         specifier: catalog:dev
         version: 0.15.15
@@ -257,15 +259,15 @@ importers:
       '@shikijs/themes':
         specifier: catalog:frontend
         version: 3.14.0
+      '@tanstack/vue-form':
+        specifier: catalog:frontend
+        version: 1.23.8(vue@3.5.22(typescript@5.9.3))
       '@unhead/vue':
         specifier: catalog:frontend
         version: 2.0.19(vue@3.5.22(typescript@5.9.3))
       '@unocss/reset':
         specifier: catalog:frontend
         version: 66.5.4
-      '@vee-validate/zod':
-        specifier: catalog:frontend
-        version: 4.15.1(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
       '@vueuse/core':
         specifier: catalog:frontend
         version: 14.0.0(vue@3.5.22(typescript@5.9.3))
@@ -283,7 +285,7 @@ importers:
         version: 0.44.7(@libsql/client@0.15.15)(@prisma/client@5.22.0(prisma@5.22.0))(@types/better-sqlite3@7.6.13)(better-sqlite3@12.4.1)(kysely@0.28.8)(prisma@5.22.0)
       hono:
         specifier: catalog:server
-        version: 4.10.4
+        version: 4.10.4(patch_hash=1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb)
       hookable:
         specifier: catalog:frontend
         version: 5.5.3
@@ -317,9 +319,6 @@ importers:
       unctx:
         specifier: catalog:frontend
         version: 2.4.1
-      vee-validate:
-        specifier: catalog:frontend
-        version: 4.15.1(vue@3.5.22(typescript@5.9.3))
       vue:
         specifier: catalog:frontend
         version: 3.5.22(typescript@5.9.3)
@@ -1949,11 +1948,23 @@ packages:
   '@tanstack/form-core@1.24.3':
     resolution: {integrity: sha512-e+HzSD49NWr4aIqJWtPPzmi+/phBJAP3nSPN8dvxwmJWqAxuB/cH138EcmCFf3+oA7j3BXvwvTY0I+8UweGPjQ==}
 
+  '@tanstack/form-core@1.24.4':
+    resolution: {integrity: sha512-+eIR7DiDamit1zvTVgaHxuIRA02YFgJaXMUGxsLRJoBpUjGl/g/nhUocQoNkRyfXqOlh8OCMTanjwDprWSRq6w==}
+
+  '@tanstack/pacer@0.15.4':
+    resolution: {integrity: sha512-vGY+CWsFZeac3dELgB6UZ4c7OacwsLb8hvL2gLS6hTgy8Fl0Bm/aLokHaeDIP+q9F9HUZTnp360z9uv78eg8pg==}
+    engines: {node: '>=18'}
+
   '@tanstack/store@0.7.7':
     resolution: {integrity: sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ==}
 
   '@tanstack/vue-form@1.23.7':
     resolution: {integrity: sha512-El0UKkXhHf+trz6SYvNzeeonSj5+ARMSMGOJh+ilmzN7hn5VE70wskQTFqE6P46NDETU4T1nxyu7bPiUcQIjZw==}
+    peerDependencies:
+      vue: ^3.4.0
+
+  '@tanstack/vue-form@1.23.8':
+    resolution: {integrity: sha512-fyNCYKYV9XoztJdtUJdO3WCwr7yPJl8fs639UWBqKdtnGlGem+EiR5YxfHG9wJ8lXxEjOsDZPc8srxV0gc8Z8g==}
     peerDependencies:
       vue: ^3.4.0
 
@@ -2220,11 +2231,6 @@ packages:
     resolution: {integrity: sha512-dmSJ3h7/kMbFOIrAyycg2W1VVN+59WCnH5s0dJTGRla2kUTAFB0iWJWdIa/W6IsvFlicMtsoLYJmTnQ/kBQm7A==}
     peerDependencies:
       vite: ^7.1.12
-
-  '@vee-validate/zod@4.15.1':
-    resolution: {integrity: sha512-329Z4TDBE5Vx0FdbA8S4eR9iGCFFUNGbxjpQ20ff5b5wGueScjocUIx9JHPa79LTG06RnlUR4XogQsjN4tecKA==}
-    peerDependencies:
-      zod: ^3.24.0
 
   '@vitejs/plugin-vue-jsx@5.1.1':
     resolution: {integrity: sha512-uQkfxzlF8SGHJJVH966lFTdjM/lGcwJGzwAHpVqAPDD/QcsqoUGa+q31ox1BrUfi+FLP2ChVp7uLXE3DkHyDdQ==}
@@ -5054,10 +5060,6 @@ packages:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
 
-  type-fest@4.41.0:
-    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
-    engines: {node: '>=16'}
-
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
@@ -5212,11 +5214,6 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
-
-  vee-validate@4.15.1:
-    resolution: {integrity: sha512-DkFsiTwEKau8VIxyZBGdO6tOudD+QoUBPuHj3e6QFqmbfCRj1ArmYWue9lEp6jLSWBIw4XPlDLjFIZNLdRAMSg==}
-    peerDependencies:
-      vue: ^3.4.26
 
   vfile-message@4.0.3:
     resolution: {integrity: sha512-QTHzsGd1EhbZs4AsQ20JX1rC3cOlt/IWJruk893DfLRr57lcnOeMaWG4K0JrRta4mIJZKth2Au3mM3u03/JWKw==}
@@ -6313,9 +6310,9 @@ snapshots:
       strip-literal: 3.1.0
       vite: 7.1.12(@types/node@24.8.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
 
-  '@hono/zod-validator@0.7.4(hono@4.10.4)(zod@4.1.12)':
+  '@hono/zod-validator@0.7.4(hono@4.10.4(patch_hash=1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb))(zod@4.1.12)':
     dependencies:
-      hono: 4.10.4
+      hono: 4.10.4(patch_hash=1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb)
       zod: 4.1.12
 
   '@humanfs/core@0.19.1': {}
@@ -6942,11 +6939,30 @@ snapshots:
       '@tanstack/devtools-event-client': 0.3.3
       '@tanstack/store': 0.7.7
 
+  '@tanstack/form-core@1.24.4':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.3.3
+      '@tanstack/pacer': 0.15.4
+      '@tanstack/store': 0.7.7
+
+  '@tanstack/pacer@0.15.4':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.3.3
+      '@tanstack/store': 0.7.7
+
   '@tanstack/store@0.7.7': {}
 
   '@tanstack/vue-form@1.23.7(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       '@tanstack/form-core': 1.24.3
+      '@tanstack/vue-store': 0.7.7(vue@3.5.22(typescript@5.9.3))
+      vue: 3.5.22(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+
+  '@tanstack/vue-form@1.23.8(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@tanstack/form-core': 1.24.4
       '@tanstack/vue-store': 0.7.7(vue@3.5.22(typescript@5.9.3))
       vue: 3.5.22(typescript@5.9.3)
     transitivePeerDependencies:
@@ -7340,14 +7356,6 @@ snapshots:
       tinyglobby: 0.2.15
       unplugin-utils: 0.3.1
       vite: 7.1.12(@types/node@24.8.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1)
-
-  '@vee-validate/zod@4.15.1(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)':
-    dependencies:
-      type-fest: 4.41.0
-      vee-validate: 4.15.1(vue@3.5.22(typescript@5.9.3))
-      zod: 4.1.12
-    transitivePeerDependencies:
-      - vue
 
   '@vitejs/plugin-vue-jsx@5.1.1(vite@7.1.12(@types/node@24.8.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))':
     dependencies:
@@ -9321,7 +9329,7 @@ snapshots:
 
   hey-listen@1.0.8: {}
 
-  hono@4.10.4: {}
+  hono@4.10.4(patch_hash=1dc8047f1e3701c3d94be3025036af118d4f1bcfa66010af8579ab592dc5decb): {}
 
   hookable@5.5.3: {}
 
@@ -10845,8 +10853,6 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  type-fest@4.41.0: {}
-
   type-is@1.6.18:
     dependencies:
       media-typer: 0.3.0
@@ -11063,12 +11069,6 @@ snapshots:
   utils-merge@1.0.1: {}
 
   vary@1.1.2: {}
-
-  vee-validate@4.15.1(vue@3.5.22(typescript@5.9.3)):
-    dependencies:
-      '@vue/devtools-api': 7.7.7
-      type-fest: 4.41.0
-      vue: 3.5.22(typescript@5.9.3)
 
   vfile-message@4.0.3:
     dependencies:
