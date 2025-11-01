@@ -9,7 +9,7 @@ defineOptions({
     <div
       flex="~ 1 col items-center"
       px="lg:8" w="full"
-      bg="white dark:zinc-900" relative max-w-6xl
+      bg="zinc-50 dark:zinc-900" relative max-w-6xl shadow-lg
       class="ring-1 ring-zinc-100 dark:ring-zinc-300/20"
     >
       <LayoutNavBar />
