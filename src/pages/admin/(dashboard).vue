@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { RouteLocationRaw } from 'vue-router'
+import { withoutTrailingSlash } from 'ufo'
 import { useAuth } from '~/composables/auth'
 
 defineOptions({
@@ -27,36 +29,38 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    title: 'Dashboard',
+    title: '仪表盘',
     path: '/admin',
     icon: 'i-mingcute:dashboard-line',
   },
   {
     title: '文章管理',
     path: '/admin/posts',
-    icon: 'i-mingcute:document-line',
-    children: [
-      {
-        title: '文章列表',
-        path: '/admin/posts',
-        icon: 'i-mingcute:list-check-line',
-      },
-      {
-        title: '新建文章',
-        path: '/admin/posts/new',
-        icon: 'i-mingcute:add-circle-line',
-      },
-    ],
+    icon: 'i-mingcute:code-line',
   },
 ]
 
-// Check if a path is active
-function isActive(path: string) {
-  if (path === '/admin') {
-    return route.path === path
-  }
-  return route.path.startsWith(path)
+function getRouteTitle(path: RouteLocationRaw) {
+  const resolved = router.resolve(path)
+  return resolved.meta.breadcrumb ?? resolved.path
 }
+
+const navigationItems = computed(() => {
+  const paths = route.fullPath
+    .replace('/admin', '')
+    .split('/')
+    .map(p => `/${p}`)
+
+  let accumulated = '/admin'
+  return paths.map((path) => {
+    accumulated = withoutTrailingSlash(`${accumulated}${path}`)
+
+    return {
+      fullPath: accumulated,
+      title: getRouteTitle(accumulated),
+    }
+  })
+})
 </script>
 
 <template>
@@ -81,42 +85,29 @@ function isActive(path: string) {
         </div>
       </div>
 
-      <!-- Navigation Menu -->
       <nav flex="~ col 1" class="overflow-y-auto p-2">
         <div flex="~ col gap-1">
-          <template v-for="item in navItems" :key="item.path">
-            <!-- Parent Item -->
-            <RouterLink
-              :to="item.path"
-              flex="~ items-center gap-3"
-              class="rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50"
-              :class="{
-                'bg-zinc-200 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100': isActive(item.path),
-                'text-zinc-600 dark:text-zinc-400': !isActive(item.path),
-              }"
-            >
-              <div :class="item.icon" class="shrink-0 text-base" />
-              <span>{{ item.title }}</span>
-            </RouterLink>
-
-            <!-- Children Items -->
-            <div v-if="item.children?.length" flex="~ col gap-1" class="mb-1 ml-4 mt-1">
-              <RouterLink
-                v-for="child in item.children"
-                :key="child.path"
-                :to="child.path"
+          <RouterLink
+            v-for="item in navItems" :key="item.path"
+            :to="item.path"
+            custom
+          >
+            <template #default="{ href, isActive, isExactActive, navigate }">
+              <a
+                :data-active="href === '/admin' ? isExactActive : isActive"
+                bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
                 flex="~ items-center gap-3"
-                class="rounded-lg px-3 py-2 text-sm transition-colors hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50"
-                :class="{
-                  'bg-zinc-200 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100': route.path === child.path,
-                  'text-zinc-600 dark:text-zinc-400': route.path !== child.path,
-                }"
+                class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                exact-active-class="active"
+                un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
+                :href="href"
+                @click="navigate"
               >
-                <div :class="child.icon" class="shrink-0 text-base" />
-                <span>{{ child.title }}</span>
-              </RouterLink>
-            </div>
-          </template>
+                <div :class="item.icon" class="shrink-0 text-base" />
+                <span>{{ item.title }}</span>
+              </a>
+            </template>
+          </RouterLink>
         </div>
       </nav>
 
@@ -145,6 +136,17 @@ function isActive(path: string) {
             bg-border
             class="mx-2 h-4 w-px shrink-0"
           />
+
+          <UiBreadcrumb>
+            <UiBreadcrumbList>
+              <template v-for="item in navigationItems" :key="item">
+                <UiBreadcrumbItem :to="item.fullPath">
+                  {{ item.title }}
+                </UiBreadcrumbItem>
+                <UiBreadcrumbSeparator class="last:hidden" />
+              </template>
+            </UiBreadcrumbList>
+          </UiBreadcrumb>
         </div>
       </header>
       <div flex="~ col 1">

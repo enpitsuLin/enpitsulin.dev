@@ -12,6 +12,12 @@ defineOptions({
   name: 'PostPage',
 })
 
+definePage({
+  meta: {
+    breadcrumb: '编辑文章',
+  },
+})
+
 const route = useRoute('/admin/(dashboard)/posts/[id]')
 const $hc = useHC()
 const router = useRouter()

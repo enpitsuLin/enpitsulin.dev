@@ -3,6 +3,12 @@ defineOptions({
   name: 'DashboardPage',
 })
 
+definePage({
+  meta: {
+    breadcrumb: '仪表盘',
+  },
+})
+
 const { user } = useAuth()
 </script>
 

@@ -9,6 +9,12 @@ defineOptions({
   name: 'PostsPage',
 })
 
+definePage({
+  meta: {
+    breadcrumb: '文章管理',
+  },
+})
+
 const $hc = useHC()
 const router = useRouter()
 const toast = useToast()
