@@ -10,6 +10,8 @@ import { documentReady } from '~~/lib/document-ready'
 import { deserializeState } from '~~/lib/state'
 import App from './App.vue'
 
+const modules = import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true })
+
 export async function createApp(routePath?: string) {
   const app = createSSRApp(App)
 
@@ -45,8 +47,9 @@ export async function createApp(routePath?: string) {
 
   app.use(router)
 
-  Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
-    .forEach(i => i.install?.(context))
+  await Promise.all(
+    Object.values(modules).map(i => i.install?.(context)),
+  )
 
   let entryRoutePath: string | undefined
   let isFirstRoute = true

@@ -118,7 +118,13 @@ const Template = defineComponent({
 export async function render(c: Context<Env>) {
   const url = new URL(c.req.url)
   const path = url.pathname
-  const { app, head, initialState, hooks } = await createApp(path)
+  const {
+    app,
+    head,
+    initialState,
+    hooks,
+  } = await createApp(path)
+
   hooks.hook('vue:error', (err, _instance, _info) => {
     console.error(err)
   })
@@ -130,9 +136,8 @@ export async function render(c: Context<Env>) {
     modules: new Set<string>(),
     context: c,
   }
-  await hooks.callHook('app:beforeRender', app, ssrContext)
+  await hooks.callHook('app:beforeRender', { app, ssrContext })
   const renderResult = await renderToString(app, ssrContext)
-
   await hooks.callHook('app:rendered', { ssrContext, renderResult })
   const tags = await head.resolveTags()
 

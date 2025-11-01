@@ -103,7 +103,7 @@ export const install: UserModule = ({ app, initialState, hooks }) => {
     $auth.user.value = authContext.user
   }
   else {
-    hooks.hook('app:beforeRender', async (app, ssrContext) => {
+    hooks.hook('app:beforeRender', async ({ app, ssrContext }) => {
       const url = new URL(ssrContext.context.req.url)
 
       const headers = ssrContext.context.req.header()

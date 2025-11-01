@@ -35,7 +35,7 @@ export const install: UserModule = ({ initialState, app, hooks }) => {
   }
 }
 
-declare module '~/types' {
+declare module '~~/lib/types/app' {
   interface AppInitialState {
     pinia: Record<string, StateTree>
     queryCache: any
