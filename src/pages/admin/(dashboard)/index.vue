@@ -9,7 +9,9 @@ definePage({
   },
 })
 
-const { user } = useAuth()
+const { session } = useAuth()
+
+const lastLogin = useDateFormat(() => session.value?.updatedAt, 'YYYY-MM-DD HH:mm:ss dddd')
 </script>
 
 <template>
@@ -19,10 +21,14 @@ const { user } = useAuth()
       border="~ border rounded-xl"
       class="p-6 shadow @container/card"
     >
-      <h1>Dashboard</h1>
-      <div flex="~ col gap-2">
-        {{ user }}
-      </div>
+      <section>
+        <p>
+          上次登录位置：{{ session?.ipAddress || "未知位置" }}
+        </p>
+        <p>
+          上次登录时间：<time :datetime="session?.updatedAt?.toISOString()">{{ lastLogin }}</time>
+        </p>
+      </section>
     </div>
   </div>
 </template>

@@ -118,7 +118,7 @@ const navigationItems = computed(() => {
           flex="~ items-center gap-3"
           class="rounded-lg px-3 py-2 text-sm text-zinc-600 font-medium transition-colors hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:bg-zinc-700/50"
         >
-          <div class="i-mingcute:home-line shrink-0 text-base" />
+          <div class="i-mingcute:home-1-line shrink-0 text-base" />
           <span>返回首页</span>
         </RouterLink>
       </div>
