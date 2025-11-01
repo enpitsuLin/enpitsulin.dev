@@ -1,90 +1,42 @@
-import type { AppContext, AppInitialState, UserModule } from '~/types'
-import { createHead as createClientHead } from '@unhead/vue/client'
-import { createHead as createSSRHead } from '@unhead/vue/server'
-import { createHooks } from 'hookable'
-import { setupLayouts } from 'layouts-generated'
-import { createSSRApp } from 'vue'
-import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import type { App as VueApp } from 'vue'
+import type { CreateOptions, Plugin } from '~~/lib/app'
+import { createApp, createSSRApp, nextTick } from 'vue'
+import { applyPlugins, createZootApp } from '~~/lib/app'
+import RootComponent from '~/App.vue'
 
-import { routes } from 'vue-router/auto-routes'
-import { documentReady } from '~~/lib/document-ready'
-import { deserializeState } from '~~/lib/state'
-import App from './App.vue'
+const plugins = Object.values(import.meta.glob<Plugin>('./plugins/*.ts', { eager: true, import: 'default' }))
 
-import '@unocss/reset/tailwind.css'
-import 'uno.css'
-import './styles/main.css'
+export async function createEntry(ssrContext: CreateOptions['ssrContext']): Promise<VueApp<Element>>
+export async function createEntry(): Promise<VueApp<Element>>
+export async function createEntry(ssrContext?: CreateOptions['ssrContext']) {
+  const vueApp = import.meta.env.SSR ? createSSRApp(RootComponent) : createApp(RootComponent)
 
-export async function createApp(routePath?: string) {
-  const app = createSSRApp(App)
+  const zoot = createZootApp({ vueApp, ssrContext })
 
-  const head = import.meta.env.SSR ? createSSRHead() : createClientHead()
-
-  app.use(head)
-
-  const router = createRouter({
-    history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
-    // @ts-expect-error: ignore readonly
-    routes: setupLayouts(routes),
-  })
-
-  const hooks: AppContext['hooks'] = createHooks()
-
-  app.config.errorHandler = (err, instance, info) => {
-    hooks.callHook('vue:error', err, instance, info)
-  }
-
-  const context: AppContext = {
-    app,
-    head,
-    routes,
-    router,
-    initialState: {} as AppInitialState,
-    routePath,
-    hooks,
-  }
-  if (!import.meta.env.SSR) {
-    await documentReady()
-    const stateStrFromDom = JSON.parse(window.__INITIAL_STATE__.textContent) as string
-    context.initialState = deserializeState(stateStrFromDom)
-  }
-
-  Object.values(import.meta.glob<{ install: UserModule }>('./modules/*.ts', { eager: true }))
-    .forEach(i => i.install?.(context))
-
-  app.use(router)
-
-  let entryRoutePath: string | undefined
-  let isFirstRoute = true
-  router.beforeEach((to, _from, next) => {
-    if (isFirstRoute || (entryRoutePath && entryRoutePath === to.path)) {
-      // The first route is rendered in the server and its state is provided globally.
-      isFirstRoute = false
-      entryRoutePath = to.path
-      to.meta.state = context.initialState
+  try {
+    await applyPlugins(zoot, plugins)
+    await zoot.hooks.callHook('app:created', vueApp)
+    if (!import.meta.env.SSR) {
+      await zoot.hooks.callHook('app:beforeMount', vueApp)
+      vueApp.mount(`#app`)
+      await zoot.hooks.callHook('app:mounted', vueApp)
+      await nextTick()
     }
-
-    next()
-  })
-
-  if (import.meta.env.SSR) {
-    const route = context.routePath ?? '/'
-    router.push(route)
-
-    await router.isReady()
-    context.initialState = router.currentRoute.value.meta.state as AppInitialState || {} as AppInitialState
+  }
+  catch (err) {
+    await zoot.callHook('app:error', err)
+    zoot.payload.error = (zoot.payload.error || err) as any
   }
 
-  const initialState = context.initialState
-
-  return {
-    ...context,
-    initialState,
-  } as AppContext
+  return vueApp
+}
+if (!import.meta.env.SSR) {
+  createEntry()
+    .catch((error: unknown) => {
+      console.error('Error while mounting app:', error)
+    })
 }
 
-declare global {
-  interface Window {
-    __INITIAL_STATE__: HTMLScriptElement
-  }
+if (import.meta.env.DEV && import.meta.hot) {
+  import.meta.hot.accept()
 }

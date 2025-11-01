@@ -28,46 +28,116 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
-      | never
+      | '/(home)/'
+      | '/(home)/[...404]'
+      | '/(home)/about'
+      | '/(home)/blog/'
+      | '/(home)/blog/[slug]'
+      | '/(home)/guestbook'
+      | '/(home)/projects'
     >,
-    '/(admin)/dashboard/': RouteRecordInfo<
-      '/(admin)/dashboard/',
-      '/dashboard',
+    '/(home)/': RouteRecordInfo<
+      '/(home)/',
+      '/',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/[...404]': RouteRecordInfo<
-      '/[...404]',
+    '/(home)/[...404]': RouteRecordInfo<
+      '/(home)/[...404]',
       '/:404(.*)',
       { 404: ParamValue<true> },
       { 404: ParamValue<false> },
       | never
     >,
-    '/about': RouteRecordInfo<
+    '/(home)/about': RouteRecordInfo<
+      '/(home)/about',
       '/about',
-      '/about',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/blog': RouteRecordInfo<
+    '/(home)/blog/': RouteRecordInfo<
+      '/(home)/blog/',
       '/blog',
-      '/blog',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/guestbook': RouteRecordInfo<
-      '/guestbook',
+    '/(home)/blog/[slug]': RouteRecordInfo<
+      '/(home)/blog/[slug]',
+      '/blog/:slug',
+      { slug: ParamValue<true> },
+      { slug: ParamValue<false> },
+      | never
+    >,
+    '/(home)/guestbook': RouteRecordInfo<
+      '/(home)/guestbook',
       '/guestbook',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/projects': RouteRecordInfo<
+    '/(home)/projects': RouteRecordInfo<
+      '/(home)/projects',
       '/projects',
-      '/projects',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin': RouteRecordInfo<
+      '/admin',
+      '/admin',
+      Record<never, never>,
+      Record<never, never>,
+      | '/admin/(dashboard)'
+      | '/admin/(dashboard)/'
+      | '/admin/(dashboard)/posts/'
+      | '/admin/(dashboard)/posts/[id]'
+      | '/admin/(dashboard)/posts/new'
+      | '/admin/sign-in'
+    >,
+    '/admin/(dashboard)': RouteRecordInfo<
+      '/admin/(dashboard)',
+      '/admin',
+      Record<never, never>,
+      Record<never, never>,
+      | '/admin/(dashboard)/'
+      | '/admin/(dashboard)/posts/'
+      | '/admin/(dashboard)/posts/[id]'
+      | '/admin/(dashboard)/posts/new'
+    >,
+    '/admin/(dashboard)/': RouteRecordInfo<
+      '/admin/(dashboard)/',
+      '/admin',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/(dashboard)/posts/': RouteRecordInfo<
+      '/admin/(dashboard)/posts/',
+      '/admin/posts',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/(dashboard)/posts/[id]': RouteRecordInfo<
+      '/admin/(dashboard)/posts/[id]',
+      '/admin/posts/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
+      | never
+    >,
+    '/admin/(dashboard)/posts/new': RouteRecordInfo<
+      '/admin/(dashboard)/posts/new',
+      '/admin/posts/new',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/admin/sign-in': RouteRecordInfo<
+      '/admin/sign-in',
+      '/admin/sign-in',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -88,42 +158,126 @@ declare module 'vue-router/auto-routes' {
     'src/pages/(home).vue': {
       routes:
         | '/(home)'
+        | '/(home)/'
+        | '/(home)/[...404]'
+        | '/(home)/about'
+        | '/(home)/blog/'
+        | '/(home)/blog/[slug]'
+        | '/(home)/guestbook'
+        | '/(home)/projects'
+      views:
+        | 'banner'
+        | 'default'
+    }
+    'src/pages/(home)/index.vue': {
+      routes:
+        | '/(home)/'
       views:
         | never
     }
-    'src/pages/(admin)/dashboard/index.vue': {
+    'src/pages/(home)/[...404].vue': {
       routes:
-        | '/(admin)/dashboard/'
+        | '/(home)/[...404]'
       views:
         | never
     }
-    'src/pages/[...404].vue': {
+    'src/pages/(home)/about.md': {
       routes:
-        | '/[...404]'
+        | '/(home)/about'
       views:
         | never
     }
-    'src/pages/about.md': {
+    'src/pages/(home)/blog/index.vue': {
       routes:
-        | '/about'
+        | '/(home)/blog/'
       views:
         | never
     }
-    'src/pages/blog.vue': {
+    'src/pages/(home)/blog/index@banner.vue': {
       routes:
-        | '/blog'
+        | '/(home)/blog/'
       views:
         | never
     }
-    'src/pages/guestbook.vue': {
+    'src/pages/(home)/blog/[slug].vue': {
       routes:
-        | '/guestbook'
+        | '/(home)/blog/[slug]'
       views:
         | never
     }
-    'src/pages/projects.md': {
+    'src/pages/(home)/guestbook.vue': {
       routes:
-        | '/projects'
+        | '/(home)/guestbook'
+      views:
+        | never
+    }
+    'src/pages/(home)/guestbook@banner.vue': {
+      routes:
+        | '/(home)/guestbook'
+      views:
+        | never
+    }
+    'src/pages/(home)/projects.md': {
+      routes:
+        | '/(home)/projects'
+      views:
+        | never
+    }
+    'src/pages/(home)/projects@banner.vue': {
+      routes:
+        | '/(home)/projects'
+      views:
+        | never
+    }
+    'src/pages/admin.vue': {
+      routes:
+        | '/admin'
+        | '/admin/(dashboard)'
+        | '/admin/(dashboard)/'
+        | '/admin/(dashboard)/posts/'
+        | '/admin/(dashboard)/posts/[id]'
+        | '/admin/(dashboard)/posts/new'
+        | '/admin/sign-in'
+      views:
+        | 'default'
+    }
+    'src/pages/admin/(dashboard).vue': {
+      routes:
+        | '/admin/(dashboard)'
+        | '/admin/(dashboard)/'
+        | '/admin/(dashboard)/posts/'
+        | '/admin/(dashboard)/posts/[id]'
+        | '/admin/(dashboard)/posts/new'
+      views:
+        | 'default'
+    }
+    'src/pages/admin/(dashboard)/index.vue': {
+      routes:
+        | '/admin/(dashboard)/'
+      views:
+        | never
+    }
+    'src/pages/admin/(dashboard)/posts/index.vue': {
+      routes:
+        | '/admin/(dashboard)/posts/'
+      views:
+        | never
+    }
+    'src/pages/admin/(dashboard)/posts/[id].vue': {
+      routes:
+        | '/admin/(dashboard)/posts/[id]'
+      views:
+        | never
+    }
+    'src/pages/admin/(dashboard)/posts/new.vue': {
+      routes:
+        | '/admin/(dashboard)/posts/new'
+      views:
+        | never
+    }
+    'src/pages/admin/sign-in.vue': {
+      routes:
+        | '/admin/sign-in'
       views:
         | never
     }

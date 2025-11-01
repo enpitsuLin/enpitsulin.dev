@@ -1,7 +1,8 @@
-import { useAuthContext } from '~/modules/auth'
+import { useZootApp } from '~~/lib/app'
 
 export function useAuth() {
-  const $auth = useAuthContext()
+  const zoot = useZootApp()
+  const $auth = zoot.$auth
 
   const client = $auth.client
   const session = $auth.session

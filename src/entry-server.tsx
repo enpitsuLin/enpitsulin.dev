@@ -1,14 +1,14 @@
 import type { HeadTag } from '@unhead/vue'
-import type { H3Event } from 'h3'
+import type { Context } from 'hono'
 import type { IntrinsicElementAttributes, PropType, VNode } from 'vue'
 import type { SSRContext } from 'vue/server-renderer'
-import type { AppSSRContext } from './types'
-import { defineEventHandler } from 'h3'
+import type { ZootSSRContext } from '~~/lib/app'
+import type { Env } from '~~/server/middleware/context'
 import { cloneVNode, defineComponent, h } from 'vue'
 import { renderToString, renderToWebStream } from 'vue/server-renderer'
 import { serializeState } from '~~/lib/state'
 import clientEntryAssets from './entry-client?assets=client'
-import { createApp } from './main'
+import { createEntry } from './main'
 
 function normalizeProps(props: Record<string, any>) {
   const ret = {} as Record<string, string>
@@ -39,7 +39,7 @@ const Template = defineComponent({
       type: Array as PropType<HeadTag[]>,
       required: true,
     },
-    initialState: {
+    payload: {
       type: Object as PropType<Record<string, any>>,
       required: true,
     },
@@ -52,7 +52,7 @@ const Template = defineComponent({
       required: true,
     },
   },
-  setup: ({ tags, initialState, content, renderContent: { teleports } }) => {
+  setup: ({ tags, payload, content, renderContent: { teleports } }) => {
     const schema = {
       htmlAttrs: {} as IntrinsicElementAttributes['html'],
       bodyAttrs: {} as IntrinsicElementAttributes['body'],
@@ -106,7 +106,7 @@ const Template = defineComponent({
           <div id="app" innerHTML={content}>
           </div>
           {teleports && <div id="teleports" innerHTML={Reflect.get(teleports, '#teleports') ?? ''}></div>}
-          <script type="application/json" id="__INITIAL_STATE__" innerHTML={serializeState(initialState) ?? ''}></script>
+          <script id="INITIAL_STATE" innerHTML={`window.__ZOOT__=${serializeState(payload)}`}></script>
           <noscript> This website requires JavaScript to function properly. Please enable JavaScript to continue. </noscript>
           {schema.tags.bodyClose.map(tag => cloneVNode(tag))}
         </body>
@@ -115,40 +115,48 @@ const Template = defineComponent({
   },
 })
 
-export async function render(
-  event: H3Event,
-) {
-  const url = new URL(event.req.url)
-  const path = url.pathname
-  const env = event.runtime!.cloudflare!.env
-  const context = event.runtime!.cloudflare!.context as ExecutionContext
-  const { app, head, initialState, hooks } = await createApp(path)
-  hooks.hook('vue:error', (err, _instance, _info) => {
-    console.error(err)
-  })
-  await hooks.callHook('app:created', app)
+export async function render(c: Context<Env>) {
+  const url = new URL(c.req.url)
 
-  const ssrContext: AppSSRContext = {
-    url: url.toString(),
-    teleports: {} as Record<string, string>,
-    modules: new Set<string>(),
-    event,
-    cloudflare: {
-      env,
-      ctx: context,
+  const runtimeConfig = {
+    public: {},
+    app: {
+      baseURL: url.origin,
     },
   }
-  await hooks.callHook('app:beforeRender', app, ssrContext)
+  const ssrContext = {
+    url: url.toString(),
+    zoot: {},
+    context: c,
+    modules: new Set<string>(),
+    teleports: {} as Record<string, string>,
+    payload: {
+      error: null,
+      config: runtimeConfig,
+    },
+    runtimeConfig,
+  } as unknown as ZootSSRContext
+
+  const app = await createEntry(ssrContext)
+
   const renderResult = await renderToString(app, ssrContext)
 
-  await hooks.callHook('app:rendered', { ssrContext, renderResult })
-  const tags = await head.resolveTags()
+  const head = app.$zoot.$head
+
+  await app.$zoot.callHook('app:rendered', { ssrContext })
+
+  // Check if there's a redirect (triggered by router.push in component)
+  if (ssrContext.redirect) {
+    return c.redirect(ssrContext.redirect, 302)
+  }
+
+  const headTags = await head.resolveTags()
 
   const stream = renderToWebStream(
     <Template
-      tags={tags}
+      tags={headTags}
       content={renderResult}
-      initialState={initialState}
+      payload={ssrContext.payload}
       renderContent={ssrContext}
     />,
   )
@@ -159,7 +167,3 @@ export async function render(
     },
   })
 }
-
-export default defineEventHandler(async (event) => {
-  return render(event)
-})

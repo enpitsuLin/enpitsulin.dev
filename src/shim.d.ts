@@ -1,10 +1,8 @@
+// typings.d.ts or router.ts
 import 'vue-router'
 
 declare module 'vue-router' {
   interface RouteMeta {
-    layout?: 'default' | 'dashboard' | false
-    requireAuth?: boolean
+    breadcrumb?: string
   }
 }
-
-export {}

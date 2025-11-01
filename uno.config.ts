@@ -22,6 +22,7 @@ export default defineConfig<Theme>({
       background: 'hsl(var(--theme-background))',
       accent: 'hsl(var(--theme-accent))',
       border: 'hsl(var(--theme-border))',
+      sidebar: 'hsl(var(--theme-sidebar))',
     },
     animation: {
       keyframes: {

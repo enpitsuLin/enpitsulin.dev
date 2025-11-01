@@ -15,14 +15,11 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import Layouts from 'vite-plugin-vue-layouts'
 
 export default defineConfig({
   environments: {
     client: {
       build: {
-        ssrManifest: true,
-        manifest: true,
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'src/entry-client.ts'),
@@ -60,14 +57,6 @@ export default defineConfig({
     VueRouter({
       extensions: ['.vue', '.md'],
       dts: 'src/typed-router.d.ts',
-      extendRoute(route) {
-        // workaround for https://github.com/JohnCampionJr/vite-plugin-vue-layouts/issues/144
-        if (route.name === '/(admin)') {
-          route.addToMeta({
-            layout: false,
-          })
-        }
-      },
     }),
 
     Vue({
@@ -75,22 +64,14 @@ export default defineConfig({
     }),
     VueJsx(),
 
-    // https://github.com/JohnCampionJr/vite-plugin-vue-layouts
-    Layouts(),
-
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
       include: [/\.[jt]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       imports: [
         'vue',
-        'vue-i18n',
         '@vueuse/core',
         unheadVueComposablesImports,
         VueRouterAutoImports,
-        {
-          // add any other imports you were relying on
-          'vue-router/auto': ['useLink'],
-        },
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: [

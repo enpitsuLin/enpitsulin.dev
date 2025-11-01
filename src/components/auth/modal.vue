@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Dialog } from '@ark-ui/vue/dialog'
 import { useMutation } from '@pinia/colada'
-import LoginForm from '~/components/auth/login-form.vue'
+import SigninForm from '~/components/auth/signin-form.vue'
 import SignupForm from '~/components/auth/signup-form.vue'
 import { useAuth } from '~/composables/auth'
 import { useToast } from '../ui/toast/use-toast'
@@ -82,13 +82,17 @@ defineExpose({
         bg="zinc-800/40 dark:bg-black/40"
         class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
       />
-      <Dialog.Positioner>
+      <Dialog.Positioner
+        fixed
+        class="left-1/2 top-4 z-$z-index sm:top-8 -translate-x-1/2"
+      >
         <Dialog.Content
-          fixed
-          p="6 sm:p-8"
-          border="~ border rounded-3xl"
+          p="6 sm:p-8" w="[calc(100vw-2rem)]"
+          relative max-w-sm of-hidden
+          border="~ border rounded-xl md:rounded-3xl"
           bg="white/95 dark:zinc-900/95"
-          class="left-1/2 top-4 z-100 max-w-sm w-[calc(100vw-2rem)] origin-top backdrop-blur-xl sm:top-8 sm:max-w-sm sm:w-full -translate-x-1/2 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
+          un-text="zinc-900 dark:white"
+          class="z-100 origin-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
         >
           <!-- Header with Avatar and Title -->
           <div mb="8" space-y-2>
@@ -165,7 +169,7 @@ defineExpose({
             </div>
 
             <!-- Form Components -->
-            <LoginForm
+            <SigninForm
               v-if="!isSignUp"
               @success="handleSuccess"
               @error="handleError"

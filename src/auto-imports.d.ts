@@ -7,7 +7,10 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
+  const HCInjectionKey: typeof import('./composables/hc').HCInjectionKey
   const OauthPopup: typeof import('./composables/popup').OauthPopup
+  const SSRRedirectError: typeof import('./composables/router').SSRRedirectError
+  const ZootNavigationRedirect: typeof import('./composables/router').ZootNavigationRedirect
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
   const clearNuxtState: typeof import('./composables/state').clearState
@@ -20,7 +23,6 @@ declare global {
   const controlledComputed: typeof import('@vueuse/core').controlledComputed
   const controlledRef: typeof import('@vueuse/core').controlledRef
   const createApp: typeof import('vue').createApp
-  const createBaseAuthClient: typeof import('./composables/auth').createBaseAuthClient
   const createEventHook: typeof import('@vueuse/core').createEventHook
   const createGlobalState: typeof import('@vueuse/core').createGlobalState
   const createInjectionState: typeof import('@vueuse/core').createInjectionState
@@ -58,6 +60,7 @@ declare global {
   const makeDestructurable: typeof import('@vueuse/core').makeDestructurable
   const manualResetRef: typeof import('@vueuse/core').manualResetRef
   const markRaw: typeof import('vue').markRaw
+  const navigateTo: typeof import('./composables/router').navigateTo
   const nextTick: typeof import('vue').nextTick
   const onActivated: typeof import('vue').onActivated
   const onBeforeMount: typeof import('vue').onBeforeMount
@@ -85,6 +88,7 @@ declare global {
   const preferredDark: typeof import('./composables/dark').preferredDark
   const prerenderRoutes: typeof import('./composables/ssr').prerenderRoutes
   const provide: typeof import('vue').provide
+  const provideHC: typeof import('./composables/hc').provideHC
   const provideLocal: typeof import('@vueuse/core').provideLocal
   const provideNavigation: typeof import('./composables/navigation').provideNavigation
   const reactify: typeof import('@vueuse/core').reactify
@@ -199,6 +203,7 @@ declare global {
   const useFullscreen: typeof import('@vueuse/core').useFullscreen
   const useGamepad: typeof import('@vueuse/core').useGamepad
   const useGeolocation: typeof import('@vueuse/core').useGeolocation
+  const useHC: typeof import('./composables/hc').useHC
   const useHead: typeof import('@unhead/vue').useHead
   const useHeadSafe: typeof import('@unhead/vue').useHeadSafe
   const useI18n: typeof import('vue-i18n').useI18n
@@ -250,7 +255,8 @@ declare global {
   const usePrevious: typeof import('@vueuse/core').usePrevious
   const useRafFn: typeof import('@vueuse/core').useRafFn
   const useRefHistory: typeof import('@vueuse/core').useRefHistory
-  const useRequestEvent: typeof import('./composables/ssr').useRequestEvent
+  const useRequestContext: typeof import('./composables/ssr').useRequestContext
+  const useRequestEvent: typeof import('./composables/ssr').useRequestContext
   const useRequestFetch: typeof import('./composables/ssr').useRequestFetch
   const useRequestHeader: typeof import('./composables/ssr').useRequestHeader
   const useRequestHeaders: typeof import('./composables/ssr').useRequestHeaders
@@ -315,6 +321,8 @@ declare global {
   const useWindowFocus: typeof import('@vueuse/core').useWindowFocus
   const useWindowScroll: typeof import('@vueuse/core').useWindowScroll
   const useWindowSize: typeof import('@vueuse/core').useWindowSize
+  const useZootRouter: typeof import('./composables/router').useZootRouter
+  const validatorsFromSchema: typeof import('./composables/form').validatorsFromSchema
   const watch: typeof import('vue').watch
   const watchArray: typeof import('@vueuse/core').watchArray
   const watchAtMost: typeof import('@vueuse/core').watchAtMost
@@ -524,9 +532,9 @@ declare module 'vue' {
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>
     readonly useGeolocation: UnwrapRef<typeof import('@vueuse/core')['useGeolocation']>
+    readonly useHC: UnwrapRef<typeof import('./composables/hc')['useHC']>
     readonly useHead: UnwrapRef<typeof import('@unhead/vue')['useHead']>
     readonly useHeadSafe: UnwrapRef<typeof import('@unhead/vue')['useHeadSafe']>
-    readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>
@@ -536,7 +544,6 @@ declare module 'vue' {
     readonly useIntervalFn: UnwrapRef<typeof import('@vueuse/core')['useIntervalFn']>
     readonly useKeyModifier: UnwrapRef<typeof import('@vueuse/core')['useKeyModifier']>
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
-    readonly useLink: UnwrapRef<typeof import('vue-router/auto')['useLink']>
     readonly useLocalStorage: UnwrapRef<typeof import('@vueuse/core')['useLocalStorage']>
     readonly useMagicKeys: UnwrapRef<typeof import('@vueuse/core')['useMagicKeys']>
     readonly useManualRefHistory: UnwrapRef<typeof import('@vueuse/core')['useManualRefHistory']>
@@ -574,7 +581,7 @@ declare module 'vue' {
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
-    readonly useRequestEvent: UnwrapRef<typeof import('./composables/ssr')['useRequestEvent']>
+    readonly useRequestContext: UnwrapRef<typeof import('./composables/ssr')['useRequestContext']>
     readonly useRequestHeader: UnwrapRef<typeof import('./composables/ssr')['useRequestHeader']>
     readonly useRequestHeaders: UnwrapRef<typeof import('./composables/ssr')['useRequestHeaders']>
     readonly useRequestURL: UnwrapRef<typeof import('./composables/url')['useRequestURL']>
@@ -637,6 +644,7 @@ declare module 'vue' {
     readonly useWindowFocus: UnwrapRef<typeof import('@vueuse/core')['useWindowFocus']>
     readonly useWindowScroll: UnwrapRef<typeof import('@vueuse/core')['useWindowScroll']>
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
+    readonly validatorsFromSchema: UnwrapRef<typeof import('./composables/form')['validatorsFromSchema']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
     readonly watchAtMost: UnwrapRef<typeof import('@vueuse/core')['watchAtMost']>

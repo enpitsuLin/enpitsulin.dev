@@ -22,16 +22,18 @@
 :root {
   color-scheme: light only;
   font-family: 'HarmonyOS_Medium';
-  --theme-background: 210 17% 98%; /** #f8f9fa */
+  --theme-background: 0 0% 100%; /** #ffffff */
   --theme-accent: 200 77% 39%; /* #177CB0 */
   --theme-border: 240 4% 95%; /* #f2f2f3*/
+  --theme-sidebar: 0 0.48% 98.03%; /* #fafafa */
 }
 
 .dark {
   color-scheme: dark only;
-  --theme-background: 222 32% 10%; /* #121723 */
+  --theme-background: 0 0% 4%; /* #0a0a0a */
   --theme-accent: 195 50% 39%; /* #177CB0 */
   --theme-border: 240 6% 15%; /* #242429*/
+  --theme-sidebar: 0 0% 9%; /* #171717*/
 }
 
 .prose {

@@ -2,12 +2,42 @@
 const { y } = useWindowScroll()
 
 const links = [
-  { name: 'Email', href: 'mailto://enpitsulin@gmail.com', icon: 'i-mingcute:mail-line', class: 'bg-#c45040' },
-  { name: 'Twitter', href: 'https://twitter.com/enpitsulin', icon: 'i-mingcute:twitter-line', class: 'bg-#4d9feb' },
-  { name: 'Github', href: 'https://github.com/enpitsulin', icon: 'i-mingcute:github-line', class: 'bg-black' },
-  { name: 'Mastodon', href: 'https://elk.zone/m.cmx.im/@enpitsulin', icon: 'i-mingcute:mastodon-fill', class: 'bg-#479fd1' },
-  { name: 'RSS', href: '/feed.xml', icon: 'i-mingcute:rss-line', class: 'bg-#f2a93b' },
-  { name: 'Bilibili', href: 'https://space.bilibili.com/423632', icon: <IconsBilibili />, class: 'bg-#e479b4' },
+  {
+    name: 'Email',
+    href: 'mailto://enpitsulin@gmail.com',
+    icon: 'i-mingcute:mail-line',
+    class: 'bg-#c45040',
+  },
+  {
+    name: 'Twitter: @enpitsulin',
+    href: 'https://twitter.com/enpitsulin',
+    icon: 'i-mingcute:twitter-line',
+    class: 'bg-#4d9feb',
+  },
+  {
+    name: 'Github: enpitsulin',
+    href: 'https://github.com/enpitsulin',
+    icon: 'i-mingcute:github-line',
+    class: 'bg-black',
+  },
+  {
+    name: 'Mastodon: enpitsulin@m.cmx.im',
+    href: 'https://elk.zone/m.cmx.im/@enpitsulin',
+    icon: 'i-mingcute:mastodon-fill',
+    class: 'bg-#479fd1',
+  },
+  {
+    name: 'Bilibili',
+    href: 'https://space.bilibili.com/423632',
+    icon: <IconsBilibili />,
+    class: 'bg-#e479b4',
+  },
+  {
+    name: 'RSS',
+    href: '/feed.xml',
+    icon: 'i-mingcute:rss-line',
+    class: 'bg-#f2a93b',
+  },
 ]
 </script>
 
@@ -38,7 +68,6 @@ const links = [
                   rel="noreferrer"
                   class="group"
                   :href="link.href"
-                  :title="link.name"
                   :class="link.class"
                 >
                   <span class="sr-only">{{ link.name }}</span>

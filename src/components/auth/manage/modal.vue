@@ -62,7 +62,7 @@ defineExpose({
           relative of-hidden
           h="xl md:2xl" w="90vw md:4xl"
           border="~ border rounded-xl md:rounded-3xl"
-          bg="white/50 dark:zinc-900/50"
+          bg="white/95 dark:zinc-900/95"
           un-text="zinc-900 dark:white"
           class="z-100 origin-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
         >

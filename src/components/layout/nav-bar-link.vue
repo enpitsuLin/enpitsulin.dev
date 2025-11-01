@@ -9,20 +9,31 @@ defineProps<{
 
 <template>
   <RouterLink
-    flex="~ items-center justify-center"
-    h="full" w="full" cursor-pointer px-3
+    custom
     :to="href"
-    class="navbar-link relative transition-color hover:text-zinc-9 dark:hover:text-zinc-6"
   >
-    <template #default="{ isActive }">
-      <motion.div
-        v-if="isActive"
-        layout-id="navbar-link"
-        class="absolute inset-0 rounded-full bg-white shadow-md dark:bg-zinc-200"
-      />
-      <span class="relative">
-        <slot />
-      </span>
+    <template #default="{ href, isActive, isExactActive, navigate }">
+      <a
+        :data-active="href === '/' ? isExactActive : isActive"
+        flex="~ items-center justify-center"
+        h="full" w="full"
+        un-text="data-[active=true]:zinc-200 dark:data-[active=true]:zinc-800 zinc-800 dark:zinc-200 op-70 data-[active=true]:op-100 hover:op-100"
+        class="navbar-link relative transition-color"
+        cursor-pointer px-3
+        :href="href"
+        @click="navigate"
+      >
+
+        <motion.div
+          v-if="href === '/' ? isExactActive : isActive"
+          layout-id="navbar-link"
+          bg="zinc-800 dark:zinc-200"
+          class="absolute inset-0 rounded-full shadow-md"
+        />
+        <span class="relative">
+          <slot />
+        </span>
+      </a>
     </template>
   </RouterLink>
 </template>
