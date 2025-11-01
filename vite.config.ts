@@ -69,14 +69,9 @@ export default defineConfig({
       include: [/\.[jt]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       imports: [
         'vue',
-        'vue-i18n',
         '@vueuse/core',
         unheadVueComposablesImports,
         VueRouterAutoImports,
-        {
-          // add any other imports you were relying on
-          'vue-router/auto': ['useLink'],
-        },
       ],
       dts: 'src/auto-imports.d.ts',
       dirs: [

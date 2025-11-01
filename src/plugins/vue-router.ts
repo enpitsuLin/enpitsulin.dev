@@ -1,4 +1,4 @@
-import type { RouteLocationRaw, Router, RouteRecordRaw } from 'vue-router'
+import type { RouteLocationRaw, Router } from 'vue-router'
 import { parseQuery, parseURL, withoutBase } from 'ufo'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
@@ -40,7 +40,6 @@ export default defineZootPlugin(async (zootApp) => {
 
   return {
     provide: {
-      routes,
       router,
     },
   }
@@ -49,6 +48,5 @@ export default defineZootPlugin(async (zootApp) => {
 declare module '~~/lib/app' {
   interface ZootApp {
     $router: Router
-    $routes: RouteRecordRaw[]
   }
 }
