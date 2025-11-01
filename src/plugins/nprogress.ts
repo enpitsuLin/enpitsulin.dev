@@ -1,8 +1,9 @@
-import type { UserModule } from '~~/lib/types/app'
 import NProgress from 'nprogress'
+import { defineZootPlugin } from '~~/lib/app'
 
-export const install: UserModule = ({ router }) => {
-  if (!import.meta.env.SSR) {
+export default defineZootPlugin((zootApp) => {
+  zootApp.hook('app:mounted', (app) => {
+    const router = app.config.globalProperties.$router
     router.beforeEach((to, from) => {
       if (to.path !== from.path)
         NProgress.start()
@@ -10,5 +11,5 @@ export const install: UserModule = ({ router }) => {
     router.afterEach(() => {
       NProgress.done()
     })
-  }
-}
+  })
+})

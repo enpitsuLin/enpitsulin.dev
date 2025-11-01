@@ -43,6 +43,8 @@
     "pinia": "catalog:frontend",
     "srvx": "catalog:server",
     "ua-parser-js": "catalog:frontend",
+    "ufo": "catalog:frontend",
+    "unctx": "catalog:frontend",
     "vee-validate": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-i18n": "catalog:frontend",

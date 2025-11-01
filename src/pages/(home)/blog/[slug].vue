@@ -25,5 +25,6 @@ const { data } = useQuery({
 
 <template>
   <h1>Blog {{ route.params.slug }}</h1>
+  <div>{{ data }}</div>
   <MarkdownRender :content="data?.content" />
 </template>

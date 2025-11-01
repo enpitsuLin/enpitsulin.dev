@@ -42,5 +42,7 @@ export const middleware = createMiddleware<Env>(async (c, next) => {
     throw new HTTPException(500, { message: 'Internal server error' })
   }
 
+  c.set('auth', authContext)
+
   await next()
 })

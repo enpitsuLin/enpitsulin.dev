@@ -9,7 +9,7 @@ defineOptions({
     <div
       flex="~ 1 col items-center"
       px="lg:8" w="full"
-      bg-card relative max-w-6xl
+      bg="white dark:zinc-900" relative max-w-6xl
       class="ring-1 ring-zinc-100 dark:ring-zinc-300/20"
     >
       <LayoutNavBar />

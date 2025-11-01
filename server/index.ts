@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { auth } from '~~/lib/auth'
 import { render } from '~~/src/entry-server'
 import * as schema from './database/schema'
+import { middleware } from './middleware/context'
 import { useDrizzle } from './utils/drizzle'
 
 const apiPostRoute = new Hono<Env>({ strict: false })
@@ -406,6 +407,7 @@ const apiRoute = new Hono<Env>({ strict: false })
   .route('/post', apiPostRoute)
 
 const app = new Hono<Env>({ strict: false })
+  .use('*', middleware)
   .use('*', cors())
   .route('/api', apiRoute)
   .get('/*', c => render(c))

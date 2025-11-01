@@ -1,11 +1,11 @@
-import type { AppSSRContext } from '~~/lib/types/app'
+import type { ZootSSRContext } from '~~/lib/app'
 import { computed, ref, useSSRContext } from 'vue'
 
 export function useRequestContext() {
   if (!import.meta.env.SSR) {
     return
   }
-  const ssrContext = useSSRContext<AppSSRContext>()
+  const ssrContext = useSSRContext<ZootSSRContext>()
   return ssrContext!.context
 }
 
