@@ -86,20 +86,7 @@ function handleNew() {
 function formatDate(date: number | Date | string | null | undefined) {
   if (!date)
     return '-'
-  let timestamp: number
-  if (typeof date === 'number') {
-    timestamp = date
-  }
-  else if (typeof date === 'string') {
-    timestamp = Number.parseInt(date, 10)
-    if (Number.isNaN(timestamp)) {
-      return date
-    }
-  }
-  else {
-    timestamp = date.getTime()
-  }
-  return new Date(timestamp).toLocaleString('zh-CN')
+  return new Date(date).toLocaleString('zh-CN')
 }
 </script>
 
