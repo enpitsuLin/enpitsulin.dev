@@ -1,5 +1,6 @@
 import type { RouteLocationRaw, Router } from 'vue-router'
 import { parseQuery, parseURL, withoutBase } from 'ufo'
+import { nextTick } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 import { defineZootPlugin, useRuntimeConfig } from '~~/lib/app'
@@ -36,6 +37,28 @@ export default defineZootPlugin(async (zootApp) => {
     const route = getRouteFromPath(initialURL)
     await router.push(route)
     await router.isReady()
+
+    // Store initial path from router (after initial push) for later comparison
+    const initialRoute = router.currentRoute.value
+    const initialPath = initialRoute.fullPath
+
+    // Register hook to check route changes after component rendering
+    zootApp.hook('app:rendered', async () => {
+      // Wait for any pending router operations
+      await nextTick()
+      await router.isReady()
+
+      // Check if route changed during rendering (e.g., by router.push in component setup)
+      const finalRoute = router.currentRoute.value
+      const finalPath = finalRoute.fullPath
+
+      if (initialPath !== finalPath) {
+        // Build complete redirect URL (including baseURL)
+        const baseURL = zootApp.ssrContext!.runtimeConfig.app.baseURL
+        zootApp.ssrContext!.redirect = new URL(finalPath, baseURL).toString()
+        zootApp.callHook('app:redirected')
+      }
+    })
   }
 
   return {

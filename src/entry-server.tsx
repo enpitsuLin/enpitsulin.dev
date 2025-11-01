@@ -144,6 +144,12 @@ export async function render(c: Context<Env>) {
   const head = app.$zoot.$head
 
   await app.$zoot.callHook('app:rendered', { ssrContext })
+
+  // Check if there's a redirect (triggered by router.push in component)
+  if (ssrContext.redirect) {
+    return c.redirect(ssrContext.redirect, 302)
+  }
+
   const headTags = await head.resolveTags()
 
   const stream = renderToWebStream(

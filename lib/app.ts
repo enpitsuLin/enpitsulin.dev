@@ -45,6 +45,8 @@ export interface ZootSSRContext extends SSRContext {
     public: Record<string, any>
     app: Record<string, any>
   }
+  /** redirect URL if route changed during SSR rendering */
+  redirect?: string
 }
 
 export interface RuntimeConfig {
