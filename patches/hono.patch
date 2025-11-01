@@ -1,0 +1,13 @@
+diff --git a/dist/client/client.js b/dist/client/client.js
+index 441680aaccd0828b16218527a81f34b836f912ad..8af5acda8dc769f95d234c12f7ed02084364b251 100644
+--- a/dist/client/client.js
++++ b/dist/client/client.js
+@@ -47,7 +47,7 @@ var ClientRequestImpl = class {
+         for (const [k, v] of Object.entries(args.form)) {
+           if (Array.isArray(v)) {
+             for (const v2 of v) {
+-              form.append(k, v2);
++              form.append(k+'[]', v2);
+             }
+           } else {
+             form.append(k, v);

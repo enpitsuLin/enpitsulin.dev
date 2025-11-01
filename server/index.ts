@@ -1,6 +1,6 @@
 import type { Env } from './middleware/context'
 import { zValidator } from '@hono/zod-validator'
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq, inArray } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
@@ -135,54 +135,40 @@ const apiPostRoute = new Hono<Env>({ strict: false })
     async (c) => {
       const param = c.req.valid('param')
       const db = useDrizzle()
-      const result = await db
-        .select({
-          id: schema.post.id,
-          title: schema.post.title,
-          slug: schema.post.slug,
-          content: schema.post.content,
-          status: schema.post.status,
-          publishedAt: schema.post.publishedAt,
-          createdAt: schema.post.createdAt,
-          updatedAt: schema.post.updatedAt,
-          tagId: schema.tag.id,
-          tagName: schema.tag.name,
-          tagCreatedAt: schema.tag.createdAt,
-          tagUpdatedAt: schema.tag.updatedAt,
-        })
+
+      // Query post
+      const postResult = await db
+        .select()
         .from(schema.post)
-        .leftJoin(schema.postTag, eq(schema.post.id, schema.postTag.postId))
-        .leftJoin(schema.tag, eq(schema.postTag.tagId, schema.tag.id))
         .where(eq(schema.post.id, param.id))
         .limit(1)
 
-      if (result.length === 0) {
+      if (postResult.length === 0) {
         throw new HTTPException(404, { message: 'Post not found' })
       }
-      const postData = result[0]
-      const tags: schema.SelectTag[] = []
 
-      // Group tags
-      for (const row of result) {
-        if (row.tagId && !tags.find(t => t.id === row.tagId)) {
-          tags.push({
-            id: row.tagId!,
-            name: row.tagName!,
-            createdAt: row.tagCreatedAt!,
-            updatedAt: row.tagUpdatedAt!,
-          })
-        }
+      const postData = postResult[0]
+
+      // Query all tags for this post
+      const postTags = await db
+        .select({
+          tagId: schema.postTag.tagId,
+        })
+        .from(schema.postTag)
+        .where(eq(schema.postTag.postId, param.id))
+
+      const tagIds = postTags.map(pt => pt.tagId).filter((id): id is string => id !== null)
+
+      let tags: schema.SelectTag[] = []
+      if (tagIds.length > 0) {
+        tags = await db
+          .select()
+          .from(schema.tag)
+          .where(inArray(schema.tag.id, tagIds))
       }
 
       const response: schema.SelectPost & { tags: schema.SelectTag[] } = {
-        id: postData.id,
-        title: postData.title,
-        slug: postData.slug,
-        content: postData.content,
-        status: postData.status,
-        publishedAt: postData.publishedAt,
-        createdAt: postData.createdAt,
-        updatedAt: postData.updatedAt,
+        ...postData,
         tags,
       }
 
@@ -345,55 +331,40 @@ const apiPostRoute = new Hono<Env>({ strict: false })
   ), async (c) => {
     const param = c.req.valid('param')
     const db = useDrizzle()
-    const result = await db
-      .select({
-        id: schema.post.id,
-        title: schema.post.title,
-        slug: schema.post.slug,
-        content: schema.post.content,
-        status: schema.post.status,
-        publishedAt: schema.post.publishedAt,
-        createdAt: schema.post.createdAt,
-        updatedAt: schema.post.updatedAt,
-        tagId: schema.tag.id,
-        tagName: schema.tag.name,
-        tagCreatedAt: schema.tag.createdAt,
-        tagUpdatedAt: schema.tag.updatedAt,
-      })
+
+    // Query post by slug
+    const postResult = await db
+      .select()
       .from(schema.post)
-      .leftJoin(schema.postTag, eq(schema.post.id, schema.postTag.postId))
-      .leftJoin(schema.tag, eq(schema.postTag.tagId, schema.tag.id))
       .where(eq(schema.post.slug, param.slug))
       .limit(1)
 
-    if (result.length === 0) {
+    if (postResult.length === 0) {
       throw new HTTPException(404, { message: 'Post not found' })
     }
 
-    const postData = result[0]
-    const tags: schema.SelectTag[] = []
+    const postData = postResult[0]
 
-    // Group tags
-    for (const row of result) {
-      if (row.tagId && !tags.find(t => t.id === row.tagId)) {
-        tags.push({
-          id: row.tagId!,
-          name: row.tagName!,
-          createdAt: row.tagCreatedAt!,
-          updatedAt: row.tagUpdatedAt!,
-        })
-      }
+    // Query all tags for this post
+    const postTags = await db
+      .select({
+        tagId: schema.postTag.tagId,
+      })
+      .from(schema.postTag)
+      .where(eq(schema.postTag.postId, postData.id))
+
+    const tagIds = postTags.map(pt => pt.tagId).filter((id): id is string => id !== null)
+
+    let tags: schema.SelectTag[] = []
+    if (tagIds.length > 0) {
+      tags = await db
+        .select()
+        .from(schema.tag)
+        .where(inArray(schema.tag.id, tagIds))
     }
 
     const response: schema.SelectPost & { tags: schema.SelectTag[] } = {
-      id: postData.id,
-      title: postData.title,
-      slug: postData.slug,
-      content: postData.content,
-      status: postData.status,
-      publishedAt: postData.publishedAt,
-      createdAt: postData.createdAt,
-      updatedAt: postData.updatedAt,
+      ...postData,
       tags,
     }
 
