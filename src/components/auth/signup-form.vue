@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { SignupFormData } from '~/schemas/auth'
 import { useMutation } from '@pinia/colada'
-import { toTypedSchema } from '@vee-validate/zod'
-import { Form } from 'vee-validate'
+import { useForm } from '@tanstack/vue-form'
 import { useAuth } from '~/composables/auth'
 import { signupSchema } from '~/schemas/auth'
 
@@ -12,8 +11,6 @@ const emit = defineEmits<{
 }>()
 
 const { signUp } = useAuth()
-
-const schema = toTypedSchema(signupSchema)
 
 const { mutate, isLoading } = useMutation({
   mutation(values: SignupFormData) {
@@ -33,78 +30,137 @@ const { mutate, isLoading } = useMutation({
     emit('error', error.message)
   },
 })
+
+const form = useForm({
+  defaultValues: {
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  },
+  validators: validatorsFromSchema(signupSchema, 'submit'),
+  onSubmit: async ({ value }) => {
+    mutate(value)
+  },
+})
 </script>
 
 <template>
-  <Form
-    :validation-schema="schema"
-    :initial-values="{ name: '', email: '', password: '', confirmPassword: '' }"
+  <form
     flex="~ col gap-4"
-    @submit="(data) => mutate(data as SignupFormData)"
+    @submit="(e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      form.handleSubmit()
+    }"
   >
     <!-- Name field -->
-    <UiFormField
-      v-slot="{ props }"
-      label="用户名" name="name"
+    <form.Field
+      name="name"
     >
-      <input
-        v-bind="props"
-        type="text"
-        placeholder="请输入用户名"
-        w="full" p="x4 y2"
-        border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
-        bg="transparent"
-        class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
-      >
-    </UiFormField>
+      <template #default="{ field }">
+        <UiFormField
+          :field
+          label="用户名"
+        >
+          <template #default="{ value, onInput, onBlur }">
+            <input
+              :value="value"
+              type="text"
+              placeholder="请输入用户名"
+              w="full" p="x4 y2"
+              border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+              bg="transparent"
+              :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+              class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+              @input="onInput"
+              @blur="onBlur"
+            >
+          </template>
+        </UiFormField>
+      </template>
+    </form.Field>
 
     <!-- Email field -->
-    <UiFormField
-      v-slot="{ props }"
-      label="邮箱地址" name="email"
+    <form.Field
+      name="email"
     >
-      <input
-        v-bind="props"
-        type="email"
-        placeholder="请输入邮箱地址"
-        w="full" p="x4 y2"
-        border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
-        bg="transparent"
-        class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
-      >
-    </UiFormField>
+      <template #default="{ field }">
+        <UiFormField
+          :field
+          label="邮箱地址"
+        >
+          <template #default="{ value, onInput, onBlur }">
+            <input
+              :value="value"
+              type="email"
+              placeholder="请输入邮箱地址"
+              w="full" p="x4 y2"
+              border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+              bg="transparent"
+              :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+              class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+              @input="onInput"
+              @blur="onBlur"
+            >
+          </template>
+        </UiFormField>
+      </template>
+    </form.Field>
 
     <!-- Password field -->
-    <UiFormField
-      v-slot="{ props }"
-      label="密码" name="password"
+    <form.Field
+      name="password"
     >
-      <input
-        v-bind="props"
-        type="password"
-        placeholder="请输入密码"
-        w="full" p="x4 y2"
-        border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
-        bg="transparent"
-        class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
-      >
-    </UiFormField>
+      <template #default="{ field }">
+        <UiFormField
+          :field
+          label="密码"
+        >
+          <template #default="{ value, onInput, onBlur }">
+            <input
+              :value="value"
+              type="password"
+              placeholder="请输入密码"
+              w="full" p="x4 y2"
+              border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+              bg="transparent"
+              :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+              class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+              @input="onInput"
+              @blur="onBlur"
+            >
+          </template>
+        </UiFormField>
+      </template>
+    </form.Field>
 
     <!-- Confirm Password field -->
-    <UiFormField
-      v-slot="{ props }"
-      label="确认密码" name="confirmPassword"
+    <form.Field
+      name="confirmPassword"
     >
-      <input
-        v-bind="props"
-        type="password"
-        placeholder="请再次输入密码"
-        w="full" p="x4 y2"
-        border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
-        bg="transparent"
-        class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
-      >
-    </UiFormField>
+      <template #default="{ field }">
+        <UiFormField
+          :field
+          label="确认密码"
+        >
+          <template #default="{ value, onInput, onBlur }">
+            <input
+              :value="value"
+              type="password"
+              placeholder="请再次输入密码"
+              w="full" p="x4 y2"
+              border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+              bg="transparent"
+              :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+              class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+              @input="onInput"
+              @blur="onBlur"
+            >
+          </template>
+        </UiFormField>
+      </template>
+    </form.Field>
 
     <!-- Submit button -->
     <button
@@ -121,5 +177,5 @@ const { mutate, isLoading } = useMutation({
         {{ isLoading ? '注册中...' : '注册' }}
       </span>
     </button>
-  </Form>
+  </form>
 </template>

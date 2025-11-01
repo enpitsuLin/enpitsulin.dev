@@ -1,46 +1,34 @@
-<script setup lang="ts">
-import type { useField } from '@ark-ui/vue/field'
-import type { FieldSlotProps } from 'vee-validate'
-import type { UnwrapRef } from 'vue'
+<script setup lang="ts" generic="TParentData, TName extends DeepKeys<TParentData>">
+import type { DeepKeys, FieldApi } from '@tanstack/vue-form'
 import { Field } from '@ark-ui/vue/field'
-import { Field as FormField } from 'vee-validate'
 
 defineProps<{
-  name: string
+  field: FieldApi<TParentData, TName, any, any, any>
   label: string
   helperText?: string
 }>()
-
-function mergeProps(fieldSlot: FieldSlotProps<any>, field: UnwrapRef<ReturnType<typeof useField>>) {
-  return {
-    props: {
-      ...fieldSlot.componentField,
-      ...field.getInputProps(),
-    },
-  }
-}
 </script>
 
 <template>
-  <FormField :name>
-    <template #default="fieldSlot">
-      <Field.Root space-y-2 :invalid="!!fieldSlot.errorMessage">
-        <Field.Label
-          un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block
-        >
-          {{ label }}
-        </Field.Label>
-        <Field.Context v-slot="field">
-          <slot v-bind="mergeProps(fieldSlot, field)" />
-        </Field.Context>
-        <Field.HelperText v-if="helperText" un-text="xs">
-          {{ helperText }}
-        </Field.HelperText>
+  <Field.Root space-y-2 :invalid="field.state.meta.errors.length > 0">
+    <Field.Label
+      un-text="xs font-medium text-zinc-700 dark:text-zinc-300" block
+    >
+      {{ label }}
+    </Field.Label>
+    <Field.Context>
+      <slot
+        :value="field.state.value"
+        :on-input="(e: Event) => field.handleChange((e.target as HTMLInputElement).value)"
+        :on-blur="field.handleBlur"
+      />
+    </Field.Context>
+    <Field.HelperText v-if="helperText" un-text="xs">
+      {{ helperText }}
+    </Field.HelperText>
 
-        <Field.ErrorText v-if="fieldSlot.errorMessage" inline-block un-text="xs red-500">
-          {{ fieldSlot.errorMessage }}
-        </Field.ErrorText>
-      </Field.Root>
-    </template>
-  </FormField>
+    <Field.ErrorText v-if="field.state.meta.errors.length > 0" inline-block un-text="xs red-500">
+      {{ field.state.meta.errors[0] }}
+    </Field.ErrorText>
+  </Field.Root>
 </template>

@@ -52,18 +52,24 @@ export default defineZootPlugin(async (zootApp) => {
   }
 
   if (!import.meta.env.SSR) {
+    auth.user.value = zootApp.payload.auth?.user ?? null
+    auth.session.value = zootApp.payload.auth?.session ?? null
+
     auth.client.$store.listen('$sessionSignal', () => {
       auth.refreshSession()
     })
   }
   else {
-    zootApp.hook('app:created', (app) => {
-      const { user, session } = app.$zoot.ssrContext!.context.get('auth')
-      if (user && session) {
-        auth.user.value = user
-        auth.session.value = session
+    const { user, session } = zootApp.ssrContext!.context.get('auth')
+    if (user && session) {
+      auth.user.value = user
+      auth.session.value = session
+
+      zootApp.payload.auth = {
+        user: auth.user.value,
+        session: auth.session.value,
       }
-    })
+    }
   }
 
   return {
