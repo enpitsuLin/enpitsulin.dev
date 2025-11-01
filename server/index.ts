@@ -4,7 +4,7 @@ import { desc, eq, inArray } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { auth } from '~~/lib/auth'
 import { render } from '~~/src/entry-server'
 import * as schema from './database/schema'
@@ -20,8 +20,16 @@ const apiPostRoute = new Hono<Env>({ strict: false })
         title: z.string().min(1, 'Title is required'),
         slug: z.string().min(1, 'Slug is required'),
         content: z.string().min(1, 'Content is required'),
-        status: z.enum(['draft', 'published', 'archived']).default('draft'),
-        tags: z.array(z.string()).default([]),
+        status: z.enum(['draft', 'published', 'archived']),
+        tags: z.preprocess(
+          (value) => {
+            if (!Array.isArray(value)) {
+              return [value]
+            }
+            return value
+          },
+          z.array(z.string()),
+        ),
       }),
     ),
     async (c) => {
@@ -189,7 +197,15 @@ const apiPostRoute = new Hono<Env>({ strict: false })
         title: z.string().optional(),
         content: z.string().optional(),
         status: z.enum(['draft', 'published', 'archived']).optional(),
-        tags: z.array(z.string()).optional(),
+        tags: z.preprocess(
+          (value) => {
+            if (!Array.isArray(value)) {
+              return [value]
+            }
+            return value
+          },
+          z.array(z.string()),
+        ),
       }),
     ),
     async (c) => {

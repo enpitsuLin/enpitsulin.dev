@@ -1,7 +1,5 @@
 packages: []
 
-patchedDependencies:
-  hono: patches/hono.patch
 catalogs:
   build:
     '@intlify/unplugin-vue-i18n': ^11.0.1
