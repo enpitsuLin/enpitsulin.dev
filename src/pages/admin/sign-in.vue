@@ -20,7 +20,7 @@ watch(user, (user) => {
       router.push('/admin')
     }
   }
-})
+}, { immediate: true })
 
 const toast = useToast()
 function handleError(message: string) {
