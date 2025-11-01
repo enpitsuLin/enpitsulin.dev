@@ -2,7 +2,7 @@
 defineOptions({
   name: 'PostPage',
 })
-const route = useRoute('/(admin)/dashboard/posts/[id]')
+const route = useRoute('/admin/(dashboard)/posts/[id]')
 </script>
 
 <template>
