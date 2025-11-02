@@ -41,13 +41,15 @@ import { navigation } from '~/constants'
                 un-text="base text-zinc-800 dark:text-zinc-300"
                 class="-my-2 divide-y divide-zinc-500/20 dark:divide-zinc-100/5"
               >
-                <li v-for="{ href, label } in navigation" :key="href">
-                  <RouterLink v-slot="{ navigate, href }" :to="href" custom block py-2>
-                    <Dialog.CloseTrigger as-child @click="navigate">
-                      <a :href="href">
-                        {{ label }}
-                      </a>
-                    </Dialog.CloseTrigger>
+                <li v-for="{ href, label } in navigation" :key="label">
+                  <RouterLink :to="href" custom block py-2>
+                    <template #default="{ navigate, href }">
+                      <Dialog.CloseTrigger as-child @click="navigate">
+                        <a :href="href">
+                          {{ label }}
+                        </a>
+                      </Dialog.CloseTrigger>
+                    </template>
                   </RouterLink>
                 </li>
               </ul>
