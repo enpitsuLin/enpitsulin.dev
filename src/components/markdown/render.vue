@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: move to remark
 import { fromHighlighter } from '@shikijs/markdown-it'
 import MarkdownIt from 'markdown-it'
 import LinkAttributes from 'markdown-it-link-attributes'
@@ -54,7 +55,7 @@ md.use(LinkAttributes, {
 })
 md.use(shiki)
 
-const html = md.render(content)
+const html = computed(() => md.render(content))
 </script>
 
 <template>

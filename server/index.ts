@@ -1,6 +1,6 @@
 import type { Env } from './middleware/context'
 import { zValidator } from '@hono/zod-validator'
-import { count, desc, eq, inArray } from 'drizzle-orm'
+import { asc, count, desc, eq, gt, inArray, lt } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
@@ -333,20 +333,68 @@ const apiPostRoute = new Hono<Env>({ strict: false })
 
       const tagIds = postTags.map(pt => pt.tagId).filter((id): id is string => id !== null)
 
-      let tags: schema.SelectTag[] = []
+      let tags: string[] = []
       if (tagIds.length > 0) {
         tags = await db
-          .select()
+          .select({ name: schema.tag.name })
           .from(schema.tag)
           .where(inArray(schema.tag.id, tagIds))
+          .then(result => result.map(r => r.name))
       }
 
-      const response: schema.SelectPost & { tags: schema.SelectTag[] } = {
+      const response: schema.SelectPost & { tags: string[] } = {
         ...postData,
         tags,
       }
 
       return c.json(response)
+    },
+  )
+  .get(
+    '/slug/:slug/surround',
+    zValidator('param', z.object({ slug: z.string() })),
+    async (c) => {
+      const param = c.req.valid('param')
+      const db = useDrizzle()
+
+      // Query post by slug
+      const postResult = await db
+        .select()
+        .from(schema.post)
+        .where(eq(schema.post.slug, param.slug))
+        .limit(1)
+
+      if (postResult.length === 0) {
+        throw new HTTPException(404, { message: 'Post not found' })
+      }
+
+      const postData = postResult[0]
+
+      // Query previous and next posts
+      const previousPost = await db
+        .select({
+          slug: schema.post.slug,
+          title: schema.post.title,
+        })
+        .from(schema.post)
+        .where(lt(schema.post.publishedAt, postData.publishedAt))
+        .orderBy(desc(schema.post.publishedAt))
+        .limit(1)
+
+      const nextPost = await db
+        .select({
+          slug: schema.post.slug,
+          title: schema.post.title,
+        })
+        .from(schema.post)
+        .where(gt(schema.post.publishedAt, postData.publishedAt))
+        .orderBy(asc(schema.post.publishedAt))
+        .limit(1)
+
+      return c.json({
+        previous: previousPost[0],
+        next: nextPost[0],
+      })
     },
   )
 
