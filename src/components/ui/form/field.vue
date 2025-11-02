@@ -29,7 +29,6 @@ defineProps<{
     any
   >
   label: string
-  name: TName
   helperText?: string
 }>()
 

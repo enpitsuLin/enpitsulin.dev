@@ -49,7 +49,6 @@ const form = useForm({
       <UiFormField
         v-slot="{ value, onInput, onBlur }"
         :field
-        name="title"
         label="标题"
       >
         <input
@@ -73,7 +72,6 @@ const form = useForm({
       <UiFormField
         v-slot="{ value, onInput, onBlur }"
         :field
-        name="slug"
         label="Slug"
       >
         <input
@@ -97,7 +95,6 @@ const form = useForm({
       <UiFormField
         v-slot="{ value, onInput, onBlur }"
         :field
-        name="content"
         label="内容 (Markdown)"
       >
         <textarea
@@ -121,7 +118,6 @@ const form = useForm({
       <UiFormField
         v-slot="{ value, onInput, onBlur }"
         :field
-        name="status"
         label="状态"
       >
         <select
@@ -154,7 +150,6 @@ const form = useForm({
       <UiFormField
         v-slot="{ value, handleChange }"
         :field
-        name="tags"
         label="标签"
       >
         <UiFormTagInput

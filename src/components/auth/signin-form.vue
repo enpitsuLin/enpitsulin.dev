@@ -51,10 +51,7 @@ const form = useForm({
       form.handleSubmit()
     }"
   >
-    <!-- Email field -->
-    <form.Field
-      name="email"
-    >
+    <form.Field name="email">
       <template #default="{ field }">
         <UiFormField
           :field
@@ -79,10 +76,7 @@ const form = useForm({
       </template>
     </form.Field>
 
-    <!-- Password field -->
-    <form.Field
-      name="password"
-    >
+    <form.Field name="password">
       <template #default="{ field }">
         <UiFormField
           :field
