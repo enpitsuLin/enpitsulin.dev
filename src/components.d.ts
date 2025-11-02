@@ -12,6 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
     Article: typeof import('./components/article/index.vue')['default']
     ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
     ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
@@ -62,6 +63,7 @@ declare module 'vue' {
     UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
     UiButton: typeof import('./components/ui/button.vue')['default']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
+    UiFormTagInput: typeof import('./components/ui/form/tag-input.vue')['default']
     UiMarquee: typeof import('./components/ui/marquee.vue')['default']
     UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
     UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
@@ -70,6 +72,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
   const Article: typeof import('./components/article/index.vue')['default']
   const ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
   const ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
@@ -120,6 +123,7 @@ declare global {
   const UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
   const UiButton: typeof import('./components/ui/button.vue')['default']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
+  const UiFormTagInput: typeof import('./components/ui/form/tag-input.vue')['default']
   const UiMarquee: typeof import('./components/ui/marquee.vue')['default']
   const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
   const UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
