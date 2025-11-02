@@ -45,6 +45,10 @@ const shiki = fromHighlighter(highlighter, {
   },
 })
 
+onScopeDispose(() => {
+  highlighter.dispose()
+})
+
 const md = new MarkdownIt()
 md.use(LinkAttributes, {
   matcher: (link: string) => /^https?:\/\//.test(link),
