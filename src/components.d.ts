@@ -32,6 +32,7 @@ declare module 'vue' {
     AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
     HomeIntro: typeof import('./components/home/intro.vue')['default']
     HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+    HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
     IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
     LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']
     LayoutFab: typeof import('./components/layout/fab.vue')['default']
@@ -54,6 +55,7 @@ declare module 'vue' {
     UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
     UiButton: typeof import('./components/ui/button.vue')['default']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
+    UiMarquee: typeof import('./components/ui/marquee.vue')['default']
     UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
     UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
   }
@@ -81,6 +83,7 @@ declare global {
   const AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
   const HomeIntro: typeof import('./components/home/intro.vue')['default']
   const HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+  const HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
   const IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
   const LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']
   const LayoutFab: typeof import('./components/layout/fab.vue')['default']
@@ -103,6 +106,7 @@ declare global {
   const UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
   const UiButton: typeof import('./components/ui/button.vue')['default']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
+  const UiMarquee: typeof import('./components/ui/marquee.vue')['default']
   const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
   const UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
 }

@@ -40,8 +40,8 @@ const { data: posts } = useQuery({
       <pre>{{ posts }}</pre>
     </details>
 
-    <blockquote v-for="fact in posts.data" :key="fact.id">
-      {{ fact.content }}
+    <blockquote v-for="post in posts.data" :key="post.id">
+      {{ post.content }}
     </blockquote>
   </template>
   <RouterLink v-if="page > 0" :to="`/blog/${page - 1}`">
