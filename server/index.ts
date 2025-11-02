@@ -1,6 +1,6 @@
 import type { Env } from './middleware/context'
 import { zValidator } from '@hono/zod-validator'
-import { desc, eq, inArray } from 'drizzle-orm'
+import { count, desc, eq, inArray } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
@@ -23,6 +23,9 @@ const apiPostRoute = new Hono<Env>({ strict: false })
         status: z.enum(['draft', 'published', 'archived']),
         tags: z.preprocess(
           (value) => {
+            if (typeof value === 'undefined' || value === null) {
+              return []
+            }
             if (!Array.isArray(value)) {
               return [value]
             }
@@ -115,21 +118,32 @@ const apiPostRoute = new Hono<Env>({ strict: false })
     zValidator(
       'query',
       z.object({
-        limit: z.number().optional().default(10),
-        offset: z.number().optional().default(0),
+        limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+        offset: z.coerce.number().int().optional(),
       }),
     ),
     async (c) => {
       const query = c.req.valid('query')
       const db = useDrizzle()
+
+      const totalPosts = await db
+        .select({ count: count() })
+        .from(schema.post)
+        .then(result => result[0].count)
+
       const posts = await db
         .select()
         .from(schema.post)
-        .limit(query.limit)
-        .offset(query.offset)
         .orderBy(desc(schema.post.publishedAt))
+        .limit(query.limit)
+        .offset(query.offset ?? 0)
 
-      return c.json(posts)
+      return c.json({
+        data: posts,
+        limit: query.limit,
+        offset: query.offset ?? 0,
+        total: totalPosts,
+      })
     },
   )
   .get(
