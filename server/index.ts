@@ -407,8 +407,13 @@ const apiRoute = new Hono<Env>({ strict: false })
 const app = new Hono<Env>({ strict: false })
   .use('*', middleware)
   .use('*', cors())
+  .get('/*', (c, next) => {
+    if (c.req.path.startsWith('/api')) {
+      return next()
+    }
+    return render(c)
+  })
   .route('/api', apiRoute)
-  .get('/*', c => render(c))
   .get('/.well-known/nostr.json', (c) => {
     c.res.headers.set('Content-Type', 'application/json')
     c.res.headers.set('Access-Control-Allow-Origin', '*')
