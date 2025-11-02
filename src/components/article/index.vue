@@ -36,7 +36,7 @@ const { article, delay = 0 } = defineProps<Props>()
         relative z-10 text-sm text="zinc-600 dark:zinc-400"
         class="max-w-80ch prose dark:prose-invert"
       >
-        <p>{{ article.content }}</p>
+        <p>{{ article.content.slice(0, 100) }}...</p>
       </div>
       <div
         aria-hidden="true"

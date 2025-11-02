@@ -20,7 +20,8 @@ defineProps<Props>()
     <div
       relative z-10 mt-2 w-full text-sm text="zinc-600 dark:zinc-400"
     >
-      <p>{{ article.content }}</p>
+      <!-- TODO: 截取文章内容 -->
+      <p>{{ article.content.slice(0, 100) }}...</p>
     </div>
 
     <div

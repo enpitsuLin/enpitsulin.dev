@@ -7,13 +7,12 @@ const { content = '', tag = 'div' } = defineProps<{
   content?: string
   tag?: string
 }>()
-
-const { Content } = useMarkdown(content)
 </script>
 
 <template>
-  <Content
-    :tag
+  <tag
     m-auto text-left prose prose-sm dark:prose-invert
-  />
+  >
+    {{ content }}
+  </tag>
 </template>
