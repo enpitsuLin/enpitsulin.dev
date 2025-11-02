@@ -29,6 +29,7 @@ const post = sqliteTable(
     slug: text('slug').notNull().unique(),
     content: text('content').notNull(),
     status: text('status', { enum: ['draft', 'published', 'archived'] }).notNull().default('draft'),
+    excerpt: text('excerpt'),
     publishedAt: integer('published_at', { mode: 'timestamp_ms' })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
       .notNull(),
