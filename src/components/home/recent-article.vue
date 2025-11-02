@@ -18,7 +18,7 @@ defineProps<Props>()
     <ArticleCardTime :date="article.publishedAt" />
 
     <div
-      relative z-10 mt-2 text-sm text="zinc-600 dark:zinc-400"
+      relative z-10 mt-2 w-full text-sm text="zinc-600 dark:zinc-400"
     >
       <p>{{ article.content }}</p>
     </div>
