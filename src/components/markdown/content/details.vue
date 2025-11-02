@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Collapsible } from '@ark-ui/vue/collapsible'
 import { Comment, Fragment, isVNode, Static, Text } from 'vue'
-import MarkdownContentSummary from './summary.vue'
 
 function getType(vnode: unknown) {
   const typeofVNode = typeof vnode
@@ -50,7 +49,7 @@ const slots = useSlots()
 function Children() {
   const _children = slots.default?.() ?? []
 
-  const trigger = _children.find(c => isComponent(c) && c.type === MarkdownContentSummary)
+  const trigger = _children.find(c => isComponent(c) && c.type.name === 'MarkdownComponent' && c.props?.node.tagName === 'summary')
   const content = _children.filter(c => c !== trigger)
   return h(Fragment, null, [
     trigger,

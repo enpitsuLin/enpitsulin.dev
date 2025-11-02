@@ -1,3 +1,4 @@
+import type { VueHeadClient } from '@unhead/vue/types'
 import type { Context } from 'hono'
 import type { Hookable, HookCallback } from 'hookable'
 import type { App } from 'vue'
@@ -5,7 +6,6 @@ import type { SSRContext } from 'vue/server-renderer'
 import type { Env } from '~~/server/middleware/context'
 import { createHooks } from 'hookable'
 import { getContext } from 'unctx'
-import { deserializeState } from './state'
 
 const zootAppCtx = /* #__PURE__ */ getContext<ZootApp>('zoot-app')
 
@@ -39,14 +39,13 @@ export interface ZootSSRContext extends SSRContext {
   /** whether we are rendering an SSR error */
   error?: boolean
   zoot: _ZootApp
+  head: VueHeadClient
   payload: _ZootApp['payload']
   teleports?: Record<string, string>
-  runtimeConfig: {
-    public: Record<string, any>
-    app: Record<string, any>
-  }
+  runtimeConfig: RuntimeConfig
   /** redirect URL if route changed during SSR rendering */
   redirect?: string
+  _payloadReducers: Record<string, (value: any) => any>
 }
 
 export interface RuntimeConfig {
@@ -56,6 +55,15 @@ export interface RuntimeConfig {
   public: {
     [key: string]: any
   }
+}
+
+export interface ZootPayload {
+  serverRendered?: boolean
+  data: Record<string, any>
+  state: Record<string, any>
+  config?: Pick<RuntimeConfig, 'public' | 'app'>
+  error?: Error | undefined
+  [key: string]: unknown
 }
 
 interface _ZootApp {
@@ -71,18 +79,11 @@ interface _ZootApp {
 
   isHydrating?: boolean
 
+  /** @internal */
+  _payloadRevivers: Record<string, (data: any) => any>
+
   ssrContext?: ZootSSRContext
-  payload: {
-    error?: Error | {
-      url: string
-      statusCode: number
-      statusMessage: string
-      message: string
-      description: string
-      data?: any
-    } | null
-    [key: string]: any
-  }
+  payload: ZootPayload
 
   provide: (name: string, value: any) => void
 }
@@ -105,10 +106,35 @@ export function createZootApp(options: CreateOptions) {
     provide: undefined as unknown as ZootApp['provide'],
     isHydrating: !import.meta.env.SSR,
     payload: reactive({
-      ...(import.meta.env.SSR ? { serverRendered: true } : deserializeState(window.__ZOOT__ ?? '{}')),
+      ...options.ssrContext?.payload || {},
+      error: shallowReactive({}),
     }),
+    _payloadRevivers: {},
     ...options,
   } as ZootApp
+
+  if (import.meta.env.SSR) {
+    zootApp.payload.serverRendered = true
+  }
+
+  if (!import.meta.env.SSR) {
+    const __ZOOT__ = window.__ZOOT__
+    // TODO: remove/refactor in https://github.com/nuxt/nuxt/issues/25336
+    if (__ZOOT__) {
+      for (const key in __ZOOT__) {
+        switch (key) {
+          case 'data':
+          case 'state':
+            // Preserve reactivity for non-rich payload support
+            Object.assign(zootApp.payload[key], __ZOOT__[key])
+            break
+
+          default:
+            zootApp.payload[key] = __ZOOT__[key]
+        }
+      }
+    }
+  }
 
   zootApp.hooks = createHooks<RuntimeZootHoooks>()
   zootApp.hook = zootApp.hooks.hook
@@ -170,7 +196,7 @@ export function createZootApp(options: CreateOptions) {
 
   const runtimeConfig = import.meta.env.SSR
     ? options.ssrContext!.runtimeConfig
-    : reactive(zootApp.payload.config)
+    : reactive(zootApp.payload.config!)
 
   zootApp.provide('config', runtimeConfig)
 
@@ -241,7 +267,7 @@ function defineGetter<K extends string | number | symbol, V>(obj: Record<K, V>, 
 
 declare global {
   interface Window {
-    __ZOOT__?: string
+    __ZOOT__?: Record<string, any>
   }
 }
 
