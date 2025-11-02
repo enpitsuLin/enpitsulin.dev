@@ -12,9 +12,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Article: typeof import('./components/article/index.vue')['default']
     ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
     ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
     ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
+    ArticleTag: typeof import('./components/article/tag.vue')['default']
     AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
     AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
     AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -68,9 +70,11 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const Article: typeof import('./components/article/index.vue')['default']
   const ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
   const ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
   const ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
+  const ArticleTag: typeof import('./components/article/tag.vue')['default']
   const AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
   const AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
   const AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']

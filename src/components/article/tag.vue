@@ -21,10 +21,8 @@ const { adChild = false, tag } = defineProps<{
       class="text-zinc-900 outline-offset-2 transition active:text-zinc-900/60 dark:text-zinc-400 active:transition-none dark:active:text-zinc-100/70 dark:hover:text-zinc-100"
       @click="navigate"
     >
-      <span>{{ tag }}</span>
-      <template v-if="$slots.default">
-        <slot />
-      </template>
+      <span v-if="!$slots.default">{{ tag }}</span>
+      <slot />
     </ark.a>
   </RouterLink>
 </template>
