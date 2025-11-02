@@ -12,6 +12,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
+    ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
+    ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
     AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
     AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
     AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -32,6 +35,8 @@ declare module 'vue' {
     AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
     HomeIntro: typeof import('./components/home/intro.vue')['default']
     HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+    HomeRecent: typeof import('./components/home/recent.vue')['default']
+    HomeRecentArticle: typeof import('./components/home/recent-article.vue')['default']
     HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
     IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
     LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']
@@ -63,6 +68,9 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
+  const ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
+  const ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
   const AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
   const AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
   const AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -83,6 +91,8 @@ declare global {
   const AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
   const HomeIntro: typeof import('./components/home/intro.vue')['default']
   const HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+  const HomeRecent: typeof import('./components/home/recent.vue')['default']
+  const HomeRecentArticle: typeof import('./components/home/recent-article.vue')['default']
   const HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
   const IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
   const LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']

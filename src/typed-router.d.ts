@@ -33,6 +33,7 @@ declare module 'vue-router/auto-routes' {
       | '/(home)/about'
       | '/(home)/blog/[[page]]'
       | '/(home)/blog/[slug]'
+      | '/(home)/blog/tags/[tag]'
       | '/(home)/guestbook'
       | '/(home)/projects'
     >,
@@ -69,6 +70,13 @@ declare module 'vue-router/auto-routes' {
       '/blog/:slug',
       { slug: ParamValue<true> },
       { slug: ParamValue<false> },
+      | never
+    >,
+    '/(home)/blog/tags/[tag]': RouteRecordInfo<
+      '/(home)/blog/tags/[tag]',
+      '/blog/tags/:tag',
+      { tag: ParamValue<true> },
+      { tag: ParamValue<false> },
       | never
     >,
     '/(home)/guestbook': RouteRecordInfo<
@@ -163,6 +171,7 @@ declare module 'vue-router/auto-routes' {
         | '/(home)/about'
         | '/(home)/blog/[[page]]'
         | '/(home)/blog/[slug]'
+        | '/(home)/blog/tags/[tag]'
         | '/(home)/guestbook'
         | '/(home)/projects'
       views:
@@ -202,6 +211,12 @@ declare module 'vue-router/auto-routes' {
     'src/pages/(home)/blog/[slug].vue': {
       routes:
         | '/(home)/blog/[slug]'
+      views:
+        | never
+    }
+    'src/pages/(home)/blog/tags/[tag].vue': {
+      routes:
+        | '/(home)/blog/tags/[tag]'
       views:
         | never
     }
