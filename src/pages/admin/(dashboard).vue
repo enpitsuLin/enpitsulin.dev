@@ -39,7 +39,7 @@ const navItems: NavItem[] = [
     title: '文章管理',
     path: '/admin/posts',
     icon: 'i-mingcute:code-line',
-    match: ['/admin/(dashboard)/posts/[[page]]', '/admin/(dashboard)/posts/[id]', '/admin/(dashboard)/posts/new'],
+    match: ['/admin/(dashboard)/posts/[[page]]', '/admin/(dashboard)/posts/[id]', '/admin/(dashboard)/posts/create'],
   },
 ]
 

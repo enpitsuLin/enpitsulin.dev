@@ -92,7 +92,7 @@ function cancelDelete() {
 }
 
 function handleNew() {
-  router.push('/admin/posts/new')
+  router.push('/admin/posts/create')
 }
 
 function formatDate(date: number | Date | string | null | undefined) {

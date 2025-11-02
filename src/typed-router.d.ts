@@ -102,7 +102,7 @@ declare module 'vue-router/auto-routes' {
       | '/admin/(dashboard)/'
       | '/admin/(dashboard)/posts/[[page]]'
       | '/admin/(dashboard)/posts/[id]'
-      | '/admin/(dashboard)/posts/new'
+      | '/admin/(dashboard)/posts/create'
       | '/admin/sign-in'
     >,
     '/admin/(dashboard)': RouteRecordInfo<
@@ -113,7 +113,7 @@ declare module 'vue-router/auto-routes' {
       | '/admin/(dashboard)/'
       | '/admin/(dashboard)/posts/[[page]]'
       | '/admin/(dashboard)/posts/[id]'
-      | '/admin/(dashboard)/posts/new'
+      | '/admin/(dashboard)/posts/create'
     >,
     '/admin/(dashboard)/': RouteRecordInfo<
       '/admin/(dashboard)/',
@@ -136,9 +136,9 @@ declare module 'vue-router/auto-routes' {
       { page?: ParamValueZeroOrOne<false> },
       | never
     >,
-    '/admin/(dashboard)/posts/new': RouteRecordInfo<
-      '/admin/(dashboard)/posts/new',
-      '/admin/posts/new',
+    '/admin/(dashboard)/posts/create': RouteRecordInfo<
+      '/admin/(dashboard)/posts/create',
+      '/admin/posts/create',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -251,7 +251,7 @@ declare module 'vue-router/auto-routes' {
         | '/admin/(dashboard)/'
         | '/admin/(dashboard)/posts/[[page]]'
         | '/admin/(dashboard)/posts/[id]'
-        | '/admin/(dashboard)/posts/new'
+        | '/admin/(dashboard)/posts/create'
         | '/admin/sign-in'
       views:
         | 'default'
@@ -262,7 +262,7 @@ declare module 'vue-router/auto-routes' {
         | '/admin/(dashboard)/'
         | '/admin/(dashboard)/posts/[[page]]'
         | '/admin/(dashboard)/posts/[id]'
-        | '/admin/(dashboard)/posts/new'
+        | '/admin/(dashboard)/posts/create'
       views:
         | 'default'
     }
@@ -284,9 +284,9 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'src/pages/admin/(dashboard)/posts/new.vue': {
+    'src/pages/admin/(dashboard)/posts/create.vue': {
       routes:
-        | '/admin/(dashboard)/posts/new'
+        | '/admin/(dashboard)/posts/create'
       views:
         | never
     }
