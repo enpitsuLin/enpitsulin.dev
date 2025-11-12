@@ -3,9 +3,6 @@
 .wrangler
 .dev.vars
 
-# Astro generated types
-.astro/
-
 # Dependencies
 node_modules
 .pnp
@@ -49,5 +46,3 @@ yarn-error.log*
 tmp.json
 tmp.ts
 .idea
-
-apps/sandbox-container/workdir

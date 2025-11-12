@@ -1,7 +1,7 @@
-import nodeLoaderCloudflare from '@hiogawa/node-loader-cloudflare/vite';
-import unocss from 'unocss/vite';
-import react from '@vitejs/plugin-react';
-import { defineConfig } from 'waku/config';
+import nodeLoaderCloudflare from '@hiogawa/node-loader-cloudflare/vite'
+import react from '@vitejs/plugin-react'
+import unocss from 'unocss/vite'
+import { defineConfig } from 'waku/config'
 
 export default defineConfig({
   vite: {
@@ -24,4 +24,4 @@ export default defineConfig({
       }),
     ],
   },
-});
+})

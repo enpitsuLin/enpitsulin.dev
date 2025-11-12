@@ -1,3 +1,18 @@
 {
-  "extends": "@enpitsulin-dev/typescript-config/lib.json"
+  "compilerOptions": {
+    "target": "esnext",
+    "jsx": "react-jsx",
+    "moduleDetection": "force",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "types": ["./worker-configuration.d.ts", "vite/client"],
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "downlevelIteration": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  }
 }

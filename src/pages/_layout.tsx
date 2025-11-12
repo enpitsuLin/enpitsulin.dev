@@ -1,13 +1,13 @@
-import 'uno.css';
+import type { ReactNode } from 'react'
 
-import type { ReactNode } from 'react';
-import { Footer } from '../components/footer';
-import { Header } from '../components/header';
+import { Footer } from '../components/footer'
+import { Header } from '../components/header'
+import 'uno.css'
 
-type RootLayoutProps = { children: ReactNode };
+interface RootLayoutProps { children: ReactNode }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const data = await getData();
+  const data = await getData()
 
   return (
     <div className="font-['Nunito']">
@@ -26,20 +26,20 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </main>
       <Footer />
     </div>
-  );
+  )
 }
 
-const getData = async () => {
+async function getData() {
   const data = {
     description: 'An internet website!',
     icon: '/images/favicon.png',
-  };
+  }
 
-  return data;
-};
+  return data
+}
 
-export const getConfig = async () => {
+export async function getConfig() {
   return {
     render: 'static',
-  } as const;
-};
+  } as const
+}

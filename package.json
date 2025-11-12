@@ -8,23 +8,41 @@
   "sideEffects": false,
   "main": "index.js",
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "deploy": "turbo deploy",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
-    "cf-typegen": "turbo cf-typegen",
+    "dev": "waku dev",
+    "build": "waku build",
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "cf-typegen": "wrangler types",
     "postinstall": "pnpm simple-git-hooks"
+  },
+  "dependencies": {
+    "hono": "catalog:server",
+    "react": "catalog:lib",
+    "react-dom": "catalog:lib",
+    "react-server-dom-webpack": "catalog:lib",
+    "waku": "catalog:lib"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
-    "@enpitsulin-dev/typescript-config": "workspace:*",
+    "@hiogawa/node-loader-cloudflare": "catalog:dev",
+    "@types/node": "catalog:types",
+    "@types/react": "catalog:types",
+    "@types/react-dom": "catalog:types",
+    "@unocss/preset-mini": "catalog:dev",
+    "@unocss/preset-uno": "catalog:dev",
+    "@vitejs/plugin-react": "catalog:dev",
+    "babel-plugin-react-compiler": "catalog:dev",
     "eslint": "catalog:dev",
     "jiti": "catalog:dev",
     "lint-staged": "catalog:dev",
+    "miniflare": "catalog:dev",
     "simple-git-hooks": "catalog:dev",
-    "turbo": "catalog:dev",
-    "typescript": "catalog:dev"
+    "typescript": "catalog:dev",
+    "unocss": "catalog:dev",
+    "vite": "catalog:dev",
+    "wrangler": "catalog:dev"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
