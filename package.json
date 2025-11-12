@@ -18,6 +18,7 @@
     "postinstall": "pnpm simple-git-hooks"
   },
   "dependencies": {
+    "better-auth": "catalog:lib",
     "hono": "catalog:server",
     "react": "catalog:lib",
     "react-dom": "catalog:lib",

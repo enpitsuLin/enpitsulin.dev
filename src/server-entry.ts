@@ -5,6 +5,8 @@ import adapter from 'waku/adapters/cloudflare'
 import cloudflareMiddleware from './middleware/cloudflare'
 
 export default adapter(
-  fsRouter(import.meta.glob('./**/*.tsx', { base: './pages' })),
+  fsRouter(
+    import.meta.glob('./**/*.{tsx,ts}', { base: './pages', exhaustive: true }),
+  ),
   { middlewareFns: [contextStorage, cloudflareMiddleware] },
 )

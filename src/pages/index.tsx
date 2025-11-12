@@ -1,6 +1,8 @@
 import { env, waitUntil } from 'cloudflare:workers'
 import { Suspense } from 'react'
 import { Link } from 'waku'
+import SignIn from '@/components/sign-in'
+import SignUp from '@/components/sign-up'
 import { Counter } from '../components/counter'
 
 export default async function HomePage() {
@@ -35,6 +37,8 @@ export default async function HomePage() {
         <ServerMessage />
       </Suspense>
       <Counter max={maxItems} />
+      <SignIn />
+      <SignUp />
       <Link to="/about" className="mt-4 inline-block underline">
         About page
       </Link>
