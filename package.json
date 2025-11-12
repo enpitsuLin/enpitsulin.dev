@@ -13,14 +13,23 @@
     "deploy": "turbo deploy",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "cf-typegen": "turbo cf-typegen"
+    "cf-typegen": "turbo cf-typegen",
+    "postinstall": "pnpm simple-git-hooks"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@enpitsulin-dev/typescript-config": "workspace:*",
     "eslint": "catalog:dev",
     "jiti": "catalog:dev",
+    "lint-staged": "catalog:dev",
+    "simple-git-hooks": "catalog:dev",
     "turbo": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }

@@ -18,6 +18,8 @@ catalogs:
     eslint: ^9.39.1
     eslint-plugin-format: ^1.0.2
     jiti: ^2.6.1
+    lint-staged: ^16.2.6
+    simple-git-hooks: ^2.13.1
     turbo: ^2.6.1
     typescript: ^5.9.3
     unocss: ^66.5.6
