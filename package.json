@@ -42,6 +42,7 @@
     "typescript": "catalog:dev",
     "unocss": "catalog:dev",
     "vite": "catalog:dev",
+    "vite-tsconfig-paths": "catalog:dev",
     "wrangler": "catalog:dev"
   },
   "simple-git-hooks": {

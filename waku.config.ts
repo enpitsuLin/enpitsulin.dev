@@ -1,11 +1,13 @@
 import nodeLoaderCloudflare from '@hiogawa/node-loader-cloudflare/vite'
 import react from '@vitejs/plugin-react'
 import unocss from 'unocss/vite'
+import viteTsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'waku/config'
 
 export default defineConfig({
   vite: {
     plugins: [
+      viteTsconfigPaths(),
       unocss(),
       react({
         babel: {

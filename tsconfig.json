@@ -5,6 +5,9 @@
     "moduleDetection": "force",
     "module": "esnext",
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "types": ["./worker-configuration.d.ts", "vite/client"],
     "strict": true,
     "exactOptionalPropertyTypes": true,
