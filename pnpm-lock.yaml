@@ -144,6 +144,9 @@ importers:
       '@astrojs/vue':
         specifier: catalog:astro
         version: 5.1.3(@types/node@24.10.1)(astro@5.15.5(@types/node@24.10.1)(jiti@2.6.1)(rollup@4.53.2)(typescript@5.9.3)(yaml@2.8.1))(jiti@2.6.1)(rollup@4.53.2)(vue@3.5.24(typescript@5.9.3))(yaml@2.8.1)
+      '@enpitsulin-dev/workers-server':
+        specifier: workspace:*
+        version: link:../server
       astro:
         specifier: catalog:astro
         version: 5.15.5(@types/node@24.10.1)(jiti@2.6.1)(rollup@4.53.2)(typescript@5.9.3)(yaml@2.8.1)

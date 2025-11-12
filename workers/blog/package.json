@@ -19,6 +19,7 @@
     "@astrojs/rss": "catalog:astro",
     "@astrojs/sitemap": "catalog:astro",
     "@astrojs/vue": "catalog:astro",
+    "@enpitsulin-dev/workers-server": "workspace:*",
     "astro": "catalog:astro",
     "sharp": "catalog:astro",
     "vue": "catalog:lib"

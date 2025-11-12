@@ -6,5 +6,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "enpitsulin-dev-workers-server",
   "main": "src/index.ts",
-  "compatibility_date": "2025-06-01"
+  "compatibility_date": "2025-06-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "enpitsulin-dev",
+      "database_id": "665d7a3a-6e3f-4c51-9fcf-d1d0f806004a"
+    }
+  ]
 }
