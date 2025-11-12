@@ -14,16 +14,17 @@
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.10",
-    "@astrojs/mdx": "^4.3.10",
-    "@astrojs/rss": "^4.0.13",
-    "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.15.5",
-    "sharp": "^0.34.3"
+    "@astrojs/cloudflare": "catalog:astro",
+    "@astrojs/mdx": "catalog:astro",
+    "@astrojs/rss": "catalog:astro",
+    "@astrojs/sitemap": "catalog:astro",
+    "astro": "catalog:astro",
+    "sharp": "catalog:astro"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@types/node": "catalog:types",
     "eslint-plugin-format": "catalog:dev",
-    "wrangler": "^4.47.0"
+    "unocss": "catalog:dev",
+    "wrangler": "catalog:dev"
   }
 }
