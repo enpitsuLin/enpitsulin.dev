@@ -1,0 +1,34 @@
+{
+  "name": "blog",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "cf-typegen": "wrangler types",
+    "dev": "waku dev",
+    "build": "waku build",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "hono": "catalog:server",
+    "react": "catalog:lib",
+    "react-dom": "catalog:lib",
+    "react-server-dom-webpack": "catalog:lib",
+    "waku": "catalog:lib",
+    "wrangler": "catalog:dev"
+  },
+  "devDependencies": {
+    "@hiogawa/node-loader-cloudflare": "catalog:dev",
+    "@types/node": "catalog:types",
+    "@types/react": "catalog:types",
+    "@types/react-dom": "catalog:types",
+    "@unocss/preset-mini": "catalog:dev",
+    "@unocss/preset-uno": "catalog:dev",
+    "@vitejs/plugin-react": "catalog:dev",
+    "babel-plugin-react-compiler": "catalog:dev",
+    "miniflare": "catalog:dev",
+    "typescript": "catalog:dev",
+    "unocss": "catalog:dev",
+    "vite": "catalog:dev"
+  }
+}

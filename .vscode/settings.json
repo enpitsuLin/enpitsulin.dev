@@ -1,5 +1,3 @@
 {
-	"files.associations": {
-		"wrangler.json": "jsonc"
-	}
+  "unocss.root": "workers/blog"
 }
