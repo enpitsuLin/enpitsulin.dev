@@ -18,8 +18,10 @@
     "@astrojs/mdx": "catalog:astro",
     "@astrojs/rss": "catalog:astro",
     "@astrojs/sitemap": "catalog:astro",
+    "@astrojs/vue": "catalog:astro",
     "astro": "catalog:astro",
-    "sharp": "catalog:astro"
+    "sharp": "catalog:astro",
+    "vue": "catalog:lib"
   },
   "devDependencies": {
     "@types/node": "catalog:types",
