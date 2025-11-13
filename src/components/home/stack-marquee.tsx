@@ -53,7 +53,7 @@ export function StackMarquee() {
           ))}
         </Marquee>
 
-        <Marquee>
+        <Marquee reverse>
           {tools.map((item, i) => (
             <div
               key={i}
