@@ -7,6 +7,7 @@ import {
   presetTypography,
   presetWebFonts,
   presetWind3,
+  transformerAttributifyJsx,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -118,6 +119,7 @@ export default defineConfig<Theme>({
     }),
   ],
   transformers: [
+    transformerAttributifyJsx(),
     transformerDirectives(),
     transformerVariantGroup(),
   ],

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@better-auth/passkey": "catalog:lib",
+    "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
     "defu": "catalog:lib",
     "drizzle-orm": "catalog:server",
@@ -54,6 +55,7 @@
     "typescript": "catalog:dev",
     "unocss": "catalog:dev",
     "vite": "catalog:dev",
+    "vite-plugin-inspect": "catalog:dev",
     "vite-tsconfig-paths": "catalog:dev",
     "wrangler": "catalog:dev"
   },

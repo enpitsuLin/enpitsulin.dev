@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Footer } from '../components/footer'
 import { Header } from '../components/header'
 import 'uno.css'
+import '@unocss/reset/tailwind.css'
 
 interface RootLayoutProps { children: ReactNode }
 

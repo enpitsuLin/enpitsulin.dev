@@ -39,7 +39,7 @@ export default async function HomePage() {
       <Counter max={maxItems} />
       <SignIn />
       <SignUp />
-      <Link to="/about" className="mt-4 inline-block underline">
+      <Link to="/about" text-red className="mt-4 inline-block underline">
         About page
       </Link>
     </div>
