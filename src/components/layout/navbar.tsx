@@ -4,7 +4,7 @@ import type { DialogOpenChangeDetails } from '@ark-ui/react/dialog'
 import { Dialog } from '@ark-ui/react/dialog'
 import { Portal } from '@ark-ui/react/portal'
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useRouter } from 'waku'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { navigation } from '@/lib/constants'
@@ -103,11 +103,8 @@ export function NavbarMenu() {
     setOpen(details.open)
   }
 
-  useEffect(() => {
-    if (!isMobile) {
-      setOpen(false)
-    }
-  }, [isMobile])
+  if (!isMobile)
+    return null
 
   return (
     <div
