@@ -74,8 +74,8 @@ catalogs:
       specifier: ^5.1.4
       version: 5.1.4
     wrangler:
-      specifier: ^4.47.0
-      version: 4.47.0
+      specifier: ^4.48.0
+      version: 4.48.0
   lib:
     '@better-auth/passkey':
       specifier: ^1.4.0-beta.20
@@ -177,7 +177,7 @@ importers:
         version: 6.2.0(@vue/compiler-sfc@3.5.24)(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       '@hiogawa/node-loader-cloudflare':
         specifier: catalog:dev
-        version: 0.0.2(miniflare@4.20251105.0)(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))(wrangler@4.47.0(@cloudflare/workers-types@4.20251111.0))
+        version: 0.0.2(miniflare@4.20251105.0)(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))(wrangler@4.48.0(@cloudflare/workers-types@4.20251111.0))
       '@iconify-json/logos':
         specifier: 'catalog:'
         version: 1.2.10
@@ -246,7 +246,7 @@ importers:
         version: 5.1.4(typescript@5.9.3)(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))
       wrangler:
         specifier: catalog:dev
-        version: 4.47.0(@cloudflare/workers-types@4.20251111.0)
+        version: 4.48.0(@cloudflare/workers-types@4.20251111.0)
 
 packages:
 
@@ -3154,8 +3154,8 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  miniflare@4.20251109.0:
-    resolution: {integrity: sha512-fm0J/IFrrx7RT1w3SIoDM5m7zPCa2wBtxBApy6G0QVjd2tx8w0WGlMFop6R49XyTfF1q3LRHCjFMfzJ8YS0RzQ==}
+  miniflare@4.20251109.1:
+    resolution: {integrity: sha512-btcTw1pH40PGVMwn1pZDcrodQkgY8ijKJA/r7LKgJQGqVZ1k9gqfHHtbelZp8O9bJ995eQqdURyvXMflZwCo+g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -3935,8 +3935,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.47.0:
-    resolution: {integrity: sha512-JP0U8oqUETK9D+ZbrSjFFOxGdufYsS6HsT0vLU1IAQrban9a6woMHdBZlGNn/lt8QA70xv1uFiJK8DUMPzC73A==}
+  wrangler@4.48.0:
+    resolution: {integrity: sha512-qkcwysx96XNDWXl4w/5VjAZjqWatxAq9chMXVeqv/etL9e06ouPaZ+Hwwbe5XYV2GYf/XhZVZ3fHJcTBrq60gQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -4539,9 +4539,9 @@ snapshots:
 
   '@hexagon/base64@1.1.28': {}
 
-  '@hiogawa/node-loader-cloudflare@0.0.2(miniflare@4.20251105.0)(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))(wrangler@4.47.0(@cloudflare/workers-types@4.20251111.0))':
+  '@hiogawa/node-loader-cloudflare@0.0.2(miniflare@4.20251105.0)(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1))(wrangler@4.48.0(@cloudflare/workers-types@4.20251111.0))':
     dependencies:
-      wrangler: 4.47.0(@cloudflare/workers-types@4.20251111.0)
+      wrangler: 4.48.0(@cloudflare/workers-types@4.20251111.0)
     optionalDependencies:
       miniflare: 4.20251105.0
       vite: 7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
@@ -7406,7 +7406,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  miniflare@4.20251109.0:
+  miniflare@4.20251109.1:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       acorn: 8.14.0
@@ -8201,13 +8201,13 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20251109.0
       '@cloudflare/workerd-windows-64': 1.20251109.0
 
-  wrangler@4.47.0(@cloudflare/workers-types@4.20251111.0):
+  wrangler@4.48.0(@cloudflare/workers-types@4.20251111.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.7.10(unenv@2.0.0-rc.24)(workerd@1.20251109.0)
       blake3-wasm: 2.1.5
       esbuild: 0.25.1
-      miniflare: 4.20251109.0
+      miniflare: 4.20251109.1
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.24
       workerd: 1.20251109.0
