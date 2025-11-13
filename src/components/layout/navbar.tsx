@@ -1,9 +1,12 @@
 'use client'
 
+import type { DialogOpenChangeDetails } from '@ark-ui/react/dialog'
 import { Dialog } from '@ark-ui/react/dialog'
 import { Portal } from '@ark-ui/react/portal'
 import { motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import { Link, useRouter } from 'waku'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { navigation } from '@/lib/constants'
 
 export function Navbar() {
@@ -93,13 +96,26 @@ export function Navbar() {
 }
 
 export function NavbarMenu() {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const [open, setOpen] = useState(isMobile)
+
+  function handleOpenChange(details: DialogOpenChangeDetails) {
+    setOpen(details.open)
+  }
+
+  useEffect(() => {
+    if (!isMobile) {
+      setOpen(false)
+    }
+  }, [isMobile])
+
   return (
     <div
       relative
       ml-auto
       className="transform animate-duration-1300 animate-ease-$spring-easing animate-in slide-in-from-top-70px md:hidden"
     >
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={handleOpenChange}>
         <Dialog.Trigger
           bg="zinc-50/50 dark:zinc-950/50"
           px-4
