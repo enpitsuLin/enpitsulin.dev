@@ -1,5 +1,5 @@
+import { ThemeScript } from '@/hooks/theme/script'
 import { description } from '@/lib/constants'
-
 import 'uno.css'
 import '@unocss/reset/tailwind.css'
 import '@/styles/main.css'
@@ -14,7 +14,7 @@ export default async function RootElement({ children }: { children: React.ReactN
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
-
+        <ThemeScript />
       </head>
       <body
         data-version="1.0"
