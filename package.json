@@ -22,7 +22,7 @@
     "postinstall": "pnpm simple-git-hooks"
   },
   "dependencies": {
-    "@ark-ui/react": "catalog:",
+    "@ark-ui/react": "catalog:lib",
     "@better-auth/passkey": "catalog:lib",
     "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
@@ -40,8 +40,8 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@hiogawa/node-loader-cloudflare": "catalog:dev",
-    "@iconify-json/logos": "catalog:",
-    "@iconify-json/mingcute": "catalog:",
+    "@iconify-json/logos": "catalog:dev",
+    "@iconify-json/mingcute": "catalog:dev",
     "@libsql/client": "catalog:dev",
     "@types/node": "catalog:types",
     "@types/react": "catalog:types",
