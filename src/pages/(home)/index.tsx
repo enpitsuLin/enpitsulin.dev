@@ -1,7 +1,9 @@
+import { Intro } from '@/components/home/intro'
+
 export default async function HomePage() {
   return (
     <div>
-      index page
+      <Intro />
     </div>
   )
 }

@@ -7,7 +7,7 @@ interface RootLayoutProps { children: ReactNode }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div relative px="sm:8" flex="~ 1 justify-center">
+    <div relative px="sm:8" flex="~ justify-center" min-h-screen>
       <div
         flex="~ 1 col items-center"
         px="lg:8"

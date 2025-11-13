@@ -27,6 +27,7 @@
     "@better-auth/passkey": "catalog:lib",
     "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
+    "clsx": "catalog:lib",
     "defu": "catalog:lib",
     "drizzle-orm": "catalog:server",
     "hono": "catalog:server",
