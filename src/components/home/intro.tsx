@@ -1,7 +1,7 @@
 'use client'
 
 import { Tooltip } from '@ark-ui/react'
-import { motion, useScroll } from 'motion/react'
+import { motion } from 'motion/react'
 import { useEasterEgg } from '@/hooks/use-easter-egg'
 import { cn } from '@/lib/utils'
 
@@ -45,7 +45,6 @@ const links = [
 ]
 
 export function Intro() {
-  const { scrollY } = useScroll()
   return (
     <section w="full" flex="~ col items-center" className="mb-10 sm:mb-0">
       <div flex="~ col-reverse md:row md:justify-between gap-8" className="w-full md:my-16">
@@ -114,8 +113,7 @@ export function Intro() {
       </div>
 
       <div
-
-        className={cn('mt-auto hidden pb-6 pt-8 transition-opacity duration-500 sm:flex sm:justify-center', scrollY.get() > 20 ? 'op-0' : 'op-100')}
+        className="mt-auto hidden pb-6 pt-8 transition-opacity duration-500 sm:flex sm:justify-center op-100"
       >
         <span className="animate-bounce text-gray-500">
           <i inline-block className="i-mingcute:right-line rotate-90" />

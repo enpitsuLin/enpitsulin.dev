@@ -1,4 +1,5 @@
 import { ThemeToggle } from './theme-toggle'
+import { ToTopButton } from './to-top-button'
 
 export function Fab() {
   return (
@@ -13,6 +14,7 @@ export function Fab() {
       backdrop-blur
     >
       <ThemeToggle />
+      <ToTopButton />
     </div>
   )
 }
