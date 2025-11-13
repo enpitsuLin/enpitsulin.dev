@@ -10,7 +10,6 @@
     },
     "types": ["./worker-configuration.d.ts", "vite/client"],
     "strict": true,
-    "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "downlevelIteration": true,
     "noEmit": true,
