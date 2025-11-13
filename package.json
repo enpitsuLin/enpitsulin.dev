@@ -23,12 +23,14 @@
     "postinstall": "pnpm simple-git-hooks"
   },
   "dependencies": {
+    "@ark-ui/react": "catalog:",
     "@better-auth/passkey": "catalog:lib",
     "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
     "defu": "catalog:lib",
     "drizzle-orm": "catalog:server",
     "hono": "catalog:server",
+    "motion": "catalog:lib",
     "react": "catalog:lib",
     "react-dom": "catalog:lib",
     "react-server-dom-webpack": "catalog:lib",
@@ -37,6 +39,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@hiogawa/node-loader-cloudflare": "catalog:dev",
+    "@iconify-json/mingcute": "catalog:",
     "@libsql/client": "catalog:dev",
     "@types/node": "catalog:types",
     "@types/react": "catalog:types",

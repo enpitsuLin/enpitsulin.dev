@@ -1,4 +1,7 @@
-// Create root element
+import 'uno.css'
+import '@unocss/reset/tailwind.css'
+import '@/styles/main.css'
+
 export default async function RootElement({ children }: { children: React.ReactNode }) {
   const data = await getData()
 
@@ -15,8 +18,12 @@ export default async function RootElement({ children }: { children: React.ReactN
           precedence="font"
         />
       </head>
-      <body data-version="1.0">{children}</body>
-
+      <body
+        data-version="1.0"
+        className="text-gray-950 dark:text-gray-50 bg-slate-50 dark:bg-black bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]"
+      >
+        {children}
+      </body>
     </html>
   )
 }
