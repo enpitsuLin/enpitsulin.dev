@@ -40,6 +40,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@hiogawa/node-loader-cloudflare": "catalog:dev",
+    "@iconify-json/logos": "catalog:",
     "@iconify-json/mingcute": "catalog:",
     "@libsql/client": "catalog:dev",
     "@types/node": "catalog:types",

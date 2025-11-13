@@ -2,6 +2,7 @@ overrides:
   esbuild: 0.25.1
 catalog:
   '@ark-ui/react': ^5.27.1
+  '@iconify-json/logos': ^1.2.10
   '@iconify-json/mingcute': ^1.2.5
 
 catalogs:
