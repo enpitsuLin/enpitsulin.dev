@@ -60,6 +60,7 @@
     "typescript": "catalog:dev",
     "unocss": "catalog:dev",
     "vite": "catalog:dev",
+    "vite-plugin-devtools-json": "catalog:dev",
     "vite-plugin-inspect": "catalog:dev",
     "vite-tsconfig-paths": "catalog:dev",
     "wrangler": "catalog:dev"
