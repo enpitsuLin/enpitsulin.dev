@@ -1,5 +1,5 @@
 import { ThemeScript } from '@/hooks/theme/script'
-import { description } from '@/lib/constants'
+import { description, title } from '@/lib/constants'
 import 'uno.css'
 import '@unocss/reset/tailwind.css'
 import '@/styles/main.css'
@@ -8,12 +8,12 @@ export default async function RootElement({ children }: { children: React.ReactN
   return (
     <html suppressHydrationWarning={true} lang="zh-Hans">
       <head>
-        <title>enpitsulin.dev</title>
+        <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="enpitsulin, blog, portfolio" />
+        <meta name="author" content="enpitsulin" />
         <link rel="icon" type="image/png" href="/images/favicon.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
         <ThemeScript />
       </head>
       <body
