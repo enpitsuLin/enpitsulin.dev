@@ -89,6 +89,9 @@ catalogs:
     clsx:
       specifier: ^2.1.1
       version: 2.1.1
+    consola:
+      specifier: ^3.4.2
+      version: 3.4.2
     defu:
       specifier: ^6.1.4
       version: 6.1.4
@@ -147,6 +150,9 @@ importers:
       clsx:
         specifier: catalog:lib
         version: 2.1.1
+      consola:
+        specifier: catalog:lib
+        version: 3.4.2
       defu:
         specifier: catalog:lib
         version: 6.1.4

@@ -5,6 +5,7 @@ import defu from 'defu'
 import { contextStorage } from 'hono/context-storage'
 import { createPages } from 'waku'
 import adapter from 'waku/adapters/cloudflare'
+import { logger } from './lib/logger'
 import cloudflareMiddleware from './middleware/cloudflare'
 
 const METHODS = [
@@ -119,6 +120,7 @@ function fsRouter(options?: FsRouterOptions) {
                 `API ${path} is invalid. For static API routes, only a single GET handler is supported.`,
               )
             }
+            logger.log(`register static API ${apiPath}`)
             createApi({
               path: apiPath,
               render: 'static',
@@ -150,6 +152,7 @@ function fsRouter(options?: FsRouterOptions) {
               }
             }
 
+            logger.log(`register dynamic API ${apiPath}`)
             createApi({
               path: apiPath,
               render: 'dynamic',
@@ -159,6 +162,7 @@ function fsRouter(options?: FsRouterOptions) {
         }
         // Handle slices
         else if (firstItem === opts.slicesDir) {
+          logger.log(`register slice ${pathItems.slice(1).join('/')}`)
           createSlice({
             component: mod.default as FunctionComponent<{ children: ReactNode }>,
             render: 'static',
@@ -168,6 +172,7 @@ function fsRouter(options?: FsRouterOptions) {
         }
         // Handle layouts
         else if (lastItem === '_layout') {
+          logger.log(`register layout ${path}`)
           createLayout({
             path,
             component: mod.default as FunctionComponent<{ children: ReactNode }>,
@@ -177,6 +182,7 @@ function fsRouter(options?: FsRouterOptions) {
         }
         // Handle root
         else if (lastItem === '_root') {
+          logger.log(`register root ${path}`)
           createRoot({
             component: mod.default as FunctionComponent<{ children: ReactNode }>,
             render: 'static',
@@ -185,6 +191,7 @@ function fsRouter(options?: FsRouterOptions) {
         }
         // Handle regular pages
         else {
+          logger.log(`register page ${path}`)
           createPage({
             path,
             component: mod.default,
