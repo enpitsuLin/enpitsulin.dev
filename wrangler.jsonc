@@ -1,4 +1,5 @@
 {
+  "$schema": "node_modules/wrangler/config.schema.json",
   "name": "enpitsulin-dev-workers-blog",
   "main": "./dist/server/serve-cloudflare.js",
   // https://developers.cloudflare.com/workers/platform/compatibility-dates
@@ -15,5 +16,13 @@
   },
   "vars": {
     "MAX_ITEMS": 10
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "enpitsulin-dev",
+      "database_id": "665d7a3a-6e3f-4c51-9fcf-d1d0f806004a",
+      "migrations_dir": "./database/migrations"
+    }
+  ]
 }
