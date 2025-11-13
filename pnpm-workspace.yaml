@@ -1,5 +1,6 @@
 overrides:
   esbuild: 0.25.1
+  vite: 7.2.2
 catalog:
   '@ark-ui/react': ^5.27.1
   '@iconify-json/logos': ^1.2.10
