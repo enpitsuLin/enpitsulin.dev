@@ -2,7 +2,6 @@
 
 import { Tooltip } from '@ark-ui/react'
 import { motion, useScroll } from 'motion/react'
-import { useTheme } from '@/hooks/theme'
 import { useEasterEgg } from '@/hooks/use-easter-egg'
 import { cn } from '@/lib/utils'
 
@@ -47,7 +46,6 @@ const links = [
 
 export function Intro() {
   const { scrollY } = useScroll()
-  const { theme, toggle } = useTheme()
   return (
     <section w="full" flex="~ col items-center" className="mb-10 sm:mb-0">
       <div flex="~ col-reverse md:row md:justify-between gap-8" className="w-full md:my-16">
@@ -123,11 +121,6 @@ export function Intro() {
           <i inline-block className="i-mingcute:right-line rotate-90" />
         </span>
       </div>
-      <button onClick={() => toggle(theme === 'light' ? 'dark' : 'light')}>
-        theme
-        {' '}
-        {theme}
-      </button>
     </section>
   )
 }
