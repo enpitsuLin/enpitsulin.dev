@@ -15,3 +15,15 @@
       rotate(var(--un-exit-rotate, 0));
   }
 }
+
+@keyframes wave-hand {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(30deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

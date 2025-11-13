@@ -2,6 +2,7 @@
 
 import { Tooltip } from '@ark-ui/react'
 import { motion, useScroll } from 'motion/react'
+import { useEasterEgg } from '@/hooks/use-easter-egg'
 import { cn } from '@/lib/utils'
 
 const links = [
@@ -125,9 +126,10 @@ export function Intro() {
 }
 
 export function IntroAvatar({ className }: { className?: string }) {
+  const easterEgg = useEasterEgg()
   return (
     <div relative className={className}>
-      <div className={cn('')}>
+      <div className={cn(easterEgg && 'animate-spin')}>
         <motion.img
           layoutId="avatar"
           alt="avatar"
