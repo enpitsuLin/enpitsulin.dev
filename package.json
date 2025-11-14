@@ -24,6 +24,7 @@
   "dependencies": {
     "@ark-ui/react": "catalog:lib",
     "@better-auth/passkey": "catalog:lib",
+    "@hookform/resolvers": "catalog:lib",
     "@tanstack/react-query": "catalog:lib",
     "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
@@ -37,7 +38,8 @@
     "react-dom": "catalog:lib",
     "react-hook-form": "catalog:lib",
     "react-server-dom-webpack": "catalog:lib",
-    "waku": "catalog:lib"
+    "waku": "catalog:lib",
+    "zod": "catalog:lib"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",

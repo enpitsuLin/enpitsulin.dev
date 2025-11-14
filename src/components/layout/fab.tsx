@@ -1,3 +1,4 @@
+import { AuthButton } from './auth-button'
 import { ThemeToggle } from './theme-toggle'
 import { ToTopButton } from './to-top-button'
 
@@ -13,6 +14,7 @@ export function Fab() {
       p-1
       backdrop-blur
     >
+      <AuthButton />
       <ThemeToggle />
       <ToTopButton />
     </div>

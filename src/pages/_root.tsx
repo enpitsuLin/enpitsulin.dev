@@ -1,13 +1,15 @@
 import { GlobalProvider } from '@/components/global-provider'
 import { ThemeScript } from '@/hooks/theme/script'
+import { getSession } from '@/lib/auth/server-utils'
 import { description, title } from '@/lib/constants'
 import '@/styles/main.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
 
 export default async function RootElement({ children }: { children: React.ReactNode }) {
+  const session = await getSession()
   return (
-    <GlobalProvider>
+    <GlobalProvider session={session.session} user={session.user}>
       <html suppressHydrationWarning={true} lang="zh-Hans">
         <head>
           <title>{title}</title>
@@ -23,6 +25,9 @@ export default async function RootElement({ children }: { children: React.ReactN
           className="text-gray-950 dark:text-gray-50 bg-slate-50 dark:bg-black bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]"
         >
           {children}
+          <pre>
+            {JSON.stringify(session, null, 2)}
+          </pre>
         </body>
       </html>
     </GlobalProvider>

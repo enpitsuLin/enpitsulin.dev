@@ -6,7 +6,6 @@ export default async function HomePage() {
     <div>
       <Intro />
       <StackMarquee />
-      <div className="h-100vh"></div>
     </div>
   )
 }

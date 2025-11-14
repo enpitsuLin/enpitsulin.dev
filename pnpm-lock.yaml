@@ -79,6 +79,9 @@ catalogs:
     '@better-auth/passkey':
       specifier: ^1.4.0-beta.20
       version: 1.4.0-beta.20
+    '@hookform/resolvers':
+      specifier: ^5.2.2
+      version: 5.2.2
     '@tanstack/react-query':
       specifier: ^5.90.8
       version: 5.90.8
@@ -115,6 +118,9 @@ catalogs:
     waku:
       specifier: 0.27.0
       version: 0.27.0
+    zod:
+      specifier: ^4.1.12
+      version: 4.1.12
   server:
     drizzle-orm:
       specifier: ^0.44.7
@@ -147,6 +153,9 @@ importers:
       '@better-auth/passkey':
         specifier: catalog:lib
         version: 1.4.0-beta.20(@better-auth/core@1.4.0-beta.20(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.0.26)(jose@6.1.1)(kysely@0.28.8)(nanostores@1.0.1))(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-auth@1.4.0-beta.20(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(better-call@1.0.26)(nanostores@1.0.1)
+      '@hookform/resolvers':
+        specifier: catalog:lib
+        version: 5.2.2(react-hook-form@7.66.0(react@19.2.0))
       '@tanstack/react-query':
         specifier: catalog:lib
         version: 5.90.8(react@19.2.0)
@@ -189,6 +198,9 @@ importers:
       waku:
         specifier: catalog:lib
         version: 0.27.0(@swc/helpers@0.5.17)(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(react-dom@19.2.0(react@19.2.0))(react-server-dom-webpack@19.2.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(webpack@5.102.1(esbuild@0.27.0)))(react@19.2.0)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
+      zod:
+        specifier: catalog:lib
+        version: 4.1.12
     devDependencies:
       '@antfu/eslint-config':
         specifier: catalog:dev
@@ -816,6 +828,11 @@ packages:
     peerDependencies:
       hono: ^4
 
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
+
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
     engines: {node: '>=18.18.0'}
@@ -1278,6 +1295,9 @@ packages:
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@stylistic/eslint-plugin@5.5.0':
     resolution: {integrity: sha512-IeZF+8H0ns6prg4VrkhgL+yrvDXWDH2cKchrbh80ejG9dQgZWp10epHMbgRuQvgchLII/lfh6Xn3lu6+6L86Hw==}
@@ -4563,6 +4583,11 @@ snapshots:
     dependencies:
       hono: 4.10.3
 
+  '@hookform/resolvers@5.2.2(react-hook-form@7.66.0(react@19.2.0))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.66.0(react@19.2.0)
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -4997,6 +5022,8 @@ snapshots:
   '@speed-highlight/core@1.2.12': {}
 
   '@standard-schema/spec@1.0.0': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@stylistic/eslint-plugin@5.5.0(eslint@9.39.1(jiti@2.6.1))':
     dependencies:

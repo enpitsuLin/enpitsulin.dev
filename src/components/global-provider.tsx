@@ -1,13 +1,26 @@
 'use client'
 
+import type { AuthContextType } from '@/hooks/auth/context'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from '@/hooks/auth/provider'
 
 const queryClient = new QueryClient()
 
-export function GlobalProvider({ children }: { children: React.ReactNode }) {
+export interface GlobalProviderProps extends Pick<AuthContextType, 'session' | 'user'> {
+  children: React.ReactNode
+
+}
+
+export function GlobalProvider({
+  session,
+  user,
+  children,
+}: GlobalProviderProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <AuthProvider session={session} user={user}>
+        {children}
+      </AuthProvider>
     </QueryClientProvider>
   )
 }
