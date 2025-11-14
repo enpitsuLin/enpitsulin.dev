@@ -3,7 +3,7 @@ import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlit
 
 export * from './auth-schema'
 
-const tags = sqliteTable(
+export const tags = sqliteTable(
   'tags',
   {
     id: text('id').primaryKey(),
@@ -21,8 +21,27 @@ const tags = sqliteTable(
   ],
 )
 
-const posts = sqliteTable(
-  'post',
+export const categories = sqliteTable(
+  'categories',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull().unique(),
+    slug: text('slug').notNull().unique(),
+    createdAt: integer('created_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
+      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+  },
+  table => [
+    index('category_name_idx').on(table.name),
+  ],
+)
+
+export const posts = sqliteTable(
+  'posts',
   {
     id: text('id').primaryKey(),
     title: text('title').notNull(),
@@ -49,7 +68,7 @@ const posts = sqliteTable(
   ],
 )
 
-const postsToTags = sqliteTable(
+export const postsToTags = sqliteTable(
   'posts_to_tags',
   {
     postId: text('post_id')
@@ -65,15 +84,35 @@ const postsToTags = sqliteTable(
   ],
 )
 
-const tagRelations = relations(tags, ({ many }) => ({
+export const postsToCategories = sqliteTable(
+  'posts_to_categories',
+  {
+    postId: text('post_id')
+      .notNull()
+      .references(() => posts.id, { onDelete: 'cascade' }),
+    categoryId: text('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'cascade' }),
+  },
+  table => [
+    // Composite primary key prevents duplicate post-category combinations
+    primaryKey({ columns: [table.postId, table.categoryId] }),
+  ],
+)
+
+export const tagRelations = relations(tags, ({ many }) => ({
   postsToTags: many(postsToTags),
 }))
 
-const postRelations = relations(posts, ({ many }) => ({
+export const categoryRelations = relations(categories, ({ many }) => ({
+  postsToCategories: many(postsToCategories),
+}))
+
+export const postRelations = relations(posts, ({ many }) => ({
   postsToTags: many(postsToTags),
 }))
 
-const postToTagRelations = relations(postsToTags, ({ one }) => ({
+export const postToTagRelations = relations(postsToTags, ({ one }) => ({
   post: one(posts, {
     fields: [postsToTags.postId],
     references: [posts.id],
@@ -84,11 +123,16 @@ const postToTagRelations = relations(postsToTags, ({ one }) => ({
   }),
 }))
 
-// Export all tables
-export { posts as post, postsToTags, tags as tag }
-
-// Export relations
-export { postRelations, postToTagRelations, tagRelations }
+export const postToCategoryRelations = relations(postsToCategories, ({ one }) => ({
+  post: one(posts, {
+    fields: [postsToCategories.postId],
+    references: [posts.id],
+  }),
+  category: one(categories, {
+    fields: [postsToCategories.categoryId],
+    references: [categories.id],
+  }),
+}))
 
 // Export types
 export type SelectPost = typeof posts.$inferSelect
