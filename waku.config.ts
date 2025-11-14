@@ -7,6 +7,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'waku/config'
 
 export default defineConfig({
+  adapter: 'waku/adapters/cloudflare',
   vite: {
     plugins: [
       devtoolsJson(),
