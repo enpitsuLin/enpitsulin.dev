@@ -15,6 +15,13 @@
       "when": 1763047117912,
       "tag": "0001_petite_doomsday",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1763088271334,
+      "tag": "0002_spotty_dreaming_celestial",
+      "breakpoints": true
     }
   ]
 }
