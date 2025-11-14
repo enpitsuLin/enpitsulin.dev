@@ -24,6 +24,7 @@
   "dependencies": {
     "@ark-ui/react": "catalog:lib",
     "@better-auth/passkey": "catalog:lib",
+    "@tanstack/react-query": "catalog:lib",
     "@unocss/reset": "catalog:lib",
     "better-auth": "catalog:lib",
     "clsx": "catalog:lib",
@@ -34,6 +35,7 @@
     "motion": "catalog:lib",
     "react": "catalog:lib",
     "react-dom": "catalog:lib",
+    "react-hook-form": "catalog:lib",
     "react-server-dom-webpack": "catalog:lib",
     "waku": "catalog:lib"
   },

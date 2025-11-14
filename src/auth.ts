@@ -16,4 +16,5 @@ export const auth = betterAuth(defu<BetterAuthOptions, [BetterAuthOptions]>(
   },
 ))
 
-export type Session = typeof auth.$Infer.Session
+export type Session = typeof auth.$Infer.Session['session']
+export type User = typeof auth.$Infer.Session['user']
