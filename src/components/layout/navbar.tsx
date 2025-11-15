@@ -78,6 +78,8 @@ export function Navbar() {
                 >
                   {path === href && (
                     <motion.div
+                      // workaround https://github.com/motiondivision/motion/issues/1535
+                      style={{ originY: 'top' }}
                       layoutId="navbar-link"
                       bg="zinc-800 dark:zinc-200"
                       className="absolute inset-0 rounded-full shadow-md"
