@@ -42,6 +42,7 @@ export function ThemeScript() {
   const scriptContext = useMemo(() => `(${script.toString()})(${JSON.stringify(['theme', 'system']).slice(1, -1)})`, [])
   return (
     <script
+      async
       suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: scriptContext }}
     />

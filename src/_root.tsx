@@ -1,4 +1,4 @@
-import type { RootComponent } from '@framework/component'
+import { Head } from '@framework/lib/head'
 import { getContext } from '@framework/server'
 import { GlobalProvider } from '@/components/global-provider'
 import { ThemeScript } from '@/hooks/theme/script'
@@ -8,7 +8,7 @@ import '@/styles/main.css'
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
 
-const Root: RootComponent = async ({ children }) => {
+export default async function Root({ children }: { children: React.ReactNode }) {
   const session = await getSession()
   const ctx = getContext()
   const matchRoute = ctx.var.route?.matchedPath || '/'
@@ -24,7 +24,9 @@ const Root: RootComponent = async ({ children }) => {
       path={matchRoute}
     >
       <html suppressHydrationWarning={true} lang="zh-Hans">
-        <head>
+        <Head>
+          <htmlAttrs lang="zh-Hans" />
+          <bodyAttrs class="text-gray-950 dark:text-gray-50 bg-slate-50 dark:bg-black bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]" />
           <title>{title}</title>
           <meta name="description" content={description} />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,17 +37,12 @@ const Root: RootComponent = async ({ children }) => {
             crossOrigin="anonymous"
             src="//unpkg.com/react-scan/dist/auto.global.js"
           />
+        </Head>
+        <body data-version="1.0">
           <ThemeScript />
-        </head>
-        <body
-          data-version="1.0"
-          className="text-gray-950 dark:text-gray-50 bg-slate-50 dark:bg-black bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]"
-        >
           {children}
         </body>
       </html>
     </GlobalProvider>
   )
 }
-
-export default Root

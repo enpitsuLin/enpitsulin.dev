@@ -1,4 +1,4 @@
-import type { PageComponent } from '@framework/component'
+import type { PageComponent, RootComponent } from '@framework/component'
 import type { APIHandler, HonoEnv, Method, PageModule } from '@framework/server'
 import { createRoutesAsync } from '@framework/router'
 import { rscRenderer } from '@framework/rsc/rsc-renderer'
@@ -13,7 +13,7 @@ const app = new Hono<HonoEnv>()
 app.use(rscRenderer({
   getRoot: async () => {
     const { default: Root } = await import('../src/_root')
-    return Root
+    return Root as RootComponent
   },
 }))
 app.use(logger())

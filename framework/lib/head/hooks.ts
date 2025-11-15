@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import type {
@@ -12,7 +11,7 @@ import type {
   UseScriptReturn,
   UseSeoMetaInput,
 } from 'unhead/types'
-import { use, useEffect, useRef } from 'react'
+import { use, useEffect, useMemo, useRef } from 'react'
 import { useHead as baseHead, useHeadSafe as baseHeadSafe, useSeoMeta as baseSeoMeta, useScript as baseUseScript } from 'unhead'
 import { UnheadContext } from './context'
 
@@ -26,31 +25,31 @@ export function useUnhead(): Unhead {
 }
 
 function useWithSideEffects<Input, T extends ActiveHeadEntry<Input>>(input: Input, options: any, fn: any): T {
-  const unhead = options.head || useUnhead()
+  const unhead = useUnhead()
   const entryRef = useRef<T | null>(null)
 
   // Create entry only once, even in Strict Mode
+  // eslint-disable-next-line react-hooks/refs
   if (!entryRef.current) {
     entryRef.current = fn(unhead, input, options)
   }
 
-  const entry = entryRef.current
-
   // Patch entry when input changes
   useEffect(() => {
-    entry?.patch(input)
-  }, [input, entry])
+    entryRef.current?.patch(input)
+  }, [input])
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      entry?.dispose()
+      entryRef.current?.dispose()
       // Clear ref so new entry is created on remount
       entryRef.current = null
     }
-  }, [entry])
+  }, [])
 
-  return entry as T
+  // eslint-disable-next-line react-hooks/refs
+  return entryRef.current!
 }
 
 export function useHead(input: UseHeadInput = {}, options: HeadEntryOptions = {}): ActiveHeadEntry<UseHeadInput> {
@@ -65,43 +64,46 @@ export function useSeoMeta(input: UseSeoMetaInput = {}, options: HeadEntryOption
   return useWithSideEffects(input, options, baseSeoMeta)
 }
 
-export function useScript<T extends Record<symbol | string, any> = Record<symbol | string, any>>(_input: UseScriptInput, _options?: UseScriptOptions<T>): UseScriptReturn<T> {
-  const input = (typeof _input === 'string' ? { src: _input } : _input) as UseScriptInput
-  const options = _options || {} as UseScriptOptions<T>
-  const head = options?.head || useUnhead()
-  options.head = head
+export function useScript<T extends Record<symbol | string, any> = Record<symbol | string, any>>(input: UseScriptInput, options: UseScriptOptions<T> = {}): UseScriptReturn<T> {
+  const head = useUnhead()
 
-  const mountCbs: (() => void)[] = []
-  let isMounted = false
-  useEffect(() => {
-    isMounted = true
-    mountCbs.forEach(i => i())
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  const mountCbs = useRef<Array<() => void>>([])
 
-  if (typeof options.trigger === 'undefined') {
-    options.trigger = (load) => {
-      if (isMounted) {
+  const isMounted = useRef(false)
+
+  // Note: we don't remove scripts on unmount as it's not a common use case and reloading the script may be expensive
+  const sideEffects = useRef<(() => void)[]>([])
+
+  const script = useMemo(() => {
+    const trigger: UseScriptOptions['trigger'] = (load) => {
+      if (isMounted.current) {
         load()
       }
       else {
-        mountCbs.push(load)
+        mountCbs.current.push(load)
       }
     }
-  }
-  // @ts-expect-error untyped
-  const script = baseUseScript(head, input as BaseUseScriptInput, options)
-  // Note: we don't remove scripts on unmount as it's not a common use case and reloading the script may be expensive
-  const sideEffects: (() => void)[] = []
+    const _script = baseUseScript(head, input, { trigger, ...options })
+
+    // if we have a scope we should make these callbacks reactive
+    // eslint-disable-next-line react-hooks/immutability
+    _script.onLoaded = (cb: (instance: T) => void | Promise<void>) => _registerCb('loaded', cb)
+    // eslint-disable-next-line react-hooks/immutability
+    _script.onError = (cb: (err?: Error) => void | Promise<void>) => _registerCb('error', cb)
+    return _script
+  }, [head, input, options])
+
   useEffect(() => {
+    isMounted.current = true
+    mountCbs.current.forEach(i => i())
     return () => {
+      isMounted.current = false
       script._triggerAbortController?.abort()
-      sideEffects.forEach(i => i())
+      sideEffects.current.forEach(i => i())
     }
   }, [])
-  const _registerCb = (key: 'loaded' | 'error', cb: any) => {
+
+  function _registerCb(key: 'loaded' | 'error', cb: any) {
     let i: number | null
     const destroy = () => {
       // avoid removing the wrong callback
@@ -110,18 +112,16 @@ export function useScript<T extends Record<symbol | string, any> = Record<symbol
         i = null
       }
     }
-    mountCbs.push(() => {
+    mountCbs.current.push(() => {
       if (!script._cbs[key]) {
         cb(script.instance)
         return () => { }
       }
       i = script._cbs[key].push(cb)
-      sideEffects.push(destroy)
+      sideEffects.current.push(destroy)
       return destroy
     })
   }
-  // if we have a scope we should make these callbacks reactive
-  script.onLoaded = (cb: (instance: T) => void | Promise<void>) => _registerCb('loaded', cb)
-  script.onError = (cb: (err?: Error) => void | Promise<void>) => _registerCb('error', cb)
+
   return script
 }

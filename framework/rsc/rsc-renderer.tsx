@@ -114,12 +114,10 @@ export function rscRenderer({ getRoot }: RscRendererOptions = {}) {
         // Collect all layouts from the matched route
         if (route) {
           const layouts = collectLayouts(route.node)
-
           // Wrap children with layouts from innermost to outermost
-          for (let i = layouts.length - 1; i >= 0; i--) {
-            const Layout = layouts[i]!
-            content = createElement(Layout, { children: content })
-          }
+          content = layouts.reduce((content, Layout) => {
+            return createElement(Layout, { children: content })
+          }, content)
         }
 
         // Wrap with root component if it exists
