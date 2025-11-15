@@ -1,5 +1,5 @@
 import type { PageComponent } from '@framework/component'
-import type { HonoEnv, Method, PageModule } from '@framework/server'
+import type { APIHandler, HonoEnv, Method, PageModule } from '@framework/server'
 import { createRoutesAsync } from '@framework/router'
 import { rscRenderer } from '@framework/rsc/rsc-renderer'
 import { Hono } from 'hono'
@@ -29,16 +29,22 @@ app.use(async (c, next) => {
       file = file.replace(/\.\w+$/, '')
 
       if (file.startsWith('api/')) {
+        // eslint-disable-next-line no-console
+        console.log('Registering API route:', file)
         addRoute(file, mod, { type: 'api' })
         continue
       }
 
       if (file.startsWith('routes/')) {
         const path = file.replace('routes/', '')
+        // eslint-disable-next-line no-console
+        console.log('Registering API route:', file)
         addRoute(path, mod, { type: 'api' })
         continue
       }
 
+      // eslint-disable-next-line no-console
+      console.log('Registering Page route:', file)
       addRoute(file, mod, { type: 'page' })
     }
   })
@@ -53,6 +59,13 @@ app.all('*', (c) => {
 
   if (route) {
     if (route.node.value.meta?.type === 'api') {
+      const hasWildcardHandler = 'default' in route.node.value.module
+
+      if (hasWildcardHandler) {
+        const handler = route.node.value.module.default as APIHandler
+        return handler(c.req.raw)
+      }
+
       const handler = route.node.value.module[c.req.method.toUpperCase() as Method]
       if (!handler) {
         return c.notFound()
