@@ -46,7 +46,7 @@ export class TreeNode<Module = any, Meta extends Record<string, any> = Record<st
     return child
   }
 
-  * getChildrenDeep(): Generator<TreeNode<Module>> {
+  * getChildrenDeep(): Generator<TreeNode<Module, Meta>> {
     for (const child of this.children.values()) {
       yield child
       yield* child.getChildrenDeep()
@@ -67,14 +67,14 @@ export class TreeNode<Module = any, Meta extends Record<string, any> = Record<st
   /**
    * Get the children of this node sorted by their path.
    */
-  getChildrenSorted(): TreeNode[] {
+  getChildrenSorted(): TreeNode<Module, Meta>[] {
     return Array.from(this.children.values()).sort(TreeNode.compare)
   }
 
   /**
    * Calls {@link getChildrenDeep} and sorts the result by path in the end.
    */
-  getChildrenDeepSorted(): TreeNode[] {
+  getChildrenDeepSorted(): TreeNode<Module, Meta>[] {
     return Array.from(this.getChildrenDeep()).sort(TreeNode.compare)
   }
 

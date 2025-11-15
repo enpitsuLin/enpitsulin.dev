@@ -1,12 +1,17 @@
+'use client'
+
 import type { ReactNode } from 'react'
 
+import { useRouter, useRoutes } from '@framework/router/client'
 import { Fab } from '@/components/layout/fab'
 import { Footer } from '@/components/layout/footer'
 import { Navbar } from '@/components/layout/navbar'
 
 interface RootLayoutProps { children: ReactNode }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
+  const routes = useRoutes()
+  const router = useRouter()
   return (
     <>
       <div relative px="sm:8" flex="~ justify-center" min-h-screen>
@@ -23,6 +28,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <Navbar />
           <main relative mt-16 w="full" px="8 sm:12">
             {children}
+
+            <pre>
+              {JSON.stringify({ routes, router }, null, 2)}
+            </pre>
           </main>
           <div mt-auto aria-hidden="true" />
           <Footer />

@@ -1,7 +1,8 @@
+import type { PageComponent, RootComponent } from '@framework/component'
+import type { Router, TreeNode } from '@framework/router'
+import type { MatchResult } from '@framework/router/matcher'
 import type { ReactFormState } from 'react-dom/client'
-import type { PageComponent, RootComponent } from './component'
-import type { Router } from './router'
-import type { MatchResult } from './router/matcher'
+import { getContext as getHonoContext } from 'hono/context-storage'
 
 export interface RscPayload {
   root: React.ReactNode
@@ -13,6 +14,7 @@ export interface HonoEnv {
   Variables: {
     router: Router<PageModule, { type: 'page' | 'api' }>
     route?: MatchResult<PageModule, { type: 'page' | 'api' }>
+    routes: TreeNode<PageModule, { type: 'page' | 'api' }>[]
     rscActionResult: {
       returnValue: { ok: boolean, data: unknown } | undefined
       formState: ReactFormState | undefined
@@ -53,4 +55,6 @@ export interface PageModule {
   TRACE?: APIHandler
 }
 
-export { getContext } from 'hono/context-storage'
+export function getContext() {
+  return getHonoContext<HonoEnv>()
+}

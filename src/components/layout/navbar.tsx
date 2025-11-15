@@ -3,13 +3,15 @@
 import type { DialogOpenChangeDetails } from '@ark-ui/react/dialog'
 import { Dialog } from '@ark-ui/react/dialog'
 import { Portal } from '@ark-ui/react/portal'
+import { useRouter } from '@framework/router/client'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { navigation } from '@/lib/constants'
 
 export function Navbar() {
-  const path = '/'
+  const router = useRouter()
+  const path = router.route.path
   return (
     <header
       flex="~ items-center justify-between md:justify-center"
@@ -33,7 +35,7 @@ export function Navbar() {
           position="sticky top-4 md:absolute md:top-1/2 md:left--12"
           md:translate-y="-1/2"
         >
-          {path === '/' && (
+          {path !== '/' && (
             <motion.img
               layoutId="avatar"
               alt="avatar"

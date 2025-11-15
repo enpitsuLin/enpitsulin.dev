@@ -55,6 +55,8 @@ app.use(async (c, next) => {
     }
   })
   c.set('router', router)
+  const routes = router.tree.getChildrenDeepSorted()
+  c.set('routes', routes)
   await next()
 })
 
