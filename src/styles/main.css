@@ -47,26 +47,9 @@
   --at-apply: border-t border-t-border pt-20;
 }
 
-html,
-body {
-  height: fit-content;
+* {
   scroll-behavior: smooth;
-}
-
-body,
-#app {
-  min-height: 100vh;
-  scroll-behavior: smooth;
-  position: relative;
-}
-
-#app {
-  --at-apply: flex flex-col;
-}
-
-html {
-  scroll-padding-top: 4rem;
-}
+} 
 
 #nprogress {
   pointer-events: none;

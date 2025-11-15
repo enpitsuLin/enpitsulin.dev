@@ -5,7 +5,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import type { ReactFormState } from 'react-dom/client'
 import * as ReactServer from '@vitejs/plugin-rsc/rsc'
 import { createMiddleware } from 'hono/factory'
-import { createElement } from 'react'
+import { createElement, Suspense } from 'react'
 import { parseRenderRequest } from './request'
 
 // Props interface that can be extended by users
@@ -132,7 +132,13 @@ export function rscRenderer({ getRoot }: RscRendererOptions = {}) {
 
       // Create RSC payload with the component wrapped in Layout
       const rscPayload: RscPayload = {
-        root: <RscRoot>{component}</RscRoot>,
+        root: (
+          <RscRoot>
+            <Suspense>
+              {component}
+            </Suspense>
+          </RscRoot>
+        ),
         formState,
         returnValue,
       }
