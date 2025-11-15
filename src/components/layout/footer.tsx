@@ -1,4 +1,3 @@
-import { Link } from 'waku'
 import { navigation } from '@/lib/constants'
 
 export function Footer() {
@@ -7,13 +6,13 @@ export function Footer() {
       <div flex="~ col items-center justify-between gap-6 sm:row">
         <div className="flex gap-6 text-sm text-zinc-800 font-medium dark:text-zinc-200">
           {navigation.map(({ href, label }) => (
-            <Link
+            <a
               key={href}
-              to={href}
+              href={href}
               className="transition hover:text-accent/80 dark:hover:text-accent"
             >
               {label}
-            </Link>
+            </a>
           ))}
         </div>
         <p className="text-sm text-zinc-600 dark:text-zinc-300">

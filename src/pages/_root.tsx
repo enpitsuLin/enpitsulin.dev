@@ -2,11 +2,11 @@ import { GlobalProvider } from '@/components/global-provider'
 import { ThemeScript } from '@/hooks/theme/script'
 import { getSession } from '@/lib/auth/server-utils'
 import { description, title } from '@/lib/constants'
-import '@/styles/main.css'
-import '@unocss/reset/tailwind.css'
 import 'uno.css'
+import '@unocss/reset/tailwind.css'
+import '@/styles/main.css'
 
-export default async function RootElement({ children }: { children: React.ReactNode }) {
+export default async function Root({ children }: { children: React.ReactNode }) {
   const session = await getSession()
   return (
     <GlobalProvider session={session.session} user={session.user}>
@@ -32,10 +32,4 @@ export default async function RootElement({ children }: { children: React.ReactN
       </html>
     </GlobalProvider>
   )
-}
-
-export async function getConfig() {
-  return {
-    render: 'static',
-  } as const
 }

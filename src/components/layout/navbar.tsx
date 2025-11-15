@@ -5,12 +5,11 @@ import { Dialog } from '@ark-ui/react/dialog'
 import { Portal } from '@ark-ui/react/portal'
 import { motion } from 'motion/react'
 import { useState } from 'react'
-import { Link, useRouter } from 'waku'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { navigation } from '@/lib/constants'
 
 export function Navbar() {
-  const { path } = useRouter()
+  const path = '/'
   return (
     <header
       flex="~ items-center justify-between md:justify-center"
@@ -34,7 +33,7 @@ export function Navbar() {
           position="sticky top-4 md:absolute md:top-1/2 md:left--12"
           md:translate-y="-1/2"
         >
-          {path !== '/' && (
+          {path === '/' && (
             <motion.img
               layoutId="avatar"
               alt="avatar"
@@ -64,7 +63,7 @@ export function Navbar() {
                 flex="~ items-center justify-center"
                 className="h-7 break-keep"
               >
-                <Link
+                <a
                   data-active={path === href ? 'true' : 'false'}
                   flex="~ items-center justify-center"
                   h="full"
@@ -73,7 +72,7 @@ export function Navbar() {
                   className="navbar-link relative transition-color"
                   cursor-pointer
                   px-3
-                  to={href}
+                  href={href}
                 >
                   {path === href && (
                     <motion.div
@@ -83,7 +82,7 @@ export function Navbar() {
                     />
                   )}
                   <span relative>{label}</span>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -150,9 +149,9 @@ export function NavbarMenu() {
                   {navigation.map(({ href, label }) => (
                     <li key={href}>
                       <Dialog.CloseTrigger asChild>
-                        <Link to={href} block py-2>
+                        <a href={href} block py-2>
                           {label}
-                        </Link>
+                        </a>
                       </Dialog.CloseTrigger>
                     </li>
                   ))}

@@ -1,5 +1,3 @@
-import { Link } from 'waku'
-
 export default async function AboutPage() {
   const data = await getData()
 
@@ -8,9 +6,9 @@ export default async function AboutPage() {
       <title>{data.title}</title>
       <h1 className="text-4xl font-bold tracking-tight">{data.headline}</h1>
       <p>{data.body}</p>
-      <Link to="/" className="mt-4 inline-block underline">
+      <a href="/" className="mt-4 inline-block underline">
         Return home
-      </Link>
+      </a>
     </div>
   )
 }
@@ -23,10 +21,4 @@ async function getData() {
   }
 
   return data
-}
-
-export async function getConfig() {
-  return {
-    render: 'static',
-  } as const
 }

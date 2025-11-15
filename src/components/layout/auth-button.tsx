@@ -1,7 +1,6 @@
 'use client'
 
 import { Menu, Portal } from '@ark-ui/react'
-import { Link } from 'waku'
 import { useAuthContext } from '@/hooks/auth/context'
 import { authClient } from '@/lib/auth/client'
 import { AuthModal } from '../auth/modal'
@@ -66,18 +65,18 @@ export function AuthButton() {
                 value="admin"
                 asChild
               >
-                <Link
+                <a
                   p="x2 y1.5"
                   flex="~ items-center gap-2"
                   bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
                   cursor-pointer
                   rounded
                   text-xs
-                  to="/admin"
+                  href="/admin"
                 >
                   <div className="i-mingcute:dashboard-2-line size-4" />
                   <span>后台管理</span>
-                </Link>
+                </a>
               </Menu.Item>
             )}
             <Menu.Item
