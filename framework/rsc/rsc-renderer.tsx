@@ -1,10 +1,12 @@
 import type { LayoutComponent, RootComponent } from '@framework/component.js'
 import type { TreeNode } from '@framework/router/core/tree'
 import type { HonoEnv, RscPayload } from '@framework/server'
+import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import type { ReactFormState } from 'react-dom/client'
 import * as ReactServer from '@vitejs/plugin-rsc/rsc'
 import { createMiddleware } from 'hono/factory'
 import { createElement } from 'react'
+import { parseRenderRequest } from './request'
 
 // Props interface that can be extended by users
 export interface Props {
@@ -12,7 +14,7 @@ export interface Props {
 }
 
 export interface RscRendererOptions {
-
+  getRoot?: () => RootComponent | Promise<RootComponent>
 }
 
 // This declaration is necessary to type the c.render() method in Hono
@@ -22,37 +24,61 @@ declare module 'hono' {
   }
 }
 
-export function rscRenderer(_options: RscRendererOptions = {}) {
+export function rscRenderer({ getRoot }: RscRendererOptions = {}) {
   return createMiddleware<HonoEnv>(async (c, next) => {
+    // Get root component
+    const Root = await getRoot?.()
     const request = c.req.raw
 
-    // Handle server actions (POST requests)
-    if (request.method === 'POST') {
-      let returnValue: unknown | undefined
-      let formState: ReactFormState | undefined
-      let temporaryReferences: unknown | undefined
+    // differentiate RSC, SSR, action, etc.
+    const renderRequest = parseRenderRequest(request)
+    // handle server function request
+    let returnValue: RscPayload['returnValue'] | undefined
+    let formState: ReactFormState | undefined
+    let temporaryReferences: unknown | undefined
 
-      const actionId = request.headers.get('x-rsc-action')
-      const contentType = request.headers.get('content-type')
+    let actionStatus: ContentfulStatusCode | undefined
 
-      if (actionId) {
+    if (renderRequest.isAction) {
+      if (renderRequest.actionId) {
+        // action is called via `ReactClient.setServerCallback`.
+        const contentType = request.headers.get('content-type')
         const body = contentType?.startsWith('multipart/form-data')
           ? await request.formData()
           : await request.text()
         temporaryReferences = ReactServer.createTemporaryReferenceSet()
         const args = await ReactServer.decodeReply(body, { temporaryReferences })
-        const action = await ReactServer.loadServerAction(actionId)
-        // eslint-disable-next-line prefer-spread
-        returnValue = await action.apply(null, args)
+        const action = await ReactServer.loadServerAction(renderRequest.actionId)
+
+        try {
+          // eslint-disable-next-line prefer-spread
+          const data = await action.apply(null, args)
+          returnValue = { ok: true, data }
+        }
+        catch (e) {
+          returnValue = { ok: false, data: e }
+          actionStatus = 500
+        }
       }
-      else if (contentType?.startsWith('multipart/form-data')) {
+      else {
+        // otherwise server function is called via `<form action={...}>`
+        // before hydration (e.g. when javascript is disabled).
+        // aka progressive enhancement.
         const formData = await request.formData()
         const decodedAction = await ReactServer.decodeAction(formData)
-        const result = await decodedAction()
-        formState = await ReactServer.decodeFormState(result, formData)
+        try {
+          const result = await decodedAction()
+          formState = await ReactServer.decodeFormState(result, formData)
+        }
+        catch (e) {
+          console.error('RSC form action failed:', e)
+          // there's no single general obvious way to surface this error,
+          // so explicitly return classic 500 response.
+          return c.newResponse('Internal Server Error: server action failed', {
+            status: 500,
+          })
+        }
       }
-
-      // Store action results in context for render
       c.set('rscActionResult', { returnValue, formState, temporaryReferences })
     }
 
@@ -60,7 +86,6 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
     c.setRenderer(async (component: React.ReactNode, _props?: Props) => {
       // Get action results if they exist
       const actionResult = c.get('rscActionResult') || {}
-      const router = c.get('router')
       const route = c.get('route')
       const { returnValue, formState, temporaryReferences } = actionResult
 
@@ -84,8 +109,6 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
       }
 
       function RscRoot({ children }: React.PropsWithChildren) {
-        // Get root component
-        const rootMatch = router.match('_root')
         let content: React.ReactNode = children
 
         // Collect all layouts from the matched route
@@ -100,8 +123,7 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
         }
 
         // Wrap with root component if it exists
-        if (rootMatch) {
-          const Root = rootMatch.node.value.module.default as RootComponent
+        if (Root) {
           return <Root>{content}</Root>
         }
 
@@ -114,34 +136,33 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
         formState,
         returnValue,
       }
+      const rscOptions = { temporaryReferences }
 
-      const rscOptions = temporaryReferences ? { temporaryReferences } : {}
       const rscStream = ReactServer.renderToReadableStream<RscPayload>(
         rscPayload,
         rscOptions,
       )
 
-      // Check if this is an RSC request or HTML request
-      const url = new URL(request.url)
-      const isRscRequest = url.searchParams.has('__rsc')
-
-      if (isRscRequest) {
-        return c.body(rscStream, 200, {
+      if (renderRequest.isRsc) {
+        return c.body(rscStream, actionStatus, {
           'content-type': 'text/x-component;charset=utf-8',
           'vary': 'accept',
         })
       }
 
-      // Delegate to SSR for HTML rendering
+      // Delegate to SSR environment for html rendering.
+      // The plugin provides `loadModule` helper to allow loading SSR environment entry module
+      // in RSC environment. however this can be customized by implementing own runtime communication
+      // e.g. `@cloudflare/vite-plugin`'s service binding.
       const ssrEntryModule = await import.meta.viteRsc.loadModule<
         typeof import('./entry-server.js')
       >('ssr', 'index')
-      const htmlStream = await ssrEntryModule.renderHTML(rscStream, {
+      const { stream, status } = await ssrEntryModule.renderHTML(rscStream, {
         formState,
-        debugNojs: url.searchParams.has('__nojs'),
+        debugNojs: renderRequest.url.searchParams.has('__nojs'),
       })
 
-      return c.body(htmlStream, 200, {
+      return c.body(stream, status, {
         'Content-Type': 'text/html; charset=utf-8',
         'vary': 'accept',
       })

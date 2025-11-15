@@ -31,9 +31,17 @@ export function createRscRenderRequest(
   })
 }
 
+function isActionRequest(request: Request): boolean {
+  if (request.method !== 'POST')
+    return false
+  const contentType = request.headers.get('content-type')
+
+  return typeof contentType === 'string' && contentType.startsWith('multipart/form-data')
+}
+
 export function parseRenderRequest(request: Request): RenderRequest {
   const url = new URL(request.url)
-  const isAction = request.method === 'POST'
+  const isAction = isActionRequest(request)
   if (url.pathname.endsWith(URL_POSTFIX)) {
     url.pathname = url.pathname.slice(0, -URL_POSTFIX.length)
     const actionId = request.headers.get(HEADER_ACTION_ID) || undefined

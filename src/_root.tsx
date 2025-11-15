@@ -1,3 +1,4 @@
+import type { RootComponent } from '@framework/component'
 import { GlobalProvider } from '@/components/global-provider'
 import { ThemeScript } from '@/hooks/theme/script'
 import { getSession } from '@/lib/auth/server-utils'
@@ -6,7 +7,7 @@ import 'uno.css'
 import '@unocss/reset/tailwind.css'
 import '@/styles/main.css'
 
-export default async function Root({ children }: { children: React.ReactNode }) {
+const Root: RootComponent = async ({ children }) => {
   const session = await getSession()
   return (
     <GlobalProvider session={session.session} user={session.user}>
@@ -33,3 +34,5 @@ export default async function Root({ children }: { children: React.ReactNode }) 
     </GlobalProvider>
   )
 }
+
+export default Root

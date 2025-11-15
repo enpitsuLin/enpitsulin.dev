@@ -6,10 +6,16 @@ import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
 import { createElement } from 'react'
+import { parseRenderRequest } from './rsc/request'
 
 const app = new Hono<HonoEnv>()
 
-app.use(rscRenderer())
+app.use(rscRenderer({
+  getRoot: async () => {
+    const { default: Root } = await import('../src/_root')
+    return Root
+  },
+}))
 app.use(logger())
 app.use(contextStorage())
 
@@ -53,9 +59,9 @@ app.use(async (c, next) => {
 })
 
 app.all('*', (c) => {
-  const url = new URL(c.req.url)
+  const renderRequest = parseRenderRequest(c.req.raw)
   const router = c.get('router')
-  const route = router.match(url.pathname)
+  const route = router.match(renderRequest.url.pathname)
 
   if (route) {
     if (route.node.value.meta?.type === 'api') {

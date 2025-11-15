@@ -5,7 +5,7 @@ import type { MatchResult } from './router/matcher'
 
 export interface RscPayload {
   root: React.ReactNode
-  returnValue?: unknown
+  returnValue: { ok: boolean, data: unknown } | undefined
   formState?: ReactFormState
 }
 
@@ -14,7 +14,7 @@ export interface HonoEnv {
     router: Router<PageModule, { type: 'page' | 'api' }>
     route?: MatchResult<PageModule, { type: 'page' | 'api' }>
     rscActionResult: {
-      returnValue: unknown | undefined
+      returnValue: { ok: boolean, data: unknown } | undefined
       formState: ReactFormState | undefined
       temporaryReferences: unknown | undefined
     }

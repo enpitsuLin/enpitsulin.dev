@@ -5,6 +5,7 @@ import React from 'react'
 import * as ReactDOMClient from 'react-dom/client'
 import { rscStream } from 'rsc-html-stream/client'
 import { createHead } from 'unhead/client'
+import { createRscRenderRequest } from './request'
 // import `uno.css` for client side HMR
 import 'uno.css'
 
@@ -36,30 +37,26 @@ async function main() {
   }
 
   async function fetchRscPayload() {
-    const url = new URL(window.location.href)
-    url.searchParams.set('__rsc', 'true')
-    const payload = await ReactClient.createFromFetch<RscPayload>(
-      fetch(url),
-
-    )
+    const renderRequest = createRscRenderRequest(window.location.href)
+    const payload = await ReactClient.createFromFetch<RscPayload>(fetch(renderRequest))
     setPayload(payload)
   }
 
   ReactClient.setServerCallback(async (id, args) => {
-    const url = new URL(window.location.href)
     const temporaryReferences = ReactClient.createTemporaryReferenceSet()
+    const renderRequest = createRscRenderRequest(window.location.href, {
+      id,
+      body: await ReactClient.encodeReply(args, { temporaryReferences }),
+    })
     const payload = await ReactClient.createFromFetch<RscPayload>(
-      fetch(url, {
-        method: 'POST',
-        body: await ReactClient.encodeReply(args, { temporaryReferences }),
-        headers: {
-          'x-rsc-action': id,
-        },
-      }),
+      fetch(renderRequest),
       { temporaryReferences },
     )
     setPayload(payload)
-    return payload.returnValue
+    const { ok, data } = payload.returnValue!
+    if (!ok)
+      throw data
+    return data
   })
 
   const browserRoot = (
@@ -67,9 +64,14 @@ async function main() {
       <BrowserRoot />
     </React.StrictMode>
   )
-  ReactDOMClient.hydrateRoot(document, browserRoot, {
-    formState: initialPayload.formState,
-  })
+  if ('__NO_HYDRATE' in globalThis) {
+    ReactDOMClient.createRoot(document).render(browserRoot)
+  }
+  else {
+    ReactDOMClient.hydrateRoot(document, browserRoot, {
+      formState: initialPayload.formState,
+    })
+  }
 
   if (import.meta.hot) {
     import.meta.hot.on('rsc:update', () => {
