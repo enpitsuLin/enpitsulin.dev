@@ -33,8 +33,9 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
       let temporaryReferences: unknown | undefined
 
       const actionId = request.headers.get('x-rsc-action')
+      const contentType = request.headers.get('content-type')
+
       if (actionId) {
-        const contentType = request.headers.get('content-type')
         const body = contentType?.startsWith('multipart/form-data')
           ? await request.formData()
           : await request.text()
@@ -44,7 +45,7 @@ export function rscRenderer(_options: RscRendererOptions = {}) {
         // eslint-disable-next-line prefer-spread
         returnValue = await action.apply(null, args)
       }
-      else {
+      else if (contentType?.startsWith('multipart/form-data')) {
         const formData = await request.formData()
         const decodedAction = await ReactServer.decodeAction(formData)
         const result = await decodedAction()
