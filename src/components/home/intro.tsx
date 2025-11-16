@@ -1,9 +1,7 @@
-'use client'
-
-import { Tooltip } from '@ark-ui/react'
-import { motion } from 'motion/react'
-import { useEasterEgg } from '@/hooks/use-easter-egg'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { IntroAvatar } from './avatar'
+import { IntroScrollIndicator } from './scroll-indicator'
 
 const links = [
   {
@@ -77,8 +75,8 @@ export function Intro() {
             <ul flex="~ gap-2">
               {links.map(link => (
                 <li key={link.name}>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <a
                         flex="~ items-center justify-center"
                         inline-block
@@ -93,17 +91,12 @@ export function Intro() {
                         <span className="sr-only">{link.name }</span>
                         {typeof link.icon === 'string' ? <i inline-block className={cn('transition-transform group-hover:scale-110', link.icon)} /> : link.icon}
                       </a>
-                    </Tooltip.Trigger>
-                    <Tooltip.Positioner>
-                      <Tooltip.Content
-                        bg="zinc-700 dark:zinc-300"
-                        text-background
-                        className="z-$z-index w-fit rounded-md px-2 py-1.5 text-balance text-xs animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-[side=right]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2"
-                      >
-                        {link.name}
-                      </Tooltip.Content>
-                    </Tooltip.Positioner>
-                  </Tooltip.Root>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                      {link.name}
+                    </TooltipContent>
+                  </Tooltip>
                 </li>
               ))}
             </ul>
@@ -112,42 +105,7 @@ export function Intro() {
         <IntroAvatar className="size-28 md:size-34" />
       </div>
 
-      <div
-        className="mt-auto hidden pb-6 pt-8 transition-opacity duration-500 sm:flex sm:justify-center op-100"
-      >
-        <span className="animate-bounce text-gray-500">
-          <i inline-block className="i-mingcute:right-line rotate-90" />
-        </span>
-      </div>
+      <IntroScrollIndicator />
     </section>
-  )
-}
-
-export function IntroAvatar({ className }: { className?: string }) {
-  const easterEgg = useEasterEgg()
-  return (
-    <div relative className={className}>
-      <div className={cn(easterEgg && 'animate-spin')}>
-        <motion.img
-          layoutId="avatar"
-          alt="avatar"
-          width="250"
-          height="250"
-          decoding="async"
-          className="border-[0.35rem] border-white rounded-full object-cover shadow-xl"
-          src="https://avatars.githubusercontent.com/enpitsuLin"
-        />
-      </div>
-      <span
-        absolute
-        bottom-0
-        right-0
-        cursor-default
-        text-4xl
-        className="transition-transform hover:animate-name-wave-hand hover:animate-duration-1000 hover:animate-iteration-infinite"
-      >
-        👋
-      </span>
-    </div>
   )
 }
