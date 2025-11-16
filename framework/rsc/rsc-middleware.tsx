@@ -1,14 +1,15 @@
 import type { LayoutComponent, PageComponent, RootComponent } from '@framework/component.js'
 import type { TreeNode } from '@framework/router/core/tree'
 import type { MatchResult } from '@framework/router/matcher.js'
-import type { APIHandler, APIModule, HonoEnv, Method, RenderModule, RscPayload } from '@framework/server'
+import type { APIHandler, APIModule, HonoEnv, Method, PageModule, RenderModule, RscPayload } from '@framework/server'
 import type { Context } from 'hono'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
+import type { ErrorInfo } from 'react'
 import type { ReactFormState } from 'react-dom/client'
 import type { RenderRequest } from './request.js'
 import * as ReactServer from '@vitejs/plugin-rsc/rsc'
 import { createMiddleware } from 'hono/factory'
-import { createElement, Suspense } from 'react'
+import { createElement } from 'react'
 import { parseRenderRequest } from './request.js'
 
 // Props interface that can be extended by users
@@ -170,26 +171,48 @@ async function handlePageRoute(
     c.set('rscActionResult', { returnValue, formState, temporaryReferences })
   }
 
+  function Page() {
+    return createElement(component, {
+      path: route!.matchedPath,
+      params: route!.params,
+    })
+  }
+
   const rscPayload: RscPayload = {
     root: (
       <StackLayouts route={route} Root={Root}>
-        <Suspense fallback={<div>loading</div>}>
-          {createElement(component, {
-            path: route!.matchedPath,
-            params: route!.params,
-          })}
-        </Suspense>
+        <Page />
       </StackLayouts>
     ),
     formState,
     returnValue,
   }
-  const rscOptions = { temporaryReferences }
+  let error: unknown
+  const rscOptions = {
+    temporaryReferences,
+    onError: (e: unknown, errorInfo: ErrorInfo) => {
+      console.error('Error during rendering:', e, errorInfo)
+      error = e
+      if (
+        e
+        && typeof e === 'object'
+        && 'digest' in e
+        && typeof e.digest === 'string'
+      ) {
+        return e.digest
+      }
+    },
+  }
 
   const rscStream = ReactServer.renderToReadableStream<RscPayload>(
     rscPayload,
     rscOptions,
   )
+
+  if (error) {
+    // TODO handle rsc notFound
+    return
+  }
 
   if (renderRequest.isRsc) {
     return c.body(rscStream, actionStatus, {
@@ -205,15 +228,36 @@ async function handlePageRoute(
   const ssrEntryModule = await import.meta.viteRsc.loadModule<
     typeof import('./entry-server.js')
   >('ssr', 'index')
-  const { stream, status } = await ssrEntryModule.renderHTML(rscStream, {
+  const ret = await ssrEntryModule.renderHTML(rscStream, {
     formState,
     debugNojs: renderRequest.url.searchParams.has('__nojs'),
   })
 
+  if (typeof ret === 'string' && ret === 'notFound') {
+    return 'notFound'
+  }
+
+  const { stream, status } = ret
   return c.body(stream, status, {
     'Content-Type': 'text/html; charset=utf-8',
     'vary': 'accept',
   })
+}
+
+function findClosestCatchAll(node: TreeNode<PageModule, { type: 'page' }>): TreeNode<PageModule, { type: 'page' }> | null {
+  if (!node.parent)
+    return null
+
+  if (node.parent.isCatchAll)
+    return node.parent
+
+  const nodes = node.parent.getChildrenSorted()
+  const n = nodes.find(node => node.isCatchAll)
+
+  if (n)
+    return n
+
+  return findClosestCatchAll(node.parent)
 }
 
 export function rscMiddle({ getRoot }: RscRendererOptions = {}) {
@@ -228,7 +272,21 @@ export function rscMiddle({ getRoot }: RscRendererOptions = {}) {
       }
       else if (isRenderRoute(route)) {
         const Root = await getRoot?.()
-        return handlePageRoute(c, route, renderRequest, Root)
+        const res = await handlePageRoute(c, route, renderRequest, Root)
+        if (typeof res === 'string' && res === 'notFound') {
+          const closetCatchAll = findClosestCatchAll(route.node)
+          if (closetCatchAll) {
+            const toRoute = {
+              ...route,
+              node: closetCatchAll,
+            } as MatchResult<RenderModule, { type: 'page' }>
+            return handlePageRoute(c, toRoute, renderRequest, Root) as Promise<Response>
+          }
+          return c.notFound()
+        }
+        else {
+          return res
+        }
       }
     }
 

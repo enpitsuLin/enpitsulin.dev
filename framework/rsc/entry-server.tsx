@@ -47,6 +47,9 @@ export async function renderHTML(
     })
   }
   catch (e) {
+    if (e instanceof Error && e.message === 'not found') {
+      return 'notFound'
+    }
     // fallback to render an empty shell and run pure CSR on browser,
     // which can replay server component error and trigger error boundary.
     status = 500
