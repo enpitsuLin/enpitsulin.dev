@@ -34,6 +34,7 @@
     "better-auth": "catalog:better-auth",
     "clsx": "catalog:lib",
     "consola": "catalog:lib",
+    "date-fns": "catalog:lib",
     "defu": "catalog:lib",
     "drizzle-orm": "catalog:server",
     "foxact": "catalog:lib",

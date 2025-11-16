@@ -1,4 +1,4 @@
-import { Markdown } from '@/components/ui/markdown/markdown'
+import { Markdown } from '@/components/article/markdown'
 import '@/styles/shiki.css'
 
 export default function BlogPage() {

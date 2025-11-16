@@ -15,6 +15,9 @@
       ],
       "@framework/*": [
         "./framework/*"
+      ],
+      "@database/*": [
+        "./database/*"
       ]
     },
     "types": [

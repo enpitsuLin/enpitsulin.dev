@@ -1,3 +1,5 @@
+'use client'
+
 import type { ComponentProps } from 'react'
 import type { User } from '@/auth'
 import { Avatar } from '@ark-ui/react'

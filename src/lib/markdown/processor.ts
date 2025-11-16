@@ -9,8 +9,6 @@ import {
   transformerNotationHighlight,
   transformerNotationWordHighlight,
 } from '@shikijs/transformers'
-import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
-import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 import rehypeUnwrapImages from 'rehype-unwrap-images'
 import remarkDirective from 'remark-directive'
 import remarkDirectiveRehype from 'remark-directive-rehype'
@@ -20,9 +18,7 @@ import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
-import { VFile } from 'vfile'
-import { ProseDetails, ProsePre, ProseSummary } from '@/components/content'
-import { getHighlighter } from '../code-highlighter'
+import { getHighlighter } from './code-highlighter'
 
 const rehypeShikiOption = {
   themes: {
@@ -55,11 +51,11 @@ const rehypeShikiOption = {
   defaultColor: false,
 } as RehypeShikiCoreOptions
 
-export async function Markdown({ children }: { children: string }) {
+export async function getProcessor() {
   const highlighter = await getHighlighter({
     themes: ['github-dark', 'github-light'],
   })
-  const file = new VFile(children)
+
   const processor = unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -75,28 +71,5 @@ export async function Markdown({ children }: { children: string }) {
     )
     .use(rehypeUnwrapImages)
 
-  const mdast = processor.parse(file)
-
-  const hast = await processor.run(mdast, file)
-
-  const node = toJsxRuntime(hast, {
-    Fragment,
-    jsx,
-    jsxs,
-    passNode: true,
-    ignoreInvalidStyle: true,
-    components: {
-      pre: ProsePre,
-      details: ProseDetails,
-      summary: ProseSummary,
-    },
-  })
-
-  return (
-    <article
-      className="prose dark:prose-invert"
-    >
-      {node}
-    </article>
-  )
+  return processor
 }

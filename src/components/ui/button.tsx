@@ -1,3 +1,5 @@
+'use client'
+
 import { ark } from '@ark-ui/react'
 import { cn } from '@/lib/utils'
 

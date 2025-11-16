@@ -28,6 +28,7 @@ catalogs:
     '@tanstack/react-query': ^5.90.9
     clsx: ^2.1.1
     consola: ^3.4.2
+    date-fns: ^4.1.0
     defu: ^6.1.4
     foxact: ^0.2.49
     react-hook-form: ^7.66.0

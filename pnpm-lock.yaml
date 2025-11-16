@@ -73,6 +73,9 @@ catalogs:
     consola:
       specifier: ^3.4.2
       version: 3.4.2
+    date-fns:
+      specifier: ^4.1.0
+      version: 4.1.0
     defu:
       specifier: ^6.1.4
       version: 6.1.4
@@ -215,6 +218,9 @@ importers:
       consola:
         specifier: catalog:lib
         version: 3.4.2
+      date-fns:
+        specifier: catalog:lib
+        version: 4.1.0
       defu:
         specifier: catalog:lib
         version: 6.1.4
@@ -2214,6 +2220,9 @@ packages:
   data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
+
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -6490,6 +6499,8 @@ snapshots:
   csstype@3.1.3: {}
 
   data-uri-to-buffer@4.0.1: {}
+
+  date-fns@4.1.0: {}
 
   debug@4.4.3:
     dependencies:
