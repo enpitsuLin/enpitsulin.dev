@@ -5,7 +5,6 @@ import { rscRenderer } from '@framework/rsc/rsc-renderer'
 import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
-import { createElement } from 'react'
 import { parseRenderRequest } from './rsc/request'
 
 const app = new Hono<HonoEnv>()
@@ -89,7 +88,7 @@ app.all('*', (c) => {
       }
       // Store route in context for layout rendering
       c.set('route', route)
-      return c.render(createElement(component))
+      return c.render(component)
     }
   }
 

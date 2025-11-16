@@ -1,4 +1,4 @@
-import type { LayoutComponent, RootComponent } from '@framework/component.js'
+import type { LayoutComponent, PageComponent, RootComponent } from '@framework/component.js'
 import type { TreeNode } from '@framework/router/core/tree'
 import type { HonoEnv, RscPayload } from '@framework/server'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
@@ -20,7 +20,7 @@ export interface RscRendererOptions {
 // This declaration is necessary to type the c.render() method in Hono
 declare module 'hono' {
   interface ContextRenderer {
-    (component: React.ReactNode, props?: Props): Response | Promise<Response>
+    (component: PageComponent): Response | Promise<Response>
   }
 }
 
@@ -83,7 +83,7 @@ export function rscRenderer({ getRoot }: RscRendererOptions = {}) {
     }
 
     // Set up the render function
-    c.setRenderer(async (component: React.ReactNode, _props?: Props) => {
+    c.setRenderer(async (component) => {
       // Get action results if they exist
       const actionResult = c.get('rscActionResult') || {}
       const route = c.get('route')
@@ -133,7 +133,10 @@ export function rscRenderer({ getRoot }: RscRendererOptions = {}) {
         root: (
           <RscRoot>
             <Suspense>
-              {component}
+              {createElement(component, {
+                path: route!.matchedPath,
+                params: route!.params,
+              })}
             </Suspense>
           </RscRoot>
         ),

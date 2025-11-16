@@ -1,7 +1,10 @@
-export type PageProps<P = unknown> = P & {
+import type { InferPathParams } from './lib/infer-param-type'
+
+export interface PageProps<Path extends string = string> {
   path: string
-  children?: React.ReactNode
+  params: InferPathParams<Path>
 }
+
 export type LayoutComponent = React.ComponentType<React.PropsWithChildren>
 export type PageComponent = React.ComponentType<PageProps>
 export type RootComponent = React.ComponentType<React.PropsWithChildren>
