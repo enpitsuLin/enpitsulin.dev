@@ -6,7 +6,7 @@ const HEADER_ACTION_ID = 'x-rsc-action'
 
 // Parsed request information used to route between RSC/SSR rendering and action handling.
 // Created by parseRenderRequest() from incoming HTTP requests.
-interface RenderRequest {
+export interface RenderRequest {
   isRsc: boolean // true if request should return RSC payload (via _.rsc suffix)
   isAction: boolean // true if this is a server action call (POST request)
   actionId?: string // server action ID from x-rsc-action header

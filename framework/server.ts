@@ -1,4 +1,4 @@
-import type { PageComponent, RootComponent } from '@framework/component'
+import type { LayoutComponent, PageComponent, RootComponent } from '@framework/component'
 import type { Router, TreeNode } from '@framework/router'
 import type { MatchResult } from '@framework/router/matcher'
 import type { ReactFormState } from 'react-dom/client'
@@ -39,11 +39,12 @@ export type Method = (typeof METHODS)[number]
 
 export type APIHandler = (req: Request) => Promise<Response>
 
-export interface PageModule {
-  default: PageComponent | RootComponent | APIHandler
-  getConfig?: () => Promise<{
-    render?: 'static' | 'dynamic'
-  }>
+export interface RenderModule {
+  default: PageComponent | RootComponent | LayoutComponent
+}
+
+export interface APIModule {
+  default?: APIHandler
   GET?: APIHandler
   POST?: APIHandler
   PUT?: APIHandler
@@ -54,6 +55,8 @@ export interface PageModule {
   CONNECT?: APIHandler
   TRACE?: APIHandler
 }
+
+export type PageModule = RenderModule | APIModule
 
 export function getContext() {
   return getHonoContext<HonoEnv>()
