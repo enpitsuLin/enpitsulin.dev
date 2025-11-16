@@ -33,10 +33,12 @@ export default async function Root({ children }: { children: React.ReactNode }) 
           <meta name="keywords" content="enpitsulin, blog, portfolio" />
           <meta name="author" content="enpitsulin" />
           <link rel="icon" type="image/png" href="/images/favicon.png" />
-          <script
-            crossOrigin="anonymous"
-            src="//unpkg.com/react-scan/dist/auto.global.js"
-          />
+          {import.meta.env.DEV && (
+            <script
+              crossOrigin="anonymous"
+              src="//unpkg.com/react-scan/dist/auto.global.js"
+            />
+          )}
         </Head>
         <body data-version="1.0">
           <ThemeScript />
