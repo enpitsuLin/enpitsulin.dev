@@ -1,13 +1,12 @@
-import type { SelectPost } from '@database/schema'
 import { posts } from '@database/schema'
 
 import { desc } from 'drizzle-orm'
 import { ArticleTime, ArticleTitle } from '@/components/article/article-items'
 import { Button } from '@/components/ui/button'
-import { db } from '@/lib/drizzle'
+import { getPosts } from '@/lib/post'
 
 export async function RecentArticles() {
-  const articles: SelectPost[] = await db.query.posts.findMany({
+  const articles = await getPosts({
     orderBy: desc(posts.publishedAt),
     limit: 2,
   })
