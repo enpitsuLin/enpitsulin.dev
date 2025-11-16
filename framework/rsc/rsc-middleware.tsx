@@ -1,16 +1,13 @@
 import type { LayoutComponent, PageComponent, RootComponent } from '@framework/component.js'
 import type { TreeNode } from '@framework/router/core/tree'
 import type { MatchResult } from '@framework/router/matcher.js'
-import type { APIHandler, APIModule, HonoEnv, Method, PageModule, RenderModule, RscPayload } from '@framework/server'
+import type { APIHandler, APIModule, HonoEnv, Method, RscPayload } from '@framework/server'
 import type { Context } from 'hono'
-import type { ContentfulStatusCode } from 'hono/utils/http-status'
-import type { ErrorInfo } from 'react'
-import type { ReactFormState } from 'react-dom/client'
-import type { RenderRequest } from './request.js'
-import * as ReactServer from '@vitejs/plugin-rsc/rsc'
+import { getErrorInfo } from '@framework/lib/custom-error.js'
+import { toProcessRequest } from '@framework/lib/request/parse'
+import { getContext } from '@framework/server'
 import { createMiddleware } from 'hono/factory'
 import { createElement } from 'react'
-import { parseRenderRequest } from './request.js'
 
 // Props interface that can be extended by users
 export interface Props {
@@ -98,198 +95,153 @@ function handleApiRoute(c: Context<HonoEnv>, route: MatchResult<APIModule, { typ
   return handler(c.req.raw)
 }
 
-function isRenderRoute(route: MatchResult): route is MatchResult<RenderModule, { type: 'page' }> {
-  if (!route.node.module || !route.node.meta)
-    return false
-  if (!('type' in route.node.meta))
-    return false
-  if (route.node.meta.type !== 'page')
-    return false
-  return true
-}
-
-async function handlePageRoute(
-  c: Context<HonoEnv>,
-  route: MatchResult<RenderModule, { type: 'page' }>,
-  renderRequest: RenderRequest,
-  Root?: RootComponent,
-) {
-  const pageNode = route.node
-
-  const component = pageNode.value.module.default as PageComponent
-  if (!component) {
-    return c.notFound()
-  }
-
-  // handle server function request
-  let returnValue: RscPayload['returnValue'] | undefined
-  let formState: ReactFormState | undefined
-  let temporaryReferences: unknown | undefined
-
-  let actionStatus: ContentfulStatusCode | undefined
-
-  if (renderRequest.isAction) {
-    if (renderRequest.actionId) {
-      // action is called via `ReactClient.setServerCallback`.
-      const contentType = c.req.header('content-type')
-      const body = contentType?.startsWith('multipart/form-data')
-        ? await c.req.formData()
-        : await c.req.text()
-      temporaryReferences = ReactServer.createTemporaryReferenceSet()
-      const args = await ReactServer.decodeReply(body, { temporaryReferences })
-      const action = await ReactServer.loadServerAction(renderRequest.actionId)
-
-      try {
-        // eslint-disable-next-line prefer-spread
-        const data = await action.apply(null, args)
-        returnValue = { ok: true, data }
-      }
-      catch (e) {
-        returnValue = { ok: false, data: e }
-        actionStatus = 500
-      }
-    }
-    else {
-      // otherwise server function is called via `<form action={...}>`
-      // before hydration (e.g. when javascript is disabled).
-      // aka progressive enhancement.
-      const formData = await c.req.formData()
-      const decodedAction = await ReactServer.decodeAction(formData)
-      try {
-        const result = await decodedAction()
-        formState = await ReactServer.decodeFormState(result, formData)
-      }
-      catch (e) {
-        console.error('RSC form action failed:', e)
-        // there's no single general obvious way to surface this error,
-        // so explicitly return classic 500 response.
-        return c.newResponse('Internal Server Error: server action failed', {
-          status: 500,
-        })
-      }
-    }
-    c.set('rscActionResult', { returnValue, formState, temporaryReferences })
-  }
-
-  function Page() {
-    return createElement(component, {
-      path: route!.matchedPath,
-      params: route!.params,
-    })
-  }
-
-  const rscPayload: RscPayload = {
-    root: (
-      <StackLayouts route={route} Root={Root}>
-        <Page />
-      </StackLayouts>
-    ),
-    formState,
-    returnValue,
-  }
-  let error: unknown
-  const rscOptions = {
-    temporaryReferences,
-    onError: (e: unknown, errorInfo: ErrorInfo) => {
-      console.error('Error during rendering:', e, errorInfo)
-      error = e
-      if (
-        e
-        && typeof e === 'object'
-        && 'digest' in e
-        && typeof e.digest === 'string'
-      ) {
-        return e.digest
-      }
-    },
-  }
-
-  const rscStream = ReactServer.renderToReadableStream<RscPayload>(
-    rscPayload,
-    rscOptions,
-  )
-
-  if (error) {
-    // TODO handle rsc notFound
-    return
-  }
-
-  if (renderRequest.isRsc) {
-    return c.body(rscStream, actionStatus, {
-      'content-type': 'text/x-component;charset=utf-8',
-      'vary': 'accept',
-    })
-  }
-
-  // Delegate to SSR environment for html rendering.
-  // The plugin provides `loadModule` helper to allow loading SSR environment entry module
-  // in RSC environment. however this can be customized by implementing own runtime communication
-  // e.g. `@cloudflare/vite-plugin`'s service binding.
-  const ssrEntryModule = await import.meta.viteRsc.loadModule<
-    typeof import('./entry-server.js')
-  >('ssr', 'index')
-  const ret = await ssrEntryModule.renderHTML(rscStream, {
-    formState,
-    debugNojs: renderRequest.url.searchParams.has('__nojs'),
-  })
-
-  if (typeof ret === 'string' && ret === 'notFound') {
-    return 'notFound'
-  }
-
-  const { stream, status } = ret
-  return c.body(stream, status, {
-    'Content-Type': 'text/html; charset=utf-8',
-    'vary': 'accept',
-  })
-}
-
-function findClosestCatchAll(node: TreeNode<PageModule, { type: 'page' }>): TreeNode<PageModule, { type: 'page' }> | null {
-  if (!node.parent)
+async function getMatchForRoute(path: string) {
+  const ctx = getContext()
+  const route = ctx.var.router.match(path)
+  if (!route)
     return null
-
-  if (node.parent.isCatchAll)
-    return node.parent
-
-  const nodes = node.parent.getChildrenSorted()
-  const n = nodes.find(node => node.isCatchAll)
-
-  if (n)
-    return n
-
-  return findClosestCatchAll(node.parent)
+  return route
 }
 
 export function rscMiddle({ getRoot }: RscRendererOptions = {}) {
-  return createMiddleware<HonoEnv>(async (c, next) => {
-    const renderRequest = parseRenderRequest(c.req.raw)
-    const router = c.get('router')
-    const route = router.match(renderRequest.url.pathname)
+  const handle = toProcessRequest(async ({
+    input,
+    renderUtils: { renderHtml, renderRsc },
+  }, c) => {
+    const match = await getMatchForRoute(input.pathname)
+    if (!match)
+      return null
 
-    if (route) {
-      if (isApiRoute(route)) {
-        return handleApiRoute(c, route)
-      }
-      else if (isRenderRoute(route)) {
+    c.set('route', match)
+    if (input.type === 'component') {
+      const Root = await getRoot?.()
+      const component = match.node.module.default as PageComponent
+
+      console.error('rsc-middleware L120')
+      return renderRsc({
+        root: (
+          <StackLayouts route={match} Root={Root}>
+            {createElement(component, {
+              path: match!.matchedPath,
+              params: match!.params,
+            })}
+          </StackLayouts>
+        ),
+        returnValue: undefined,
+      })
+    }
+    if (input.type === 'function') {
+      try {
         const Root = await getRoot?.()
-        const res = await handlePageRoute(c, route, renderRequest, Root)
-        if (typeof res === 'string' && res === 'notFound') {
-          const closetCatchAll = findClosestCatchAll(route.node)
-          if (closetCatchAll) {
-            const toRoute = {
-              ...route,
-              node: closetCatchAll,
-            } as MatchResult<RenderModule, { type: 'page' }>
-            return handlePageRoute(c, toRoute, renderRequest, Root) as Promise<Response>
-          }
-          return c.notFound()
+        const component = match.node.module.default as PageComponent
+        const value = await input.fn(...input.args)
+
+        console.error('rsc-middleware L139')
+        return renderRsc({
+          root: (
+            <StackLayouts route={match} Root={Root}>
+              {createElement(component, {
+                path: match!.matchedPath,
+                params: match!.params,
+              })}
+            </StackLayouts>
+          ),
+          returnValue: {
+            ok: true,
+            data: value,
+          },
+        })
+      }
+      catch (error) {
+        const info = getErrorInfo(error)
+        if (info?.location) {
+          const match = await getMatchForRoute(info.location)
+          if (!match)
+            return new Response('not found todo') // TODO: to notFound
+
+          const Root = await getRoot?.()
+          const component = match.node.module.default as PageComponent
+
+          console.error('rsc-middleware L165')
+          return renderRsc({
+            root: (
+              <StackLayouts route={match} Root={Root}>
+                {createElement(component, {
+                  path: match!.matchedPath,
+                  params: match!.params,
+                })}
+              </StackLayouts>
+            ),
+            returnValue: undefined,
+          })
         }
-        else {
-          return res
-        }
+        throw error
+      }
+      finally {
+        // do some cleanup?
       }
     }
 
+    if (match && isApiRoute(match)) {
+      return handleApiRoute(c, match)
+    }
+
+    if (input.type === 'action' || input.type === 'custom') {
+      const renderIt = async (pathname: string) => {
+        const match = await getMatchForRoute(pathname)
+        if (!match) {
+          return null
+        }
+        const formState = input.type === 'action' ? await input.fn() : undefined
+
+        const Root = await getRoot?.()
+        const component = match.node.module.default as PageComponent
+
+        const payload: RscPayload = {
+          root: (
+            <StackLayouts route={match} Root={Root}>
+              {createElement(component, {
+                path: match!.matchedPath,
+                params: match!.params,
+              })}
+            </StackLayouts>
+          ),
+          formState,
+          returnValue: {
+            ok: true,
+            data: undefined,
+          },
+        }
+
+        console.error('rsc-middleware L216')
+        return renderHtml(payload)
+      }
+
+      try {
+        return renderIt(input.pathname)
+      }
+      catch (error) {
+        console.error('rsc middleware L217')
+        const info = getErrorInfo(error)
+        if (info?.status !== 404) {
+          throw error
+        }
+      }
+      // detect has catch-all page
+      if (!false) {
+        return new Response('test')
+      }
+      else {
+        return null
+      }
+    }
+
+    return null
+  })
+  return createMiddleware<HonoEnv>(async (c, next) => {
+    const res = await handle(c)
+    if (res)
+      return res
     await next()
   })
 }

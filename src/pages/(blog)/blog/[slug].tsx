@@ -1,4 +1,5 @@
 import type { PageProps } from '@framework/component'
+import { notFound } from '@framework/lib/router'
 import { getPost } from '@/lib/post'
 
 export default async function BlogSlug({ params }: PageProps<'blog/[slug]'>) {
@@ -6,7 +7,7 @@ export default async function BlogSlug({ params }: PageProps<'blog/[slug]'>) {
     slug: params.slug,
   })
   if (!post) {
-    throw new Error('not found')
+    return notFound()
   }
   return (
     <div>

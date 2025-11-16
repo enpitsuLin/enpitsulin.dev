@@ -1,11 +1,11 @@
 import type { RscPayload } from '@framework/server'
 import { UnheadProvider } from '@framework/lib/head/provider'
+import { createRscRenderRequest } from '@framework/lib/request'
 import * as ReactClient from '@vitejs/plugin-rsc/browser'
 import React from 'react'
 import * as ReactDOMClient from 'react-dom/client'
 import { rscStream } from 'rsc-html-stream/client'
 import { createHead } from 'unhead/client'
-import { createRscRenderRequest } from './request'
 // import `uno.css` for client side HMR
 import 'uno.css'
 

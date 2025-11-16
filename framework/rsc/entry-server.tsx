@@ -1,86 +1,88 @@
 import type { RscPayload } from '@framework/server'
 import type { ContentfulStatusCode } from 'hono/utils/http-status'
 import type { ReactFormState } from 'react-dom/client'
+import { getErrorInfo } from '@framework/lib/custom-error'
 import { UnheadProvider } from '@framework/lib/head/provider'
 import { injectUnHead } from '@framework/lib/head/transform-stream'
 import * as ReactClient from '@vitejs/plugin-rsc/ssr'
-import React from 'react'
+import { captureOwnerStack, use } from 'react'
 import * as ReactDOMServer from 'react-dom/server.edge'
 import { injectRSCPayload } from 'rsc-html-stream/server'
 import { createHead } from 'unhead/server'
 
-export async function renderHTML(
+export async function renderHtmlStream(
   rscStream: ReadableStream<Uint8Array>,
   options: {
     formState?: ReactFormState
     nonce?: string
-    debugNojs?: boolean
   },
 ) {
-  const [rscStream1, rscStream2] = rscStream.tee()
+  const [stream1, stream2] = rscStream.tee()
 
   const unhead = createHead()
 
-  let payload: Promise<RscPayload> | undefined
+  let htmlPromise: Promise<RscPayload> | undefined
   function SsrRoot() {
-    payload ??= ReactClient.createFromReadableStream<RscPayload>(rscStream1)
+    htmlPromise ??= ReactClient.createFromReadableStream<RscPayload>(stream1)
     return (
       <UnheadProvider value={unhead}>
-        {React.use(payload).root}
+        {use(htmlPromise).root}
       </UnheadProvider>
     )
   }
 
-  const bootstrapScriptContent
-    = await import.meta.viteRsc.loadBootstrapScriptContent('index')
+  const bootstrapScriptContent = await loadBootstrapScriptContent()
 
   let htmlStream: ReadableStream<Uint8Array>
   let status: ContentfulStatusCode | undefined
 
   try {
     htmlStream = await ReactDOMServer.renderToReadableStream(<SsrRoot />, {
-      bootstrapScriptContent: options?.debugNojs
-        ? undefined
-        : bootstrapScriptContent,
+      bootstrapScriptContent,
       nonce: options?.nonce,
       formState: options?.formState,
+      onError(e) {
+        if (
+          e
+          && typeof e === 'object'
+          && 'digest' in e
+          && typeof e.digest === 'string'
+        ) {
+          return e.digest
+        }
+        console.error('[SSR Error]', captureOwnerStack?.() || '', '\n', e)
+      },
     })
   }
   catch (e) {
-    if (e instanceof Error && e.message === 'not found') {
-      return 'notFound'
+    console.error('entry-server L58')
+    const info = getErrorInfo(e)
+
+    if (info?.location) {
+      // keep unstable_redirect error as http redirection
+      throw e
     }
-    // fallback to render an empty shell and run pure CSR on browser,
-    // which can replay server component error and trigger error boundary.
-    status = 500
-    htmlStream = await ReactDOMServer.renderToReadableStream(
+    status = info?.status || 500
+    const ssrErrorRoot = (
       <html>
-        <body>
-          <div id="ssr-error">
-            {JSON.stringify(e)}
-          </div>
-          <noscript>Internal Server Error: SSR failed</noscript>
-        </body>
-      </html>,
-      {
-        bootstrapScriptContent:
-          `self.__NO_HYDRATE=1;${
-            options?.debugNojs ? '' : bootstrapScriptContent}`,
-        nonce: options?.nonce,
-      },
+        <body></body>
+      </html>
     )
+    htmlStream = await ReactDOMServer.renderToReadableStream(ssrErrorRoot, {
+      bootstrapScriptContent: `self.__NO_HYDRATE=1;${bootstrapScriptContent}`,
+      nonce: options?.nonce,
+    })
   }
 
   let responseStream: ReadableStream<Uint8Array> = htmlStream
-  if (!options?.debugNojs) {
-    responseStream = responseStream
-      .pipeThrough(
-        injectRSCPayload(rscStream2, {
-          nonce: options?.nonce,
-        }),
-      )
-      .pipeThrough(injectUnHead(unhead))
-  }
+
+  responseStream = responseStream
+    .pipeThrough(injectRSCPayload(stream2, { nonce: options?.nonce }))
+    .pipeThrough(injectUnHead(unhead))
 
   return { stream: responseStream, status }
+}
+
+function loadBootstrapScriptContent(): Promise<string> {
+  return import.meta.viteRsc.loadBootstrapScriptContent('index')
 }

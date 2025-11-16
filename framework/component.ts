@@ -1,4 +1,4 @@
-import type { InferPathParams } from './lib/infer-param-type'
+import type { InferPathParams } from './lib/router/infer-param-type'
 
 export interface PageProps<Path extends string = string> {
   path: string
