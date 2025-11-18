@@ -1,6 +1,6 @@
 import type { MatchFunction } from 'path-to-regexp'
 import type { ComponentType } from 'react'
-import type { ExtractRouteParams, FlattenNodePaths } from '../utils/type'
+import type { ExtractRouteParams, FlattenNodePaths, MostMatchPath } from '../utils/type'
 import { match } from 'path-to-regexp'
 
 export type RouterContext = Record<string, any>
@@ -45,11 +45,11 @@ export interface ComponentRouteModule {
 
 export type RouteModule = HandlerRouteModule | ComponentRouteModule
 
-export type Route<
+export interface Route<
   Context extends RouterContext = RouterContext,
   Path extends string = string,
   Params extends Record<string, any> = ExtractRouteParams<Path>,
-> = {
+> {
   path: Path
   name?: string
   parent?: Route<Context, any, any> | null
@@ -58,13 +58,10 @@ export type Route<
    * If unspecified, the route will be matched using the path-to-regexp library.
    */
   match?: MatchFunction<Params>
-} & ({
   lazy?: () => Promise<RouteModule>
-} | {
-  component: ComponentType<unknown> | (() => Promise<{ default: ComponentType<unknown> }>)
-} | {
-  handler: HandlerRouteModule | (() => Promise<{ default: (request: Request) => Response }>)
-})
+  component?: ComponentType<unknown> | (() => Promise<{ default: ComponentType<unknown> }>)
+  handler?: HandlerRouteModule | (() => Promise<{ default: (request: Request) => Response }>)
+}
 
 export type Routes<
   Context extends RouterContext = RouterContext,
@@ -118,9 +115,9 @@ class Router<
     return this.traverse()
   }
 
-  resolve<const Path extends FlattenNodePaths<R>>(
+  resolve<const Path extends string = string>(
     pathname: Path,
-  ): RouteResolved<Context, Path> {
+  ): RouteResolved<Context, MostMatchPath<Path, FlattenNodePaths<R>>> {
     const path = this.normalizePathname(pathname)
     const result = this.matchRoute(this.root, path, this.baseUrl)
 
@@ -128,7 +125,7 @@ class Router<
       throw this.createNotFoundError()
     }
 
-    return result as RouteResolved<Context, Path>
+    return result as RouteResolved<Context, MostMatchPath<Path, FlattenNodePaths<R>>>
   }
 
   private normalizePathname(pathname: string): string {
@@ -227,35 +224,22 @@ class Router<
   }
 }
 
-// class InsertableRouter<
-//   const Context extends RouterContext = RouterContext,
-//   const Pathes extends string = ''
-// > {
-//   private routes: Routes<Context> = []
+export class InsertableRouter<
+  const Context extends RouterContext = RouterContext,
+  const Paths extends string = '/',
+> {
+  insert<const Path extends string = string>(
+    _path: Path,
+    _route: Omit<Route<Context, Path, ExtractRouteParams<Path>>, 'path'>,
+  ): InsertableRouter<Context, Paths | Path> {
+    throw new Error('Not implemented')
+  }
 
-//   insert<const Path extends string = string>(
-//     path: Path,
-//     route: Omit<Route<Context, Path, ExtractRouteParams<Path>>, 'path'>,
-//   ): InsertableRouter<Context, Pathes | Path> {
-
-//     throw new Error('Not implemented')
-//   }
-
-//   resolve<const Path extends Pathes>(pathname: AccpetRoutePath<Path>): RouteResolved<Context, Path> {
-//     throw new Error('Not implemented')
-//   }
-// }
-
-// declare const router: InsertableRouter<RouterContext>
-
-// const aaa = router
-//   .insert('/foo', {})
-//   .insert('/foo/:id', {})
-
-// const routeResolved = aaa.resolve('/foo/:id')
-
-// type AA = RouteResolved<{}, '/foo/:id'>['params']
-
-// routeResolved.params.id
+  resolve<const Path extends string = string>(
+    _pathname: Path,
+  ): RouteResolved<Context, MostMatchPath<Path, Paths>> {
+    throw new Error('Not implemented')
+  }
+}
 
 export { Router }

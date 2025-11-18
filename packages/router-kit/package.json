@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest --typecheck"
   },
   "dependencies": {
     "path-to-regexp": "catalog:lib"
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/react": "catalog:types",
     "react": "catalog:react",
+    "type-fest": "^5.2.0",
     "vitest": "catalog:vite"
   }
 }

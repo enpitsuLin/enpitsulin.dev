@@ -1,6 +1,6 @@
 import type { MatchResult } from 'path-to-regexp'
 import { describe, expect, it } from 'vitest'
-import { Router } from './router'
+import { InsertableRouter, Router } from './router'
 
 describe('Router', () => {
   it('requires routes', () => {
@@ -443,5 +443,15 @@ describe('Router', () => {
         }),
       }),
     )
+  })
+})
+
+describe('InsertableRouter', () => {
+  it('inserts routes', () => {
+    const router = new InsertableRouter()
+    router.insert('/foo', {
+      name: 'foo',
+      lazy: () => Promise.resolve({ default: 'foo' as any }),
+    })
   })
 })
