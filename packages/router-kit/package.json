@@ -1,0 +1,20 @@
+{
+  "name": "@enpitsulin/router-kit",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "path-to-regexp": "catalog:lib"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:types",
+    "react": "catalog:react",
+    "vitest": "catalog:vite"
+  }
+}
