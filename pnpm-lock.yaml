@@ -5,11 +5,180 @@ settings:
   excludeLinksFromLockfile: false
 
 catalogs:
+  better-auth:
+    '@better-auth/passkey':
+      specifier: ^1.4.0-beta.20
+      version: 1.4.0-beta.21
+    better-auth:
+      specifier: ^1.4.0-beta.20
+      version: 1.4.0-beta.21
+  components:
+    '@ark-ui/react':
+      specifier: ^5.28.0
+      version: 5.28.0
+    motion:
+      specifier: ^12.23.24
+      version: 12.23.24
+  dev:
+    '@libsql/client':
+      specifier: ^0.15.15
+      version: 0.15.15
+    drizzle-kit:
+      specifier: ^0.31.7
+      version: 0.31.7
+    jiti:
+      specifier: ^2.6.1
+      version: 2.6.1
+    lint-staged:
+      specifier: ^16.2.6
+      version: 16.2.6
+    simple-git-hooks:
+      specifier: ^2.13.1
+      version: 2.13.1
+    tsx:
+      specifier: ^4.20.6
+      version: 4.20.6
+    typescript:
+      specifier: ^5.9.3
+      version: 5.9.3
+    wrangler:
+      specifier: ^4.48.0
+      version: 4.48.0
+  eslint:
+    '@antfu/eslint-config':
+      specifier: ^6.2.0
+      version: 6.2.0
+    '@eslint-react/eslint-plugin':
+      specifier: ^2.3.5
+      version: 2.3.5
+    eslint:
+      specifier: ^9.39.1
+      version: 9.39.1
+    eslint-plugin-react-hooks:
+      specifier: ^7.0.1
+      version: 7.0.1
+    eslint-plugin-react-refresh:
+      specifier: ^0.4.24
+      version: 0.4.24
   lib:
+    '@hookform/resolvers':
+      specifier: ^5.2.2
+      version: 5.2.2
+    '@tanstack/react-query':
+      specifier: ^5.90.9
+      version: 5.90.10
+    clsx:
+      specifier: ^2.1.1
+      version: 2.1.1
+    consola:
+      specifier: ^3.4.2
+      version: 3.4.2
+    date-fns:
+      specifier: ^4.1.0
+      version: 4.1.0
+    defu:
+      specifier: ^6.1.4
+      version: 6.1.4
+    foxact:
+      specifier: ^0.2.49
+      version: 0.2.49
     path-to-regexp:
       specifier: ^8.3.0
       version: 8.3.0
+    react-hook-form:
+      specifier: ^7.66.0
+      version: 7.66.1
+    unhead:
+      specifier: ^2.0.19
+      version: 2.0.19
+    zod:
+      specifier: ^4.1.12
+      version: 4.1.12
+  markdown:
+    '@shikijs/rehype':
+      specifier: ^3.15.0
+      version: 3.15.0
+    '@shikijs/transformers':
+      specifier: ^3.15.0
+      version: 3.15.0
+    hast-util-to-jsx-runtime:
+      specifier: ^2.3.6
+      version: 2.3.6
+    shiki:
+      specifier: ^3.15.0
+      version: 3.15.0
+    unified:
+      specifier: ^11.0.5
+      version: 11.0.5
+    vfile:
+      specifier: ^6.0.3
+      version: 6.0.3
+  react:
+    react:
+      specifier: ^19.2.0
+      version: 19.2.0
+    react-dom:
+      specifier: ^19.2.0
+      version: 19.2.0
+  rsc:
+    rsc-html-stream:
+      specifier: ^0.0.7
+      version: 0.0.7
+  server:
+    drizzle-orm:
+      specifier: ^0.44.7
+      version: 0.44.7
+    hono:
+      specifier: ^4.10.6
+      version: 4.10.6
+  types:
+    '@types/node':
+      specifier: ^24.10.1
+      version: 24.10.1
+    '@types/react':
+      specifier: ^19.2.5
+      version: 19.2.6
+    '@types/react-dom':
+      specifier: ^19.2.3
+      version: 19.2.3
+  unocss:
+    '@iconify-json/logos':
+      specifier: ^1.2.10
+      version: 1.2.10
+    '@iconify-json/mingcute':
+      specifier: ^1.2.5
+      version: 1.2.5
+    '@unocss/preset-mini':
+      specifier: ^66.5.6
+      version: 66.5.6
+    '@unocss/preset-uno':
+      specifier: ^66.5.6
+      version: 66.5.6
+    '@unocss/reset':
+      specifier: ^66.5.6
+      version: 66.5.6
+    unocss:
+      specifier: ^66.5.6
+      version: 66.5.6
   vite:
+    '@cloudflare/vite-plugin':
+      specifier: ^1.14.2
+      version: 1.14.2
+    '@vitejs/plugin-react':
+      specifier: latest
+      version: 5.1.1
+    '@vitejs/plugin-rsc':
+      specifier: latest
+      version: 0.5.1
+    vite-plugin-devtools-json:
+      specifier: ^1.0.0
+      version: 1.0.0
+    vite-plugin-inspect:
+      specifier: ^11.3.3
+      version: 11.3.3
+    vite-tsconfig-paths:
+      specifier: ^5.1.4
+      version: 5.1.4
     vitest:
       specifier: ^4.0.9
       version: 4.0.9
@@ -238,10 +407,10 @@ importers:
         version: 8.3.0
     devDependencies:
       '@types/react':
-        specifier: ^19.2.6
+        specifier: catalog:types
         version: 19.2.6
       react:
-        specifier: ^19.2.0
+        specifier: catalog:react
         version: 19.2.0
       vitest:
         specifier: catalog:vite
@@ -3986,6 +4155,7 @@ packages:
   wrangler@4.48.0:
     resolution: {integrity: sha512-qkcwysx96XNDWXl4w/5VjAZjqWatxAq9chMXVeqv/etL9e06ouPaZ+Hwwbe5XYV2GYf/XhZVZ3fHJcTBrq60gQ==}
     engines: {node: '>=18.0.0'}
+    deprecated: Unexpected API fields cause wrangler deploy to crash in some code paths. Downgrade to wrangler@4.47
     hasBin: true
     peerDependencies:
       '@cloudflare/workers-types': ^4.20251109.0
