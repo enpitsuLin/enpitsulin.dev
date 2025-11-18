@@ -1,5 +1,6 @@
 import type { MatchFunction } from 'path-to-regexp'
 import type { ComponentType } from 'react'
+import type { AccpetRoutePath, ExtractRouteParams, FlattenNodePaths } from '../utils/type'
 import { match } from 'path-to-regexp'
 
 export type RouterContext = Record<string, any>
@@ -12,12 +13,15 @@ type MaybePromise<T> = Promise<T> | T
 
 export type RouteResult = MaybePromise<RouteModule | undefined>
 
-export interface RouteResolved<Context extends RouterContext = RouterContext> {
+export interface RouteResolved<
+  Context extends RouterContext = RouterContext,
+  Params extends Record<string, any> = RouteParams,
+> {
   router: Router<Context>
-  route: Route<Context>
+  route: Route<Context, any, Params>
   baseUrl: string
   pathname: string
-  params: RouteParams
+  params: Params
 }
 
 export type RouteHandler = (request: Request) => Response
@@ -41,15 +45,19 @@ export interface ComponentRouteModule {
 
 export type RouteModule = HandlerRouteModule | ComponentRouteModule
 
-export type Route<Context extends RouterContext = RouterContext, Path extends string = string> = {
-  path?: Path
+export type Route<
+  Context extends RouterContext = RouterContext,
+  Path extends string = string,
+  Params extends Record<string, any> = ExtractRouteParams<Path>,
+> = {
+  path: Path
   name?: string
-  parent?: Route<Context> | null
-  children?: Routes<Context> | null
+  parent?: Route<Context, any, any> | null
+  children?: Routes<Context, any, any>
   /**
    * If unspecified, the route will be matched using the path-to-regexp library.
    */
-  match?: MatchFunction<RouteParams>
+  match?: MatchFunction<Params>
 } & ({
   lazy?: () => Promise<RouteModule>
 } | {
@@ -58,28 +66,38 @@ export type Route<Context extends RouterContext = RouterContext, Path extends st
   handler: HandlerRouteModule | (() => Promise<{ default: (request: Request) => Response }>)
 })
 
-export type Routes<Context extends RouterContext = RouterContext> = Array<Route<Context>>
+export type Routes<
+  Context extends RouterContext = RouterContext,
+  Path extends string = string,
+  Params extends Record<string, any> = ExtractRouteParams<Path>,
+> = Array<Route<Context, Path, Params>>
 
-// eslint-disable-next-line ts/no-empty-object-type
-class Router<const Context extends RouterContext = {}> {
+class Router<
+  // eslint-disable-next-line ts/no-empty-object-type
+  const Context extends RouterContext = {},
+  const R extends Route<Context> = Route<Context>,
+  const Base extends string = '',
+> {
   root: Route<Context>
 
   baseUrl: string
 
-  constructor(routes: Routes<Context> | Route<Context>, baseUrl: string = '') {
+  constructor(route: R, baseUrl?: Base)
+  constructor(routes: NonNullable<R['children']>, baseUrl?: Base)
+  constructor(routes: Routes<Context> | Route<Context>, baseUrl = '') {
     if (!routes || typeof routes !== 'object') {
       throw new TypeError('Invalid routes')
     }
     this.baseUrl = baseUrl
     this.root = Array.isArray(routes)
-      ? { path: '', children: routes, parent: null }
+      ? { path: '', children: routes, parent: null } as Route<Context>
       : routes
     this.root.parent = null
   }
 
   * traverse() {
     // Use a stack for depth-first traversal
-    const stack: Route<Context>[] = [this.root]
+    const stack: Route<Context, any, any>[] = [this.root]
 
     while (stack.length > 0) {
       const route = stack.pop()!
@@ -101,7 +119,11 @@ class Router<const Context extends RouterContext = {}> {
     return this.traverse()
   }
 
-  resolve(pathname: string): RouteResolved<Context> {
+  resolve(
+    pathname: Base extends ''
+      ? AccpetRoutePath<FlattenNodePaths<R>>
+      : AccpetRoutePath<FlattenNodePaths<R>> | `${Base}${AccpetRoutePath<FlattenNodePaths<R>>}`,
+  ): RouteResolved<Context, ExtractRouteParams<FlattenNodePaths<R>>> {
     const path = this.normalizePathname(pathname)
     const result = this.matchRoute(this.root, path, this.baseUrl)
 
@@ -109,7 +131,7 @@ class Router<const Context extends RouterContext = {}> {
       throw this.createNotFoundError()
     }
 
-    return result
+    return result as RouteResolved<Context, ExtractRouteParams<FlattenNodePaths<R>>>
   }
 
   private normalizePathname(pathname: string): string {
@@ -118,7 +140,7 @@ class Router<const Context extends RouterContext = {}> {
       : pathname
   }
 
-  private ensureMatchFunction(route: Route<Context>): void {
+  private ensureMatchFunction(route: Route<Context, any, any>): void {
     if (!route.match && route.path !== undefined) {
       const hasChildren = route.children && route.children.length > 0
       // If route has children, don't match the end of the path
@@ -127,11 +149,11 @@ class Router<const Context extends RouterContext = {}> {
   }
 
   private createRouteResolved(
-    route: Route<Context>,
+    route: Route<Context, any, any>,
     baseUrl: string,
     pathname: string,
     params: RouteParams,
-  ): RouteResolved<Context> {
+  ): RouteResolved<Context, any> {
     return {
       router: this,
       route,
@@ -142,11 +164,11 @@ class Router<const Context extends RouterContext = {}> {
   }
 
   private matchChildren(
-    route: Route<Context>,
+    route: Route<Context, any, any>,
     remainingPath: string,
     baseUrl: string,
     params: RouteParams,
-  ): RouteResolved<Context> | null {
+  ): RouteResolved<Context, any> | null {
     if (!route.children) {
       return null
     }
@@ -164,11 +186,11 @@ class Router<const Context extends RouterContext = {}> {
   }
 
   private matchRoute(
-    route: Route<Context>,
+    route: Route<Context, any, any>,
     currentPath: string,
     currentBaseUrl: string,
     parentParams: RouteParams = {},
-  ): RouteResolved<Context> | null {
+  ): RouteResolved<Context, any> | null {
     this.ensureMatchFunction(route)
 
     // Try to match current route

@@ -75,7 +75,7 @@ describe('Router', () => {
         { path: '/baz/*splat', name: 'baz-wildcard' },
         { path: '/qux{/:id}', name: 'qux-optional' },
       ],
-    })
+    } as const)
 
     expect(router.resolve('/foo')).toEqual(
       expect.objectContaining({
@@ -214,7 +214,9 @@ describe('Router', () => {
       ],
     })
 
+    // @ts-expect-error wrong argument
     expect(() => router.resolve('/bar')).toThrow('Route not found')
+    // @ts-expect-error wrong argument
     expect(() => router.resolve('/bar')).toThrow(
       expect.objectContaining({ status: 404 }),
     )
