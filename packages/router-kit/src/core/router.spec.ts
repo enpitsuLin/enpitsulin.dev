@@ -214,9 +214,7 @@ describe('Router', () => {
       ],
     })
 
-    // @ts-expect-error wrong argument
     expect(() => router.resolve('/bar')).toThrow('Route not found')
-    // @ts-expect-error wrong argument
     expect(() => router.resolve('/bar')).toThrow(
       expect.objectContaining({ status: 404 }),
     )
@@ -447,11 +445,40 @@ describe('Router', () => {
 })
 
 describe('InsertableRouter', () => {
-  it('inserts routes', () => {
+  it('inserts routes base', () => {
     const router = new InsertableRouter()
-    router.insert('/foo', {
-      name: 'foo',
-      lazy: () => Promise.resolve({ default: 'foo' as any }),
-    })
+      .insert('/foo', { name: 'foo' })
+
+    const routes = Array.from(router)
+    expect(routes.map(route => route.path)).toEqual(['/', '/foo'])
+  })
+
+  it('inserts routes nested', () => {
+    const router = new InsertableRouter()
+      .insert('foo', { name: 'foo' })
+      .insert('foo/bar', { name: 'foo-bar' })
+      .insert('foo/bar/baz', { name: 'foo-bar-baz' })
+
+    const routes = Array.from(router)
+    expect(routes.map(route => route.path)).toEqual(['/', '/foo', '/foo/bar', '/foo/bar/baz'])
+  })
+
+  it('inserts routes with dynamic segments', () => {
+    const router = new InsertableRouter()
+      .insert('foo/:id', { name: 'foo-id' })
+      .insert('foo/:id/bar', { name: 'foo-id-bar' })
+      .insert('foo/:id/bar/baz', { name: 'foo-id-bar-baz' })
+      .insert('foo/user{/:id}/delete', { name: 'foo-user-delete' })
+
+    const routes = Array.from(router)
+    expect(routes).toEqual([
+      expect.objectContaining({ path: '/' }),
+      expect.objectContaining({ path: '/foo' }),
+      expect.objectContaining({ path: '/foo/:id' }),
+      expect.objectContaining({ path: '/foo/:id/bar' }),
+      expect.objectContaining({ path: '/foo/:id/bar/baz' }),
+      expect.objectContaining({ path: '/foo/user{/:id}' }),
+      expect.objectContaining({ path: '/foo/user{/:id}/delete' }),
+    ])
   })
 })
