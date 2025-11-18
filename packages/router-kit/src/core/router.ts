@@ -1,6 +1,6 @@
 import type { MatchFunction } from 'path-to-regexp'
 import type { ComponentType } from 'react'
-import type { AccpetRoutePath, ExtractRouteParams, FlattenNodePaths } from '../utils/type'
+import type { ExtractRouteParams, FlattenNodePaths } from '../utils/type'
 import { match } from 'path-to-regexp'
 
 export type RouterContext = Record<string, any>
@@ -15,13 +15,13 @@ export type RouteResult = MaybePromise<RouteModule | undefined>
 
 export interface RouteResolved<
   Context extends RouterContext = RouterContext,
-  Params extends Record<string, any> = RouteParams,
+  Path extends string = string,
 > {
   router: Router<Context>
-  route: Route<Context, any, Params>
+  route: Route<Context, Path, ExtractRouteParams<Path>>
   baseUrl: string
   pathname: string
-  params: Params
+  params: ExtractRouteParams<Path>
 }
 
 export type RouteHandler = (request: Request) => Response
@@ -73,8 +73,7 @@ export type Routes<
 > = Array<Route<Context, Path, Params>>
 
 class Router<
-  // eslint-disable-next-line ts/no-empty-object-type
-  const Context extends RouterContext = {},
+  const Context extends RouterContext = RouterContext,
   const R extends Route<Context> = Route<Context>,
   const Base extends string = '',
 > {
@@ -119,11 +118,9 @@ class Router<
     return this.traverse()
   }
 
-  resolve(
-    pathname: Base extends ''
-      ? AccpetRoutePath<FlattenNodePaths<R>>
-      : AccpetRoutePath<FlattenNodePaths<R>> | `${Base}${AccpetRoutePath<FlattenNodePaths<R>>}`,
-  ): RouteResolved<Context, ExtractRouteParams<FlattenNodePaths<R>>> {
+  resolve<const Path extends FlattenNodePaths<R>>(
+    pathname: Path,
+  ): RouteResolved<Context, Path> {
     const path = this.normalizePathname(pathname)
     const result = this.matchRoute(this.root, path, this.baseUrl)
 
@@ -131,7 +128,7 @@ class Router<
       throw this.createNotFoundError()
     }
 
-    return result as RouteResolved<Context, ExtractRouteParams<FlattenNodePaths<R>>>
+    return result as RouteResolved<Context, Path>
   }
 
   private normalizePathname(pathname: string): string {
@@ -229,5 +226,36 @@ class Router<
     return error
   }
 }
+
+// class InsertableRouter<
+//   const Context extends RouterContext = RouterContext,
+//   const Pathes extends string = ''
+// > {
+//   private routes: Routes<Context> = []
+
+//   insert<const Path extends string = string>(
+//     path: Path,
+//     route: Omit<Route<Context, Path, ExtractRouteParams<Path>>, 'path'>,
+//   ): InsertableRouter<Context, Pathes | Path> {
+
+//     throw new Error('Not implemented')
+//   }
+
+//   resolve<const Path extends Pathes>(pathname: AccpetRoutePath<Path>): RouteResolved<Context, Path> {
+//     throw new Error('Not implemented')
+//   }
+// }
+
+// declare const router: InsertableRouter<RouterContext>
+
+// const aaa = router
+//   .insert('/foo', {})
+//   .insert('/foo/:id', {})
+
+// const routeResolved = aaa.resolve('/foo/:id')
+
+// type AA = RouteResolved<{}, '/foo/:id'>['params']
+
+// routeResolved.params.id
 
 export { Router }
