@@ -1,7 +1,7 @@
 import type { RouterContext } from '../context'
 import type { TreePathParam } from '../utils/segment'
 import type { RouteValue } from './route-value'
-import { ESCAPED_TRAILING_SLASH_RE, splitFilePath } from '../utils/path'
+import { ESCAPED_TRAILING_SLASH_RE, splitPath } from '../utils/path'
 import { escapeRegex } from '../utils/segment'
 import { createRouteValue } from './route-value'
 
@@ -21,7 +21,7 @@ export class Route<Context extends RouterContext = RouterContext> {
     path: string,
     context: Context,
   ): Route<Context> {
-    const { tail, segment, viewName } = splitFilePath(path)
+    const { tail, segment, viewName } = splitPath(path)
 
     if (!this.children.has(segment)) {
       this.children.set(segment, new Route(segment, this))

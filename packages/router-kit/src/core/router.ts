@@ -1,20 +1,15 @@
 import type { RouterContext } from '../context'
-import type { ExtractRouteParams } from '../utils/type'
-import type { Route } from './route'
+import { Route } from './route'
 
 export interface RouteParams {
   [name: string]: string | string[] | undefined
 }
 
-export interface RouteResolved<
-  Context extends RouterContext = RouterContext,
-  Path extends string = string,
-> {
+export interface RouteResolved<Context extends RouterContext = RouterContext> {
   router: Router<Context>
   route: Route<Context>
-  baseUrl: string
   pathname: string
-  params: ExtractRouteParams<Path>
+  params: RouteParams
 }
 
 export type Routes<
@@ -26,18 +21,23 @@ class Router<
   const Paths extends string = '/',
 > {
   root: Route<Context>
-  baseUrl: string
 
   routesMap: Map<string, Route<Context>> = new Map()
 
   constructor() {
-    throw new Error('not implemented')
+    this.root = new Route('')
   }
 
   insert<const Path extends string = string>(
-    _path: Path,
-    _route: Context,
+    path: Path,
+    context: Context,
   ): Router<Context, Paths | Path> {
+    const route = this.root.insert(path, context)
+    this.routesMap.set(route.fullPath, route)
+    return this
+  }
+
+  resolve(_path: string): RouteResolved<Context> {
     throw new Error('not implemented')
   }
 }

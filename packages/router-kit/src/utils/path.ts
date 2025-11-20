@@ -26,13 +26,11 @@ export function joinPath(...paths: string[]): string {
 /**
  * Splits a path into by finding the first '/' and returns the tail and segment. If it has an extension, it removes it.
  * If it contains a named view, it returns the view name as well (otherwise it's default).
- *
- * @param filePath - filePath to split
  */
-export function splitFilePath(filePath: string) {
-  const slashPos = filePath.indexOf('/')
-  const head = slashPos < 0 ? filePath : filePath.slice(0, slashPos)
-  const tail = slashPos < 0 ? '' : filePath.slice(slashPos + 1)
+export function splitPath(path: string) {
+  const slashPos = path.indexOf('/')
+  const head = slashPos < 0 ? path : path.slice(0, slashPos)
+  const tail = slashPos < 0 ? '' : path.slice(slashPos + 1)
 
   let segment = head
   let viewName = 'default'
