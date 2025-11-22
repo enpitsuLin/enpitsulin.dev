@@ -1,25 +1,22 @@
 import path from 'node:path'
 import { cloudflare as Cloudflare } from '@cloudflare/vite-plugin'
 import FullStack from '@hiogawa/vite-plugin-fullstack'
-import VueI18n from '@intlify/unplugin-vue-i18n/vite'
-import Shiki from '@shikijs/markdown-it'
 import { unheadVueComposablesImports } from '@unhead/vue'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Markdown from 'unplugin-vue-markdown/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
-import { defineConfig } from 'vite'
+import { defaultClientConditions, defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
   environments: {
     client: {
       build: {
+        minify: false,
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'src/entry-client.ts'),
@@ -27,14 +24,12 @@ export default defineConfig({
         },
       },
     },
-  },
-  builder: {
-    async buildApp(builder) {
-      await builder.build(builder.environments.client!)
-      await builder.build(builder.environments.worker!)
+    worker: {
+      resolve: {
+        conditions: [...defaultClientConditions],
+      },
     },
   },
-
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
@@ -43,10 +38,15 @@ export default defineConfig({
   },
 
   plugins: [
-    Inspect(),
+    Inspect({
+      build: true,
+    }),
+
     FullStack({
       serverHandler: false,
+      serverEnvironments: ['worker'],
     }),
+
     Cloudflare({
       viteEnvironment: {
         name: 'worker',
@@ -55,13 +55,14 @@ export default defineConfig({
 
     // https://github.com/posva/unplugin-vue-router
     VueRouter({
-      extensions: ['.vue', '.md'],
+      extensions: ['.vue'],
       dts: 'src/typed-router.d.ts',
     }),
 
     Vue({
       include: [/\.vue$/, /\.md$/],
     }),
+
     VueJsx(),
 
     // https://github.com/antfu/unplugin-auto-import
@@ -96,37 +97,6 @@ export default defineConfig({
     // see uno.config.ts for config
     Unocss(),
 
-    // https://github.com/unplugin/unplugin-vue-markdown
-    // Don't need this? Try vitesse-lite: https://github.com/antfu/vitesse-lite
-    Markdown({
-      wrapperClasses: 'prose dark:prose-invert prose-sm m-auto text-left',
-      headEnabled: true,
-      async markdownItSetup(md) {
-        md.use(LinkAttributes, {
-          matcher: (link: string) => /^https?:\/\//.test(link),
-          attrs: {
-            target: '_blank',
-            rel: 'noopener',
-          },
-        })
-        md.use(await Shiki({
-          defaultColor: false,
-          themes: {
-            light: 'vitesse-light',
-            dark: 'vitesse-dark',
-          },
-        }))
-      },
-    }),
-
-    // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
-    VueI18n({
-      runtimeOnly: true,
-      compositionOnly: true,
-      fullInstall: true,
-      include: [path.resolve(__dirname, 'locales/**')],
-    }),
-
     // https://github.com/webfansplz/vite-plugin-vue-devtools
     // VueDevTools(),
   ],
@@ -135,12 +105,4 @@ export default defineConfig({
     cors: false,
   },
 
-  optimizeDeps: {
-    entries: ['./src/entry-client.ts'],
-  },
-
-  ssr: {
-    // TODO: workaround until they support native ESM
-    noExternal: ['workbox-window', /vue-i18n/],
-  },
 })

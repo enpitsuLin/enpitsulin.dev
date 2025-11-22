@@ -1,9 +1,9 @@
 <script setup lang="ts">
-defineOptions({
-  name: 'BlogPage',
-})
+
 </script>
 
 <template>
-  <h1>Home</h1>
+  <div>
+    <h1>/blog/tags/[tag]</h1>
+  </div>
 </template>

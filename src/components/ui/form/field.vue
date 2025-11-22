@@ -1,11 +1,44 @@
 <script setup lang="ts" generic="TParentData, TName extends DeepKeys<TParentData>">
-import type { DeepKeys, FieldApi } from '@tanstack/vue-form'
+import type { DeepKeys, DeepValue, FieldApi } from '@tanstack/vue-form'
 import { Field } from '@ark-ui/vue/field'
 
 defineProps<{
-  field: FieldApi<TParentData, TName, any, any, any>
+  field: FieldApi<
+    TParentData,
+    TName,
+    DeepValue<TParentData, TName>,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any,
+    any
+  >
   label: string
   helperText?: string
+}>()
+
+defineSlots<{
+  default: (props: {
+    value: DeepValue<TParentData, TName>
+    onInput: (e: Event) => void
+    onBlur: () => void
+    handleChange: (value: DeepValue<TParentData, TName>) => void
+  }) => VNode
 }>()
 </script>
 
@@ -19,8 +52,9 @@ defineProps<{
     <Field.Context>
       <slot
         :value="field.state.value"
-        :on-input="(e: Event) => field.handleChange((e.target as HTMLInputElement).value)"
+        :on-input="(e: Event) => field.handleChange((e.target as HTMLInputElement).value as DeepValue<TParentData, TName>)"
         :on-blur="field.handleBlur"
+        :handle-change="field.handleChange"
       />
     </Field.Context>
     <Field.HelperText v-if="helperText" un-text="xs">

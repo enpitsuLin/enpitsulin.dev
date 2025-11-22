@@ -4,9 +4,21 @@ import { z } from 'zod'
 export const postSchema = z.object({
   title: z.string().min(1, '标题不能为空'),
   slug: z.string().min(1, 'Slug 不能为空'),
+  excerpt: z.string().optional(),
   content: z.string().min(1, '内容不能为空'),
   status: z.enum(['draft', 'published', 'archived']).default('draft'),
-  tags: z.array(z.string()).default([]),
+  tags: z.preprocess(
+    (value) => {
+      if (typeof value === 'undefined' || value === null) {
+        return []
+      }
+      if (!Array.isArray(value)) {
+        return [value]
+      }
+      return value
+    },
+    z.array(z.string()),
+  ),
 })
 
 export type PostFormData = z.infer<typeof postSchema>

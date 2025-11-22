@@ -12,3 +12,5 @@ public/assets/fonts
 .env
 
 *.local
+
+.vite-inspect

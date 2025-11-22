@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router'
+import { toArray } from '@vueuse/core'
 import { withoutTrailingSlash } from 'ufo'
 import { useAuth } from '~/composables/auth'
 
@@ -24,7 +25,7 @@ interface NavItem {
   title: string
   path: string
   icon: string
-  children?: NavItem[]
+  match: string | string[]
 }
 
 const navItems: NavItem[] = [
@@ -32,11 +33,13 @@ const navItems: NavItem[] = [
     title: '仪表盘',
     path: '/admin',
     icon: 'i-mingcute:dashboard-line',
+    match: '/admin/(dashboard)',
   },
   {
     title: '文章管理',
     path: '/admin/posts',
     icon: 'i-mingcute:code-line',
+    match: ['/admin/(dashboard)/posts/[[page]]', '/admin/(dashboard)/posts/[id]', '/admin/(dashboard)/posts/create'],
   },
 ]
 
@@ -92,9 +95,9 @@ const navigationItems = computed(() => {
             :to="item.path"
             custom
           >
-            <template #default="{ href, isActive, isExactActive, navigate }">
+            <template #default="{ href, navigate }">
               <a
-                :data-active="href === '/admin' ? isExactActive : isActive"
+                :data-active="toArray(item.match).includes(withoutTrailingSlash($route.name))"
                 bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
                 flex="~ items-center gap-3"
                 class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"

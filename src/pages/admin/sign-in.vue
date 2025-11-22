@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useMutation } from '@pinia/colada'
-import { logger } from '~~/lib/logger'
 import SigninForm from '~/components/auth/signin-form.vue'
 import { useToast } from '~/components/ui/toast/use-toast'
 import { useAuth } from '~/composables/auth'
@@ -12,7 +11,6 @@ const router = useRouter()
 
 watch(user, (user) => {
   if (user && user.role === 'admin') {
-    logger.info('redirect to', user, route.query.redirect)
     if (route.query.redirect) {
       router.push(decodeURIComponent(route.query.redirect as string))
     }

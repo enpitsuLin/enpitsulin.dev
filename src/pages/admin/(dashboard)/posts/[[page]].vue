@@ -10,6 +10,7 @@ defineOptions({
 })
 
 definePage({
+  alias: '/admin/posts/:page(\\d+)?',
   meta: {
     breadcrumb: '文章管理',
   },
@@ -20,15 +21,26 @@ const router = useRouter()
 const toast = useToast()
 const queryCache = useQueryCache()
 
+const route = useRoute('/admin/(dashboard)/posts/[[page]]')
+
+const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 0)
+
 // Fetch posts list
 const { data: posts, isPending } = useQuery({
-  key: ['posts', 'list'],
-  query: async () => {
+  key: () => ['admin/posts', page.value],
+  async query() {
+    const limit = 20
+    const offset = Math.max(0, page.value) * limit
     const res = await $hc.api.post.$get({
       query: {
+        limit: limit.toString(),
+        offset: offset.toString(),
       },
     })
     return res.json()
+  },
+  placeholderData(previousData) {
+    return previousData
   },
 })
 
@@ -80,7 +92,7 @@ function cancelDelete() {
 }
 
 function handleNew() {
-  router.push('/admin/posts/new')
+  router.push('/admin/posts/create')
 }
 
 function formatDate(date: number | Date | string | null | undefined) {
@@ -102,7 +114,7 @@ function formatDate(date: number | Date | string | null | undefined) {
     <div v-if="isPending">
       加载中...
     </div>
-    <div v-else-if="posts && posts.length > 0">
+    <div v-else-if="posts && posts.data.length > 0">
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
           <tr>
@@ -127,7 +139,7 @@ function formatDate(date: number | Date | string | null | undefined) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="post in posts" :key="post.id">
+          <tr v-for="post in posts.data" :key="post.id">
             <td style="border: 1px solid #ddd; padding: 8px;">
               {{ post.title }}
             </td>
@@ -158,6 +170,17 @@ function formatDate(date: number | Date | string | null | undefined) {
     <div v-else>
       暂无文章
     </div>
+
+    <RouterLink
+      v-if="page > 0" :to="page - 1 > 0 ? `/admin/posts/${page - 1}` : '/admin/posts'"
+    >
+      上一页
+    </RouterLink>
+    <RouterLink
+      v-if="posts?.total && (posts.total > posts.offset + posts.limit)" :to="`/admin/posts/${page + 1}`"
+    >
+      下一页
+    </RouterLink>
 
     <!-- Delete confirmation dialog -->
     <div

@@ -12,6 +12,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
+    Article: typeof import('./components/article/index.vue')['default']
+    ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
+    ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
+    ArticleTag: typeof import('./components/article/tag.vue')['default']
     AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
     AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
     AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -32,6 +37,9 @@ declare module 'vue' {
     AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
     HomeIntro: typeof import('./components/home/intro.vue')['default']
     HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+    HomeRecent: typeof import('./components/home/recent.vue')['default']
+    HomeRecentArticle: typeof import('./components/home/recent-article.vue')['default']
+    HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
     IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
     LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']
     LayoutFab: typeof import('./components/layout/fab.vue')['default']
@@ -45,6 +53,10 @@ declare module 'vue' {
     LayoutSidebarTrigger: typeof import('./components/layout/sidebar/trigger.vue')['default']
     LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
     LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
+    MarkdownContentCopyButton: typeof import('./components/markdown/content/copy-button.vue')['default']
+    MarkdownContentDetails: typeof import('./components/markdown/content/details.vue')['default']
+    MarkdownContentPre: typeof import('./components/markdown/content/pre.vue')['default']
+    MarkdownContentSummary: typeof import('./components/markdown/content/summary.vue')['default']
     MarkdownRender: typeof import('./components/markdown/render.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -54,6 +66,8 @@ declare module 'vue' {
     UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
     UiButton: typeof import('./components/ui/button.vue')['default']
     UiFormField: typeof import('./components/ui/form/field.vue')['default']
+    UiFormTagInput: typeof import('./components/ui/form/tag-input.vue')['default']
+    UiMarquee: typeof import('./components/ui/marquee.vue')['default']
     UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
     UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
   }
@@ -61,6 +75,11 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
+  const Article: typeof import('./components/article/index.vue')['default']
+  const ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
+  const ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
+  const ArticleTag: typeof import('./components/article/tag.vue')['default']
   const AuthManageAccountIcon: typeof import('./components/auth/manage/account/icon.vue')['default']
   const AuthManageAccountInfo: typeof import('./components/auth/manage/account/info.vue')['default']
   const AuthManageAccountSkeleton: typeof import('./components/auth/manage/account/skeleton.vue')['default']
@@ -81,6 +100,9 @@ declare global {
   const AuthSignupForm: typeof import('./components/auth/signup-form.vue')['default']
   const HomeIntro: typeof import('./components/home/intro.vue')['default']
   const HomeIntroAvatar: typeof import('./components/home/intro-avatar.vue')['default']
+  const HomeRecent: typeof import('./components/home/recent.vue')['default']
+  const HomeRecentArticle: typeof import('./components/home/recent-article.vue')['default']
+  const HomeStackMarquee: typeof import('./components/home/stack-marquee.vue')['default']
   const IconsBilibili: typeof import('./components/icons/bilibili.vue')['default']
   const LayoutAuthButton: typeof import('./components/layout/auth-button.vue')['default']
   const LayoutFab: typeof import('./components/layout/fab.vue')['default']
@@ -94,6 +116,10 @@ declare global {
   const LayoutSidebarTrigger: typeof import('./components/layout/sidebar/trigger.vue')['default']
   const LayoutThemeButton: typeof import('./components/layout/theme-button.vue')['default']
   const LayoutToTopButton: typeof import('./components/layout/to-top-button.vue')['default']
+  const MarkdownContentCopyButton: typeof import('./components/markdown/content/copy-button.vue')['default']
+  const MarkdownContentDetails: typeof import('./components/markdown/content/details.vue')['default']
+  const MarkdownContentPre: typeof import('./components/markdown/content/pre.vue')['default']
+  const MarkdownContentSummary: typeof import('./components/markdown/content/summary.vue')['default']
   const MarkdownRender: typeof import('./components/markdown/render.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
@@ -103,6 +129,8 @@ declare global {
   const UiBreadcrumbSeparator: typeof import('./components/ui/breadcrumb/separator.vue')['default']
   const UiButton: typeof import('./components/ui/button.vue')['default']
   const UiFormField: typeof import('./components/ui/form/field.vue')['default']
+  const UiFormTagInput: typeof import('./components/ui/form/tag-input.vue')['default']
+  const UiMarquee: typeof import('./components/ui/marquee.vue')['default']
   const UiToastToaster: typeof import('./components/ui/toast/toaster.vue')['default']
   const UiTooltip: typeof import('./components/ui/tooltip.vue')['default']
 }

@@ -1,62 +1,36 @@
 <script setup lang="ts">
-import { fromHighlighter } from '@shikijs/markdown-it'
-import MarkdownIt from 'markdown-it'
-import LinkAttributes from 'markdown-it-link-attributes'
-import { createJavaScriptRegexEngine } from 'shiki'
-import { createdBundledHighlighter } from 'shiki/core-unwasm.mjs'
+import type { Root } from 'hast'
+import { useQuery } from '@pinia/colada'
+import { Markdown } from './markdown'
 
 defineOptions({
   name: 'MarkdownRender',
 })
 
-const { content = '' } = defineProps<{
+const { content = '', tag = 'div' } = defineProps<{
   content?: string
+  tag?: string
 }>()
 
-const createHighlighter = createdBundledHighlighter({
-  themes: {
-    'vitesse-light': () => import('@shikijs/themes/vitesse-light'),
-    'vitesse-dark': () => import('@shikijs/themes/vitesse-dark'),
+const hc = useHC()
+const { data: root } = useQuery({
+  key: () => ['highlight-markdown', content],
+  async query() {
+    const res = await hc.api.markdown.$post({ json: { markdown: content } })
+    const { rendered } = await res.json()
+    return rendered as Root
   },
-  langs: {
-    tsx: () => import('@shikijs/langs/tsx'),
-    typescript: () => import('@shikijs/langs/typescript'),
-    javascript: () => import('@shikijs/langs/javascript'),
-    json: () => import('@shikijs/langs/json'),
-    html: () => import('@shikijs/langs/html'),
-    css: () => import('@shikijs/langs/css'),
-    markdown: () => import('@shikijs/langs/markdown'),
-    yaml: () => import('@shikijs/langs/yaml'),
-  },
-  engine: () => createJavaScriptRegexEngine(),
+  enabled: !!content,
 })
-
-const highlighter = await createHighlighter({
-  themes: ['vitesse-light', 'vitesse-dark'],
-  langs: ['tsx', 'typescript', 'javascript', 'json', 'html', 'css', 'markdown', 'yaml'],
-})
-
-const shiki = fromHighlighter(highlighter, {
-  defaultColor: false,
-  themes: {
-    light: 'vitesse-light',
-    dark: 'vitesse-dark',
-  },
-})
-
-const md = new MarkdownIt()
-md.use(LinkAttributes, {
-  matcher: (link: string) => /^https?:\/\//.test(link),
-  attrs: {
-    target: '_blank',
-    rel: 'noopener',
-  },
-})
-md.use(shiki)
-
-const html = md.render(content)
 </script>
 
 <template>
-  <div class="m-auto text-left prose prose-sm dark:prose-invert" v-html="html" />
+  <Markdown
+    v-if="root"
+    :tag
+    :root="root"
+    m-auto text-left prose prose-sm dark:prose-invert
+  >
+    {{ content }}
+  </Markdown>
 </template>

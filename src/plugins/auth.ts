@@ -83,4 +83,10 @@ declare module '~~/lib/app' {
   interface ZootApp {
     $auth: Auth
   }
+  interface ZootPayload {
+    auth?: {
+      user: User | null
+      session: Session | null
+    }
+  }
 }

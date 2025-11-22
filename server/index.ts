@@ -1,12 +1,13 @@
 import type { Env } from './middleware/context'
 import { zValidator } from '@hono/zod-validator'
-import { desc, eq, inArray } from 'drizzle-orm'
+import { asc, count, desc, eq, gt, inArray, lt } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 import { auth } from '~~/lib/auth'
 import { render } from '~~/src/entry-server'
+import { postSchema } from '~/schemas/post'
 import * as schema from './database/schema'
 import { middleware } from './middleware/context'
 import { useDrizzle } from './utils/drizzle'
@@ -14,24 +15,7 @@ import { useDrizzle } from './utils/drizzle'
 const apiPostRoute = new Hono<Env>({ strict: false })
   .post(
     '/',
-    zValidator(
-      'form',
-      z.object({
-        title: z.string().min(1, 'Title is required'),
-        slug: z.string().min(1, 'Slug is required'),
-        content: z.string().min(1, 'Content is required'),
-        status: z.enum(['draft', 'published', 'archived']),
-        tags: z.preprocess(
-          (value) => {
-            if (!Array.isArray(value)) {
-              return [value]
-            }
-            return value
-          },
-          z.array(z.string()),
-        ),
-      }),
-    ),
+    zValidator('form', postSchema),
     async (c) => {
       const form = c.req.valid('form')
 
@@ -115,31 +99,37 @@ const apiPostRoute = new Hono<Env>({ strict: false })
     zValidator(
       'query',
       z.object({
-        limit: z.number().optional().default(10),
-        offset: z.number().optional().default(0),
+        limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+        offset: z.coerce.number().int().optional(),
       }),
     ),
     async (c) => {
       const query = c.req.valid('query')
       const db = useDrizzle()
+
+      const totalPosts = await db
+        .select({ count: count() })
+        .from(schema.post)
+        .then(result => result[0].count)
+
       const posts = await db
         .select()
         .from(schema.post)
-        .limit(query.limit)
-        .offset(query.offset)
         .orderBy(desc(schema.post.publishedAt))
+        .limit(query.limit)
+        .offset(query.offset ?? 0)
 
-      return c.json(posts)
+      return c.json({
+        data: posts,
+        limit: query.limit,
+        offset: query.offset ?? 0,
+        total: totalPosts,
+      })
     },
   )
   .get(
     '/:id',
-    zValidator(
-      'param',
-      z.object({
-        id: z.string(),
-      }),
-    ),
+    zValidator('param', z.object({ id: z.string() })),
     async (c) => {
       const param = c.req.valid('param')
       const db = useDrizzle()
@@ -185,29 +175,8 @@ const apiPostRoute = new Hono<Env>({ strict: false })
   )
   .patch(
     '/:id',
-    zValidator(
-      'param',
-      z.object({
-        id: z.string(),
-      }),
-    ),
-    zValidator(
-      'form',
-      z.object({
-        title: z.string().optional(),
-        content: z.string().optional(),
-        status: z.enum(['draft', 'published', 'archived']).optional(),
-        tags: z.preprocess(
-          (value) => {
-            if (!Array.isArray(value)) {
-              return [value]
-            }
-            return value
-          },
-          z.array(z.string()),
-        ),
-      }),
-    ),
+    zValidator('param', z.object({ id: z.string() })),
+    zValidator('form', postSchema.omit({ slug: true })),
     async (c) => {
       c.get('auth').assertAuth('admin')
 
@@ -237,7 +206,7 @@ const apiPostRoute = new Hono<Env>({ strict: false })
       if (form.status !== undefined) {
         updateData.status = form.status
         if (form.status === 'published') {
-          updateData.publishedAt = Date.now()
+          updateData.publishedAt = new Date()
         }
       }
 
@@ -308,12 +277,7 @@ const apiPostRoute = new Hono<Env>({ strict: false })
   )
   .delete(
     '/:id',
-    zValidator(
-      'param',
-      z.object({
-        id: z.string(),
-      }),
-    ),
+    zValidator('param', z.object({ id: z.string() })),
     async (c) => {
       c.get('auth').assertAuth('admin')
 
@@ -339,65 +303,130 @@ const apiPostRoute = new Hono<Env>({ strict: false })
       return c.json({ success: true })
     },
   )
-  .get('/slug/:slug', zValidator(
-    'param',
-    z.object({
-      slug: z.string(),
-    }),
-  ), async (c) => {
-    const param = c.req.valid('param')
-    const db = useDrizzle()
+  .get(
+    '/slug/:slug',
+    zValidator('param', z.object({ slug: z.string() })),
+    async (c) => {
+      const param = c.req.valid('param')
+      const db = useDrizzle()
 
-    // Query post by slug
-    const postResult = await db
-      .select()
-      .from(schema.post)
-      .where(eq(schema.post.slug, param.slug))
-      .limit(1)
-
-    if (postResult.length === 0) {
-      throw new HTTPException(404, { message: 'Post not found' })
-    }
-
-    const postData = postResult[0]
-
-    // Query all tags for this post
-    const postTags = await db
-      .select({
-        tagId: schema.postTag.tagId,
-      })
-      .from(schema.postTag)
-      .where(eq(schema.postTag.postId, postData.id))
-
-    const tagIds = postTags.map(pt => pt.tagId).filter((id): id is string => id !== null)
-
-    let tags: schema.SelectTag[] = []
-    if (tagIds.length > 0) {
-      tags = await db
+      // Query post by slug
+      const postResult = await db
         .select()
-        .from(schema.tag)
-        .where(inArray(schema.tag.id, tagIds))
-    }
+        .from(schema.post)
+        .where(eq(schema.post.slug, param.slug))
+        .limit(1)
 
-    const response: schema.SelectPost & { tags: schema.SelectTag[] } = {
-      ...postData,
-      tags,
-    }
+      if (postResult.length === 0) {
+        throw new HTTPException(404, { message: 'Post not found' })
+      }
 
-    return c.json(response)
-  })
+      const postData = postResult[0]
+
+      // Query all tags for this post
+      const postTags = await db
+        .select({
+          tagId: schema.postTag.tagId,
+        })
+        .from(schema.postTag)
+        .where(eq(schema.postTag.postId, postData.id))
+
+      const tagIds = postTags.map(pt => pt.tagId).filter((id): id is string => id !== null)
+
+      let tags: string[] = []
+      if (tagIds.length > 0) {
+        tags = await db
+          .select({ name: schema.tag.name })
+          .from(schema.tag)
+          .where(inArray(schema.tag.id, tagIds))
+          .then(result => result.map(r => r.name))
+      }
+
+      const response: schema.SelectPost & { tags: string[] } = {
+        ...postData,
+        tags,
+      }
+
+      return c.json(response)
+    },
+  )
+  .get(
+    '/slug/:slug/surround',
+    zValidator('param', z.object({ slug: z.string() })),
+    async (c) => {
+      const param = c.req.valid('param')
+      const db = useDrizzle()
+
+      // Query post by slug
+      const postResult = await db
+        .select()
+        .from(schema.post)
+        .where(eq(schema.post.slug, param.slug))
+        .limit(1)
+
+      if (postResult.length === 0) {
+        throw new HTTPException(404, { message: 'Post not found' })
+      }
+
+      const postData = postResult[0]
+
+      // Query previous and next posts
+      const previousPost = await db
+        .select({
+          slug: schema.post.slug,
+          title: schema.post.title,
+        })
+        .from(schema.post)
+        .where(lt(schema.post.publishedAt, postData.publishedAt))
+        .orderBy(desc(schema.post.publishedAt))
+        .limit(1)
+
+      const nextPost = await db
+        .select({
+          slug: schema.post.slug,
+          title: schema.post.title,
+        })
+        .from(schema.post)
+        .where(gt(schema.post.publishedAt, postData.publishedAt))
+        .orderBy(asc(schema.post.publishedAt))
+        .limit(1)
+
+      return c.json({
+        previous: previousPost[0],
+        next: nextPost[0],
+      })
+    },
+  )
 
 const apiRoute = new Hono<Env>({ strict: false })
   .on(['POST', 'GET'], '/auth/*', (c) => {
     return auth.handler(c.req.raw)
   })
   .route('/post', apiPostRoute)
+  .post('/markdown', zValidator('json', z.object({ markdown: z.string() })), async (c) => {
+    const body = c.req.valid('json')
+    const { markdown } = body
+
+    try {
+      const rendered = await import('~~/server/utils/markdown').then(mod => mod.markdown(markdown))
+      return c.json({ rendered })
+    }
+    catch (error) {
+      console.error('Markdown processing error:', error)
+      throw new HTTPException(500, { message: 'Markdown processing failed' })
+    }
+  })
 
 const app = new Hono<Env>({ strict: false })
   .use('*', middleware)
   .use('*', cors())
+  .get('/*', (c, next) => {
+    if (c.req.path.startsWith('/api')) {
+      return next()
+    }
+    return render(c)
+  })
   .route('/api', apiRoute)
-  .get('/*', c => render(c))
   .get('/.well-known/nostr.json', (c) => {
     c.res.headers.set('Content-Type', 'application/json')
     c.res.headers.set('Access-Control-Allow-Origin', '*')

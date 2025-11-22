@@ -1,8 +1,9 @@
 import type { BetterAuthClientOptions, BetterAuthOptions } from 'better-auth'
-import { adminClient, multiSessionClient, passkeyClient } from 'better-auth/client/plugins'
+import { passkey } from '@better-auth/passkey'
+import { passkeyClient } from '@better-auth/passkey/client'
+import { adminClient, multiSessionClient } from 'better-auth/client/plugins'
 import { admin } from 'better-auth/plugins/admin'
 import { multiSession } from 'better-auth/plugins/multi-session'
-import { passkey } from 'better-auth/plugins/passkey'
 
 export const baseServerOptions = {
   appName: 'enpitsulin.dev',

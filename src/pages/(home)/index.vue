@@ -6,4 +6,6 @@ defineOptions({
 
 <template>
   <HomeIntro />
+  <HomeRecent />
+  <HomeStackMarquee />
 </template>
