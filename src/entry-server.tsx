@@ -1,4 +1,5 @@
 import type { Context } from 'hono'
+import type { ZootSSRContext } from '~~/lib/app'
 import type { Env } from '~~/server/middleware/context'
 import { renderSSRHead } from '@unhead/vue/server'
 import { renderToString } from 'vue/server-renderer'
@@ -58,7 +59,7 @@ export async function render(c: Context<Env>) {
     ]),
     body: [
       `<div id="app">${rendered}</div>`,
-      `<div id="teleports">${ssrContext.teleports ? Reflect.get(ssrContext.teleports, '#teleports') : ''}</div>`,
+      `<div id="teleports">${getDefaultTeleportsTemplate(ssrContext)}</div>`,
     ],
     bodyAppend: [bodyTags],
   }
@@ -98,4 +99,15 @@ function renderHTMLDocument(html: ZootRenderHTMLContext) {
 <head>${joinTags(html.head)}</head>
 <body ${joinAttrs(html.bodyAttrs)}>${joinTags(html.bodyPrepend)}${joinTags(html.body)}${joinTags(html.bodyAppend)}</body>
 </html>`
+}
+
+function getDefaultTeleportsTemplate(ssrContext: ZootSSRContext) {
+  if (!ssrContext.teleports) {
+    return ''
+  }
+
+  if (!Reflect.has(ssrContext.teleports, '#teleports')) {
+    return ''
+  }
+  return Reflect.get(ssrContext.teleports, '#teleports')
 }
