@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isDark } from '~/composables/dark'
 import { description, title } from '~/constants'
 
 useHead({
