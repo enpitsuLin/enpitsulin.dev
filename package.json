@@ -33,7 +33,6 @@
     "@unocss/reset": "^66.5.9",
     "@vueuse/core": "^14.0.0",
     "better-auth": "^1.4.0",
-    "consola": "^3.4.2",
     "devalue": "^5.5.0",
     "drizzle-orm": "^0.44.7",
     "hast-util-to-jsx-runtime": "^2.3.6",
