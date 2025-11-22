@@ -1,10 +1,9 @@
 <script setup lang="ts">
 defineOptions({
-  name: 'IndexPage',
+  name: 'IndexPageBanner',
 })
 </script>
 
 <template>
-  <HomeRecent />
-  <HomeStackMarquee />
+  <HomeIntro />
 </template>

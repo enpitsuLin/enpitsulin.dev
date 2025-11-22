@@ -184,6 +184,12 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
+    'src/pages/(home)/index@banner.vue': {
+      routes:
+        | '/(home)/'
+      views:
+        | never
+    }
     'src/pages/(home)/[...404].vue': {
       routes:
         | '/(home)/[...404]'
