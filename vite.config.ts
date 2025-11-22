@@ -51,7 +51,7 @@ export default defineConfig({
     // https://github.com/posva/unplugin-vue-router
     VueRouter({
       extensions: ['.vue'],
-      dts: 'src/typed-router.d.ts',
+      dts: '.types/typed-router.d.ts',
     }),
 
     Vue({
@@ -77,7 +77,7 @@ export default defineConfig({
         unheadVueComposablesImports,
         VueRouterAutoImports,
       ],
-      dts: 'src/auto-imports.d.ts',
+      dts: '.types/auto-imports.d.ts',
       dirs: [
         'src/composables',
         'src/stores',
@@ -92,7 +92,7 @@ export default defineConfig({
       extensions: ['vue', 'md', 'tsx'],
       // allow auto import and register components used in markdown
       include: [/\.vue$/, /\.vue\?vue/, /\.md$/, /\.tsx$/],
-      dts: 'src/components.d.ts',
+      dts: '.types/components.d.ts',
       dtsTsx: true,
     }),
 
