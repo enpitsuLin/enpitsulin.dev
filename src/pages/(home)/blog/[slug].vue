@@ -68,7 +68,8 @@ useHead({
         </section>
       </header>
       <MarkdownRender
-        :content="data?.content ?? ''"
+        v-if="data?.content"
+        :content="data.content"
         tag="article"
         text-15px
         class="max-w-unset prose dark:prose-invert"

@@ -40,8 +40,8 @@ export function definePayloadReviver(
   name: string,
   revive: (data: any) => any | undefined,
 ) {
-  if (import.meta.env.DEV && getCurrentInstance()) {
-    console.warn('[nuxt] [definePayloadReviver] This function must be called in a Nuxt plugin that is `unshift`ed to the beginning of the Nuxt plugins array.')
+  if (import.meta.env.DEV && !useZootApp()) {
+    console.warn('[definePayloadReviver] This function must be called in a plugin that is `unshift`ed to the beginning of the plugins array.')
   }
   if (!import.meta.env.SSR) {
     useZootApp()._payloadRevivers[name] = revive

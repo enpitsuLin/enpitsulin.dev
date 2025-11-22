@@ -190,7 +190,7 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'src/pages/(home)/about.md': {
+    'src/pages/(home)/about.vue': {
       routes:
         | '/(home)/about'
       views:
@@ -232,7 +232,7 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'src/pages/(home)/projects.md': {
+    'src/pages/(home)/projects.vue': {
       routes:
         | '/(home)/projects'
       views:

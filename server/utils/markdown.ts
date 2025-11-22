@@ -1,6 +1,3 @@
-import type { Props } from 'hast-util-to-jsx-runtime'
-import type { Component, SlotsType } from 'vue'
-import type { JSX } from 'vue/jsx-runtime'
 import rehypeShikiFromHighlighter from '@shikijs/rehype/core'
 import {
   transformerMetaHighlight,
@@ -11,7 +8,6 @@ import {
   transformerNotationHighlight,
   transformerNotationWordHighlight,
 } from '@shikijs/transformers'
-import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
 import rehypeUnwrapImages from 'rehype-unwrap-images'
@@ -25,38 +21,6 @@ import { createJavaScriptRegexEngine, makeSingletonHighlighter } from 'shiki'
 import { createdBundledHighlighter } from 'shiki/core-unwasm.mjs'
 import { unified } from 'unified'
 import { VFile } from 'vfile'
-import { Comment, Fragment, h, isVNode, Static, Suspense, Text, withCtx } from 'vue'
-import { useZootApp } from '~~/lib/app'
-
-function isVNodeTypesComponent(type: any): type is Component {
-  if (typeof type === 'string') {
-    return false
-  }
-  if (isVNode(type)) {
-    return false
-  }
-  if (type === Text || type === Static || type === Comment || type === Fragment) {
-    return false
-  }
-  return true
-}
-
-function jsx(type: any, props: Props, key?: string | undefined) {
-  const { children } = props
-  delete props.children
-  if (arguments.length > 2) {
-    props.key = key
-  }
-  // use default slot to prevent "Non-function value encountered for default slot"
-  if (isVNodeTypesComponent(type)) {
-    return h(type, props, { default: withCtx(() => children) })
-  }
-  return h(
-    type,
-    props,
-    children,
-  ) as JSX.Element
-}
 
 const createHighlighter = createdBundledHighlighter({
   themes: {
@@ -78,37 +42,6 @@ const createHighlighter = createdBundledHighlighter({
 })
 
 const getHighlighter = makeSingletonHighlighter(createHighlighter)
-
-const componentsGlob = import.meta.glob<any>(
-  '~/components/markdown/content/*.vue',
-  { eager: true, import: 'default' },
-)
-
-function wrapperMarkdownComponent(component: Component) {
-  return defineComponent({
-    name: 'MarkdownComponent',
-    props: {
-      node: {
-        type: Object,
-        required: true,
-      },
-    },
-    slots: Object as SlotsType<{
-      default: () => VNode[]
-    }>,
-    setup({ node }, { attrs, slots }) {
-      provide('node', node)
-      return () => h(component, attrs, slots)
-    },
-  })
-}
-
-const components = Object.fromEntries(
-  Object.entries(componentsGlob).map(([key, component]) => [
-    key.replace(/^\/src\/components\/markdown\/content\/(.*)\.vue$/, '$1'),
-    wrapperMarkdownComponent(component),
-  ]),
-)
 
 async function getProcessor() {
   const highlighter = await getHighlighter({
@@ -162,56 +95,11 @@ async function getProcessor() {
     .use(rehypeStringify, { allowDangerousHtml: true })
 }
 
-export function useMarkdown(markdown: string) {
-  const Renderer = defineComponent({
-    name: 'Renderer',
-    async setup() {
-      const file = new VFile(markdown)
-      const processor = await getProcessor()
+export async function markdown(markdown: string) {
+  const file = new VFile(markdown)
+  const processor = await getProcessor()
 
-      const mdast = processor.parse(file)
+  const mdast = processor.parse(file)
 
-      const hast = await processor.run(mdast, file)
-
-      const nodes = toJsxRuntime(hast, {
-        Fragment,
-        jsx,
-        jsxs: jsx,
-        passNode: true,
-        elementAttributeNameCase: 'html',
-        ignoreInvalidStyle: true,
-        components,
-      })
-
-      return () => h(nodes)
-    },
-  })
-
-  const Content = defineComponent({
-    name: 'Content',
-    props: {
-      tag: {
-        type: String,
-        default: 'div',
-      },
-    },
-    setup({ tag }, ctx) {
-      const zoot = useZootApp()
-      return () => h(
-        Suspense,
-        {
-          suspensible: true,
-          onResolve() {
-            zoot.callHook('app:suspense:resolve')
-          },
-        },
-        {
-          default: () => h(tag, ctx.attrs, h(Renderer)),
-          fallback: () => h('div', 'Loading...'),
-        },
-      )
-    },
-  })
-
-  return { Renderer, Content }
+  return await processor.run(mdast, file)
 }

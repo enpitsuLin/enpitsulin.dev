@@ -403,6 +403,19 @@ const apiRoute = new Hono<Env>({ strict: false })
     return auth.handler(c.req.raw)
   })
   .route('/post', apiPostRoute)
+  .post('/markdown', zValidator('json', z.object({ markdown: z.string() })), async (c) => {
+    const body = c.req.valid('json')
+    const { markdown } = body
+
+    try {
+      const rendered = await import('~~/server/utils/markdown').then(mod => mod.markdown(markdown))
+      return c.json({ rendered })
+    }
+    catch (error) {
+      console.error('Markdown processing error:', error)
+      throw new HTTPException(500, { message: 'Markdown processing failed' })
+    }
+  })
 
 const app = new Hono<Env>({ strict: false })
   .use('*', middleware)

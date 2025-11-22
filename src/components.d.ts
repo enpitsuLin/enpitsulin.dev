@@ -14,7 +14,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
     Article: typeof import('./components/article/index.vue')['default']
-    ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
     ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
     ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
     ArticleTag: typeof import('./components/article/tag.vue')['default']
@@ -78,7 +77,6 @@ declare module 'vue' {
 declare global {
   const AdminPostForm: typeof import('./components/admin/post/form.vue')['default']
   const Article: typeof import('./components/article/index.vue')['default']
-  const ArticleCardTag: typeof import('./components/article/card/tag.vue')['default']
   const ArticleCardTime: typeof import('./components/article/card/time.vue')['default']
   const ArticleCardTitle: typeof import('./components/article/card/title.vue')['default']
   const ArticleTag: typeof import('./components/article/tag.vue')['default']

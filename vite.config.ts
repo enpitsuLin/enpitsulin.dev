@@ -1,16 +1,12 @@
 import path from 'node:path'
 import { cloudflare as Cloudflare } from '@cloudflare/vite-plugin'
 import FullStack from '@hiogawa/vite-plugin-fullstack'
-import VueI18n from '@intlify/unplugin-vue-i18n/vite'
-import Shiki from '@shikijs/markdown-it'
 import { unheadVueComposablesImports } from '@unhead/vue'
 import Vue from '@vitejs/plugin-vue'
 import VueJsx from '@vitejs/plugin-vue-jsx'
-import LinkAttributes from 'markdown-it-link-attributes'
 import Unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Markdown from 'unplugin-vue-markdown/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
@@ -95,37 +91,6 @@ export default defineConfig({
     // https://github.com/antfu/unocss
     // see uno.config.ts for config
     Unocss(),
-
-    // https://github.com/unplugin/unplugin-vue-markdown
-    // Don't need this? Try vitesse-lite: https://github.com/antfu/vitesse-lite
-    Markdown({
-      wrapperClasses: 'prose dark:prose-invert prose-sm m-auto text-left',
-      headEnabled: true,
-      async markdownItSetup(md) {
-        md.use(LinkAttributes, {
-          matcher: (link: string) => /^https?:\/\//.test(link),
-          attrs: {
-            target: '_blank',
-            rel: 'noopener',
-          },
-        })
-        md.use(await Shiki({
-          defaultColor: false,
-          themes: {
-            light: 'vitesse-light',
-            dark: 'vitesse-dark',
-          },
-        }))
-      },
-    }),
-
-    // https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n
-    VueI18n({
-      runtimeOnly: true,
-      compositionOnly: true,
-      fullInstall: true,
-      include: [path.resolve(__dirname, 'locales/**')],
-    }),
 
     // https://github.com/webfansplz/vite-plugin-vue-devtools
     // VueDevTools(),
