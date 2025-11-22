@@ -11,6 +11,7 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defaultClientConditions, defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   environments: {
@@ -47,12 +48,6 @@ export default defineConfig({
       serverEnvironments: ['worker'],
     }),
 
-    Cloudflare({
-      viteEnvironment: {
-        name: 'worker',
-      },
-    }),
-
     // https://github.com/posva/unplugin-vue-router
     VueRouter({
       extensions: ['.vue'],
@@ -64,6 +59,12 @@ export default defineConfig({
     }),
 
     VueJsx(),
+
+    Cloudflare({
+      viteEnvironment: {
+        name: 'worker',
+      },
+    }),
 
     // https://github.com/antfu/unplugin-auto-import
     AutoImport({
@@ -98,7 +99,7 @@ export default defineConfig({
     Unocss(),
 
     // https://github.com/webfansplz/vite-plugin-vue-devtools
-    // VueDevTools(),
+    VueDevTools(),
   ],
 
   server: {
