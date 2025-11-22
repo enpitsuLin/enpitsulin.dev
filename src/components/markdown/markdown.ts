@@ -1,19 +1,20 @@
 import type { Root } from 'hast'
+import type { Props } from 'hast-util-to-jsx-runtime'
 import type { Component, PropType, SlotsType, VNode } from 'vue'
 import type { JSX as Jsx } from 'vue/jsx-runtime'
 import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
-import { h } from 'vue'
+import { capitalize, h } from 'vue'
 
-import { Fragment, jsx, jsxDEV, jsxs } from 'vue/jsx-runtime'
+import { Fragment } from 'vue/jsx-runtime'
 
-const componentsGlob = import.meta.glob<any>(
-  '~/components/markdown/content/*.vue',
-  { eager: true, import: 'default' },
+const componentsGlob = import.meta.glob<Component>(
+  '~/components/markdown/prose/*.vue',
+  { eager: true, import: 'default', base: './prose' },
 )
 
-function wrapperMarkdownComponent(component: Component) {
+function wrapperProseComponent(component: Component, name: string) {
   return defineComponent({
-    name: 'MarkdownComponent',
+    name: `ProseComponent${capitalize(name)}`,
     props: {
       node: {
         type: Object,
@@ -31,10 +32,13 @@ function wrapperMarkdownComponent(component: Component) {
 }
 
 const components = Object.fromEntries(
-  Object.entries(componentsGlob).map(([key, component]) => [
-    key.replace(/^\/src\/components\/markdown\/content\/(.*)\.vue$/, '$1'),
-    wrapperMarkdownComponent(component),
-  ]),
+  Object.entries(componentsGlob).map(([key, component]) => {
+    const name = key.replace(/^\.\/(.*)\.vue$/, '$1')
+    return [
+      name,
+      wrapperProseComponent(component, name),
+    ]
+  }),
 )
 
 export const Markdown = defineComponent({
@@ -56,8 +60,8 @@ export const Markdown = defineComponent({
       toJsxRuntime(root, {
         Fragment,
         jsx,
-        jsxs,
-        jsxDEV,
+        jsxs: jsx,
+        jsxDEV: jsx,
         passNode: true,
         elementAttributeNameCase: 'html',
         // ignoreInvalidStyle: true,
@@ -66,6 +70,26 @@ export const Markdown = defineComponent({
     )
   },
 })
+
+function jsx(type: any, props: Props, key?: string): JSX.Element {
+  const { children } = props
+  delete props.children
+  if (key) {
+    props.key = key
+  }
+
+  if (isComponent(type)) {
+    return h(type, props, () => children)
+  }
+  return h(type, props, children!)
+}
+
+function isComponent(type: any): type is Component {
+  return (
+    typeof type === 'object'
+    || typeof type === 'function'
+  )
+}
 
 declare global {
   // eslint-disable-next-line ts/no-namespace
