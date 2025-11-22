@@ -2,13 +2,13 @@ import type { App as VueApp } from 'vue'
 import type { CreateOptions, Plugin } from '~~/lib/app'
 import { createApp, createSSRApp, nextTick } from 'vue'
 import { applyPlugins, createZootApp } from '~~/lib/app'
-import RootComponent from '~/App.vue'
 
 const plugins = Object.values(import.meta.glob<Plugin>('./plugins/*.ts', { eager: true, import: 'default' }))
 
 export async function createEntry(ssrContext: CreateOptions['ssrContext']): Promise<VueApp<Element>>
 export async function createEntry(): Promise<VueApp<Element>>
 export async function createEntry(ssrContext?: CreateOptions['ssrContext']) {
+  const { default: RootComponent } = await import('~/App.vue')
   const vueApp = import.meta.env.SSR ? createSSRApp(RootComponent) : createApp(RootComponent)
 
   const zoot = createZootApp({ vueApp, ssrContext })
