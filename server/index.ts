@@ -418,6 +418,14 @@ const apiRoute = new Hono<Env>({ strict: false })
   })
 
 const app = new Hono<Env>({ strict: false })
+  .use('*', async (c, next) => {
+    if (!import.meta.env.DEV) {
+      if (new URL(c.req.url).host !== 'enpitsulin.dev') {
+        return c.redirect('https://enpitsulin.dev', 301)
+      }
+    }
+    await next()
+  })
   .use('*', middleware)
   .use('*', cors())
   .get('/*', (c, next) => {
