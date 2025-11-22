@@ -12,6 +12,7 @@ import VueRouter from 'unplugin-vue-router/vite'
 import { defaultClientConditions, defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 import VueDevTools from 'vite-plugin-vue-devtools'
+import * as _compiler from 'vue/compiler-sfc'
 
 export default defineConfig({
   environments: {
@@ -55,6 +56,8 @@ export default defineConfig({
     }),
 
     Vue({
+      // workaround for https://github.com/cloudflare/workers-sdk/issues/11359#issuecomment-3560888535 related to import '.vue' file in worker environment in dev
+      compiler: _compiler,
       include: [/\.vue$/, /\.md$/],
     }),
 
