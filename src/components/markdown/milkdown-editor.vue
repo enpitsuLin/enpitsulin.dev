@@ -36,7 +36,15 @@ useEditor((root) => {
 
       const languagesToShikiLang = languages
         .map((lang) => {
-          (lang as any).shikiLang = lang.alias.some(alias => langs.includes(alias)) ? lang.alias.find(alias => langs.includes(alias))! : null
+          lang.alias.some((alias) => {
+            if (langs.includes(alias)) {
+              Reflect.set(lang, 'name', alias);
+
+              (lang as any).shikiLang = alias
+              return true
+            }
+            return false
+          })
           return (lang as typeof lang & { shikiLang: string | null })
         })
         .filter(lang => lang.shikiLang !== null)
