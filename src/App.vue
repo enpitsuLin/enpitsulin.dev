@@ -9,7 +9,8 @@ useHead({
     return `${t} - ${description}`
   },
   htmlAttrs: {
-    lang: 'zh-cmn-Hans',
+    lang: 'zh-Hans',
+    class: isDark ? 'dark' : '',
   },
   meta: [
     {

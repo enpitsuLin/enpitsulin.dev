@@ -12,14 +12,16 @@ const { user } = useAuth()
 const router = useRouter()
 const route = useRoute()
 
-if (user.value?.role !== 'admin') {
-  await router.push({
-    path: '/admin/sign-in',
-    query: {
-      redirect: encodeURIComponent(route.fullPath),
-    },
-  })
-}
+onMounted(async () => {
+  if (user.value?.role !== 'admin') {
+    await router.push({
+      path: '/admin/sign-in',
+      query: {
+        redirect: encodeURIComponent(route.fullPath),
+      },
+    })
+  }
+})
 
 interface NavItem {
   title: string

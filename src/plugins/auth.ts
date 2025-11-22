@@ -61,6 +61,7 @@ export default defineZootPlugin(async (zootApp) => {
   }
   else {
     const { user, session } = zootApp.ssrContext!.context.get('auth')
+
     if (user && session) {
       auth.user.value = user
       auth.session.value = session
