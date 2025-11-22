@@ -2,7 +2,7 @@ import type { RouteLocationRaw, Router } from 'vue-router'
 import { parseQuery, parseURL, withoutBase } from 'ufo'
 import { nextTick } from 'vue'
 import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
-import { routes } from 'vue-router/auto-routes'
+import { handleHotUpdate, routes } from 'vue-router/auto-routes'
 import { defineZootPlugin, useRuntimeConfig } from '~~/lib/app'
 import { documentReady } from '~~/lib/document-ready'
 
@@ -26,6 +26,10 @@ export default defineZootPlugin(async (zootApp) => {
       : createWebHistory(),
     routes,
   })
+
+  if (import.meta.hot) {
+    handleHotUpdate(router)
+  }
 
   if (!import.meta.env.SSR) {
     await documentReady()
