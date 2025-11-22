@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type z from 'zod'
+import { ClientOnly } from '@ark-ui/vue'
 import { useForm } from '@tanstack/vue-form'
 import { postSchema } from '~/schemas/post'
 
@@ -97,11 +98,13 @@ const form = useForm({
         :field
         label="内容 (Markdown)"
       >
-        <MarkdownEditor
-          :value="value"
-          @change="handleChange"
-          @blur="onBlur"
-        />
+        <ClientOnly>
+          <MarkdownEditor
+            :value="value"
+            @change="handleChange"
+            @blur="onBlur"
+          />
+        </ClientOnly>
       </UiFormField>
     </form.Field>
 

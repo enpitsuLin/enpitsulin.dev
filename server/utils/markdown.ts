@@ -17,34 +17,12 @@ import remarkEmoji from 'remark-emoji'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
-import { createJavaScriptRegexEngine, makeSingletonHighlighter } from 'shiki'
-import { createdBundledHighlighter } from 'shiki/core-unwasm.mjs'
 import { unified } from 'unified'
 import { VFile } from 'vfile'
-
-const createHighlighter = createdBundledHighlighter({
-  themes: {
-    'vitesse-light': () => import('@shikijs/themes/vitesse-light'),
-    'vitesse-dark': () => import('@shikijs/themes/vitesse-dark'),
-  },
-  langs: {
-    tsx: () => import('@shikijs/langs/tsx'),
-    typescript: () => import('@shikijs/langs/typescript'),
-    javascript: () => import('@shikijs/langs/javascript'),
-    json: () => import('@shikijs/langs/json'),
-    html: () => import('@shikijs/langs/html'),
-    css: () => import('@shikijs/langs/css'),
-    markdown: () => import('@shikijs/langs/markdown'),
-    yaml: () => import('@shikijs/langs/yaml'),
-    sh: () => import('@shikijs/langs/sh'),
-  },
-  engine: () => createJavaScriptRegexEngine(),
-})
-
-const getHighlighter = makeSingletonHighlighter(createHighlighter)
+import { getSingletonHighlighter } from '~~/lib/shiki'
 
 async function getProcessor() {
-  const highlighter = await getHighlighter({
+  const highlighter = await getSingletonHighlighter({
     themes: ['vitesse-light', 'vitesse-dark'],
     langs: ['tsx', 'typescript', 'javascript', 'json', 'html', 'css', 'markdown', 'yaml', 'sh'],
   })
