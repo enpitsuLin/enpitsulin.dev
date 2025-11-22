@@ -70,9 +70,6 @@ importers:
       hookable:
         specifier: ^5.5.3
         version: 5.5.3
-      markdown:
-        specifier: ^0.5.0
-        version: 0.5.0
       mimetext:
         specifier: ^3.0.27
         version: 3.0.27
@@ -2322,9 +2319,6 @@ packages:
     peerDependencies:
       vue: '>=3.0.0'
 
-  abbrev@1.1.1:
-    resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
-
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -3618,10 +3612,6 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
-  markdown@0.5.0:
-    resolution: {integrity: sha512-ctGPIcuqsYoJ493sCtFK7H4UEgMWAUdXeBhPbdsg1W0LsV9yJELAHRsMmWfTgao6nH0/x5gf9FmsbxiXnrgaIQ==}
-    hasBin: true
-
   mdast-util-directive@3.1.0:
     resolution: {integrity: sha512-I3fNFt+DHmpWCYAT7quoM6lHf9wuqtI+oCOfvILnoicNIqjh5E3dEJWiXuYME2gNe8vl1iMQwyUHa7bgFmak6Q==}
 
@@ -3894,10 +3884,6 @@ packages:
 
   node-releases@2.0.25:
     resolution: {integrity: sha512-4auku8B/vw5psvTiiN9j1dAOsXvMoGqJuKJcR+dTdqiXEK20mMTk1UEo3HS16LeGQsVG6+qKTPM9u/qQ2LqATA==}
-
-  nopt@2.1.2:
-    resolution: {integrity: sha512-x8vXm7BZ2jE1Txrxh/hO74HTuYZQEbo8edoRcANgdZ4+PCV+pbjd/xdummkmjjC7LU5EjPzlu8zEq/oxWylnKA==}
-    hasBin: true
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -7493,8 +7479,6 @@ snapshots:
       '@zag-js/utils': 1.29.0
       vue: 3.5.24(typescript@5.9.3)
 
-  abbrev@1.1.1: {}
-
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
       acorn: 8.15.0
@@ -8811,10 +8795,6 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
-  markdown@0.5.0:
-    dependencies:
-      nopt: 2.1.2
-
   mdast-util-directive@3.1.0:
     dependencies:
       '@types/mdast': 4.0.4
@@ -9333,10 +9313,6 @@ snapshots:
       formdata-polyfill: 4.0.10
 
   node-releases@2.0.25: {}
-
-  nopt@2.1.2:
-    dependencies:
-      abbrev: 1.1.1
 
   normalize-path@3.0.0: {}
 
