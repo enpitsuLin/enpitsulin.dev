@@ -8,6 +8,7 @@
   "main": "server/index.ts",
   "compatibility_date": "2025-10-01",
   "compatibility_flags": [
+    "nodejs_als",
     "global_fetch_strictly_public"
   ],
   "observability": {

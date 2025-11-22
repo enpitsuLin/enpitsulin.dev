@@ -30,12 +30,6 @@ export async function createEntry(ssrContext?: CreateOptions['ssrContext']) {
 
   return vueApp
 }
-if (!import.meta.env.SSR) {
-  createEntry()
-    .catch((error: unknown) => {
-      console.error('Error while mounting app:', error)
-    })
-}
 
 if (import.meta.env.DEV && import.meta.hot) {
   import.meta.hot.accept()

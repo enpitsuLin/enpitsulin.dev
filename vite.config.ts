@@ -9,7 +9,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
-import { defineConfig } from 'vite'
+import { defaultClientConditions, defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
@@ -23,14 +23,12 @@ export default defineConfig({
         },
       },
     },
-  },
-  builder: {
-    async buildApp(builder) {
-      await builder.build(builder.environments.client!)
-      await builder.build(builder.environments.worker!)
+    worker: {
+      resolve: {
+        conditions: [...defaultClientConditions],
+      },
     },
   },
-
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
@@ -39,10 +37,15 @@ export default defineConfig({
   },
 
   plugins: [
-    Inspect(),
+    Inspect({
+      build: true,
+    }),
+
     FullStack({
       serverHandler: false,
+      serverEnvironments: ['worker'],
     }),
+
     Cloudflare({
       viteEnvironment: {
         name: 'worker',
@@ -51,13 +54,14 @@ export default defineConfig({
 
     // https://github.com/posva/unplugin-vue-router
     VueRouter({
-      extensions: ['.vue', '.md'],
+      extensions: ['.vue'],
       dts: 'src/typed-router.d.ts',
     }),
 
     Vue({
       include: [/\.vue$/, /\.md$/],
     }),
+
     VueJsx(),
 
     // https://github.com/antfu/unplugin-auto-import
@@ -100,12 +104,4 @@ export default defineConfig({
     cors: false,
   },
 
-  optimizeDeps: {
-    entries: ['./src/entry-client.ts'],
-  },
-
-  ssr: {
-    // TODO: workaround until they support native ESM
-    noExternal: ['workbox-window', /vue-i18n/],
-  },
 })
