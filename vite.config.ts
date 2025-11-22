@@ -11,7 +11,6 @@ import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defaultClientConditions, defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
-import VueDevTools from 'vite-plugin-vue-devtools'
 import * as _compiler from 'vue/compiler-sfc'
 
 export default defineConfig({
@@ -100,9 +99,6 @@ export default defineConfig({
     // https://github.com/antfu/unocss
     // see uno.config.ts for config
     Unocss(),
-
-    // https://github.com/webfansplz/vite-plugin-vue-devtools
-    VueDevTools(),
   ],
 
   server: {

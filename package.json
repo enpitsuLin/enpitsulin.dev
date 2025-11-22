@@ -93,7 +93,6 @@
     "vite": "^7.2.4",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-inspect": "^11.3.3",
-    "vite-plugin-vue-devtools": "^8.0.5",
     "vue-tsc": "^3.1.4",
     "wrangler": "^4.50.0"
   },
