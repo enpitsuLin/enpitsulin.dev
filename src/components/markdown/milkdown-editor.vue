@@ -1,24 +1,31 @@
 <script setup lang="ts">
 import { Crepe } from '@milkdown/crepe'
-import { listenerCtx } from '@milkdown/kit/plugin/listener'
 import { Milkdown, useEditor } from '@milkdown/vue'
 
 const { value } = defineProps<{ value: string }>()
 const emit = defineEmits<{
   change: [value: string]
+  blur: []
 }>()
 
 useEditor((root) => {
   const crepe = new Crepe({
     root,
     defaultValue: value,
+    features: {
+      latex: false,
+    },
   })
 
-  crepe.editor.config((ctx) => {
-    ctx.get(listenerCtx).markdownUpdated((_ctx, markdown) => {
+  crepe.on((manager) => {
+    manager.blur(() => {
+      emit('blur')
+    })
+    manager.markdownUpdated((ctx, markdown) => {
       emit('change', markdown)
     })
   })
+
   return crepe
 })
 </script>

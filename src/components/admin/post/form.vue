@@ -93,13 +93,14 @@ const form = useForm({
       name="content"
     >
       <UiFormField
-        v-slot="{ value, handleChange }"
+        v-slot="{ value, handleChange, onBlur }"
         :field
         label="内容 (Markdown)"
       >
         <MarkdownEditor
           :value="value"
           @change="handleChange"
+          @blur="onBlur"
         />
       </UiFormField>
     </form.Field>
