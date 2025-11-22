@@ -29,11 +29,6 @@ useHead({
   link: [
     {
       rel: 'icon',
-      media: '(prefers-color-scheme: dark)',
-      href: '/favicon-dark.svg',
-    },
-    {
-      rel: 'icon',
       type: 'image/svg+xml',
       href: '/favicon.svg',
     },
