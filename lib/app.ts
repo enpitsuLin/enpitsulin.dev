@@ -1,11 +1,12 @@
 import type { VueHeadClient } from '@unhead/vue/types'
 import type { Context } from 'hono'
 import type { Hookable, HookCallback } from 'hookable'
-import type { App } from 'vue'
+import type { App, onErrorCaptured, VNode } from 'vue'
 import type { SSRContext } from 'vue/server-renderer'
 import type { Env } from '~~/server/middleware/context'
 import { createHooks } from 'hookable'
 import { getContext } from 'unctx'
+import { getCurrentInstance, reactive, shallowReactive } from 'vue'
 
 const zootAppCtx = /* #__PURE__ */ getContext<ZootApp>('zoot-app')
 

@@ -45,7 +45,7 @@ export default defineConfig({
 
     FullStack({
       serverHandler: false,
-      serverEnvironments: ['worker'],
+      serverEnvironments: ['ssr'],
     }),
 
     // https://github.com/posva/unplugin-vue-router
@@ -64,7 +64,7 @@ export default defineConfig({
 
     Cloudflare({
       viteEnvironment: {
-        name: 'worker',
+        name: 'ssr',
       },
     }),
 
@@ -103,6 +103,9 @@ export default defineConfig({
 
   server: {
     cors: false,
+    warmup: {
+      ssrFiles: ['lib/**/*.ts'],
+    },
   },
 
 })
