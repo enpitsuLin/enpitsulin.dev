@@ -30,7 +30,7 @@ const value = ref([parseDate('2022-01-01')]) as Ref<DateValue[]>
         bg="transparent"
         class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white group-data-[state=open]:ring-2 group-data-[state=open]:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
       >
-        <DatePicker.Input />
+        <DatePicker.Input appearance-none bg-transparent />
         <DatePicker.Trigger absolute inset-0 flex="~ items-center justify-end" px-2>
           <div i-mingcute:right-fill rotate-90 />
         </DatePicker.Trigger>
