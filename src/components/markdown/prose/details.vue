@@ -49,7 +49,7 @@ const slots = useSlots()
 function Children() {
   const _children = slots.default?.() ?? []
 
-  const trigger = _children.find(c => isComponent(c) && c.type.name === 'MarkdownComponent' && c.props?.node.tagName === 'summary')
+  const trigger = _children.find(c => isComponent(c) && c.type.name === 'ProseComponentSummary' && c.props?.node.tagName === 'summary')
   const content = _children.filter(c => c !== trigger)
   return h(Fragment, null, [
     trigger,
