@@ -31,7 +31,7 @@ useEventListener('keydown', handleKeyDown)
         layout-id="avatar"
         alt="avatar" width="250" height="250" decoding="async"
         class="border-[0.35rem] border-white rounded-full object-cover shadow-xl"
-        src="https://avatars.githubusercontent.com/enpitsuLin"
+        src="/images/avatar.png"
         fetchpriority="high"
       />
     </div>

@@ -29,7 +29,7 @@ const route = useRoute()
           width="250" height="250"
           decoding="async"
           class="size-9 border-2 border-white rounded-full object-cover shadow-xl"
-          src="https://avatars.githubusercontent.com/enpitsuLin"
+          src="/images/avatar.png"
         />
       </div>
       <nav
