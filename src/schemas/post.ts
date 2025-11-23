@@ -19,6 +19,9 @@ export const postSchema = z.object({
     },
     z.array(z.string()),
   ),
+  publishedAt: z.date().optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 })
 
 export type PostFormData = z.infer<typeof postSchema>

@@ -38,6 +38,10 @@ const apiPostRoute = new Hono<Env>({ strict: false })
         slug: form.slug,
         content: form.content,
         status: form.status,
+        updatedAt: form.updatedAt,
+        createdAt: form.createdAt,
+        publishedAt: form.publishedAt,
+        excerpt: form.excerpt,
       }
 
       await db.insert(schema.post).values(newPost)

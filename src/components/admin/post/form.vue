@@ -165,6 +165,32 @@ const form = useForm({
           />
         </UiFormField>
       </form.Field>
+
+      <form.Field
+        v-slot="{ field }"
+        name="excerpt"
+      >
+        <UiFormField
+          v-slot="{ value, onInput, onBlur }"
+          :field
+          label="摘记"
+        >
+          <textarea
+            resize-none
+            :value="value"
+            w="full" p="x4 y2"
+            border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+            bg="transparent"
+            :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+            class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+            @input="onInput"
+            @blur="onBlur"
+          />
+        </UiFormField>
+      </form.Field>
+      <div flex="~ gap-2">
+        <UiFormDatetimePicker />
+      </div>
     </aside>
   </div>
 </template>
