@@ -17,7 +17,6 @@ export default defineConfig({
   environments: {
     client: {
       build: {
-        minify: false,
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'src/entry-client.ts'),
