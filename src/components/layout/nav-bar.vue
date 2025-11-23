@@ -23,6 +23,7 @@ const route = useRoute()
         position="sticky top-4 md:absolute md:top-1/2 md:left--12" md:translate-y="-1/2"
       >
         <motion.img
+          fetchpriority="high"
           layout-id="avatar"
           alt="avatar"
           width="250" height="250"

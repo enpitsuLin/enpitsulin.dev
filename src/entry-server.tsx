@@ -38,6 +38,13 @@ export async function render(c: Context<Env>) {
       ),
   })
 
+  head.push({
+    link: [
+      { rel: 'preconnect', href: 'https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css' },
+      { rel: 'preconnect', href: 'https://s1.hdslb.com/bfs/static/jinkela/long/font/medium.css' },
+    ],
+  })
+
   // Payload
   head.push(
     { script: renderPayloadJsonScript({ ssrContext, data: ssrContext.payload }) },
