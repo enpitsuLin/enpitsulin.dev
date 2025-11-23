@@ -4,7 +4,7 @@ import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { MarkdownConsumer } from './milkdown/consumer'
 
 import '@milkdown/crepe/theme/common/prosemirror.css'
-import '@milkdown/crepe/theme/common/reset.css'
+// import '@milkdown/crepe/theme/common/reset.css'
 import '@milkdown/crepe/theme/common/block-edit.css'
 import '@milkdown/crepe/theme/common/code-mirror.css'
 import '@milkdown/crepe/theme/common/cursor.css'
@@ -40,6 +40,18 @@ const emit = defineEmits<{
 </template>
 
 <style>
+.milkdown {
+  position: relative;
+}
+.milkdown .ProseMirror {
+  padding: 30px 90px;
+  max-width: unset !important;
+  --at-apply: prose;
+}
+.dark .milkdown .ProseMirror {
+  --at-apply: prose-invert;
+}
+
 .milkdown {
   --crepe-color-background: #ffffff;
   --crepe-color-on-background: #000000;
