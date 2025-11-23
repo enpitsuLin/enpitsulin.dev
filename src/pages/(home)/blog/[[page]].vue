@@ -41,7 +41,7 @@ const pagination = usePagination(computed(() => ({
       },
     })
   },
-  count: posts.value ? posts.value.total - 1 : 0,
+  count: posts.value ? posts.value.total : 0,
   pageSize: posts.value?.limit ?? pageLimit,
   currentPage: page.value,
   siblingCount: 2,
