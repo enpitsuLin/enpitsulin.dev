@@ -6,7 +6,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "enpitsulin-dev",
   "main": "server/index.ts",
-  "compatibility_date": "2025-10-01",
+  "compatibility_date": "2025-11-17",
   "compatibility_flags": [
     "nodejs_als",
     "global_fetch_strictly_public"
