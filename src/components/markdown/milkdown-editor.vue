@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import {
-  codeBlockConfig,
-} from '@milkdown/components/code-block'
+import { codeBlockConfig } from '@milkdown/components/code-block'
 import { Crepe } from '@milkdown/crepe'
 import { highlight, highlightPluginConfig } from '@milkdown/plugin-highlight'
 import { createParser } from '@milkdown/plugin-highlight/shiki'
@@ -38,29 +36,25 @@ useEditor((root) => {
         .map((lang) => {
           lang.alias.some((alias) => {
             if (langs.includes(alias)) {
-              Reflect.set(lang, 'name', alias);
-
-              (lang as any).shikiLang = alias
+              Reflect.set(lang, 'name', alias)
+              Reflect.set(lang, 'shikiLang', alias)
               return true
             }
             return false
           })
-          return (lang as typeof lang & { shikiLang: string | null })
+          return (lang as typeof lang & { shikiLang?: string })
         })
-        .filter(lang => lang.shikiLang !== null)
+        .filter(lang => !!lang.shikiLang)
 
       ctx.update(codeBlockConfig.key, defaultConfig => ({
         ...defaultConfig,
         languages: languagesToShikiLang,
+        copyText: '复制代码',
+        searchPlaceholder: '搜索语言',
       }))
 
       ctx.set(highlightPluginConfig.key, {
         parser,
-        languageExtractor: (node) => {
-          const language = node.attrs.language
-          const lang = languagesToShikiLang.find(l => l.name === language)
-          return lang?.shikiLang || 'plaintext'
-        },
       })
     })
     .use(highlight)

@@ -128,7 +128,7 @@ const navigationItems = computed(() => {
         </RouterLink>
       </div>
     </LayoutSidebar>
-    <LayoutSidebarInset>
+    <LayoutSidebarInset of-hidden class="max-h-[calc(100svh-24px)]">
       <header
         border="b border"
         flex="~ shrink-0 items-center gap-2"
@@ -154,12 +154,11 @@ const navigationItems = computed(() => {
           </UiBreadcrumb>
         </div>
       </header>
-      <div flex="~ col 1">
-        <div flex="~ col 1 gap-2 " class="@container/main">
-          <div flex="~ col gap-4" class="py-4 md:gap-6 md:py-6">
-            <RouterView />
-          </div>
-        </div>
+      <div
+        of-auto space-y-2
+        class="h-[calc(100%-var(--header-height))] py-4 @container/main md:gap-6 md:py-6"
+      >
+        <RouterView />
       </div>
     </LayoutSidebarInset>
   </LayoutSidebarProvider>

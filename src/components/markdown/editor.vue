@@ -24,6 +24,7 @@ const emit = defineEmits<{
 <template>
   <MilkdownProvider>
     <MilkdownEditor
+      v-bind="$attrs"
       :value="value"
       @change="emit('change', $event)"
       @blur="emit('blur')"

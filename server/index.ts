@@ -176,7 +176,7 @@ const apiPostRoute = new Hono<Env>({ strict: false })
   .patch(
     '/:id',
     zValidator('param', z.object({ id: z.string() })),
-    zValidator('form', postSchema.omit({ slug: true })),
+    zValidator('form', postSchema),
     async (c) => {
       c.get('auth').assertAuth('admin')
 
@@ -203,6 +203,8 @@ const apiPostRoute = new Hono<Env>({ strict: false })
         updateData.title = form.title
       if (form.content !== undefined)
         updateData.content = form.content
+      if (form.slug !== undefined)
+        updateData.slug = form.slug
       if (form.status !== undefined) {
         updateData.status = form.status
         if (form.status === 'published') {

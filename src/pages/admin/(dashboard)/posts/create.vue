@@ -49,9 +49,5 @@ const { mutate, isLoading } = useMutation({
 </script>
 
 <template>
-  <div style="padding: 20px; max-width: 800px;">
-    <h1>新建文章</h1>
-
-    <AdminPostForm :submitting="isLoading" @submit="mutate" />
-  </div>
+  <AdminPostForm :submitting="isLoading" @submit="mutate" />
 </template>
