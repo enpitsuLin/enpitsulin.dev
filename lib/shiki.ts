@@ -1,5 +1,5 @@
-import { createJavaScriptRegexEngine, makeSingletonHighlighter } from 'shiki'
-import { createdBundledHighlighter } from 'shiki/core-unwasm.mjs'
+import { createdBundledHighlighter, makeSingletonHighlighter } from 'shiki/core'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 const createHighlighter = createdBundledHighlighter({
   themes: {
