@@ -84,7 +84,7 @@ const form = useForm({
       >
         <ClientOnly>
           <MarkdownEditor
-            h-50rem flex-1 of-auto
+            h-80svh flex-1 of-auto
             border="~ border rounded-lg"
             :value="field.state.value"
             @change="field.handleChange($event)"

@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import type { DateValue } from '@ark-ui/vue/date-picker'
+import type { DatePickerRootProps, DateValue } from '@ark-ui/vue/date-picker'
 import type { Ref } from 'vue'
 import { DatePicker, parseDate } from '@ark-ui/vue/date-picker'
 import { ref } from 'vue'
 
 const value = ref([parseDate('2022-01-01')]) as Ref<DateValue[]>
+
+const format: DatePickerRootProps['format'] = (date) => {
+  const d = date.toDate('Asia/Shanghai')
+  return d.toLocaleDateString('zh-CN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
 </script>
 
 <template>
@@ -15,17 +25,18 @@ const value = ref([parseDate('2022-01-01')]) as Ref<DateValue[]>
       placement: 'bottom-start',
       sameWidth: true,
     }"
+    :format="format"
     :start-of-week="1"
+    time-zone="Asia/Shanghai"
   >
     <DatePicker.Label
       un-text="xs font-medium text-zinc-700 dark:text-zinc-300"
     >
       Label
     </DatePicker.Label>
-    <div role="group" flex="~ col gap-2" w-full>
+    <div role="group" grid="~ gap-2 cols-3" w-full>
       <DatePicker.Control
-        relative
-        flex-1 p="x4 y2"
+        relative col-span-2 flex-1 p="x4 y2"
         border="~ border group-data-[state=open]:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
         bg="transparent"
         class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white group-data-[state=open]:ring-2 group-data-[state=open]:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
@@ -47,7 +58,7 @@ const value = ref([parseDate('2022-01-01')]) as Ref<DateValue[]>
     </div>
     <DatePicker.Positioner>
       <DatePicker.Content
-        p-4
+        w-80 p-4
         border="~ border rounded-xl"
         bg="white/95 dark:zinc-900/95"
         class="z-100 origin-top-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
@@ -97,7 +108,7 @@ const value = ref([parseDate('2022-01-01')]) as Ref<DateValue[]>
                     :key="id" un-text-sm
                     class="op-50" size-9
                   >
-                    {{ weekDay.short }}
+                    {{ weekDay.narrow }}
                   </DatePicker.TableHeader>
                 </DatePicker.TableRow>
               </DatePicker.TableHead>

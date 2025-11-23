@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LocaleProvider } from '@ark-ui/vue/locale'
 import { isDark } from '~/composables/dark'
 import { description, title } from '~/constants'
 
@@ -42,14 +43,16 @@ useHead({
 </script>
 
 <template>
-  <UiToastToaster>
-    <Suspense>
-      <RouterView />
-      <template #fallback>
-        <div>
-          <h1>Loading...</h1>
-        </div>
-      </template>
-    </Suspense>
-  </UiToastToaster>
+  <LocaleProvider locale="zh-CN">
+    <UiToastToaster>
+      <Suspense>
+        <RouterView />
+        <template #fallback>
+          <div>
+            <h1>Loading...</h1>
+          </div>
+        </template>
+      </Suspense>
+    </UiToastToaster>
+  </LocaleProvider>
 </template>
