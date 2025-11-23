@@ -45,14 +45,7 @@ useHead({
 <template>
   <LocaleProvider locale="zh-CN">
     <UiToastToaster>
-      <Suspense>
-        <RouterView />
-        <template #fallback>
-          <div>
-            <h1>Loading...</h1>
-          </div>
-        </template>
-      </Suspense>
+      <RouterView />
     </UiToastToaster>
   </LocaleProvider>
 </template>

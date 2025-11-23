@@ -64,6 +64,11 @@ export default defineZootPlugin(async (zootApp) => {
       }
     })
   }
+  else {
+    zootApp.hook('app:beforeMount', async () => {
+      await router.isReady()
+    })
+  }
 
   return {
     provide: {
