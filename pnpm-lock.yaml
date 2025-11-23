@@ -28,6 +28,9 @@ importers:
       '@milkdown/components':
         specifier: ^7.17.1
         version: 7.17.1(@codemirror/language@6.11.3)(@codemirror/state@6.5.2)(@codemirror/view@6.38.8)(typescript@5.9.3)
+      '@milkdown/core':
+        specifier: ^7.17.1
+        version: 7.17.1
       '@milkdown/crepe':
         specifier: ^7.17.1
         version: 7.17.1(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3)(typescript@5.9.3)
@@ -37,12 +40,18 @@ importers:
       '@milkdown/plugin-highlight':
         specifier: ^7.17.1
         version: 7.17.1(@shikijs/types@3.15.0)(@types/hast@3.0.4)(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-transform@1.10.5)(prosemirror-view@1.41.3)
+      '@milkdown/prose':
+        specifier: ^7.17.1
+        version: 7.17.1
       '@milkdown/vue':
         specifier: ^7.17.1
         version: 7.17.1(@codemirror/language@6.11.3)(@codemirror/state@6.5.2)(@codemirror/view@6.38.8)(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.41.3)(typescript@5.9.3)(vue@3.5.24(typescript@5.9.3))
       '@pinia/colada':
         specifier: ^0.17.8
         version: 0.17.8(pinia@3.0.4(typescript@5.9.3)(vue@3.5.24(typescript@5.9.3)))(vue@3.5.24(typescript@5.9.3))
+      '@prosemirror-adapter/vue':
+        specifier: ^0.4.6
+        version: 0.4.6(vue@3.5.24(typescript@5.9.3))
       '@shikijs/langs':
         specifier: ^3.15.0
         version: 3.15.0
@@ -170,9 +179,15 @@ importers:
       '@types/hast':
         specifier: ^3.0.4
         version: 3.0.4
+      '@types/mdast':
+        specifier: ^4.0.4
+        version: 4.0.4
       '@types/nprogress':
         specifier: ^0.2.3
         version: 0.2.3
+      '@types/unist':
+        specifier: ^3.0.3
+        version: 3.0.3
       '@unocss/eslint-config':
         specifier: ^66.5.9
         version: 66.5.9(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -1668,6 +1683,17 @@ packages:
 
   '@prisma/get-platform@5.22.0':
     resolution: {integrity: sha512-pHhpQdr1UPFpt+zFfnPazhulaZYCUqeIcPpJViYoq9R+D/yw4fjE+CtnsnKzPYm0ddUbeXUzjGVGIRVgPDCk4Q==}
+
+  '@prosemirror-adapter/core@0.4.6':
+    resolution: {integrity: sha512-qbqd4u9IyDXXolFFmX1tzE000IpF9JbCiiwuSvqIh7lT9ZqjeMcyDVR/vxyM4oVY1sVyQQQj+WxHMAIhj7egVg==}
+
+  '@prosemirror-adapter/vue@0.4.6':
+    resolution: {integrity: sha512-1zDxyi4JqH4Iw8SPAvkNSAfUPEHQDRi0Oshi2qOmRf3xFHk1hBiV8CL0kEmOUE2C40ipk9AWkX2uu3UgO/8IYw==}
+    peerDependencies:
+      vue: ^3.0.0
+    peerDependenciesMeta:
+      vue:
+        optional: true
 
   '@quansync/fs@0.1.5':
     resolution: {integrity: sha512-lNS9hL2aS2NZgNW7BBj+6EBl4rOf8l+tQ0eRY6JWCI8jI2kc53gSoqbjojU0OnAWhzoXiOjFyGsHcDGePB3lhA==}
@@ -7062,6 +7088,23 @@ snapshots:
     dependencies:
       '@prisma/debug': 5.22.0
     optional: true
+
+  '@prosemirror-adapter/core@0.4.6':
+    dependencies:
+      prosemirror-model: 1.25.4
+      prosemirror-state: 1.4.4
+      prosemirror-view: 1.41.3
+
+  '@prosemirror-adapter/vue@0.4.6(vue@3.5.24(typescript@5.9.3))':
+    dependencies:
+      '@prosemirror-adapter/core': 0.4.6
+      nanoid: 5.1.6
+      prosemirror-keymap: 1.2.3
+      prosemirror-model: 1.25.4
+      prosemirror-state: 1.4.4
+      prosemirror-view: 1.41.3
+    optionalDependencies:
+      vue: 3.5.24(typescript@5.9.3)
 
   '@quansync/fs@0.1.5':
     dependencies:

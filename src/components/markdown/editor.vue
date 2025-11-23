@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MilkdownProvider } from '@milkdown/vue'
-import MilkdownEditor from './milkdown-editor.vue'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
+import { MarkdownConsumer } from './milkdown/consumer'
 
 import '@milkdown/crepe/theme/common/prosemirror.css'
 import '@milkdown/crepe/theme/common/reset.css'
@@ -14,6 +15,10 @@ import '@milkdown/crepe/theme/common/placeholder.css'
 import '@milkdown/crepe/theme/common/toolbar.css'
 import '@milkdown/crepe/theme/common/table.css'
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { value } = defineProps<{ value: string }>()
 const emit = defineEmits<{
   change: [value: string]
@@ -23,12 +28,14 @@ const emit = defineEmits<{
 
 <template>
   <MilkdownProvider>
-    <MilkdownEditor
-      v-bind="$attrs"
-      :value="value"
-      @change="emit('change', $event)"
-      @blur="emit('blur')"
-    />
+    <ProsemirrorAdapterProvider>
+      <MarkdownConsumer
+        v-bind="$attrs"
+        :value="value"
+        @change="emit('change', $event)"
+        @blur="emit('blur')"
+      />
+    </ProsemirrorAdapterProvider>
   </MilkdownProvider>
 </template>
 
