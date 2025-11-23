@@ -426,7 +426,7 @@ const apiRoute = new Hono<Env>({ strict: false })
 const app = new Hono<Env>({ strict: false })
   .use('*', async (c, next) => {
     if (!import.meta.env.DEV) {
-      if (['enpitsulin.dev', 'localhost'].includes(new URL(c.req.url).hostname)) {
+      if (!['enpitsulin.dev', 'localhost'].includes(new URL(c.req.url).hostname)) {
         return c.redirect('https://enpitsulin.dev', 301)
       }
     }
