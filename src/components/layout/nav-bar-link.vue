@@ -30,6 +30,9 @@ defineProps<{
           layout-id="navbar-link"
           bg="zinc-800 dark:zinc-200"
           class="absolute inset-0 rounded-full shadow-md"
+          :style="{
+            originY: 'top', // workaround https://github.com/motiondivision/motion/issues/1535
+          }"
         />
         <span class="relative">
           <slot />
