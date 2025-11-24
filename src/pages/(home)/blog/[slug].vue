@@ -5,7 +5,7 @@ const route = useRoute('/(home)/blog/[slug]')
 const $hc = useHC()
 
 const { data } = useQuery({
-  key: ['post', route.params.slug],
+  key: () => ['post', route.params.slug],
   async query() {
     const res = await $hc.api.post.slug[':slug'].$get({
       param: { slug: route.params.slug },
@@ -15,7 +15,7 @@ const { data } = useQuery({
 })
 
 const { data: surroundData } = useQuery({
-  key: ['post', route.params.slug, 'surround'],
+  key: () => ['post', route.params.slug, 'surround'],
   async query() {
     const res = await $hc.api.post.slug[':slug'].surround.$get({
       param: { slug: route.params.slug },
@@ -70,6 +70,7 @@ useHead({
       <MarkdownRender
         v-if="data?.content"
         :content="data.content"
+        :query-key="route.params.slug"
         tag="article"
         text-15px
         class="max-w-unset prose dark:prose-invert"

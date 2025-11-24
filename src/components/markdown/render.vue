@@ -7,14 +7,15 @@ defineOptions({
   name: 'MarkdownRender',
 })
 
-const { content = '', tag = 'div' } = defineProps<{
+const { content = '', tag = 'div', queryKey = content } = defineProps<{
   content?: string
   tag?: string
+  queryKey?: string
 }>()
 
 const hc = useHC()
 const { data: root } = useQuery({
-  key: () => ['highlight-markdown', content],
+  key: () => ['highlight-markdown', queryKey],
   async query() {
     const res = await hc.api.markdown.$post({ json: { markdown: content } })
     const { rendered } = await res.json()
