@@ -38,9 +38,7 @@ export default defineConfig({
   },
 
   plugins: [
-    Inspect({
-      build: true,
-    }),
+    Inspect(),
 
     FullStack({
       serverHandler: false,
