@@ -23,7 +23,6 @@ defineProps<{
         :href="href"
         @click="navigate"
       >
-
         <motion.div
           v-if="isActive"
           layout-id="navbar-link"
