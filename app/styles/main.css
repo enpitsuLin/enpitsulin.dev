@@ -1,0 +1,123 @@
+@import './scrollbar.css';
+@import './shiki.css';
+@import './animation.css';
+@import 'https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css';
+@import 'https://s1.hdslb.com/bfs/static/jinkela/long/font/medium.css';
+
+@font-face {
+  font-family: MonaspiceArNerdFont;
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/MonaspiceArNerdFont-Medium.woff2) format('woff2');
+  unicode-range:
+    u+00??, u+0131, u+0152-0153, u+02bb-02bc, u+02c6, u+02da, u+02dc, u+0304, u+0308, u+0329, u+2000-206f, u+2074,
+    u+20ac, u+2122, u+2191, u+2193, u+2212, u+2215, u+feff, u+fffd;
+}
+
+* {
+  outline: none;
+}
+
+:root {
+  color-scheme: light only;
+  font-family: 'HarmonyOS_Medium';
+  --theme-background: 0 0% 100%; /** #ffffff */
+  --theme-accent: 200 77% 39%; /* #177CB0 */
+  --theme-border: 240 4% 95%; /* #f2f2f3*/
+  --theme-sidebar: 0 0.48% 98.03%; /* #fafafa */
+
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/text-autospace */
+  text-autospace: normal;
+}
+
+.dark {
+  color-scheme: dark only;
+  --theme-background: 0 0% 4%; /* #0a0a0a */
+  --theme-accent: 195 50% 39%; /* #177CB0 */
+  --theme-border: 240 6% 15%; /* #242429*/
+  --theme-sidebar: 0 0% 9%; /* #171717*/
+}
+
+.prose {
+  --un-prose-bg-soft: #e8e8e8;
+  --un-prose-borders: hsl(var(--theme-accent) / 0.8);
+}
+
+.dark .prose {
+  --un-prose-bg-soft: #28282a;
+}
+
+.prose .footnotes {
+  --at-apply: border-t border-t-border pt-20;
+}
+
+html,
+body {
+  height: fit-content;
+  scroll-behavior: smooth;
+}
+
+body,
+#__nuxt {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  position: relative;
+}
+
+#__nuxt {
+  --at-apply: flex flex-col;
+}
+
+html {
+  scroll-padding-top: 4rem;
+}
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  --at-apply: bg-accent op-75 fixed z-99 top-0 left-0 w-full h-3px;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--height);
+  }
+
+  to {
+    height: 0;
+  }
+}
+
+[data-scope='collapsible'][data-part='root'] {
+  overflow: hidden;
+  margin: 1em 0;
+  padding: 1rem 1.25rem;
+  background: var(--un-prose-bg-soft);
+}
+
+[data-scope='collapsible'][data-part='content'] {
+  margin-top: 0.6em;
+}
+
+[data-scope='collapsible'][data-part='content'][data-state='open'] {
+  animation: slideDown 350ms;
+  animation-timing-function: var(--ease-spring);
+}
+
+[data-scope='collapsible'][data-part='content'][data-state='closed'] {
+  animation: slideUp 300ms;
+  animation-timing-function: var(--ease-spring);
+}

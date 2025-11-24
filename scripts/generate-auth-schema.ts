@@ -9,7 +9,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { getAuthTables } from 'better-auth/db'
 import { ESLint } from 'eslint'
 import prettier from 'prettier'
-import { baseServerOptions } from '../lib/auth/options'
+import { baseServerOptions } from '../shared/auth-options'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
