@@ -19,6 +19,8 @@ defineOptions({
       <div mt-auto aria-hidden="true" />
       <LayoutFooter />
     </div>
+    <Teleport to="#teleports">
+      <LayoutFab />
+    </Teleport>
   </div>
-  <LayoutFab />
 </template>
