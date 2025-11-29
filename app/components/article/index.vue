@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SerializeObject } from 'nitropack/types'
 import type { SelectPost } from '~~/server/database/schema'
-import { formatDate } from '@vueuse/core'
 import { motion } from 'motion-v'
 
 interface Props {
@@ -47,13 +46,11 @@ const { article, delay = 0 } = defineProps<Props>()
       </div>
     </div>
     <div relative z-10 order-first class="hidden md:flex" flex="col items-start">
-      <time
+      <NuxtTime
         mb-3 mt-1 text-sm
         class="text-zinc-500 dark:text-zinc-500"
         :datetime="article.publishedAt"
-      >
-        {{ formatDate(new Date(article.publishedAt), 'MMM DD YYYY', { locales: 'zh-Hans' }) }}
-      </time>
+      />
       <div flex="~ gap-1 wrap" pr-10>
         <ArticleTag v-for="tag in []" :key="tag" :tag text-xs />
       </div>
