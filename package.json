@@ -45,6 +45,7 @@
     "@iconify-json/mingcute": "^1.2.5",
     "@libsql/client": "^0.15.15",
     "@nuxtjs/color-mode": "^4.0.0",
+    "@nuxtjs/mdc": "^0.19.1",
     "@pinia/nuxt": "^0.11.3",
     "@types/node": "^24.10.1",
     "@unocss/nuxt": "^66.5.9",

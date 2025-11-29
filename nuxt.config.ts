@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     '@pinia/colada-nuxt',
+    '@nuxtjs/mdc',
   ],
 
   colorMode: {
