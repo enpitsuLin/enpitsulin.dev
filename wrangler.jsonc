@@ -1,18 +1,12 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "enpitsulin-dev",
-  "main": "server/index.ts",
-  "compatibility_date": "2025-11-17",
-  "compatibility_flags": [
-    "nodejs_als",
-    "global_fetch_strictly_public"
-  ],
+  "compatibility_date": "2025-11-18",
   "observability": {
     "enabled": true
+  },
+  "assets": {
+    "directory": "dist"
   },
   "d1_databases": [
     {

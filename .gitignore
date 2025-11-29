@@ -1,16 +1,29 @@
-.DS_Store
-
-*.local
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
 dist
+
+# Node dependencies
 node_modules
-.idea/
+
+# Logs
+logs
 *.log
-public/assets/fonts
 
-.wrangler
+# Misc
+.DS_Store
+.fleet
+.idea
 
+# Local env files
 .env
+.env.*
+!.env.example
 
-*.local
-
-.vite-inspect
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
