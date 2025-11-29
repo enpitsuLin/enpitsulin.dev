@@ -32,6 +32,14 @@ export default defineNuxtConfig({
     },
     rollupConfig: {
       external: ['cloudflare:email', 'mimetext'],
+      output: {
+        banner: 'import "reflect-metadata";',
+      },
+    },
+    hooks: {
+      'rollup:before': (nitro) => {
+        nitro.options.moduleSideEffects.push('reflect-metadata')
+      },
     },
   },
 
