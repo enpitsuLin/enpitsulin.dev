@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@vueuse/nuxt',
     '@nuxtjs/color-mode',
+    '@pinia/nuxt',
+    '@pinia/colada-nuxt',
   ],
 
   eslint: {

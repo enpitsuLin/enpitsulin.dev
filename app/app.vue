@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { LocaleProvider } from '@ark-ui/vue/locale'
 import { description, title } from './constants'
 import '@unocss/reset/tailwind.css'
 import './styles/main.css'
@@ -44,7 +45,11 @@ useHead({
 
 <template>
   <NuxtRouteAnnouncer />
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <LocaleProvider locale="zh-CN">
+    <UiToastToaster>
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </UiToastToaster>
+  </LocaleProvider>
 </template>
