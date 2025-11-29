@@ -43,6 +43,7 @@
     "@iconify-json/carbon": "^1.2.14",
     "@iconify-json/logos": "^1.2.10",
     "@iconify-json/mingcute": "^1.2.5",
+    "@libsql/client": "^0.15.15",
     "@nuxtjs/color-mode": "^4.0.0",
     "@pinia/nuxt": "^0.11.3",
     "@types/node": "^24.10.1",
