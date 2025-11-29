@@ -32,20 +32,13 @@ export default defineNuxtConfig({
     },
     rollupConfig: {
       external: ['cloudflare:email', 'mimetext'],
-      output: {
-        banner: 'import "reflect-metadata";',
-      },
-    },
-    hooks: {
-      'rollup:before': (nitro) => {
-        nitro.options.moduleSideEffects.push('reflect-metadata')
-      },
     },
   },
 
   typescript: {
     tsConfig: {
       compilerOptions: {
+        experimentalDecorators: true,
         types: [fileURLToPath(new URL('./worker-configuration.d.ts', import.meta.url))],
       },
     },
