@@ -2,7 +2,7 @@
   "name": "enpitsulin-dev",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.23.0",
+  "packageManager": "pnpm@10.24.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -21,15 +21,15 @@
   "dependencies": {
     "@antfu/eslint-config": "^6.2.0",
     "@ark-ui/vue": "^5.29.1",
-    "@better-auth/passkey": "^1.4.1",
+    "@better-auth/passkey": "^1.4.3",
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "2.0.0",
     "@pinia/colada": "^0.17.9",
     "@pinia/colada-nuxt": "0.2.4",
     "@tanstack/vue-form": "^1.26.0",
     "@unocss/reset": "^66.5.9",
-    "@vueuse/core": "^14.0.0",
-    "better-auth": "^1.4.1",
+    "@vueuse/core": "^14.1.0",
+    "better-auth": "^1.4.3",
     "drizzle-orm": "^0.44.7",
     "motion-v": "^1.7.4",
     "nuxt": "^4.2.1",
@@ -49,17 +49,17 @@
     "@unocss/nuxt": "^66.5.9",
     "@unocss/preset-mini": "^66.5.9",
     "@unocss/preset-uno": "^66.5.9",
-    "@vueuse/nuxt": "^14.0.0",
+    "@vueuse/nuxt": "^14.1.0",
     "drizzle-kit": "^0.31.7",
     "eslint": "^9.39.1",
     "eslint-plugin-format": "^1.0.2",
     "lint-staged": "^16.2.7",
     "mimetext": "^3.0.27",
-    "prettier": "^3.6.2",
+    "prettier": "^3.7.2",
     "simple-git-hooks": "^2.13.1",
     "typescript": "^5.9.3",
     "unocss": "^66.5.9",
-    "wrangler": "^4.50.0"
+    "wrangler": "^4.51.0"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
