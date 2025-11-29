@@ -14,6 +14,10 @@ export default defineNuxtConfig({
     '@pinia/colada-nuxt',
   ],
 
+  colorMode: {
+    classSuffix: '',
+  },
+
   eslint: {
     config: {
       standalone: false,
@@ -30,15 +34,20 @@ export default defineNuxtConfig({
       nodeCompat: true,
       deployConfig: true,
     },
+    moduleSideEffects: ['reflect-metadata'],
     rollupConfig: {
       external: ['cloudflare:email', 'mimetext'],
+    },
+    esbuild: {
+      options: {
+        target: 'esnext',
+      },
     },
   },
 
   typescript: {
     tsConfig: {
       compilerOptions: {
-        experimentalDecorators: true,
         types: [fileURLToPath(new URL('./worker-configuration.d.ts', import.meta.url))],
       },
     },
