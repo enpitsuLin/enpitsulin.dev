@@ -2,25 +2,24 @@
 import type { RouteLocationRaw } from 'vue-router'
 import { toArray } from '@vueuse/core'
 import { withoutTrailingSlash } from 'ufo'
+import { useAuthSession } from '~/composables/auth'
 
 defineOptions({
   name: 'DashboardLayout',
 })
 
-// const { user } = useAuth()
+const { user } = useAuthSession()
 const router = useRouter()
 const route = useRoute()
 
-// onMounted(async () => {
-//   if (user.value?.role !== 'admin') {
-//     await router.push({
-//       path: '/admin/sign-in',
-//       query: {
-//         redirect: encodeURIComponent(route.fullPath),
-//       },
-//     })
-//   }
-// })
+if (!user.value || user.value.role !== 'admin') {
+  await navigateTo({
+    path: '/admin/sign-in',
+    query: {
+      redirect: encodeURIComponent(route.fullPath),
+    },
+  })
+}
 
 interface NavItem {
   title: string
@@ -85,8 +84,7 @@ const navigationItems = computed(() => {
           </h2>
         </div>
         <div text-xs class="text-zinc-600 dark:text-zinc-400">
-          Username
-          <!-- {{ user?.name || user?.email }} -->
+          {{ user?.name || user?.email }}
         </div>
       </div>
 
@@ -118,14 +116,14 @@ const navigationItems = computed(() => {
 
       <!-- Sidebar Footer -->
       <div flex="~ col gap-2" class="mt-auto border-t border-border p-4">
-        <RouterLink
+        <NuxtLink
           to="/"
           flex="~ items-center gap-3"
           class="rounded-lg px-3 py-2 text-sm text-zinc-600 font-medium transition-colors hover:bg-zinc-200/50 dark:text-zinc-400 dark:hover:bg-zinc-700/50"
         >
           <div class="i-mingcute:home-1-line shrink-0 text-base" />
           <span>返回首页</span>
-        </RouterLink>
+        </NuxtLink>
       </div>
     </UiSidebar>
     <UiSidebarInset of-hidden class="max-h-[calc(100svh-24px)]">
