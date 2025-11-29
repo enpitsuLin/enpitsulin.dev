@@ -129,6 +129,9 @@ importers:
       unocss:
         specifier: ^66.5.9
         version: 66.5.9(@unocss/webpack@66.5.9(webpack@5.103.0(esbuild@0.27.0)))(postcss@8.5.6)(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(terser@5.44.1)(yaml@2.8.1))
+      unplugin-vue-router:
+        specifier: ^0.18.0
+        version: 0.18.0(@vue/compiler-sfc@3.5.25)(typescript@5.9.3)(vue-router@4.6.3(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))
       wrangler:
         specifier: ^4.51.0
         version: 4.51.0
@@ -6374,6 +6377,15 @@ packages:
 
   unplugin-vue-router@0.16.2:
     resolution: {integrity: sha512-lE6ZjnHaXfS2vFI/PSEwdKcdOo5RwAbCKUnPBIN9YwLgSWas3x+qivzQvJa/uxhKzJldE6WK43aDKjGj9Rij9w==}
+    peerDependencies:
+      '@vue/compiler-sfc': ^3.5.17
+      vue-router: ^4.6.0
+    peerDependenciesMeta:
+      vue-router:
+        optional: true
+
+  unplugin-vue-router@0.18.0:
+    resolution: {integrity: sha512-zpeMWqn1vEBlo0SMFS0aX7OA9PBJUDd/7mGnECXvurBb0xPGdOezWwHeQlg4LGaYECKhZ0szkDjYZse2++Y68Q==}
     peerDependencies:
       '@vue/compiler-sfc': ^3.5.17
       vue-router: ^4.6.0
@@ -14263,6 +14275,32 @@ snapshots:
       picomatch: 4.0.3
 
   unplugin-vue-router@0.16.2(@vue/compiler-sfc@3.5.25)(typescript@5.9.3)(vue-router@4.6.3(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3)):
+    dependencies:
+      '@babel/generator': 7.28.5
+      '@vue-macros/common': 3.1.1(vue@3.5.25(typescript@5.9.3))
+      '@vue/compiler-sfc': 3.5.25
+      '@vue/language-core': 3.1.5(typescript@5.9.3)
+      ast-walker-scope: 0.8.3
+      chokidar: 4.0.3
+      json5: 2.2.3
+      local-pkg: 1.1.2
+      magic-string: 0.30.21
+      mlly: 1.8.0
+      muggle-string: 0.4.1
+      pathe: 2.0.3
+      picomatch: 4.0.3
+      scule: 1.3.0
+      tinyglobby: 0.2.15
+      unplugin: 2.3.11
+      unplugin-utils: 0.3.1
+      yaml: 2.8.1
+    optionalDependencies:
+      vue-router: 4.6.3(vue@3.5.25(typescript@5.9.3))
+    transitivePeerDependencies:
+      - typescript
+      - vue
+
+  unplugin-vue-router@0.18.0(@vue/compiler-sfc@3.5.25)(typescript@5.9.3)(vue-router@4.6.3(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3)):
     dependencies:
       '@babel/generator': 7.28.5
       '@vue-macros/common': 3.1.1(vue@3.5.25(typescript@5.9.3))

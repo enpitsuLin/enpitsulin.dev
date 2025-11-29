@@ -1,3 +1,5 @@
+import type { RouteNamedMap } from 'vue-router/auto-routes'
+
 export const siteUrl = 'https://enpitsulin.dev'
 
 export const title = 'Promise { <pending> }'
@@ -8,21 +10,26 @@ export const navigation = [
   {
     label: '首页',
     href: '/',
+    match: ['index'],
   },
   {
     label: '文章',
     href: '/blog',
+    match: ['blog', 'blog-slug', 'blog-tag-tag'],
   },
   {
     label: '项目',
     href: '/projects',
+    match: ['projects'],
   },
   {
     label: '留言墙',
     href: '/guestbook',
+    match: ['guestbook'],
   },
   {
     label: '关于',
     href: '/about',
+    match: ['about'],
   },
-]
+] as { label: string, href: string, match: (keyof RouteNamedMap)[] }[]

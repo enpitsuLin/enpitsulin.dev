@@ -42,12 +42,12 @@ const route = useRoute()
           class="text-0.9rem text-gray-500 font-medium"
         >
           <li
-            v-for="{ href, label } in navigation"
+            v-for="{ href, label, match } in navigation"
             :key="label"
             relative flex="~ items-center justify-center"
             class="h-7 break-keep"
           >
-            <LayoutNavBarLink :href="href">
+            <LayoutNavBarLink :href="href" :active="match.includes(route.name)">
               {{ label }}
             </LayoutNavBarLink>
           </li>
