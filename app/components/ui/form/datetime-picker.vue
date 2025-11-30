@@ -64,43 +64,43 @@ const format: DatePickerRootProps['format'] = (date) => {
         bg="white/95 dark:zinc-900/95"
         class="z-100 origin-top-center backdrop-blur-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
       >
-        <DatePicker.ViewControl flex="~ justify-between">
-          <DatePicker.PrevTrigger as-child>
-            <button
-              type="button"
-              h-9 rounded px-4
-              flex="inline items-center justify-center"
-              bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
-              class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
-            >
-              <div i-mingcute:right-fill rotate-180 />
-            </button>
-          </DatePicker.PrevTrigger>
-          <DatePicker.ViewTrigger as-child>
-            <button
-              type="button"
-              h-9 rounded px-4
-              flex="inline items-center justify-center"
-              bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
-              class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
-            >
-              <DatePicker.RangeText />
-            </button>
-          </DatePicker.ViewTrigger>
-          <DatePicker.NextTrigger as-child>
-            <button
-              type="button"
-              h-9 rounded px-4
-              flex="inline items-center justify-center"
-              bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
-              class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
-            >
-              <div i-mingcute:right-fill />
-            </button>
-          </DatePicker.NextTrigger>
-        </DatePicker.ViewControl>
-        <DatePicker.View view="day" flex="not-[[hidden]]:~ items-center justify-center" py-4>
+        <DatePicker.View view="day" flex="not-[[hidden]]:~ col gap-4 items-center justify-center" py-4>
           <DatePicker.Context v-slot="api">
+            <DatePicker.ViewControl w-full flex="~ justify-between">
+              <DatePicker.PrevTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill rotate-180 />
+                </button>
+              </DatePicker.PrevTrigger>
+              <DatePicker.ViewTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <DatePicker.RangeText />
+                </button>
+              </DatePicker.ViewTrigger>
+              <DatePicker.NextTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill />
+                </button>
+              </DatePicker.NextTrigger>
+            </DatePicker.ViewControl>
             <DatePicker.Table w-full>
               <DatePicker.TableHead border="b border">
                 <DatePicker.TableRow>
@@ -137,8 +137,43 @@ const format: DatePickerRootProps['format'] = (date) => {
           </DatePicker.Context>
         </DatePicker.View>
 
-        <DatePicker.View view="month" flex="not-[[hidden]]:~ items-center justify-center" py-4>
+        <DatePicker.View view="month" flex="not-[[hidden]]:~ col gap-4 items-center justify-center" py-4>
           <DatePicker.Context v-slot="api">
+            <DatePicker.ViewControl w-full flex="~ justify-between">
+              <DatePicker.PrevTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill rotate-180 />
+                </button>
+              </DatePicker.PrevTrigger>
+              <DatePicker.ViewTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <DatePicker.RangeText />
+                </button>
+              </DatePicker.ViewTrigger>
+              <DatePicker.NextTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill />
+                </button>
+              </DatePicker.NextTrigger>
+            </DatePicker.ViewControl>
             <DatePicker.Table w-full>
               <DatePicker.TableBody>
                 <DatePicker.TableRow
@@ -168,8 +203,43 @@ const format: DatePickerRootProps['format'] = (date) => {
           </DatePicker.Context>
         </DatePicker.View>
 
-        <DatePicker.View view="year" flex="not-[[hidden]]:~ items-center justify-center" py-4>
+        <DatePicker.View view="year" flex="not-[[hidden]]:~ col gap-4 items-center justify-center" py-4>
           <DatePicker.Context v-slot="api">
+            <DatePicker.ViewControl w-full flex="~ justify-between">
+              <DatePicker.PrevTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill rotate-180 />
+                </button>
+              </DatePicker.PrevTrigger>
+              <DatePicker.ViewTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <DatePicker.RangeText />
+                </button>
+              </DatePicker.ViewTrigger>
+              <DatePicker.NextTrigger as-child>
+                <button
+                  type="button"
+                  h-9 rounded px-4
+                  flex="inline items-center justify-center"
+                  bg="transparent data-[disabled]:transparent! data-[selected]:zinc-700/10 dark:data-[selected]:zinc-100/10 hover:zinc-700/10 dark:hover:zinc-100/10"
+                  class="data-[disabled]:cursor-not-allowed data-[disabled]:op-50"
+                >
+                  <div i-mingcute:right-fill />
+                </button>
+              </DatePicker.NextTrigger>
+            </DatePicker.ViewControl>
             <DatePicker.Table w-full>
               <DatePicker.TableBody>
                 <DatePicker.TableRow
