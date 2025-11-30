@@ -7,7 +7,12 @@ const { data } = useQuery({
   key: () => ['post', route.params.slug],
   async query() {
     const res = await $fetch(`/api/post/slug/${route.params.slug}`)
-    return res
+    const ast = await parseMarkdown(res.content)
+    return {
+      data: res,
+      body: ast.body,
+      toc: ast.toc,
+    }
   },
 })
 
@@ -20,7 +25,7 @@ const { data: surroundData } = useQuery({
 })
 
 useHead({
-  title: computed(() => data.value?.title ?? ''),
+  title: computed(() => data.value?.data?.title ?? ''),
 })
 </script>
 
@@ -35,7 +40,7 @@ useHead({
           <div flex="~ items-center gap-2">
             <span class="sr-only">发布时间</span>
             <i inline-block class="i-mingcute:calendar-fill" />
-            <NuxtTime :datetime="data.publishedAt" />
+            <NuxtTime :datetime="data.data.publishedAt" />
           </div>
           <!-- <div v-if="data?.meta.readingTime.minutes" flex="~ items-center gap-2">
             <span class="sr-only">阅读时间</span>
@@ -44,18 +49,18 @@ useHead({
           </div> -->
         </section>
         <h1 text-4xl font-semibold>
-          {{ data?.title }}
+          {{ data.data.title }}
         </h1>
         <section>
           <ul flex="~ wrap items-center gap-2" tracking-tight>
-            <li v-for="tag in data?.tags ?? []" :key="tag">
+            <li v-for="tag in data.data.tags ?? []" :key="tag">
               <ArticleTag :tag="tag" />
             </li>
           </ul>
         </section>
       </header>
-      <MDC
-        :value="data.content"
+      <MDCRenderer
+        :body="data.body"
         tag="article"
         text-15px
         class="max-w-unset prose dark:prose-invert"
@@ -66,7 +71,7 @@ useHead({
         Table of content
       </h2>
       <nav pl-4>
-        <!-- <TocLinks :links="data?.body?.toc?.links" /> -->
+        <TocLinks :links="data?.toc?.links" />
       </nav>
     </aside>
   </div>
