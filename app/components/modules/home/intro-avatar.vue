@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { motion } from 'motion-v'
-
 const easterEgg = ref(false)
 const inputQueue = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
 const currentIndex = ref(0)
@@ -27,10 +25,9 @@ useEventListener('keydown', handleKeyDown)
 <template>
   <div relative>
     <div :class="{ 'animate-spin': easterEgg }">
-      <motion.img
-        layout-id="avatar"
+      <NuxtImg
         alt="avatar" width="250" height="250" decoding="async"
-        class="border-[0.35rem] border-white rounded-full object-cover shadow-xl"
+        class="border-[0.35rem] border-white rounded-full object-cover shadow-xl view-transition-avatar"
         src="/images/avatar.webp"
         fetchpriority="high"
       />
@@ -43,3 +40,9 @@ useEventListener('keydown', handleKeyDown)
     </span>
   </div>
 </template>
+
+<style>
+::view-transition-group(avatar) {
+  animation-duration: 300ms;
+}
+</style>

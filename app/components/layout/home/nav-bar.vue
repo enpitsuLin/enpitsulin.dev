@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { motion } from 'motion-v'
-
 const route = useRoute()
 const { navigation } = useAppConfig()
 </script>
@@ -21,13 +19,12 @@ const { navigation } = useAppConfig()
         v-if="route.path !== '/'"
         position="sticky top-4 md:absolute md:top-1/2 md:left--12" md:translate-y="-1/2"
       >
-        <motion.img
+        <NuxtImg
           fetchpriority="high"
-          layout-id="avatar"
           alt="avatar"
           width="250" height="250"
           decoding="async"
-          class="size-9 border-2 border-white rounded-full object-cover shadow-xl"
+          class="size-9 border-2 border-white rounded-full object-cover shadow-xl view-transition-avatar"
           src="/images/avatar.webp"
         />
       </div>

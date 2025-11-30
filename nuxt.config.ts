@@ -15,10 +15,6 @@ export default defineNuxtConfig({
     '@nuxtjs/mdc',
   ],
 
-  colorMode: {
-    classSuffix: '',
-  },
-
   mdc: {
     remarkPlugins: {
       'remark-lesetid': { },
@@ -68,6 +64,7 @@ export default defineNuxtConfig({
 
   experimental: {
     typedPages: true,
+    viewTransition: true,
   },
 
   nitro: {

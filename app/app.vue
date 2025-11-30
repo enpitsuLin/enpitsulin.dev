@@ -14,7 +14,6 @@ useHead({
   },
   htmlAttrs: {
     lang: 'zh-Hans',
-    class: isDark ? 'dark' : '',
   },
   meta: [
     {

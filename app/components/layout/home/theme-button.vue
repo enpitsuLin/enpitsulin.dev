@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ClientOnly } from '@ark-ui/vue'
+const colorMode = useColorMode()
 
 function onClick() {
+  const toggle = () => {
+    colorMode.preference = colorMode.value === 'light' ? 'dark' : 'light'
+  }
   if (!document.startViewTransition) {
-    toggleDark()
+    toggle()
     return
   }
-  const viewTransition = document.startViewTransition(toggleDark)
+  const viewTransition = document.startViewTransition(toggle)
   viewTransition.ready.then(() => {
     document.documentElement.classList.add('theme-toggle-animating')
   })
@@ -25,8 +28,8 @@ function onClick() {
   >
     <span class="sr-only">change dark mode</span>
     <ClientOnly>
-      <i v-if="isDark" inline-block class="i-mingcute:moon-line" />
-      <i v-else-if="!isDark" inline-block class="i-mingcute:sun-line" />
+      <i v-if="colorMode.preference === 'dark'" inline-block class="i-mingcute:moon-line" />
+      <i v-else-if="colorMode.preference === 'light'" inline-block class="i-mingcute:sun-line" />
       <i v-else inline-block class="i-mingcute:computer-line" />
       <template #fallback>
         <i inline-block class="i-mingcute:computer-line" />
