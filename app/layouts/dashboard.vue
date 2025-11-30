@@ -7,7 +7,6 @@ defineOptions({
 })
 
 const { user } = useAuthSession()
-const router = useRouter()
 
 const route = useRoute()
 
@@ -20,9 +19,7 @@ if (!user.value || user.value.role !== 'admin') {
   })
 }
 
-const adminRoutes = router.options.routes
-  .find(route => route.name === 'admin')!.children!
-  .filter(route => route.name !== 'admin-not-found')
+const { adminNavigation } = useAppConfig()
 </script>
 
 <template>
@@ -49,19 +46,19 @@ const adminRoutes = router.options.routes
 
       <nav flex="~ col 1" class="overflow-y-auto p-2">
         <div flex="~ col gap-1">
-          <template v-for="item in adminRoutes" :key="item.path">
+          <template v-for="item in adminNavigation" :key="item.href">
             <template v-if="item.children">
               <Collapsible.Root default-open>
                 <Collapsible.Trigger
                   w-full
-                  :data-active="$route.matched.find(route => route.name === item.name) !== undefined"
+                  :data-active="item.match.some(match => $route.name === match)"
                   bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
                   flex="~ items-center gap-3"
                   class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
                   un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
                 >
-                  <div :class="item.meta?.icon" class="shrink-0 text-base" />
-                  <span>{{ item.meta?.title }}</span>
+                  <div :class="item.icon" class="shrink-0 text-base" />
+                  <span>{{ item.label }}</span>
                   <Collapsible.Indicator
                     ml-auto
                     class="transition-transform duration-200 data-[state=open]:rotate-180"
@@ -72,9 +69,9 @@ const adminRoutes = router.options.routes
                 <Collapsible.Content>
                   <div flex="~ col gap-1" pl-6 py-2 relative>
                     <div absolute left-3 top-1 bottom-1 w-px bg-border />
-                    <template v-for="child in item.children.filter(route => !route.meta?.hideInSidebar)" :key="child.path">
+                    <template v-for="child in item.children" :key="child.href">
                       <NuxtLink
-                        :to="child.meta?.to ?? child.path"
+                        :to="child.href"
                         custom
                       >
                         <template #default="{ href, navigate, isExactActive }">
@@ -87,8 +84,8 @@ const adminRoutes = router.options.routes
                             :href="href"
                             @click="navigate"
                           >
-                            <div :class="child.meta?.icon" class="shrink-0 text-base" />
-                            <span>{{ child.meta?.title }}</span>
+                            <div :class="child.icon" class="shrink-0 text-base" />
+                            <span>{{ child.label }}</span>
                           </a>
                         </template>
                       </NuxtLink>
@@ -99,8 +96,8 @@ const adminRoutes = router.options.routes
             </template>
             <template v-else>
               <NuxtLink
-                :key="item.path"
-                :to="item.path"
+                :key="item.href"
+                :to="item.href"
                 custom
               >
                 <template #default="{ href, navigate, isExactActive }">
@@ -113,8 +110,8 @@ const adminRoutes = router.options.routes
                     :href="href"
                     @click="navigate"
                   >
-                    <div :class="item.meta?.icon" class="shrink-0 text-base" />
-                    <span>{{ item.meta?.title }}</span>
+                    <div :class="item.icon" class="shrink-0 text-base" />
+                    <span>{{ item.label }}</span>
                   </a>
                 </template>
               </NuxtLink>
@@ -165,7 +162,7 @@ const adminRoutes = router.options.routes
         of-auto space-y-2
         class="h-[calc(100%-var(--header-height))] py-4 @container/main md:gap-6 md:py-6"
       >
-        <NuxtPage />
+        <slot />
       </div>
     </UiSidebarInset>
   </UiSidebarProvider>

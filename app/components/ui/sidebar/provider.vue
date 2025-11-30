@@ -35,7 +35,7 @@ const open = computed({
 
 const openMobile = ref(false)
 
-const isMobile = useMediaQuery('(max-width: 767px)')
+const isMobile = useMediaQuery('(max-width: 767px)', { ssrWidth: 1440 })
 
 function toggleSidebar() {
   if (isMobile.value) {

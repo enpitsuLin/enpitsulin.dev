@@ -2,6 +2,10 @@
 defineOptions({
   name: 'SignInPage',
 })
+
+definePageMeta({
+  layout: false,
+})
 </script>
 
 <template>

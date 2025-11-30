@@ -2,6 +2,10 @@
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
+definePageMeta({
+  layout: 'home',
+})
+
 const route = useRoute('blog-page')
 const router = useRouter()
 

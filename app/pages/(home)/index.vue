@@ -2,6 +2,10 @@
 defineOptions({
   name: 'IndexPage',
 })
+
+definePageMeta({
+  layout: 'home',
+})
 </script>
 
 <template>

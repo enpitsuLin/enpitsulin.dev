@@ -5,6 +5,11 @@ defineOptions({
   name: 'PostsPage',
 })
 
+definePageMeta({
+  layout: 'dashboard',
+  breadcrumb: '文章管理',
+})
+
 const router = useRouter()
 const toast = useToast()
 const queryCache = useQueryCache()

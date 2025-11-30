@@ -14,7 +14,7 @@ defineOptions({
     >
       <LayoutHomeNavBar />
       <main relative mt-16 w="full" px="8 sm:12">
-        <NuxtPage />
+        <slot />
       </main>
       <div mt-auto aria-hidden="true" />
       <LayoutHomeFooter />

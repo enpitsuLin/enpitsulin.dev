@@ -48,7 +48,9 @@ useHead({
   <NuxtRouteAnnouncer />
   <LocaleProvider locale="zh-CN">
     <UiToastToaster>
-      <NuxtPage />
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
     </UiToastToaster>
   </LocaleProvider>
 </template>

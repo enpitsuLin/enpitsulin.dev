@@ -6,6 +6,12 @@ import { useToast } from '~/components/ui/toast/use-toast'
 defineOptions({
   name: 'NewPostPage',
 })
+
+definePageMeta({
+  breadcrumb: '新建',
+  layout: 'dashboard',
+})
+
 const toast = useToast()
 const router = useRouter()
 

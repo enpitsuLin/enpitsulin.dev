@@ -1,16 +1,15 @@
 <script setup lang="ts">
+import type { RouteMap } from 'vue-router'
 import { motion } from 'motion-v'
 
-const { href } = defineProps<{
+const { href, match } = defineProps<{
   href: string
+  match: (keyof RouteMap)[]
 }>()
 const route = useRoute()
 
 const isActive = computed(() => {
-  if (href === '/') {
-    return route.path === '/'
-  }
-  return route.matched.some(match => match.path === href)
+  return match.some(match => route.matched.some(route => route.name === match))
 })
 </script>
 

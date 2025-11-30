@@ -3,6 +3,10 @@ defineOptions({
   name: 'BlogSlug',
 })
 
+definePageMeta({
+  layout: 'home',
+})
+
 const route = useRoute('blog-slug')
 
 const { data } = await useAsyncData(
