@@ -50,6 +50,11 @@ export default {
             path: '/about',
             component: () => import('~/pages/(home)/about.vue'),
           },
+          {
+            name: 'not-found',
+            path: '/:pathMatch(.*)*',
+            component: () => import('~/pages/(home)/[...not-found].vue'),
+          },
         ],
       },
       {
@@ -70,19 +75,19 @@ export default {
             path: '/admin/posts',
             children: [
               {
-                name: 'posts-index',
-                path: '/admin/posts',
-                component: () => import('~/pages/admin/(dashboard)/posts/[[page]].vue'),
-                meta: {
-                  breadcrumb: '文章管理',
-                },
-              },
-              {
                 name: 'posts-id',
-                path: '/admin/posts/:id',
+                path: '/admin/posts/:id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})',
                 component: () => import('~/pages/admin/(dashboard)/posts/[id].vue'),
                 meta: {
                   breadcrumb: '编辑文章',
+                },
+              },
+              {
+                name: 'posts-index',
+                path: '/admin/posts/:page(\\d+)?',
+                component: () => import('~/pages/admin/(dashboard)/posts/[[page]].vue'),
+                meta: {
+                  breadcrumb: '文章管理',
                 },
               },
               {
@@ -94,6 +99,14 @@ export default {
                 },
               },
             ],
+          },
+          {
+            name: 'admin-not-found',
+            path: '/admin/:pathMatch(.*)*',
+            component: () => import('~/pages/admin/(dashboard)/[...not-found].vue'),
+            meta: {
+              breadcrumb: '404',
+            },
           },
         ],
       },

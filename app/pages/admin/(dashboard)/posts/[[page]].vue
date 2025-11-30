@@ -9,6 +9,6 @@ const route = useRoute('admin-posts-page')
 <template>
   <div>
     <h1>文章管理</h1>
-    <div>{{ route.params.page }}</div>
+    <div>第 {{ route.params.page || 0 }} 页</div>
   </div>
 </template>
