@@ -45,6 +45,7 @@ useHead({
 </script>
 
 <template>
+  <NuxtLoadingIndicator />
   <NuxtRouteAnnouncer />
   <LocaleProvider locale="zh-CN">
     <UiToastToaster>
