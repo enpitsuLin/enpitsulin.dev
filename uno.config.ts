@@ -72,7 +72,10 @@ export default defineConfig<Theme>({
     }),
     presetTypography({
       cssExtend: {
-
+        pre: {
+          'margin-top': '.875em',
+          'margin-bottom': '.875em',
+        },
       },
     }),
     presetWebFonts({

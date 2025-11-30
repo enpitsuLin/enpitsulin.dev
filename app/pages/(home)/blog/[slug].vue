@@ -1,28 +1,42 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
+defineOptions({
+  name: 'BlogSlug',
+})
 
 const route = useRoute('blog-slug')
 
-const { data } = useQuery({
-  key: () => ['post', route.params.slug],
-  async query() {
+const { data } = await useAsyncData(
+  `post:${route.params.slug}`,
+  async () => {
     const res = await $fetch(`/api/post/slug/${route.params.slug}`)
-    const ast = await parseMarkdown(res.content)
+    const ast = await parseMarkdown(res.content, {
+      remark: {
+        plugins: {
+          'remark-lesetid': { },
+        },
+      },
+      rehype: {
+        plugins: {
+          'rehype-unwrap-images': { },
+        },
+      },
+    })
     return {
       data: res,
       body: ast.body,
       toc: ast.toc,
+      estimation: ast.data.estimation,
     }
   },
-})
+)
 
-const { data: surroundData } = useQuery({
-  key: () => ['post', route.params.slug, 'surround'],
-  async query() {
+const { data: surroundData } = useAsyncData(
+  `post:${route.params.slug}:surround`,
+  async () => {
     const res = await $fetch(`/api/post/slug/${route.params.slug}/surround`)
     return res
   },
-})
+)
 
 useHead({
   title: computed(() => data.value?.data?.title ?? ''),
@@ -42,11 +56,11 @@ useHead({
             <i inline-block class="i-mingcute:calendar-fill" />
             <NuxtTime :datetime="data.data.publishedAt" />
           </div>
-          <!-- <div v-if="data?.meta.readingTime.minutes" flex="~ items-center gap-2">
+          <div v-if="data.estimation.minutes" flex="~ items-center gap-2">
             <span class="sr-only">阅读时间</span>
             <i inline-block class="i-mingcute:time-fill" />
-            <span>约 {{ Math.ceil(data?.meta.readingTime.minutes) }} 分钟</span>
-          </div> -->
+            <span>约 {{ Math.ceil(data.estimation.minutes) }} 分钟</span>
+          </div>
         </section>
         <h1 text-4xl font-semibold>
           {{ data.data.title }}
@@ -68,7 +82,7 @@ useHead({
     </div>
     <aside sticky top-80px ml-4 w="20%" h-full pb-20 class="hidden md:block">
       <h2 class="m-[20px_0_10px]">
-        Table of content
+        目录
       </h2>
       <nav pl-4>
         <TocLinks :links="data?.toc?.links" />
@@ -83,7 +97,7 @@ useHead({
         :to="{ name: 'blog-slug', params: { slug: surroundData.next.slug } }"
       >
         <p op-50>
-          Next
+          下一篇
         </p>
         <p>{{ surroundData.next.title }}</p>
       </RouterLink>
@@ -94,7 +108,7 @@ useHead({
         :to="{ name: 'blog-slug', params: { slug: surroundData.previous.slug } }"
       >
         <p op-50>
-          Previous
+          上一篇
         </p>
         <p>{{ surroundData.previous.title }}</p>
       </RouterLink>

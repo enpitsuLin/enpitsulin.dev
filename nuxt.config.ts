@@ -20,6 +20,12 @@ export default defineNuxtConfig({
   },
 
   mdc: {
+    remarkPlugins: {
+      'remark-lesetid': { },
+    },
+    rehypePlugins: {
+      'rehype-unwrap-images': { },
+    },
     headings: {
       anchorLinks: true,
     },
@@ -31,6 +37,24 @@ export default defineNuxtConfig({
       langs: ['js', 'jsx', 'json', 'ts', 'tsx', 'vue', 'css', 'html', 'vue', 'bash', 'md', 'mdc', 'yaml', 'toml', 'rust', 'sql'],
       shikiEngine: 'javascript',
     },
+    components: {
+      map: {
+        details: 'prose-details',
+        summary: 'prose-summary',
+      },
+    },
+  },
+
+  components: {
+    global: true,
+    dirs: [
+      {
+        path: '~/components/prose',
+        prefix: 'prose',
+        isAsync: false,
+      },
+      '~/components',
+    ],
   },
 
   eslint: {
