@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Dialog } from '@ark-ui/vue/dialog'
-import { navigation } from '~/constants'
+
+const { navigation } = useAppConfig()
 </script>
 
 <template>

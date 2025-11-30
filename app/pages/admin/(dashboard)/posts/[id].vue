@@ -5,7 +5,6 @@ defineOptions({
 
 definePageMeta({
   breadcrumb: '编辑文章',
-  layout: 'dashboard',
 })
 </script>
 

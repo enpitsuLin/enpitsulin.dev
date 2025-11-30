@@ -4,7 +4,6 @@ import { motion } from 'motion-v'
 
 defineProps<{
   href: RouteLocationRaw
-  active: boolean
 }>()
 </script>
 
@@ -13,9 +12,9 @@ defineProps<{
     custom
     :to="href"
   >
-    <template #default="{ href, navigate }">
+    <template #default="{ href, navigate, isActive, isExactActive }">
       <a
-        :data-active="active"
+        :data-active="href === '/' ? isExactActive : isActive"
         flex="~ items-center justify-center"
         h="full" w="full"
         un-text="data-[active=true]:zinc-200 dark:data-[active=true]:zinc-800 zinc-800 dark:zinc-200 op-70 data-[active=true]:op-100 hover:op-100"
@@ -25,7 +24,7 @@ defineProps<{
         @click="navigate"
       >
         <motion.div
-          v-if="active"
+          v-if="isActive"
           layout-id="navbar-link"
           bg="zinc-800 dark:zinc-200"
           class="absolute inset-0 rounded-full shadow-md"

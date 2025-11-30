@@ -7,7 +7,6 @@ defineOptions({
 
 definePageMeta({
   breadcrumb: '仪表盘',
-  layout: 'dashboard',
 })
 
 const { session } = useAuthSession()

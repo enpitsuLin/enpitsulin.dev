@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { navigation } from '~/constants'
+const { navigation } = useAppConfig()
 </script>
 
 <template>

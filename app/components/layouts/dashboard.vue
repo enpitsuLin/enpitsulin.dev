@@ -156,7 +156,7 @@ const navigationItems = computed(() => {
         of-auto space-y-2
         class="h-[calc(100%-var(--header-height))] py-4 @container/main md:gap-6 md:py-6"
       >
-        <slot />
+        <NuxtPage />
       </div>
     </UiSidebarInset>
   </UiSidebarProvider>

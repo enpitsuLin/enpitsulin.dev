@@ -10,7 +10,6 @@ definePageMeta({
     return !Number.isNaN(Number(route.params.page))
   },
   breadcrumb: '文章管理',
-  layout: 'dashboard',
 })
 </script>
 
