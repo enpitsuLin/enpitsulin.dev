@@ -2,10 +2,6 @@
 defineOptions({
   name: 'NewPostPage',
 })
-
-definePageMeta({
-  breadcrumb: '新建文章',
-})
 </script>
 
 <template>

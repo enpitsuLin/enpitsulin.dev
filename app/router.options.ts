@@ -61,6 +61,9 @@ export default {
             name: 'dashboard',
             path: '/admin',
             component: () => import('~/pages/admin/(dashboard)/index.vue'),
+            meta: {
+              breadcrumb: '仪表盘',
+            },
           },
           {
             name: 'posts',
@@ -70,16 +73,25 @@ export default {
                 name: 'posts-index',
                 path: '/admin/posts',
                 component: () => import('~/pages/admin/(dashboard)/posts/[[page]].vue'),
+                meta: {
+                  breadcrumb: '文章管理',
+                },
               },
               {
                 name: 'posts-id',
                 path: '/admin/posts/:id',
                 component: () => import('~/pages/admin/(dashboard)/posts/[id].vue'),
+                meta: {
+                  breadcrumb: '编辑文章',
+                },
               },
               {
                 name: 'posts-create',
                 path: '/admin/posts/create',
                 component: () => import('~/pages/admin/(dashboard)/posts/create.vue'),
+                meta: {
+                  breadcrumb: '新建文章',
+                },
               },
             ],
           },

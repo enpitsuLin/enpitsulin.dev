@@ -2,10 +2,6 @@
 defineOptions({
   name: 'PostPage',
 })
-
-definePageMeta({
-  breadcrumb: '编辑文章',
-})
 </script>
 
 <template>

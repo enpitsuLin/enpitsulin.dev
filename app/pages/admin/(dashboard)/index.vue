@@ -5,10 +5,6 @@ defineOptions({
   name: 'DashboardPage',
 })
 
-definePageMeta({
-  breadcrumb: '仪表盘',
-})
-
 const { session } = useAuthSession()
 </script>
 
