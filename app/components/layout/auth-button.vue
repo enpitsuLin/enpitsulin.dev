@@ -73,7 +73,7 @@ async function handleSignOut() {
             value="admin"
             as-child
           >
-            <RouterLink
+            <NuxtLink
               p="x2 y1.5"
               flex="~ items-center gap-2"
               bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50"
@@ -82,7 +82,7 @@ async function handleSignOut() {
             >
               <div class="i-mingcute:dashboard-2-line size-4" />
               <span>后台管理</span>
-            </RouterLink>
+            </NuxtLink>
           </Menu.Item>
           <AuthManageModal>
             <Menu.Item

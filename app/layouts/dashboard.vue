@@ -90,7 +90,7 @@ const navigationItems = computed(() => {
 
       <nav flex="~ col 1" class="overflow-y-auto p-2">
         <div flex="~ col gap-1">
-          <RouterLink
+          <NuxtLink
             v-for="item in navItems" :key="item.path"
             :to="item.path"
             custom
@@ -110,7 +110,7 @@ const navigationItems = computed(() => {
                 <span>{{ item.title }}</span>
               </a>
             </template>
-          </RouterLink>
+          </NuxtLink>
         </div>
       </nav>
 

@@ -23,12 +23,12 @@ const { data } = useQuery({
     >
       最新文章
       <UiButton as-child>
-        <RouterLink
+        <NuxtLink
           role="button"
           to="/blog"
         >
           <span text-sm>查看全部</span>
-        </RouterLink>
+        </NuxtLink>
       </UiButton>
     </h1>
     <div w-full grid="~ cols-1 md:cols-2 gap-16">

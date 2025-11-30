@@ -42,7 +42,7 @@ import { navigation } from '~/constants'
                 class="-my-2 divide-y divide-zinc-500/20 dark:divide-zinc-100/5"
               >
                 <li v-for="{ href, label } in navigation" :key="label">
-                  <RouterLink :to="href" custom block py-2>
+                  <NuxtLink :to="href" custom block py-2>
                     <template #default="{ navigate, href }">
                       <Dialog.CloseTrigger as-child @click="navigate">
                         <a :href="href">
@@ -50,7 +50,7 @@ import { navigation } from '~/constants'
                         </a>
                       </Dialog.CloseTrigger>
                     </template>
-                  </RouterLink>
+                  </NuxtLink>
                 </li>
               </ul>
             </nav>

@@ -11,11 +11,11 @@ defineProps<{
     data-slot="breadcrumb-item"
     flex="inline items-center gap-1.5"
   >
-    <RouterLink
+    <NuxtLink
       data-slot="breadcrumb-link"
       :to="to"
     >
       <slot />
-    </RouterLink>
+    </NuxtLink>
   </li>
 </template>
