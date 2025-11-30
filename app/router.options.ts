@@ -8,7 +8,7 @@ export default {
       {
         name: '(home)',
         path: '/',
-        component: () => import('~/components/layouts/home.vue'),
+        component: () => import('~/components/layout/home.vue'),
         children: [
           {
             name: 'index',
@@ -64,7 +64,7 @@ export default {
         meta: {
           breadcrumb: '仪表盘',
         },
-        component: () => import('~/components/layouts/dashboard.vue'),
+        component: () => import('~/components/layout/dashboard.vue'),
         children: [
           {
             name: '(dashboard)',

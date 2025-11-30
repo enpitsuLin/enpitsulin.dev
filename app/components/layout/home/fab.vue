@@ -10,8 +10,8 @@
     class="shadow-black/10 shadow-md transition-all" fixed z-99 p-1
     backdrop-blur
   >
-    <LayoutAuthButton />
-    <LayoutThemeButton />
-    <LayoutToTopButton />
+    <LayoutHomeAuthButton />
+    <LayoutHomeThemeButton />
+    <LayoutHomeToTopButton />
   </div>
 </template>

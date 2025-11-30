@@ -12,15 +12,15 @@ defineOptions({
       bg="zinc-50 dark:zinc-900" relative max-w-6xl shadow-lg
       class="ring-1 ring-zinc-100 dark:ring-zinc-300/20"
     >
-      <LayoutNavBar />
+      <LayoutHomeNavBar />
       <main relative mt-16 w="full" px="8 sm:12">
         <NuxtPage />
       </main>
       <div mt-auto aria-hidden="true" />
-      <LayoutFooter />
+      <LayoutHomeFooter />
     </div>
     <Teleport to="#teleports">
-      <LayoutFab />
+      <LayoutHomeFab />
     </Teleport>
   </div>
 </template>

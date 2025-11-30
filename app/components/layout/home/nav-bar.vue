@@ -47,15 +47,15 @@ const { navigation } = useAppConfig()
             relative flex="~ items-center justify-center"
             class="h-7 break-keep"
           >
-            <LayoutNavBarLink :href="href">
+            <LayoutHomeNavBarLink :href="href">
               {{ label }}
-            </LayoutNavBarLink>
+            </LayoutHomeNavBarLink>
           </li>
         </ul>
       </nav>
     </div>
 
-    <LayoutNavBarMenu />
+    <LayoutHomeNavBarMenu />
   </header>
 </template>
 
