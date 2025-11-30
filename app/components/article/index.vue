@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SerializeObject } from 'nitropack/types'
 import type { SelectPost } from '~~/server/database/schema'
-import { motion } from 'motion-v'
 
 interface Props {
   article: SerializeObject<SelectPost>
@@ -11,16 +10,12 @@ const { article, delay = 0 } = defineProps<Props>()
 </script>
 
 <template>
-  <motion.article
-    :initial="{ y: 50, opacity: 0.001 }"
-    :animate="{ y: 0, opacity: 1 }"
-    :transition="{
-      type: 'spring',
-      duration: 0.4,
-      bounce: 0,
-      delay,
-    }"
+  <article
     grid="md:~ md:cols-4 md:items-baseline"
+    :style="{
+      '--delay': `${delay * 1000}ms`,
+    }"
+    class="translate-y-0 op-100 [@starting-style]:translate-y-50px [@starting-style]:op-0 duration-800 ease-$spring-easing delay-$delay"
   >
     <div
       relative
@@ -60,5 +55,5 @@ const { article, delay = 0 } = defineProps<Props>()
         <ArticleTag v-for="tag in []" :key="tag" :tag text-xs />
       </div>
     </div>
-  </motion.article>
+  </article>
 </template>
