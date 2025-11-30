@@ -32,15 +32,13 @@ const { article, delay = 0 } = defineProps<Props>()
 
       <div
         v-if="article.excerpt"
-        relative z-10 text-sm text="zinc-600 dark:zinc-400"
-        class="max-w-80ch prose dark:prose-invert"
+        class="relative z-10 text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
       >
         <p>{{ article.excerpt }}</p>
       </div>
       <MDC
         v-else
-        relative z-10 text-sm text="zinc-600 dark:zinc-400"
-        class="max-w-80ch prose dark:prose-invert"
+        class="relative z-10 text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
         excerpt
         :value="article.content"
       />

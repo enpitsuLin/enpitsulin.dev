@@ -53,6 +53,9 @@ export default defineNuxtConfig({
         prefix: 'prose',
         isAsync: false,
       },
+      {
+        path: '~/components/modules',
+      },
       '~/components',
     ],
   },
