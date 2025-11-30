@@ -20,6 +20,10 @@ const { data } = await useAsyncData(
           'rehype-unwrap-images': { },
         },
       },
+      toc: {
+        depth: 5,
+        searchDepth: 5,
+      },
     })
     return {
       data: res,
