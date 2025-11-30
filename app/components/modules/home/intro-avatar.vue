@@ -44,5 +44,6 @@ useEventListener('keydown', handleKeyDown)
 <style>
 ::view-transition-group(avatar) {
   animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
 }
 </style>
