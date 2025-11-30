@@ -18,11 +18,17 @@ defineProps<Props>()
     <ArticleCardTime :date="article.publishedAt" />
 
     <div
-      relative z-10 mt-2 w-full text-sm text="zinc-600 dark:zinc-400"
+      v-if="article.excerpt"
+      class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
     >
-      <!-- TODO: 截取文章内容 -->
-      <p>{{ article.content.slice(0, 100) }}...</p>
+      <p>{{ article.excerpt }}</p>
     </div>
+    <MDC
+      v-else
+      class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
+      excerpt partial
+      :value="article.content"
+    />
 
     <div
       aria-hidden="true"
