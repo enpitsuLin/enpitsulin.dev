@@ -59,10 +59,36 @@ export default {
         children: [
           {
             name: 'dashboard',
-            path: '/dashboard',
+            path: '/admin',
             component: () => import('~/pages/admin/(dashboard)/index.vue'),
           },
+          {
+            name: 'posts',
+            path: '/admin/posts',
+            children: [
+              {
+                name: 'posts-index',
+                path: '/admin/posts',
+                component: () => import('~/pages/admin/(dashboard)/posts/[[page]].vue'),
+              },
+              {
+                name: 'posts-id',
+                path: '/admin/posts/:id',
+                component: () => import('~/pages/admin/(dashboard)/posts/[id].vue'),
+              },
+              {
+                name: 'posts-create',
+                path: '/admin/posts/create',
+                component: () => import('~/pages/admin/(dashboard)/posts/create.vue'),
+              },
+            ],
+          },
         ],
+      },
+      {
+        name: 'admin-sign-in',
+        path: '/admin/sign-in',
+        component: () => import('~/pages/admin/sign-in.vue'),
       },
     ]
   },

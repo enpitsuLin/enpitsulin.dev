@@ -4,11 +4,11 @@ import { defu } from 'defu'
 import { useAuthSession } from '~/composables/auth'
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const meta = defu<RouteMeta, [Required<Pick<RouteMeta, 'requireAuth'>>]>(to.meta, {
-    requireAuth: true,
+  const meta = defu<RouteMeta, [Required<Pick<RouteMeta, 'disabledAuth'>>]>(to.meta, {
+    disabledAuth: false,
   })
   // If auth is disabled, skip middleware
-  if (!meta.requiresAuth) {
+  if (meta.disabledAuth) {
     return
   }
 
