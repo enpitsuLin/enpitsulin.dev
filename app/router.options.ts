@@ -20,9 +20,9 @@ export default {
             path: '/blog',
             children: [
               {
-                name: 'blog-index',
-                path: '/blog',
-                component: () => import('~/pages/(home)/blog/index.vue'),
+                name: 'blog-page',
+                path: '/blog/:page(\\d+)?',
+                component: () => import('~/pages/(home)/blog/[[page]].vue'),
               },
               {
                 name: 'blog-slug',
