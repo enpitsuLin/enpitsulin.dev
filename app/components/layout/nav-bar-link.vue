@@ -24,7 +24,7 @@ defineProps<{
         @click="navigate"
       >
         <motion.div
-          v-if="isActive"
+          v-if="href === '/' ? isExactActive : isActive"
           layout-id="navbar-link"
           bg="zinc-800 dark:zinc-200"
           class="absolute inset-0 rounded-full shadow-md"
