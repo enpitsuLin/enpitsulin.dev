@@ -1,11 +1,37 @@
 <script setup lang="ts">
-const { data: posts } = useQuery({
-  key: ['posts'],
-  query: async () => {
-    const response = await $fetch('/api/post', { query: { limit: 10, offset: 0 } })
+const page = ref(1)
+
+const { data: posts, status } = useAsyncData(
+  'posts',
+  async () => {
+    const response = await $fetch('/api/post', { query: { limit: 10, offset: (page.value - 1) * 10 } })
     return response
   },
+  { watch: [page] },
+)
+
+const isReachEnd = computed(() => {
+  if (posts.value && posts.value.total)
+    return (posts.value?.offset + posts.value?.limit >= posts.value?.total)
+  return true
 })
+
+useInfiniteScroll(
+  () => document,
+  loadMore,
+  {
+    distance: 10,
+    canLoadMore: () => {
+      if (status.value === 'pending' || isReachEnd.value)
+        return false
+      return true
+    },
+  },
+)
+
+async function loadMore() {
+  page.value++
+}
 </script>
 
 <template>
@@ -28,5 +54,12 @@ const { data: posts } = useQuery({
         <Article :article="article" :delay="index * 0.1" />
       </li>
     </ul>
+  </div>
+  <div v-else-if="status !== 'pending'">
+    No Posts
+  </div>
+
+  <div v-if="!isReachEnd && status === 'pending'" mt-30>
+    <div class="loader" />
   </div>
 </template>

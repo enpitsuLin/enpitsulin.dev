@@ -21,7 +21,6 @@ const { article, delay = 0 } = defineProps<Props>()
       delay,
     }"
     grid="md:~ md:cols-4 md:items-baseline"
-    class="ease-$spring-easing animate-in zoom-in-70 [animation-fill-mode:both]! [animation-range:entry_0%,exit_100%]! [animation-timeline:view(y)]!"
   >
     <div
       relative
@@ -32,11 +31,19 @@ const { article, delay = 0 } = defineProps<Props>()
       <ArticleCardTime :date="article.publishedAt" class="md:hidden" />
 
       <div
+        v-if="article.excerpt"
         relative z-10 text-sm text="zinc-600 dark:zinc-400"
         class="max-w-80ch prose dark:prose-invert"
       >
-        <p>{{ article.content.slice(0, 100) }}...</p>
+        <p>{{ article.excerpt }}</p>
       </div>
+      <MDC
+        v-else
+        relative z-10 text-sm text="zinc-600 dark:zinc-400"
+        class="max-w-80ch prose dark:prose-invert"
+        excerpt
+        :value="article.content"
+      />
       <div
         aria-hidden="true"
         relative z-10 mt-4 flex items-center text-sm text-accent font-medium
