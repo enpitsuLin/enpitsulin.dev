@@ -1,3 +1,4 @@
+// @unocss-include
 import type { RouterConfig } from '@nuxt/schema'
 
 export default {
@@ -58,28 +59,39 @@ export default {
         ],
       },
       {
-        name: '(admin)',
+        name: 'admin',
         path: '/admin',
+        meta: {
+          breadcrumb: '仪表盘',
+        },
         component: () => import('~/components/layouts/dashboard.vue'),
         children: [
           {
-            name: 'dashboard',
+            name: '(dashboard)',
             path: '/admin',
             component: () => import('~/pages/admin/(dashboard)/index.vue'),
             meta: {
+              title: '仪表盘',
               breadcrumb: '仪表盘',
+              icon: 'i-mingcute:dashboard-line',
             },
           },
           {
             name: 'posts',
             path: '/admin/posts',
+            meta: {
+              title: '文章管理',
+              breadcrumb: '文章管理',
+              icon: 'i-mingcute:code-line',
+            },
             children: [
               {
                 name: 'posts-id',
                 path: '/admin/posts/:id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})',
                 component: () => import('~/pages/admin/(dashboard)/posts/[id].vue'),
                 meta: {
-                  breadcrumb: '编辑文章',
+                  breadcrumb: '编辑',
+                  hideInSidebar: true,
                 },
               },
               {
@@ -87,7 +99,10 @@ export default {
                 path: '/admin/posts/:page(\\d+)?',
                 component: () => import('~/pages/admin/(dashboard)/posts/[[page]].vue'),
                 meta: {
-                  breadcrumb: '文章管理',
+                  title: '管理',
+                  breadcrumb: '管理',
+                  to: '/admin/posts',
+                  icon: 'i-mingcute:list-check-3-line',
                 },
               },
               {
@@ -95,7 +110,9 @@ export default {
                 path: '/admin/posts/create',
                 component: () => import('~/pages/admin/(dashboard)/posts/create.vue'),
                 meta: {
-                  breadcrumb: '新建文章',
+                  title: '新建',
+                  breadcrumb: '新建',
+                  icon: 'i-mingcute:add-line',
                 },
               },
             ],

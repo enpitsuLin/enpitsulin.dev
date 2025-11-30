@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { RouteLocationRaw } from 'vue-router'
-import { toArray } from '@vueuse/core'
-import { withoutTrailingSlash } from 'ufo'
+import { Collapsible } from '@ark-ui/vue'
 import { useAuthSession } from '~/composables/auth'
 
 defineOptions({
@@ -10,6 +8,7 @@ defineOptions({
 
 const { user } = useAuthSession()
 const router = useRouter()
+
 const route = useRoute()
 
 if (!user.value || user.value.role !== 'admin') {
@@ -21,49 +20,9 @@ if (!user.value || user.value.role !== 'admin') {
   })
 }
 
-interface NavItem {
-  title: string
-  path: string
-  icon: string
-  match: string | string[]
-}
-
-const navItems: NavItem[] = [
-  {
-    title: '仪表盘',
-    path: '/admin',
-    icon: 'i-mingcute:dashboard-line',
-    match: '/admin/(dashboard)',
-  },
-  {
-    title: '文章管理',
-    path: '/admin/posts',
-    icon: 'i-mingcute:code-line',
-    match: ['/admin/(dashboard)/posts/[[page]]', '/admin/(dashboard)/posts/[id]', '/admin/(dashboard)/posts/create'],
-  },
-]
-
-function getRouteTitle(path: RouteLocationRaw) {
-  const resolved = router.resolve(path)
-  return resolved.meta.breadcrumb ?? resolved.path
-}
-
-const navigationItems = computed(() => {
-  const paths = route.fullPath
-    .replace('/admin', '')
-    .split('/')
-    .map(p => `/${p}`)
-
-  let accumulated = '/admin'
-  return paths.map((path) => {
-    accumulated = withoutTrailingSlash(`${accumulated}${path}`)
-
-    return {
-      fullPath: accumulated,
-      title: getRouteTitle(accumulated),
-    }
-  })
-})
+const adminRoutes = router.options.routes
+  .find(route => route.name === 'admin')!.children!
+  .filter(route => route.name !== 'admin-not-found')
 </script>
 
 <template>
@@ -90,27 +49,77 @@ const navigationItems = computed(() => {
 
       <nav flex="~ col 1" class="overflow-y-auto p-2">
         <div flex="~ col gap-1">
-          <NuxtLink
-            v-for="item in navItems" :key="item.path"
-            :to="item.path"
-            custom
-          >
-            <template #default="{ href, navigate }">
-              <a
-                :data-active="toArray(item.match).includes(withoutTrailingSlash(String($route.name)))"
-                bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
-                flex="~ items-center gap-3"
-                class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
-                exact-active-class="active"
-                un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
-                :href="href"
-                @click="navigate"
-              >
-                <div :class="item.icon" class="shrink-0 text-base" />
-                <span>{{ item.title }}</span>
-              </a>
+          <template v-for="item in adminRoutes" :key="item.path">
+            <template v-if="item.children">
+              <Collapsible.Root default-open>
+                <Collapsible.Trigger
+                  w-full
+                  :data-active="$route.matched.find(route => route.name === item.name) !== undefined"
+                  bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
+                  flex="~ items-center gap-3"
+                  class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                  un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
+                >
+                  <div :class="item.meta?.icon" class="shrink-0 text-base" />
+                  <span>{{ item.meta?.title }}</span>
+                  <Collapsible.Indicator
+                    ml-auto
+                    class="transition-transform duration-200 data-[state=open]:rotate-180"
+                  >
+                    <div class="i-mingcute:down-line size-4" />
+                  </Collapsible.Indicator>
+                </Collapsible.Trigger>
+                <Collapsible.Content>
+                  <div flex="~ col gap-1" pl-6 py-2 relative>
+                    <div absolute left-3 top-1 bottom-1 w-px bg-border />
+                    <template v-for="child in item.children.filter(route => !route.meta?.hideInSidebar)" :key="child.path">
+                      <NuxtLink
+                        :to="child.meta?.to ?? child.path"
+                        custom
+                      >
+                        <template #default="{ href, navigate, isExactActive }">
+                          <a
+                            :data-active="isExactActive"
+                            bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
+                            flex="~ items-center gap-3"
+                            class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                            un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
+                            :href="href"
+                            @click="navigate"
+                          >
+                            <div :class="child.meta?.icon" class="shrink-0 text-base" />
+                            <span>{{ child.meta?.title }}</span>
+                          </a>
+                        </template>
+                      </NuxtLink>
+                    </template>
+                  </div>
+                </Collapsible.Content>
+              </Collapsible.Root>
             </template>
-          </NuxtLink>
+            <template v-else>
+              <NuxtLink
+                :key="item.path"
+                :to="item.path"
+                custom
+              >
+                <template #default="{ href, navigate, isExactActive }">
+                  <a
+                    :data-active="isExactActive"
+                    bg="transparent hover:zinc-200/50 dark:hover:zinc-700/50 data-[active=true]:zinc-200 data-[active=true]:dark:zinc-700 "
+                    flex="~ items-center gap-3"
+                    class="rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                    un-text="zinc-600 dark:zinc-400 data-[active=true]:zinc-900 data-[active=true]:dark:zinc-100"
+                    :href="href"
+                    @click="navigate"
+                  >
+                    <div :class="item.meta?.icon" class="shrink-0 text-base" />
+                    <span>{{ item.meta?.title }}</span>
+                  </a>
+                </template>
+              </NuxtLink>
+            </template>
+          </template>
         </div>
       </nav>
 
@@ -142,9 +151,9 @@ const navigationItems = computed(() => {
 
           <UiBreadcrumb>
             <UiBreadcrumbList>
-              <template v-for="item in navigationItems" :key="item">
-                <UiBreadcrumbItem :to="item.fullPath">
-                  {{ item.title }}
+              <template v-for="item in $route.matched" :key="item">
+                <UiBreadcrumbItem :to="item.path">
+                  {{ item.meta?.breadcrumb }}
                 </UiBreadcrumbItem>
                 <UiBreadcrumbSeparator class="last:hidden" />
               </template>

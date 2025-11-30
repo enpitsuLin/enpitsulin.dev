@@ -28,7 +28,7 @@ function Children() {
   </CollapsibleRoot>
 </template>
 
-<style>
+<style scoped>
 @keyframes slideDown {
   from {
     height: 0;

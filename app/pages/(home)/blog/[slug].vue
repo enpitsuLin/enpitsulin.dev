@@ -41,6 +41,13 @@ const { data: surroundData } = useAsyncData(
 useHead({
   title: computed(() => data.value?.data?.title ?? ''),
 })
+
+if (!data.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Post not found',
+  })
+}
 </script>
 
 <template>
