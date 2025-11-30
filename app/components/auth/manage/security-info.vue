@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useQuery } from '@pinia/colada'
-import { useInView } from 'motion-v'
 import { useAuthSession } from '~/composables/auth'
 import Section from './section.vue'
 
 const { client, loggedIn, session } = useAuthSession()
 
 const securitySectionTitle = useTemplateRef('securitySectionTitle')
-const inView = useInView(securitySectionTitle)
+const inView = useElementVisibility(securitySectionTitle)
 
 const { data: sessions, isPending: isDevicesPending } = useQuery({
   key: () => ['sessions', loggedIn.value],

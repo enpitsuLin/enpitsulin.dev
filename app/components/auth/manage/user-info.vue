@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { Avatar } from '@ark-ui/vue/avatar'
 import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
-import { useInView } from 'motion-v'
 import { useAuthSession } from '~/composables/auth'
 import Section from './section.vue'
 
 const { user, client, loggedIn } = useAuthSession()
 const accountSectionTitle = useTemplateRef('accountSectionTitle')
-const inView = useInView(accountSectionTitle)
+const inView = useElementVisibility(accountSectionTitle)
 
 const queryCache = useQueryCache()
 
