@@ -17,8 +17,8 @@ const isDev = import.meta.env.DEV
           {{ JSON.stringify(error, null, 2) }}
         </code>
       </pre>
-    <Button @click="handleError">
+    <UiButton @click="handleError">
       Clear errors
-    </Button>
+    </UiButton>
   </div>
 </template>
