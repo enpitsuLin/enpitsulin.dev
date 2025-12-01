@@ -3,6 +3,7 @@ import type { UsePaginationProps } from '@ark-ui/vue/pagination'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
 definePageMeta({
+  alias: '/blog/:page(\\d+)',
   layout: 'home',
 })
 
