@@ -13,7 +13,7 @@ const { article, delay = 0 } = defineProps<Props>()
   <article
     grid="md:~ md:cols-4 md:items-baseline"
     :style="{
-      '--delay': `${delay * 1000}ms`,
+      '--delay': `${Math.floor(delay * 1000)}ms`,
     }"
     class="translate-y-0 op-100 [@starting-style]:translate-y-50px [@starting-style]:op-0 duration-800 ease-$spring-easing delay-$delay"
   >
