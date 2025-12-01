@@ -15,9 +15,14 @@ const { navigation } = useAppConfig()
           {{ label }}
         </NuxtLink>
       </div>
-      <p class="text-sm text-zinc-600 dark:text-zinc-300">
-        © {{ new Date().getFullYear() }} - enpitsulin
-      </p>
+      <div space-y-1>
+        <p class="text-sm text-zinc-600 dark:text-zinc-300">
+          © {{ new Date().getFullYear() }} - enpitsulin
+        </p>
+        <small op-50 text-xs>
+          🚧 这个站点还在建设中...
+        </small>
+      </div>
     </div>
   </footer>
 </template>
