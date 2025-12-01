@@ -5,7 +5,13 @@ import type { SelectPost } from '~~/server/database/schema'
 interface Props {
   article: SerializeObject<SelectPost>
 }
-defineProps<Props>()
+const { article } = defineProps<Props>()
+
+const hasMore = computed(() => /<!--\s*more\s*-->/.test(article.content))
+const excerptContent = computed(() => {
+  const match = article.content.match(/^[\s\S]*?<!--\s*more\s*-->/)
+  return match ? match[0] : article.content
+})
 </script>
 
 <template>
@@ -17,18 +23,18 @@ defineProps<Props>()
     <ArticleCardTitle :title="article.title" :slug="article.slug" />
     <ArticleCardTime :date="article.publishedAt" />
 
-    <div
-      v-if="article.excerpt"
-      class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
-    >
-      <p>{{ article.excerpt }}</p>
-    </div>
     <MDC
-      v-else
+      v-if="hasMore"
       class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
       excerpt partial
-      :value="article.content"
+      :value="excerptContent!"
     />
+    <div
+      v-else
+      class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
+    >
+      <p>{{ article.excerpt ?? '这篇文章没有什么内容摘要捏...' }}</p>
+    </div>
 
     <div
       aria-hidden="true"

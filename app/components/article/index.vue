@@ -7,6 +7,12 @@ interface Props {
   delay?: number
 }
 const { article, delay = 0 } = defineProps<Props>()
+
+const hasMore = computed(() => /<!--\s*more\s*-->/.test(article.content))
+const excerptContent = computed(() => {
+  const match = article.content.match(/^[\s\S]*?<!--\s*more\s*-->/)
+  return match ? match[0] : article.content
+})
 </script>
 
 <template>
@@ -25,18 +31,19 @@ const { article, delay = 0 } = defineProps<Props>()
       <ArticleCardTitle :title="article.title" :slug="article.slug" />
       <ArticleCardTime :date="article.publishedAt" class="md:hidden" />
 
-      <div
-        v-if="article.excerpt"
-        class="relative z-10 text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
-      >
-        <p>{{ article.excerpt }}</p>
-      </div>
       <MDC
-        v-else
-        class="relative z-10 text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
+        v-if="hasMore"
+        class="relative z-10 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
         excerpt partial
-        :value="article.content"
+        :value="excerptContent!"
       />
+      <div
+        v-else
+        class="relative z-10 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
+      >
+        <p>{{ article.excerpt ?? '这篇文章没有什么内容摘要捏...' }}</p>
+      </div>
+
       <div
         aria-hidden="true"
         relative z-10 mt-4 flex items-center text-sm text-accent font-medium
