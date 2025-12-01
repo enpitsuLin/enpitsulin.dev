@@ -11,7 +11,7 @@ const { adChild = false, tag } = defineProps<{
   <NuxtLink
     v-slot="{ href, navigate }"
     custom
-    :to="{ name: 'blog-tag-tag', params: { tag } }"
+    :to="{ name: 'blog-tag-tag-page', params: { tag } }"
   >
     <ark.a
       :as-child="adChild"

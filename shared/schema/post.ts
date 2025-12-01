@@ -27,3 +27,7 @@ export const postIdParamSchema = z.object({
 export const postSlugParamSchema = z.object({
   slug: z.string(),
 })
+
+export const postTagParamSchema = z.object({
+  tag: z.string(),
+})

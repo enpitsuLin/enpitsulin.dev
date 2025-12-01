@@ -21,7 +21,7 @@ const page = computed<number>(() => route.params.page ? Number.parseInt(route.pa
 const { data: posts, status } = useAsyncData(
   `admin-posts-page-${page.value}`,
   async () => {
-    const response = await $fetch('/api/post', { query: { limit: 10, offset: (page.value - 1) * 10 } })
+    const response = await $fetch('/api/post', { query: { limit: 20, offset: (page.value - 1) * 20 } })
     return response
   },
   { watch: [page] },

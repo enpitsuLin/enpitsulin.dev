@@ -31,7 +31,7 @@ export default defineAppConfig({
     {
       label: '文章',
       href: '/blog',
-      match: ['blog-page', 'blog-tag-tag', 'blog-slug'],
+      match: ['blog-page', 'blog-tag-tag', 'blog-slug', 'blog-tag-tag-page'],
     },
     {
       label: '项目',
