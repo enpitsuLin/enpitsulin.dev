@@ -15,22 +15,16 @@ definePageMeta({
 const toast = useToast()
 const router = useRouter()
 
-const route = useRoute('admin-posts-id')
+const route = useRoute('admin-posts-slug')
 
-const postId = route.params.id
+const slug = route.params.slug
 
 // Fetch post data
-const { data: post } = useAsyncData(
-  `admin-post-${postId}`,
-  async () => {
-    const res = await $fetch(`/api/post/${postId}`)
-    return res
-  },
-)
+const { data: post } = useFetch(`/api/post/${slug}`)
 
 const { mutate: updatePost, isLoading: isUpdating } = useMutation({
   async mutation(values: z.infer<typeof postSchema>) {
-    const res = await $fetch(`/api/post/${postId}`, {
+    const res = await $fetch(`/api/post/${slug}`, {
       method: 'PATCH',
       body: values,
     })
@@ -57,23 +51,17 @@ const initialValues = computed(() => {
       title: '',
       slug: '',
       content: '',
-      status: 'draft',
       tags: [],
       publishedAt: undefined,
-      createdAt: undefined,
-      updatedAt: undefined,
     } satisfies z.infer<typeof postSchema>
   }
   return {
     title: post.value.title,
     slug: post.value.slug,
-    excerpt: post.value.excerpt ?? undefined,
+    description: post.value.description,
     content: post.value.content,
-    status: post.value.status,
-    tags: post.value.tags.map(t => t.name),
+    tags: post.value.tags,
     publishedAt: post.value.publishedAt ? new Date(post.value.publishedAt) : undefined,
-    createdAt: post.value.createdAt ? new Date(post.value.createdAt) : undefined,
-    updatedAt: post.value.updatedAt ? new Date(post.value.updatedAt) : undefined,
   } satisfies z.infer<typeof postSchema>
 })
 </script>

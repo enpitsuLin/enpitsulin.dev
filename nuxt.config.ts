@@ -73,6 +73,9 @@ export default defineNuxtConfig({
     kv: true,
     blob: true,
     database: true,
+    databaseMigrationsDirs: [
+      'server/database/migrations',
+    ],
   },
 
   eslint: {

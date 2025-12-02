@@ -13,12 +13,11 @@ definePageMeta({
 
 const router = useRouter()
 const toast = useToast()
-const queryCache = useQueryCache()
 const route = useRoute('admin-posts-page')
 
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 0)
 
-const { data: posts, status } = useAsyncData(
+const { data: posts, status, refresh } = useAsyncData(
   `admin-posts-page-${page.value}`,
   async () => {
     const response = await $fetch('/api/post', { query: { limit: 20, offset: (page.value - 1) * 20 } })
@@ -33,7 +32,8 @@ const { mutate: deletePost, isLoading: isDeleting } = useMutation({
     return $fetch(`/api/post/${postId}`, { method: 'DELETE' })
   },
   onSuccess() {
-    queryCache.invalidateQueries({ key: ['posts', 'list'] })
+    // Refresh the current page data
+    refresh()
     toast.success({
       title: '成功',
       description: '文章已删除',
@@ -106,9 +106,6 @@ function formatDate(date: number | Date | string | null | undefined) {
               Slug
             </th>
             <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">
-              状态
-            </th>
-            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">
               发布时间
             </th>
             <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">
@@ -120,15 +117,12 @@ function formatDate(date: number | Date | string | null | undefined) {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="post in posts.data" :key="post.id">
+          <tr v-for="post in posts.data" :key="post.slug">
             <td style="border: 1px solid #ddd; padding: 8px;">
               {{ post.title }}
             </td>
             <td style="border: 1px solid #ddd; padding: 8px;">
               {{ post.slug }}
-            </td>
-            <td style="border: 1px solid #ddd; padding: 8px;">
-              {{ post.status }}
             </td>
             <td style="border: 1px solid #ddd; padding: 8px;">
               {{ formatDate(post.publishedAt) }}
@@ -137,10 +131,10 @@ function formatDate(date: number | Date | string | null | undefined) {
               {{ formatDate(post.updatedAt) }}
             </td>
             <td style="border: 1px solid #ddd; padding: 8px;">
-              <button style="margin-right: 8px;" @click="handleEdit(post.id)">
+              <button style="margin-right: 8px;" @click="handleEdit(post.slug)">
                 编辑
               </button>
-              <button :disabled="isDeleting" @click="handleDelete(post.id)">
+              <button :disabled="isDeleting" @click="handleDelete(post.slug)">
                 删除
               </button>
             </td>

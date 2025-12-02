@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { SerializeObject } from 'nitropack/types'
-import type { SelectPost } from '~~/server/database/schema'
+import type { Post } from '~~/shared/types/post'
 
 interface Props {
-  article: SerializeObject<SelectPost>
+  article: SerializeObject<Post>
   delay?: number
 }
 const { article, delay = 0 } = defineProps<Props>()
 
-const hasMore = computed(() => /<!--\s*more\s*-->/.test(article.content))
+const hasMore = computed(() => article.excerpt)
 const excerptContent = computed(() => {
-  const match = article.content.match(/^[\s\S]*?<!--\s*more\s*-->/)
-  return match ? match[0] : article.content
+  return article.excerpt
 })
 </script>
 
@@ -41,7 +40,7 @@ const excerptContent = computed(() => {
         v-else
         class="relative z-10 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
       >
-        <p>{{ article.excerpt ?? '这篇文章没有什么内容摘要捏...' }}</p>
+        <p>{{ article.description ?? '这篇文章没有什么内容摘要捏...' }}</p>
       </div>
 
       <div
