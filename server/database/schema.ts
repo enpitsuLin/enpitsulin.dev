@@ -1,51 +1,44 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export * from './auth-schema'
-
-const tag = sqliteTable(
-  'tag',
-  {
-    id: text('id').primaryKey(),
-    name: text('name').notNull().unique(),
-    createdAt: integer('created_at', { mode: 'timestamp_ms' })
-      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
-      .notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
-      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-  },
-  table => [
-    index('tag_name_idx').on(table.name),
-  ],
-)
-
 const post = sqliteTable(
-  'post',
+  'posts',
   {
     id: text('id').primaryKey(),
-    title: text('title').notNull(),
     slug: text('slug').notNull().unique(),
-    content: text('content').notNull(),
-    status: text('status', { enum: ['draft', 'published', 'archived'] }).notNull().default('draft'),
-    excerpt: text('excerpt'),
-    publishedAt: integer('published_at', { mode: 'timestamp_ms' })
-      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    title: text('title').notNull(),
+    description: text('description'),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
       .notNull(),
-    createdAt: integer('created_at', { mode: 'timestamp_ms' })
-      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .$onUpdate(() => new Date())
       .notNull(),
-    updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
-      .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
+    publishedAt: integer('published_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`),
   },
   table => [
     index('post_slug_idx').on(table.slug),
-    index('post_status_idx').on(table.status),
     index('post_published_at_idx').on(table.publishedAt),
-    index('post_created_at_idx').on(table.createdAt),
+  ],
+)
+
+const tag = sqliteTable(
+  'tags',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull().unique(),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => [
+    index('idx_name').on(table.name),
   ],
 )
 
@@ -55,8 +48,30 @@ const postTag = sqliteTable(
     postId: text('post_id').references(() => post.id, { onDelete: 'cascade' }),
     tagId: text('tag_id').references(() => tag.id, { onDelete: 'cascade' }),
   },
-  table => [index('post_tag_idx').on(table.postId, table.tagId)],
+  table => [
+    index('post_tag_idx').on(table.postId, table.tagId),
+  ],
 )
+
+// Relations
+export const postRelations = relations(post, ({ many }) => ({
+  postTags: many(postTag),
+}))
+
+export const tagRelations = relations(tag, ({ many }) => ({
+  postTags: many(postTag),
+}))
+
+export const postTagRelations = relations(postTag, ({ one }) => ({
+  post: one(post, {
+    fields: [postTag.postId],
+    references: [post.id],
+  }),
+  tag: one(tag, {
+    fields: [postTag.tagId],
+    references: [tag.id],
+  }),
+}))
 
 // Export all tables
 export { post, postTag, tag }

@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
-
-const { data } = useQuery({
-  key: ['recent-posts'],
-  query: async () => {
-    const response = await $fetch('/api/post', {
-      query: {
-        limit: '2',
-      },
-    })
-    return response
+const { data } = useFetch('/api/post', {
+  query: {
+    limit: '2',
   },
 })
 </script>
@@ -34,7 +26,7 @@ const { data } = useQuery({
     <div w-full grid="~ cols-1 md:cols-2 gap-16">
       <HomeRecentArticle
         v-for="article in data?.data"
-        :key="article.id"
+        :key="article.slug"
         :article="article"
       />
     </div>

@@ -10,7 +10,6 @@
     class="shadow-black/10 shadow-md transition-all" fixed z-99 p-1
     backdrop-blur
   >
-    <LayoutHomeAuthButton />
     <LayoutHomeThemeButton />
     <LayoutHomeToTopButton />
   </div>

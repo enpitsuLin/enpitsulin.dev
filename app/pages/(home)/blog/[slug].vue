@@ -9,45 +9,12 @@ definePageMeta({
 
 const route = useRoute('blog-slug')
 
-const { data } = await useAsyncData(
-  `post:${route.params.slug}`,
-  async () => {
-    const res = await $fetch(`/api/post/slug/${route.params.slug}`)
-    const ast = await parseMarkdown(res.content, {
-      remark: {
-        plugins: {
-          'remark-lesetid': { },
-        },
-      },
-      rehype: {
-        plugins: {
-          'rehype-unwrap-images': { },
-        },
-      },
-      toc: {
-        depth: 5,
-        searchDepth: 5,
-      },
-    })
-    return {
-      data: res,
-      body: ast.body,
-      toc: ast.toc,
-      estimation: ast.data.estimation,
-    }
-  },
-)
+const { data } = await useFetch(`/api/post/${route.params.slug}`)
 
-const { data: surroundData } = useAsyncData(
-  `post:${route.params.slug}:surround`,
-  async () => {
-    const res = await $fetch(`/api/post/slug/${route.params.slug}/surround`)
-    return res
-  },
-)
+const { data: surroundData } = await useFetch(`/api/post/${route.params.slug}/surround`)
 
 useHead({
-  title: computed(() => data.value?.data?.title ?? ''),
+  title: computed(() => data.value?.data.title),
 })
 
 if (!data.value) {
@@ -71,10 +38,10 @@ if (!data.value) {
             <i inline-block class="i-mingcute:calendar-fill" />
             <NuxtTime :datetime="data.data.publishedAt" />
           </div>
-          <div v-if="data.estimation.minutes" flex="~ items-center gap-2">
+          <div v-if="data.data.estimation.minutes" flex="~ items-center gap-2">
             <span class="sr-only">阅读时间</span>
             <i inline-block class="i-mingcute:time-fill" />
-            <span>约 {{ Math.ceil(data.estimation.minutes) }} 分钟</span>
+            <span>约 {{ Math.ceil(data.data.estimation.minutes) }} 分钟</span>
           </div>
         </section>
         <h1 text-4xl font-semibold>

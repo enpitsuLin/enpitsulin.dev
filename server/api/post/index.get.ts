@@ -1,36 +1,69 @@
-import z from 'zod'
-import { postQuerySchema } from '~~/shared/schema/post'
+import type { Post } from '~~/shared/types/post'
+import { desc, isNotNull, sql } from 'drizzle-orm'
+import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
-export default defineEventHandler(async (event) => {
-  const validatedQuery = await getValidatedQuery(event, postQuerySchema.safeParse)
+export default eventHandler(async (event) => {
+  const query = getQuery(event)
+  const limit = query.limit ? Number.parseInt(query.limit as string) : 10
+  const offset = query.offset ? Number.parseInt(query.offset as string) : 0
 
-  if (validatedQuery.error) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: z.prettifyError(validatedQuery.error),
-    })
-  }
+  const drizzle = useDrizzle()
 
-  const query = validatedQuery.data
+  // Query posts from database with pagination
+  const dbPosts = await drizzle.query.post.findMany({
+    where: isNotNull(tables.post.publishedAt),
+    orderBy: desc(tables.post.publishedAt),
+    limit,
+    offset,
+    with: {
+      postTags: {
+        with: {
+          tag: true,
+        },
+      },
+    },
+  })
 
-  const db = useDrizzle()
-
-  const totalPosts = await db
-    .select({ count: count() })
+  // Get total count for pagination
+  const totalResult = await drizzle
+    .select({ count: sql<number>`count(*)` })
     .from(tables.post)
-    .then((result: Array<{ count: number }>) => result[0].count)
+    .where(isNotNull(tables.post.publishedAt))
 
-  const posts = await db
-    .select()
-    .from(tables.post)
-    .orderBy(desc(tables.post.publishedAt))
-    .limit(query.limit)
-    .offset(query.offset ?? 0)
+  const total = totalResult[0]?.count ?? 0
+
+  // Fetch parsed content from KV for each post
+  const posts = await Promise.all(
+    dbPosts.map(async (dbPost) => {
+      const kvKey = `post:${dbPost.slug}`
+      const kvPost = await hubKV().get<PostInKV>(kvKey)
+
+      if (!kvPost) {
+        // Skip posts that don't exist in KV
+        return null
+      }
+
+      // Combine database fields with KV content
+      return {
+        id: dbPost.id,
+        title: dbPost.title,
+        slug: dbPost.slug,
+        description: dbPost.description,
+        publishedAt: dbPost.publishedAt,
+        updatedAt: dbPost.updatedAt,
+        content: kvPost.content,
+        tags: dbPost.postTags.map(pt => pt.tag?.name).filter((name): name is string => name !== undefined),
+        ...kvPost.parsed,
+      } as Post
+    }),
+  )
+
+  const validPosts = posts.filter((post): post is Post => post !== null)
 
   return {
-    data: posts,
-    limit: query.limit,
-    offset: query.offset ?? 0,
-    total: totalPosts,
+    data: validPosts,
+    total,
+    limit,
+    offset,
   }
 })

@@ -17,14 +17,11 @@ const emit = defineEmits<{
 
 const DEFAULT_VALUES: z.infer<typeof postSchema> = {
   title: '',
-  excerpt: '',
+  description: '',
   slug: '',
   content: '',
-  status: 'draft',
   tags: [],
-  publishedAt: undefined,
-  createdAt: undefined,
-  updatedAt: undefined,
+  publishedAt: new Date(),
 }
 
 const isEditing = !!defaultValues
@@ -43,12 +40,10 @@ watch(() => defaultValues, (newValues) => {
   form.setFieldValue('title', newValues?.title ?? '')
   form.setFieldValue('content', newValues?.content ?? '')
   form.setFieldValue('slug', newValues?.slug ?? '')
-  form.setFieldValue('status', newValues?.status ?? 'draft')
   form.setFieldValue('tags', newValues?.tags ?? [])
-  form.setFieldValue('excerpt', newValues?.excerpt ?? '')
-  form.setFieldValue('publishedAt', newValues?.publishedAt ?? undefined)
-  form.setFieldValue('createdAt', newValues?.createdAt ?? undefined)
-  form.setFieldValue('updatedAt', newValues?.updatedAt ?? undefined)
+  form.setFieldValue('content', newValues?.content ?? '')
+  form.setFieldValue('description', newValues?.description ?? '')
+  form.setFieldValue('publishedAt', newValues?.publishedAt ?? new Date())
 })
 </script>
 
@@ -144,38 +139,6 @@ watch(() => defaultValues, (newValues) => {
 
       <form.Field
         v-slot="{ field }"
-        name="status"
-      >
-        <UiFormField
-          v-slot="{ value, onInput, onBlur }"
-          :field
-          label="状态"
-        >
-          <select
-            :value="value"
-            w="full" p="x4 y2"
-            border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
-            bg="transparent"
-            :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
-            class="text-xs text-zinc-900 outline-none transition-all dark:text-white focus:ring-2 focus:ring-blue-500/20"
-            @change="onInput"
-            @blur="onBlur"
-          >
-            <option value="draft">
-              草稿
-            </option>
-            <option value="published">
-              已发布
-            </option>
-            <option value="archived">
-              已归档
-            </option>
-          </select>
-        </UiFormField>
-      </form.Field>
-
-      <form.Field
-        v-slot="{ field }"
         name="tags"
       >
         <UiFormField
@@ -192,7 +155,7 @@ watch(() => defaultValues, (newValues) => {
 
       <form.Field
         v-slot="{ field }"
-        name="excerpt"
+        name="description"
       >
         <UiFormField
           v-slot="{ value, onInput, onBlur }"

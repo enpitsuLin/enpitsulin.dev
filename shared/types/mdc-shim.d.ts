@@ -1,5 +1,3 @@
-import '@nuxtjs/mdc'
-
 declare module '@nuxtjs/mdc' {
   interface MDCData {
     estimation: {
@@ -12,4 +10,4 @@ declare module '@nuxtjs/mdc' {
   }
 }
 
-export {}
+export { }

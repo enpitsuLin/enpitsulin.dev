@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1761467824425,
-      "tag": "0000_clever_cyclops",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1761468732906,
-      "tag": "0001_noisy_daimon_hellstrom",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1761838032658,
-      "tag": "0002_whole_stature",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1761838233440,
-      "tag": "0003_third_squadron_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1762063579174,
-      "tag": "0004_famous_the_enforcers",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1762071679686,
-      "tag": "0005_dusty_vampiro",
+      "when": 1764687511012,
+      "tag": "0000_graceful_yellow_claw",
       "breakpoints": true
     }
   ]

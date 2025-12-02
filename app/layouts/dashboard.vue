@@ -1,23 +1,9 @@
 <script setup lang="ts">
 import { Collapsible } from '@ark-ui/vue'
-import { useAuthSession } from '~/composables/auth'
 
 defineOptions({
   name: 'DashboardLayout',
 })
-
-const { user } = useAuthSession()
-
-const route = useRoute()
-
-if (!user.value || user.value.role !== 'admin') {
-  await navigateTo({
-    path: '/admin/sign-in',
-    query: {
-      redirect: encodeURIComponent(route.fullPath),
-    },
-  })
-}
 
 const { adminNavigation } = useAppConfig()
 </script>
@@ -40,7 +26,7 @@ const { adminNavigation } = useAppConfig()
           </h2>
         </div>
         <div text-xs class="text-zinc-600 dark:text-zinc-400">
-          {{ user?.name || user?.email }}
+          Username
         </div>
       </div>
 

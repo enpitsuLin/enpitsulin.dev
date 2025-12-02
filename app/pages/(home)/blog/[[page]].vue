@@ -13,20 +13,10 @@ const router = useRouter()
 const POSTS_LIMIT = 5
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 1)
 
-const { data: posts } = useQuery({
-  key: () => ['posts', page.value],
-  async query() {
-    const offset = (Math.max(1, page.value) - 1) * POSTS_LIMIT
-    const res = await $fetch('/api/post', {
-      query: {
-        limit: POSTS_LIMIT,
-        offset,
-      },
-    })
-    return res
-  },
-  placeholderData(previousData) {
-    return previousData
+const { data: posts } = useFetch('/api/post', {
+  query: {
+    limit: POSTS_LIMIT,
+    offset: (Math.max(1, page.value) - 1) * POSTS_LIMIT,
   },
 })
 
@@ -55,7 +45,7 @@ const pagination = usePagination(paginationOptions)
   >
     <div v-if="posts && posts?.data?.length > 0 " pl="md:6" border="md:l border" w-full>
       <ul flex="~ col gap-16" pb-16>
-        <li v-for="(article, index) in posts?.data" :key="article.id">
+        <li v-for="(article, index) in posts?.data" :key="article.slug">
           <Article :article="article" :delay="index * 0.1" />
         </li>
       </ul>

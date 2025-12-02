@@ -15,7 +15,7 @@ definePageMeta({
 const toast = useToast()
 const router = useRouter()
 
-const { mutate, isLoading } = useMutation({
+const { mutate: createPost, isLoading } = useMutation({
   async mutation(values: z.infer<typeof postSchema>) {
     const res = await $fetch('/api/post', {
       method: 'POST',
@@ -23,12 +23,12 @@ const { mutate, isLoading } = useMutation({
     })
     return res
   },
-  onSuccess(data) {
+  onSuccess({ title }) {
     toast.success({
       title: '成功',
-      description: '文章已创建',
+      description: `文章${title}已创建`,
     })
-    router.push(`/admin/posts/${data?.id}`)
+    router.push(`/admin/posts`)
   },
   onError(error: any) {
     toast.error({
@@ -42,6 +42,6 @@ const { mutate, isLoading } = useMutation({
 <template>
   <AdminPostForm
     :submitting="isLoading"
-    @submit="mutate"
+    @submit="createPost"
   />
 </template>

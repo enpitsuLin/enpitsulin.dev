@@ -1,12 +1,9 @@
-import { env } from 'cloudflare:workers'
 import { drizzle } from 'drizzle-orm/d1'
-
 import * as schema from '../database/schema'
 
 export const tables = schema
-
-export { and, asc, count, desc, eq, gt, inArray, lt } from 'drizzle-orm'
+export type * from '../database/schema'
 
 export function useDrizzle() {
-  return drizzle(env.DB, { schema })
+  return drizzle(hubDatabase(), { schema })
 }
