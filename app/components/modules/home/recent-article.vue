@@ -32,7 +32,7 @@ const excerptContent = computed(() => {
       v-else
       class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
     >
-      <p>{{ article.description ?? '这篇文章没有什么内容摘要捏...' }}</p>
+      <p>{{ article.description || article.data.description || '这篇文章没有什么内容摘要捏...' }}</p>
     </div>
 
     <div

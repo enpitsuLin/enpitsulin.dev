@@ -8,6 +8,7 @@ export interface ParsedMDCData {
     chars: number
     text: string
   }
+  description: string
 }
 
 export interface ParsedPostResult {
