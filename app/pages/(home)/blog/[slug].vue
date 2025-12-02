@@ -14,7 +14,7 @@ const { data } = await useFetch(`/api/post/${route.params.slug}`)
 const { data: surroundData } = await useFetch(`/api/post/${route.params.slug}/surround`)
 
 useHead({
-  title: computed(() => data.value?.data.title),
+  title: computed(() => data.value?.title),
 })
 
 if (!data.value) {
@@ -36,7 +36,7 @@ if (!data.value) {
           <div flex="~ items-center gap-2">
             <span class="sr-only">发布时间</span>
             <i inline-block class="i-mingcute:calendar-fill" />
-            <NuxtTime :datetime="data.data.publishedAt" />
+            <NuxtTime :datetime="data.publishedAt" />
           </div>
           <div v-if="data.data.estimation.minutes" flex="~ items-center gap-2">
             <span class="sr-only">阅读时间</span>
@@ -45,11 +45,11 @@ if (!data.value) {
           </div>
         </section>
         <h1 text-4xl font-semibold>
-          {{ data.data.title }}
+          {{ data.title }}
         </h1>
         <section>
           <ul flex="~ wrap items-center gap-2" tracking-tight>
-            <li v-for="tag in data.data.tags ?? []" :key="tag">
+            <li v-for="tag in data.tags ?? []" :key="tag">
               <ArticleTag :tag="tag" />
             </li>
           </ul>

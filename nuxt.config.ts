@@ -69,6 +69,10 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   compatibilityDate: '2025-12-02',
 
+  nitro: {
+    preset: 'cloudflare-module',
+  },
+
   hub: {
     kv: true,
     blob: true,

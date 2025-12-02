@@ -1,6 +1,5 @@
-import type { SelectPost } from '~~/server/database/schema'
 import type { Post } from '~~/shared/types/post'
-import { and, desc, eq, isNotNull, sql } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNotNull, sql } from 'drizzle-orm'
 import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
 export default eventHandler(async (event) => {
@@ -29,36 +28,50 @@ export default eventHandler(async (event) => {
     }
   }
 
-  // Query posts that have this tag and are published
-  const dbPosts = await drizzle
-    .select({
-      id: tables.post.id,
-      slug: tables.post.slug,
-      title: tables.post.title,
-      createdAt: tables.post.createdAt,
-      updatedAt: tables.post.updatedAt,
-      publishedAt: tables.post.publishedAt,
-    })
-    .from(tables.post)
-    .innerJoin(tables.postTag, eq(tables.post.id, tables.postTag.postId))
-    .where(
-      and(
-        eq(tables.postTag.tagId, tag.id),
-        isNotNull(tables.post.publishedAt),
-      ),
-    )
-    .orderBy(desc(tables.post.publishedAt))
-    .limit(limit)
-    .offset(offset)
+  // Get all post IDs that have this tag
+  const postTags = await drizzle.query.postTag.findMany({
+    where: eq(tables.postTag.tagId, tag.id),
+    columns: {
+      postId: true,
+    },
+  })
+
+  const postIds = postTags.map(pt => pt.postId).filter((id): id is string => id !== null)
+
+  if (postIds.length === 0) {
+    return {
+      data: [] as Post[],
+      total: 0,
+      limit,
+      offset,
+    }
+  }
+
+  // Query posts from database with pagination
+  const dbPosts = await drizzle.query.post.findMany({
+    where: and(
+      inArray(tables.post.id, postIds),
+      isNotNull(tables.post.publishedAt),
+    ),
+    orderBy: desc(tables.post.publishedAt),
+    limit,
+    offset,
+    with: {
+      postTags: {
+        with: {
+          tag: true,
+        },
+      },
+    },
+  })
 
   // Get total count for pagination
   const totalResult = await drizzle
     .select({ count: sql<number>`count(*)` })
     .from(tables.post)
-    .innerJoin(tables.postTag, eq(tables.post.id, tables.postTag.postId))
     .where(
       and(
-        eq(tables.postTag.tagId, tag.id),
+        inArray(tables.post.id, postIds),
         isNotNull(tables.post.publishedAt),
       ),
     )
@@ -67,7 +80,7 @@ export default eventHandler(async (event) => {
 
   // Fetch parsed content from KV for each post
   const posts = await Promise.all(
-    dbPosts.map(async (dbPost: SelectPost) => {
+    dbPosts.map(async (dbPost) => {
       const kvKey = `post:${dbPost.slug}`
       const kvPost = await hubKV().get<PostInKV>(kvKey)
 
@@ -78,11 +91,16 @@ export default eventHandler(async (event) => {
 
       // Combine database fields with KV content
       return {
+        id: dbPost.id,
+        title: dbPost.title,
         slug: dbPost.slug,
+        description: dbPost.description,
         publishedAt: dbPost.publishedAt,
         updatedAt: dbPost.updatedAt,
+        content: kvPost.content,
+        tags: dbPost.postTags.map(pt => pt.tag?.name).filter((name): name is string => name !== undefined),
         ...kvPost.parsed,
-      }
+      } as Post
     }),
   )
 
