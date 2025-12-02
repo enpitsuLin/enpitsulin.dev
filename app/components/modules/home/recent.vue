@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/post', {
+const { data } = await useFetch('/api/post', {
   query: {
     limit: '2',
   },

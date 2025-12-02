@@ -13,7 +13,7 @@ const router = useRouter()
 const POSTS_LIMIT = 5
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 1)
 
-const { data: posts } = useFetch(`/api/post/tag/${route.params.tag}`, {
+const { data: posts } = await useFetch(`/api/post/tag/${route.params.tag}`, {
   query: {
     limit: POSTS_LIMIT,
     offset: (Math.max(1, page.value) - 1) * POSTS_LIMIT,

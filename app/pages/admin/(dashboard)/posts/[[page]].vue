@@ -18,13 +18,14 @@ const route = useRoute('admin-posts-page')
 
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 0)
 
-const { data: posts, status, refresh } = useAsyncData(
-  `admin-posts-page-${page.value}`,
-  async () => {
-    const response = await $fetch('/api/post', { query: { limit: 20, offset: (page.value - 1) * 20 } })
-    return response
+const { data: posts, status, refresh } = await useFetch(
+  '/api/post',
+  {
+    query: {
+      limit: 20,
+      offset: computed(() => (page.value - 1) * 20),
+    },
   },
-  { watch: [page] },
 )
 
 const { mutate: deletePost, isLoading: isDeleting } = useMutation({
