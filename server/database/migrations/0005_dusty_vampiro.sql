@@ -1,1 +1,0 @@
-ALTER TABLE `post` ADD `excerpt` text;

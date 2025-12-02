@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useAuthSession } from '~/composables/auth'
-
 defineOptions({
   name: 'DashboardPage',
 })
@@ -10,8 +8,6 @@ definePageMeta({
   title: '仪表盘',
   breadcrumb: '仪表盘',
 })
-
-const { session } = useAuthSession()
 </script>
 
 <template>
@@ -23,10 +19,10 @@ const { session } = useAuthSession()
     >
       <section>
         <p>
-          上次登录位置：{{ session?.ipAddress || "未知位置" }}
+          上次登录位置：{{ "未知位置" }}
         </p>
         <p>
-          上次登录时间：<NuxtTime
+          <!-- 上次登录时间：<NuxtTime
             v-if="session?.updatedAt"
             :datetime="session.updatedAt"
             time-zone="Asia/Shanghai"
@@ -34,7 +30,7 @@ const { session } = useAuthSession()
             year="numeric"
             month="long"
             day="2-digit"
-          />
+          /> -->
         </p>
       </section>
     </div>
