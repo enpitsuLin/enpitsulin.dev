@@ -10,6 +10,7 @@ defineOptions({
 definePageMeta({
   breadcrumb: '新建',
   layout: 'dashboard',
+  middleware: ['auth'],
 })
 
 const toast = useToast()

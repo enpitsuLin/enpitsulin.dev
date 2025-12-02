@@ -7,6 +7,7 @@ definePageMeta({
   layout: 'dashboard',
   title: '仪表盘',
   breadcrumb: '仪表盘',
+  middleware: ['auth'],
 })
 </script>
 

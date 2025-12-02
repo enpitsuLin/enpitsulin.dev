@@ -4,7 +4,7 @@ import { ark } from '@ark-ui/vue'
 import { normalizeClass } from 'vue'
 
 interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
-  variant?: 'default' | 'outline'
+  variant?: 'default' | 'outline' | 'ghost'
   size?: 'default' | 'small' | 'large'
   asChild?: boolean
 }
@@ -30,12 +30,13 @@ const {
     :bg="normalizeClass({
       'zinc-800 hover:zinc-700 dark:zinc-50 dark:hover:zinc-100': variant === 'default',
       'zinc-800/5 hover:zinc-700/10 dark:zinc-50/5 dark:hover:zinc-100/10': variant === 'outline',
+      'transparent hover:zinc-200/50 dark:hover:zinc-700/50': variant === 'ghost',
     })"
     :un-text="normalizeClass([
       'font-medium',
       {
         'zinc-50 xs dark:zinc-900': variant === 'default',
-        'zinc-900 xs dark:zinc-50': variant === 'outline',
+        'zinc-900 xs dark:zinc-50': variant === 'outline' || variant === 'ghost',
       },
     ])"
     :border="normalizeClass([

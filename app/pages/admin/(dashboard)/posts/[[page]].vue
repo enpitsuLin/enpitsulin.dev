@@ -9,6 +9,7 @@ definePageMeta({
   alias: '/admin/posts/:page(\\d+)?',
   layout: 'dashboard',
   breadcrumb: '文章管理',
+  middleware: ['auth'],
 })
 
 const router = useRouter()
