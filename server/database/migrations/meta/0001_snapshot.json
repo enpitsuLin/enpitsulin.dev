@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "cd4a9ecb-db7a-4424-a800-4d7d0324d605",
+  "id": "9cb6be1f-f30f-44c9-a27b-5b509bf1d959",
   "prevId": "9dfc4b53-d23a-4ae9-abc8-6a3636cb9841",
   "tables": {
     "posts": {
@@ -213,15 +213,23 @@
           "notNull": true,
           "autoincrement": false
         },
-        "content": {
-          "name": "content",
+        "mood": {
+          "name": "mood",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
-        "created_at": {
-          "name": "created_at",
+        "published_at": {
+          "name": "published_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch('now'))"
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -233,7 +241,7 @@
         "thoughts_published_at_idx": {
           "name": "thoughts_published_at_idx",
           "columns": [
-            "created_at"
+            "published_at"
           ],
           "isUnique": false
         }

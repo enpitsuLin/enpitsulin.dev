@@ -1,18 +1,13 @@
-import type { ParsedMDCData, ParsedPostResult } from './post'
-
 declare module '@nuxtjs/mdc' {
-  interface MDCData extends ParsedMDCData {
+  interface MDCData {
+    estimation: {
+      minutes: number
+      time: number
+      words: number
+      chars: number
+      text: string
+    }
   }
-}
-
-declare module '@nuxtjs/mdc/runtime' {
-  declare const parseMarkdown: (
-    md: string,
-    markdownParserOptions?: MDCParseOptions,
-    parseOptions?: {
-      fileOptions?: VFileOptions
-    },
-  ) => Promise<ParsedPostResult>
 }
 
 export { }

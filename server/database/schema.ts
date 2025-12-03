@@ -59,9 +59,13 @@ export const thoughts = sqliteTable(
   'thoughts',
   {
     id: text('id').primaryKey(),
-    content: text('content').notNull(),
-    publishedAt: integer('created_at', { mode: 'timestamp' })
+    mood: text('mood'),
+    publishedAt: integer('published_at', { mode: 'timestamp' })
       .default(sql`(unixepoch('now'))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .$onUpdate(() => new Date())
       .notNull(),
   },
   table => [
@@ -95,3 +99,5 @@ export type SelectTag = typeof tag.$inferSelect
 export type InsertTag = typeof tag.$inferInsert
 export type SelectPostTag = typeof postTag.$inferSelect
 export type InsertPostTag = typeof postTag.$inferInsert
+export type SelectThought = typeof thoughts.$inferSelect
+export type InsertThought = typeof thoughts.$inferInsert
