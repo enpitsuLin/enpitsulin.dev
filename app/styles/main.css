@@ -73,7 +73,7 @@ html {
   scroll-padding-top: 4rem;
 }
 
-::view-transition-new(root),
-::view-transition-old(root) {
+::view-transition-new(root):not(.theme-toggle-animating),
+::view-transition-old(root):not(.theme-toggle-animating) {
   animation-duration: 0s;
 }
