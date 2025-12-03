@@ -43,16 +43,17 @@ export default eventHandler(async (event) => {
         publishedAt: dbThought.publishedAt,
         updatedAt: dbThought.updatedAt,
         content: kvThought.content,
-        ...kvThought.parsed,
+        body: kvThought.parsed.body,
       } as Thought
     }),
   )
 
   const validThoughts = thoughts.filter((thought): thought is Thought => thought !== null)
 
-  // Calculate next cursor (timestamp of the last item)
-  const nextCursor = hasMore && validThoughts.length > 0
-    ? Math.floor(validThoughts[validThoughts.length - 1].publishedAt.getTime() / 1000)
+  // Calculate next cursor based on the last database item processed, not the last valid thought
+  // This ensures pagination continues correctly even if some KV lookups fail
+  const nextCursor = hasMore && dbThoughts.length > limit
+    ? Math.floor(dbThoughts[limit].publishedAt.getTime() / 1000)
     : null
 
   return {
