@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { SerializeObject } from 'nitropack/types'
 import type { Thought } from '~~/shared/types/thought'
 
 definePageMeta({
@@ -6,7 +7,7 @@ definePageMeta({
 })
 
 const THOUGHTS_LIMIT = 10
-const thoughts = ref<Thought[]>([])
+const thoughts = ref<SerializeObject<Thought>[]>([])
 const nextCursor = ref<number | null>(null)
 const isLoading = ref(false)
 const loadMoreElement = ref<HTMLElement | null>(null)
@@ -17,7 +18,7 @@ async function loadThoughts(cursor: number | null = null) {
 
   isLoading.value = true
   try {
-    const { data } = await $fetch<{ data: Thought[], nextCursor: number | null, limit: number }>('/api/thought', {
+    const data = await $fetch('/api/thought', {
       query: {
         limit: THOUGHTS_LIMIT,
         ...(cursor && { cursor }),
@@ -25,10 +26,10 @@ async function loadThoughts(cursor: number | null = null) {
     })
 
     if (cursor) {
-      thoughts.value.push(...data)
+      thoughts.value.push(...data.data)
     }
     else {
-      thoughts.value = data
+      thoughts.value = data.data
     }
     nextCursor.value = data.nextCursor
   }
@@ -43,7 +44,8 @@ await loadThoughts()
 // Infinite scroll with intersection observer
 useIntersectionObserver(
   loadMoreElement,
-  ([{ isIntersecting }]) => {
+  ([entry]) => {
+    const isIntersecting = entry?.isIntersecting ?? false
     if (isIntersecting && nextCursor.value && !isLoading.value) {
       loadThoughts(nextCursor.value)
     }
@@ -54,7 +56,7 @@ useIntersectionObserver(
 <template>
   <HomePageContainer
     title="想法"
-    description="一些零散的想法和思考"
+    description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
     <div v-if="thoughts.length > 0" pl="md:6" border="md:l border" w-full>
       <HomeThoughtTimeline :thoughts="thoughts" />

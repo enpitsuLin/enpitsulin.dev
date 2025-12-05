@@ -16,7 +16,7 @@ defineProps<{
       </h2>
       <p
         v-if="description"
-        class="animate-delay-100 text-sm op-60 animate-in fade-in slide-in-from-left-16 animate-duration-1000! animate-ease-$spring-easing! md:text-base"
+        class="animate-delay-100 font-normal text-sm op-60 animate-in fade-in slide-in-from-left-16 animate-duration-1000! animate-ease-$spring-easing! md:text-base"
       >
         {{ description }}
       </p>
