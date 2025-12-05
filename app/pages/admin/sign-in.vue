@@ -12,11 +12,10 @@ definePageMeta({
   layout: false,
 })
 
-const router = useRouter()
 const route = useRoute()
 const toast = useToast()
 
-const { loggedIn } = useUserSession()
+const { loggedIn, fetch } = useUserSession()
 
 if (loggedIn.value) {
   const redirect = (route.query.redirect as string) || '/admin'
@@ -43,7 +42,8 @@ const { mutate: login, isLoading } = useMutation({
     })
     // Redirect to the original page or admin dashboard
     const redirect = (route.query.redirect as string) || '/admin'
-    router.push(redirect)
+    fetch()
+    navigateTo(redirect, { replace: true })
   },
   onError(error: any) {
     toast.error({
