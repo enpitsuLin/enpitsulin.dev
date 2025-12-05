@@ -17,7 +17,7 @@
     {
       "binding": "DB",
       "database_name": "enpitsulin-dev",
-      "database_id": "665d7a3a-6e3f-4c51-9fcf-d1d0f806004a",
+      "database_id": "f8e5abb4-4eaa-4104-a8c9-f80877b93840",
       "migrations_dir": "server/database/migrations"
     }
   ],
