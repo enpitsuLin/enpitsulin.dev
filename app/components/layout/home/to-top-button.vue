@@ -13,11 +13,11 @@ const { y } = useWindowScroll()
       v-if="y > 100"
       type="button"
       flex="~ items-center justify-center" of-hidden
-      class="size-8 bg-opacity-80 transition-all active:scale-105 hover:scale-115"
+      class="[&:is(:hover,:active)_[class^=i-]]:scale-115 [&_[class^=i]]:transition-all size-8 bg-op-80"
       @click="y = 0"
     >
       <span class="sr-only">back to top</span>
-      <i inline-block class="i-mingcute:up-line" />
+      <div class="i-mingcute:up-line" />
     </button>
   </Transition>
 </template>
