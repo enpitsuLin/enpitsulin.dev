@@ -15,7 +15,7 @@ export default eventHandler(async (event) => {
     })
   }
   await setUserSession(event, {
-    user: { admin: true },
+    user: { role: 'admin' },
   })
   return { ok: true }
 })

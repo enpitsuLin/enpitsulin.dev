@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware(async (to) => {
-  const { loggedIn } = useUserSession()
-  if (!loggedIn.value) {
+  const { loggedIn, user } = useUserSession()
+  if (!loggedIn.value || user.value?.role !== 'admin') {
     return navigateTo({
       path: '/admin/sign-in',
       query: { redirect: to.path },

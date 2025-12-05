@@ -1,0 +1,14 @@
+diff --git a/dist/runtime/types/session.d.ts b/dist/runtime/types/session.d.ts
+index d9e87fa9e32194a37c3acc176bfe3ed83f93cb82..c8340cdf1ee5acba10a4c3375a9d1651e3858ffd 100644
+--- a/dist/runtime/types/session.d.ts
++++ b/dist/runtime/types/session.d.ts
+@@ -19,7 +19,8 @@ export interface UserSession {
+     /**
+      * Extra session data, available on client and server
+      */
+-    [key: string]: unknown;
++    // https://github.com/atinux/nuxt-auth-utils/issues/433
++    // [key: string]: unknown;
+ }
+ export interface UserSessionRequired extends UserSession {
+     user: User;

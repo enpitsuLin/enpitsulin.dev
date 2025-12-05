@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  nuxt-auth-utils:
+    hash: ec71d5f26007e27524905b4fd14e9db0f53a38cd443688a4e8a8324bed230c3d
+    path: patches/nuxt-auth-utils.patch
+
 importers:
 
   .:
@@ -125,7 +130,7 @@ importers:
         version: 3.0.27
       nuxt-auth-utils:
         specifier: ^0.5.25
-        version: 0.5.25(magicast@0.5.1)
+        version: 0.5.25(patch_hash=ec71d5f26007e27524905b4fd14e9db0f53a38cd443688a4e8a8324bed230c3d)(magicast@0.5.1)
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
@@ -12763,7 +12768,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuxt-auth-utils@0.5.25(magicast@0.5.1):
+  nuxt-auth-utils@0.5.25(patch_hash=ec71d5f26007e27524905b4fd14e9db0f53a38cd443688a4e8a8324bed230c3d)(magicast@0.5.1):
     dependencies:
       '@adonisjs/hash': 9.1.1
       '@nuxt/kit': 4.2.1(magicast@0.5.1)
