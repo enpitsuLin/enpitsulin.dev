@@ -79,9 +79,7 @@ const pagination = usePagination(paginationOptions)
         </li>
       </ul>
     </div>
-    <div v-else>
-      No Posts
-    </div>
+    <PostListEmpty v-else />
 
     <Pagination.RootProvider flex="~ row items-center justify-between gap-1" w-full pt-4 :value="pagination">
       <Pagination.PrevTrigger
