@@ -1,37 +1,10 @@
-<script lang="ts">
-import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
-
-const POSTS_LIMIT = 5
-
-function normalizPage(page: string | undefined) {
-  return page ? Number.parseInt(page as string) : 1
-}
-
-export const usePostsData = defineColadaLoader('blog-page', {
-  key: to => ['posts', to.params.page ?? '1'],
-  async query(to, { signal }) {
-    const page = normalizPage(to.params.page)
-    return $fetch('/api/post', {
-      query: {
-        limit: POSTS_LIMIT,
-        offset: (page - 1) * POSTS_LIMIT,
-      },
-      signal,
-    })
-  },
-  staleTime: 10 * 1000,
-})
-</script>
-
 <script setup lang="ts">
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
+import { normalizPage } from '#shared/utils/normalize-page'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
-defineOptions({
-  __loaders: [usePostsData],
-})
-
 definePageMeta({
+  loaders: [usePostsData],
   alias: '/blog/:page(\\d+)?',
   layout: 'home',
 })

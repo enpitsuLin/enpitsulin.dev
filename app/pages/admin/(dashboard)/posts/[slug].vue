@@ -1,15 +1,3 @@
-<script lang="ts">
-import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
-
-export const usePostData = defineColadaLoader('admin-posts-slug', {
-  key: to => ['post', to.params.slug],
-  async query(to, { signal }) {
-    return $fetch(`/api/post/${to.params.slug}`, { signal })
-  },
-  staleTime: 10 * 1000,
-})
-</script>
-
 <script setup lang="ts">
 import type z from 'zod'
 import type { postSchema } from '~~/shared/schema/post'
@@ -17,7 +5,6 @@ import { useToast } from '~/components/ui/toast/use-toast'
 
 defineOptions({
   name: 'PostPage',
-  __loaders: [usePostData],
 })
 
 definePageMeta({
@@ -34,7 +21,7 @@ const route = useRoute('admin-posts-slug')
 const slug = route.params.slug
 
 // Fetch post data
-const { data: post } = usePostData()
+const { data: post } = useAdminPostsSlugData()
 
 const { mutate: updatePost, isLoading: isUpdating } = useMutation({
   async mutation(values: z.infer<typeof postSchema>) {

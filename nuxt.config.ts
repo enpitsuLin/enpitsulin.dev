@@ -29,6 +29,10 @@ export default defineNuxtConfig({
     ],
   },
 
+  imports: {
+    dirs: ['loaders'],
+  },
+
   mdc: {
     remarkPlugins: {
       'remark-lesetid': {},

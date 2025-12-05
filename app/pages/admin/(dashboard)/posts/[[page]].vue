@@ -1,34 +1,8 @@
-<script lang="ts">
-import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
-
-const POSTS_LIMIT = 20
-
-function normalizPage(page: string | number | undefined) {
-  return page ? Number.parseInt(page as string) : 1
-}
-
-export const usePostsData = defineColadaLoader('admin-posts-page', {
-  key: to => ['posts', normalizPage(to.params.page)],
-  async query(to, { signal }) {
-    const page = normalizPage(to.params.page)
-    return $fetch('/api/post', {
-      query: {
-        limit: POSTS_LIMIT,
-        offset: (Math.max(1, page) - 1) * POSTS_LIMIT,
-      },
-      signal,
-    })
-  },
-  staleTime: 10 * 1000,
-})
-</script>
-
 <script setup lang="ts">
 import { useToast } from '~/components/ui/toast/use-toast'
 
 defineOptions({
   name: 'PostsPage',
-  __loaders: [usePostsData],
 })
 
 definePageMeta({
@@ -44,7 +18,7 @@ const route = useRoute('admin-posts-page')
 
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 0)
 
-const { data: posts, status, refresh } = usePostsData()
+const { data: posts, status, refresh } = useAdminPostsData()
 
 const { mutate: deletePost, isLoading: isDeleting } = useMutation({
   mutation(postId: string) {
