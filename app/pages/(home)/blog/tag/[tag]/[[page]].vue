@@ -1,14 +1,23 @@
 <script lang="ts">
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
 
-function normalizPage(page: string | number | undefined) {
+const POSTS_LIMIT = 10
+
+function normalizPage(page: string | undefined) {
   return page ? Number.parseInt(page as string) : 1
 }
 
-export const usePostsData = defineColadaLoader('blog-tag-tag-page', {
-  key: to => ['posts', to.params.tag, normalizPage(to.params.page)],
+export const useTagPostsData = defineColadaLoader('blog-tag-tag-page', {
+  key: to => ['tag-posts', to.params.tag, to.params.page ?? '1'],
   async query(to, { signal }) {
-    return $fetch(`/api/post/tag/${to.params.tag}`, { signal })
+    const page = normalizPage(to.params.page)
+    return $fetch(`/api/post/tag/${to.params.tag}`, {
+      query: {
+        limit: POSTS_LIMIT,
+        offset: (page - 1) * POSTS_LIMIT,
+      },
+      signal,
+    })
   },
   staleTime: 10 * 1000,
 })
@@ -18,32 +27,31 @@ export const usePostsData = defineColadaLoader('blog-tag-tag-page', {
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
+defineOptions({
+  __loaders: [useTagPostsData],
+})
+
 definePageMeta({
   alias: '/blog/tag/:tag/:page(\\d+)?',
   layout: 'home',
-  __loaders: [usePostsData],
 })
 
 const route = useRoute('blog-tag-tag-page')
-const router = useRouter()
-
-const POSTS_LIMIT = 5
-const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 1)
-
-const posts = await usePostsData()
+const posts = await useTagPostsData()
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
   onPageChange(details) {
-    router.push({
-      name: 'blog-page',
+    navigateTo({
+      name: 'blog-tag-tag-page',
       params: {
+        tag: route.params.tag,
         page: details.page === 1 ? undefined : details.page,
       },
     })
   },
-  count: posts ? posts.total : 0,
-  pageSize: posts?.limit ?? POSTS_LIMIT,
-  page: page.value,
+  count: posts.total,
+  pageSize: posts.limit,
+  page: normalizPage(route.params.page),
   siblingCount: 2,
 }))
 
@@ -62,9 +70,7 @@ const pagination = usePagination(paginationOptions)
         </li>
       </ul>
     </div>
-    <div v-else>
-      No Posts
-    </div>
+    <ListEmpty v-else type="posts" />
 
     <Pagination.RootProvider
       flex="~ row items-center justify-between gap-1"

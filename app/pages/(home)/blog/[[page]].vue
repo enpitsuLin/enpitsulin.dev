@@ -1,26 +1,20 @@
 <script lang="ts">
-import type { SerializeObject } from 'nitropack/types'
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
 
 const POSTS_LIMIT = 5
 
-function normalizPage(page: string | number | undefined) {
+function normalizPage(page: string | undefined) {
   return page ? Number.parseInt(page as string) : 1
 }
 
 export const usePostsData = defineColadaLoader('blog-page', {
-  key: to => ['posts', normalizPage(to.params.page)],
+  key: to => ['posts', to.params.page ?? '1'],
   async query(to, { signal }) {
     const page = normalizPage(to.params.page)
-    return $fetch<SerializeObject<{
-      data: Post[]
-      total: number
-      limit: number
-      offset: number
-    }>>('/api/post', {
+    return $fetch('/api/post', {
       query: {
         limit: POSTS_LIMIT,
-        offset: (Math.max(1, page) - 1) * POSTS_LIMIT,
+        offset: (page - 1) * POSTS_LIMIT,
       },
       signal,
     })
@@ -43,24 +37,21 @@ definePageMeta({
 })
 
 const route = useRoute('blog-page')
-const router = useRouter()
-
-const page = computed<number>(() => normalizPage(route.params.page))
 
 const posts = await usePostsData()
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
   onPageChange(details) {
-    router.push({
+    navigateTo({
       name: 'blog-page',
       params: {
         page: details.page === 1 ? undefined : details.page,
       },
     })
   },
-  count: posts ? posts?.total : 0,
-  pageSize: posts?.limit ?? POSTS_LIMIT,
-  page: page.value,
+  count: posts.total,
+  pageSize: posts.limit,
+  page: normalizPage(route.params.page),
   siblingCount: 2,
 }))
 
@@ -79,7 +70,7 @@ const pagination = usePagination(paginationOptions)
         </li>
       </ul>
     </div>
-    <PostListEmpty v-else />
+    <ListEmpty v-else type="posts" />
 
     <Pagination.RootProvider flex="~ row items-center justify-between gap-1" w-full pt-4 :value="pagination">
       <Pagination.PrevTrigger

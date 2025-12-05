@@ -57,9 +57,13 @@ onMounted(() => {
         :key="thought.id"
         :thought="thought"
       />
+      <div v-if="thoughts?.length === 0">
+        <ListEmpty type="thoughts" />
+      </div>
     </div>
 
     <div
+      v-if="thoughts && thoughts.length > 0"
       flex="~ flex-col items-center justify-center "
       class="py-4 min-h-[80px]"
     >
