@@ -1,7 +1,6 @@
 import type { SelectPost } from '~~/server/utils/drizzle'
 import { asc, desc } from 'drizzle-orm'
 import { z } from 'zod'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
 const paramsSchema = z.object({
   slug: z.string(),

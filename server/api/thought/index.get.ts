@@ -1,6 +1,4 @@
-import type { Thought, ThoughtInKV } from '~~/shared/types/thought'
 import { and, desc, eq, lt } from 'drizzle-orm'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
 export default eventHandler(async (event) => {
   const query = getQuery(event)
