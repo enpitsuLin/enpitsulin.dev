@@ -19,6 +19,7 @@ export const post = sqliteTable(
       .notNull(),
     publishedAt: integer('published_at', { mode: 'timestamp' })
       .default(sql`(unixepoch('now'))`),
+    isDelete: integer('is_delete', { mode: 'boolean' }).default(false).notNull(),
   },
   table => [
     index('post_slug_idx').on(table.slug),
@@ -67,6 +68,7 @@ export const thoughts = sqliteTable(
       .default(sql`(unixepoch('now'))`)
       .$onUpdate(() => new Date())
       .notNull(),
+    isDelete: integer('is_delete', { mode: 'boolean' }).default(false).notNull(),
   },
   table => [
     index('thoughts_published_at_idx').on(table.publishedAt),
