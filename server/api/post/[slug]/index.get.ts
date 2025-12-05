@@ -17,6 +17,7 @@ export default eventHandler(async (event) => {
       and(
         eqFn(post.slug, slug),
         isNotNullFn(post.publishedAt),
+        eqFn(post.isDelete, false),
       ),
     with: {
       postTags: {

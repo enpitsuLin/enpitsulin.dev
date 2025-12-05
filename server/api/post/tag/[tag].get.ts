@@ -52,6 +52,7 @@ export default eventHandler(async (event) => {
     where: and(
       inArray(tables.post.id, postIds),
       isNotNull(tables.post.publishedAt),
+      eq(tables.post.isDelete, false),
     ),
     orderBy: desc(tables.post.publishedAt),
     limit,
@@ -73,6 +74,7 @@ export default eventHandler(async (event) => {
       and(
         inArray(tables.post.id, postIds),
         isNotNull(tables.post.publishedAt),
+        eq(tables.post.isDelete, false),
       ),
     )
 

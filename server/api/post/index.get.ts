@@ -1,5 +1,5 @@
 import type { Post } from '~~/shared/types/post'
-import { desc, isNotNull, sql } from 'drizzle-orm'
+import { and, desc, eq, isNotNull, sql } from 'drizzle-orm'
 import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
 export default eventHandler(async (event) => {
@@ -11,7 +11,10 @@ export default eventHandler(async (event) => {
 
   // Query posts from database with pagination
   const dbPosts = await drizzle.query.post.findMany({
-    where: isNotNull(tables.post.publishedAt),
+    where: and(
+      isNotNull(tables.post.publishedAt),
+      eq(tables.post.isDelete, false),
+    ),
     orderBy: desc(tables.post.publishedAt),
     limit,
     offset,
@@ -28,7 +31,12 @@ export default eventHandler(async (event) => {
   const totalResult = await drizzle
     .select({ count: sql<number>`count(*)` })
     .from(tables.post)
-    .where(isNotNull(tables.post.publishedAt))
+    .where(
+      and(
+        isNotNull(tables.post.publishedAt),
+        eq(tables.post.isDelete, false),
+      ),
+    )
 
   const total = totalResult[0]?.count ?? 0
 

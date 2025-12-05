@@ -1,5 +1,5 @@
 import type { SelectPost } from '~~/server/utils/drizzle'
-import { asc, desc, eq } from 'drizzle-orm'
+import { asc, desc } from 'drizzle-orm'
 import { z } from 'zod'
 import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
@@ -18,7 +18,11 @@ export default eventHandler(async (event) => {
 
   // Find current post
   const currentPost = await drizzle.query.post.findFirst({
-    where: eq(tables.post.slug, slug),
+    where: (post, { and: andFn, eq: eqFn }) =>
+      andFn(
+        eqFn(post.slug, slug),
+        eqFn(post.isDelete, false),
+      ),
   })
 
   if (!currentPost || !currentPost.publishedAt) {
@@ -29,9 +33,10 @@ export default eventHandler(async (event) => {
 
   // Find previous post (published before current, ordered by publishedAt desc)
   const previousPost = await drizzle.query.post.findFirst({
-    where: (post, { and, isNotNull: isNotNullFn, lt: ltFn }) =>
+    where: (post, { and, eq: eqFn, isNotNull: isNotNullFn, lt: ltFn }) =>
       and(
         isNotNullFn(post.publishedAt),
+        eqFn(post.isDelete, false),
         ltFn(post.publishedAt, currentPublishedAt),
       ),
     orderBy: desc(tables.post.publishedAt),
@@ -39,9 +44,10 @@ export default eventHandler(async (event) => {
 
   // Find next post (published after current, ordered by publishedAt asc)
   const nextPost = await drizzle.query.post.findFirst({
-    where: (post, { and, isNotNull: isNotNullFn, gt: gtFn }) =>
+    where: (post, { and, eq: eqFn, isNotNull: isNotNullFn, gt: gtFn }) =>
       and(
         isNotNullFn(post.publishedAt),
+        eqFn(post.isDelete, false),
         gtFn(post.publishedAt, currentPublishedAt),
       ),
     orderBy: asc(tables.post.publishedAt),

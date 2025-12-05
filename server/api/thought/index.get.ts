@@ -1,5 +1,5 @@
 import type { Thought, ThoughtInKV } from '~~/shared/types/thought'
-import { desc, lt } from 'drizzle-orm'
+import { and, desc, eq, lt } from 'drizzle-orm'
 import { tables, useDrizzle } from '~~/server/utils/drizzle'
 
 export default eventHandler(async (event) => {
@@ -11,8 +11,11 @@ export default eventHandler(async (event) => {
 
   // Build where condition for cursor-based pagination
   const whereConditions = cursor
-    ? lt(tables.thoughts.publishedAt, new Date(cursor * 1000))
-    : undefined
+    ? and(
+        eq(tables.thoughts.isDelete, false),
+        lt(tables.thoughts.publishedAt, new Date(cursor * 1000)),
+      )
+    : eq(tables.thoughts.isDelete, false)
 
   // Query thoughts from database with cursor-based pagination
   const dbThoughts = await drizzle.query.thoughts.findMany({

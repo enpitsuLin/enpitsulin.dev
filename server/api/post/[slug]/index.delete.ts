@@ -22,9 +22,10 @@ export default eventHandler(async (event) => {
     throw createError({ statusCode: 404, message: 'Post not found' })
   }
 
-  // Delete post from database (cascade will automatically delete postTag associations)
+  // Soft delete post from database
   await drizzle
-    .delete(tables.post)
+    .update(tables.post)
+    .set({ isDelete: true })
     .where(eq(tables.post.id, existingPost.id))
 
   // Delete post content from KV storage
