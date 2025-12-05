@@ -10,6 +10,7 @@ export default withNuxt(
     },
     rules: {
       'vue/no-multiple-template-root': 'off',
+      'import-lite/first': 'off',
     },
   }),
 )
