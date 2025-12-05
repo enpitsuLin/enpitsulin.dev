@@ -6,65 +6,44 @@ definePageMeta({
   layout: 'home',
 })
 
-const THOUGHTS_LIMIT = 5
-const thoughts = ref<SerializeObject<Thought>[]>([])
-const nextCursor = ref<number | null>(null)
-const isLoading = ref(false)
-const loadMoreElement = ref<HTMLElement | null>(null)
-const wasIntersecting = ref(false)
+const THOUGHTS_LIMIT = 8
 
-async function loadThoughts(cursor: number | null = null) {
-  if (isLoading.value)
-    return
+const _thoughts = useState<SerializeObject<Thought>[]>('thoughts', () => [])
+const nextCursor = useState<number | null>('thoughts.nextCursor', () => null)
 
-  isLoading.value = true
-
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  try {
+const { data: thoughts, pending, refresh } = await useAsyncData(
+  'thoughts',
+  async () => {
+    await new Promise(resolve => setTimeout(resolve, 1000))
     const data = await $fetch('/api/thought', {
       query: {
         limit: THOUGHTS_LIMIT,
-        ...(cursor && { cursor }),
+        ...(nextCursor.value && { cursor: nextCursor.value }),
       },
     })
 
-    if (cursor) {
-      thoughts.value.push(...data.data)
-    }
-    else {
-      thoughts.value = data.data
-    }
     nextCursor.value = data.nextCursor
-  }
-  finally {
-    isLoading.value = false
-  }
-}
 
-// Initial load
-await loadThoughts()
+    _thoughts.value.push(...data.data)
 
-// Infinite scroll with intersection observer
-useIntersectionObserver(
-  loadMoreElement,
-  ([entry]) => {
-    const isIntersecting = entry?.isIntersecting ?? false
-
-    // Only trigger load when element transitions from not visible to visible
-    // This prevents multiple triggers when element stays in viewport
-    if (isIntersecting && !wasIntersecting.value && nextCursor.value && !isLoading.value) {
-      loadThoughts(nextCursor.value)
-    }
-
-    // Update the previous state
-    wasIntersecting.value = isIntersecting
-  },
-  {
-    root: null,
-    rootMargin: '100px',
-    threshold: 0.1,
+    return _thoughts.value as SerializeObject<Thought>[]
   },
 )
+
+onMounted(() => {
+  useInfiniteScroll(
+    window,
+    async () => {
+      await refresh()
+    },
+    {
+      distance: 100,
+      canLoadMore: () => {
+        return !!nextCursor.value && !pending.value
+      },
+    },
+  )
+})
 </script>
 
 <template>
@@ -72,28 +51,30 @@ useIntersectionObserver(
     title="想法"
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
-    <div v-if="thoughts.length > 0" class="relative w-full">
+    <div
+      border="~ red px"
+      class="relative w-full"
+    >
       <ThoughtItem
-        v-for="(thought, index) in thoughts"
+        v-for="(thought, index) in thoughts || []"
         :key="thought.id"
         :thought="thought"
-        :is-last="index === thoughts.length - 1"
+        :is-last="index === (thoughts?.length || 0) - 1"
       />
     </div>
 
     <div
-      ref="loadMoreElement"
       class="py-4 flex flex-col items-center justify-center min-h-[80px]"
     >
       <div
-        v-if="isLoading"
-        class="flex items-center gap-3 px-4 py-2 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-500 animate-in fade-in zoom-in duration-300"
+        v-if="pending"
+        class="flex items-center gap-3 px-4 py-2 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-500 animate-in fade-in zoom-in duration-200"
       >
         <i class="i-mingcute:loading-line w-4 h-4 animate-spin" />
         <span class="text-xs font-medium">加载更多...</span>
       </div>
       <div
-        v-if="!nextCursor && !isLoading"
+        v-if="!nextCursor && !pending"
         class="flex items-center gap-4 text-zinc-700 w-full justify-center opacity-60"
       >
         <span class="h-px w-12 bg-zinc-800" />
@@ -103,39 +84,3 @@ useIntersectionObserver(
     </div>
   </HomePageContainer>
 </template>
-
-<style>
-.loader {
-  width: 48px;
-  height: 48px;
-  display: inline-block;
-  position: relative;
-}
-.loader::after,
-.loader::before {
-  content: '';
-  box-sizing: border-box;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: #fff;
-  position: absolute;
-  left: 0;
-  top: 0;
-  animation: animloader 2s linear infinite;
-}
-.loader::after {
-  animation-delay: 1s;
-}
-
-@keyframes animloader {
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-}
-</style>
