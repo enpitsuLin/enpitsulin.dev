@@ -38,21 +38,6 @@ export default defineAppConfig({
       href: '/thoughts',
       match: ['thoughts'],
     },
-    {
-      label: '项目',
-      href: '/projects',
-      match: ['projects'],
-    },
-    {
-      label: '留言墙',
-      href: '/guestbook',
-      match: ['guestbook'],
-    },
-    {
-      label: '关于',
-      href: '/about',
-      match: ['about'],
-    },
   ] as NavigationItem[],
 
   adminNavigation: [
