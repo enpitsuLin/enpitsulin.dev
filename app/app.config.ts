@@ -34,19 +34,9 @@ export default defineAppConfig({
       match: ['blog-page', 'blog-tag-tag', 'blog-slug', 'blog-tag-tag-page'],
     },
     {
-      label: '项目',
-      href: '/projects',
-      match: ['projects'],
-    },
-    {
-      label: '留言墙',
-      href: '/guestbook',
-      match: ['guestbook'],
-    },
-    {
-      label: '关于',
-      href: '/about',
-      match: ['about'],
+      label: '想法',
+      href: '/thoughts',
+      match: ['thoughts'],
     },
   ] as NavigationItem[],
 
@@ -73,6 +63,20 @@ export default defineAppConfig({
           label: '新建文章',
           href: '/admin/posts/create',
           match: ['admin-posts-create'],
+          icon: 'i-mingcute:add-line',
+        },
+      ],
+    },
+    {
+      label: '想法管理',
+      href: '/admin/thoughts/create',
+      match: ['admin-thoughts-create'],
+      icon: 'i-mingcute:lightbulb-line',
+      children: [
+        {
+          label: '新建想法',
+          href: '/admin/thoughts/create',
+          match: ['admin-thoughts-create'],
           icon: 'i-mingcute:add-line',
         },
       ],

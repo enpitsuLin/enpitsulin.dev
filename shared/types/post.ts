@@ -1,6 +1,6 @@
 import type { MDCRoot, Toc } from '@nuxtjs/mdc'
 
-export interface ParsedMDCData {
+export interface ParsedPostData {
   estimation: {
     minutes: number
     time: number
@@ -12,7 +12,7 @@ export interface ParsedMDCData {
 }
 
 export interface ParsedPostResult {
-  data: ParsedMDCData
+  data: ParsedPostData
   body: MDCRoot
   excerpt: MDCRoot | undefined
   toc: Toc | undefined
@@ -36,5 +36,5 @@ export interface Post {
   body: MDCRoot
   excerpt: MDCRoot | undefined
   toc: Toc | undefined
-  data: ParsedMDCData
+  data: ParsedPostData
 }

@@ -1,8 +1,34 @@
+<script lang="ts">
+import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
+
+const POSTS_LIMIT = 20
+
+function normalizPage(page: string | number | undefined) {
+  return page ? Number.parseInt(page as string) : 1
+}
+
+export const usePostsData = defineColadaLoader('admin-posts-page', {
+  key: to => ['posts', normalizPage(to.params.page)],
+  async query(to, { signal }) {
+    const page = normalizPage(to.params.page)
+    return $fetch('/api/post', {
+      query: {
+        limit: POSTS_LIMIT,
+        offset: (Math.max(1, page) - 1) * POSTS_LIMIT,
+      },
+      signal,
+    })
+  },
+  staleTime: 10 * 1000,
+})
+</script>
+
 <script setup lang="ts">
 import { useToast } from '~/components/ui/toast/use-toast'
 
 defineOptions({
   name: 'PostsPage',
+  __loaders: [usePostsData],
 })
 
 definePageMeta({
@@ -18,19 +44,10 @@ const route = useRoute('admin-posts-page')
 
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 0)
 
-const { data: posts, status, refresh } = await useFetch(
-  '/api/post',
-  {
-    query: {
-      limit: 20,
-      offset: computed(() => (page.value - 1) * 20),
-    },
-  },
-)
+const { data: posts, status, refresh } = usePostsData()
 
 const { mutate: deletePost, isLoading: isDeleting } = useMutation({
   mutation(postId: string) {
-    // @ts-expect-error ignore
     return $fetch(`/api/post/${postId}`, { method: 'DELETE' })
   },
   onSuccess() {
@@ -148,14 +165,10 @@ function formatDate(date: number | Date | string | null | undefined) {
       暂无文章
     </div>
 
-    <RouterLink
-      v-if="page > 0" :to="page - 1 > 0 ? `/admin/posts/${page - 1}` : '/admin/posts'"
-    >
+    <RouterLink v-if="page > 0" :to="page - 1 > 0 ? `/admin/posts/${page - 1}` : '/admin/posts'">
       上一页
     </RouterLink>
-    <RouterLink
-      v-if="posts?.total && (posts.total > posts.offset + posts.limit)" :to="`/admin/posts/${page + 1}`"
-    >
+    <RouterLink v-if="posts?.total && (posts.total > posts.offset + posts.limit)" :to="`/admin/posts/${page + 1}`">
       下一页
     </RouterLink>
 
@@ -165,19 +178,22 @@ function formatDate(date: number | Date | string | null | undefined) {
       style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;"
       @click="cancelDelete"
     >
-      <div
-        style="background: white; padding: 20px; border-radius: 8px; max-width: 400px;"
-        @click.stop
-      >
+      <div style="background: white; padding: 20px; border-radius: 8px; max-width: 400px;" @click.stop>
         <h3 style="margin-top: 0;">
           确认删除
         </h3>
         <p>确定要删除这篇文章吗？此操作不可恢复。</p>
         <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
-          <button style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;" @click="cancelDelete">
+          <button
+            style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;"
+            @click="cancelDelete"
+          >
             取消
           </button>
-          <button style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;" @click="confirmDelete">
+          <button
+            style="padding: 8px 16px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;"
+            @click="confirmDelete"
+          >
             删除
           </button>
         </div>

@@ -1,3 +1,19 @@
+<script lang="ts">
+import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
+
+function normalizPage(page: string | number | undefined) {
+  return page ? Number.parseInt(page as string) : 1
+}
+
+export const usePostsData = defineColadaLoader('blog-tag-tag-page', {
+  key: to => ['posts', to.params.tag, normalizPage(to.params.page)],
+  async query(to, { signal }) {
+    return $fetch(`/api/post/tag/${to.params.tag}`, { signal })
+  },
+  staleTime: 10 * 1000,
+})
+</script>
+
 <script setup lang="ts">
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
@@ -5,6 +21,7 @@ import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 definePageMeta({
   alias: '/blog/tag/:tag/:page(\\d+)?',
   layout: 'home',
+  __loaders: [usePostsData],
 })
 
 const route = useRoute('blog-tag-tag-page')
@@ -13,12 +30,7 @@ const router = useRouter()
 const POSTS_LIMIT = 5
 const page = computed<number>(() => route.params.page ? Number.parseInt(route.params.page as string) : 1)
 
-const { data: posts } = await useFetch(`/api/post/tag/${route.params.tag}`, {
-  query: {
-    limit: POSTS_LIMIT,
-    offset: (Math.max(1, page.value) - 1) * POSTS_LIMIT,
-  },
-})
+const posts = await usePostsData()
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
   onPageChange(details) {
@@ -29,8 +41,8 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
       },
     })
   },
-  count: posts.value ? posts.value.total : 0,
-  pageSize: posts.value?.limit ?? POSTS_LIMIT,
+  count: posts ? posts.total : 0,
+  pageSize: posts?.limit ?? POSTS_LIMIT,
   page: page.value,
   siblingCount: 2,
 }))

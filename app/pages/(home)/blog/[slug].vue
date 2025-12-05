@@ -1,23 +1,42 @@
+<script lang="ts">
+import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
+
+export const usePostData = defineColadaLoader('blog-slug', {
+  key: to => ['post', to.params.slug],
+  async query(to, { signal }) {
+    return $fetch(`/api/post/${to.params.slug}`, { signal })
+  },
+  staleTime: 10 * 1000,
+})
+
+export const useSurroundPostData = defineColadaLoader('blog-slug', {
+  key: to => ['post', to.params.slug, 'surround'],
+  async query(to, { signal }) {
+    return $fetch(`/api/post/${to.params.slug}/surround`, { signal })
+  },
+  staleTime: 10 * 1000,
+})
+</script>
+
 <script setup lang="ts">
 defineOptions({
   name: 'BlogSlug',
+  __loaders: [usePostData, useSurroundPostData],
 })
 
 definePageMeta({
   layout: 'home',
 })
 
-const route = useRoute('blog-slug')
+const data = await usePostData()
 
-const { data } = await useFetch(`/api/post/${route.params.slug}`)
-
-const { data: surroundData } = await useFetch(`/api/post/${route.params.slug}/surround`)
+const surroundData = await useSurroundPostData()
 
 useHead({
-  title: computed(() => data.value?.title),
+  title: computed(() => data?.title),
 })
 
-if (!data.value) {
+if (!data) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Post not found',

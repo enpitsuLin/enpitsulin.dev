@@ -1,7 +1,9 @@
 import { relations, sql } from 'drizzle-orm'
 import { index, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-const post = sqliteTable(
+// MARK: - Tables
+
+export const post = sqliteTable(
   'posts',
   {
     id: text('id').primaryKey(),
@@ -24,7 +26,7 @@ const post = sqliteTable(
   ],
 )
 
-const tag = sqliteTable(
+export const tag = sqliteTable(
   'tags',
   {
     id: text('id').primaryKey(),
@@ -42,7 +44,7 @@ const tag = sqliteTable(
   ],
 )
 
-const postTag = sqliteTable(
+export const postTag = sqliteTable(
   'post_tag',
   {
     postId: text('post_id').references(() => post.id, { onDelete: 'cascade' }),
@@ -53,7 +55,25 @@ const postTag = sqliteTable(
   ],
 )
 
-// Relations
+export const thoughts = sqliteTable(
+  'thoughts',
+  {
+    id: text('id').primaryKey(),
+    mood: text('mood'),
+    publishedAt: integer('published_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .notNull(),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .default(sql`(unixepoch('now'))`)
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  table => [
+    index('thoughts_published_at_idx').on(table.publishedAt),
+  ],
+)
+
+// MARK: - Relations
 export const postRelations = relations(post, ({ many }) => ({
   postTags: many(postTag),
 }))
@@ -73,13 +93,11 @@ export const postTagRelations = relations(postTag, ({ one }) => ({
   }),
 }))
 
-// Export all tables
-export { post, postTag, tag }
-
-// Export types
 export type SelectPost = typeof post.$inferSelect
 export type InsertPost = typeof post.$inferInsert
 export type SelectTag = typeof tag.$inferSelect
 export type InsertTag = typeof tag.$inferInsert
 export type SelectPostTag = typeof postTag.$inferSelect
 export type InsertPostTag = typeof postTag.$inferInsert
+export type SelectThought = typeof thoughts.$inferSelect
+export type InsertThought = typeof thoughts.$inferInsert
