@@ -31,7 +31,7 @@ const { article } = defineProps<Props>()
 
     <div
       aria-hidden="true"
-      relative z-10 mt-4 flex items-center text-sm text-accent font-medium
+      relative z-10 mt-1 flex items-center text-sm text-accent font-medium
     >
       立即阅读
       <i inline-block class="i-mingcute:right-small-line ml-1 size-4" />
