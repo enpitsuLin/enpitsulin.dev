@@ -24,8 +24,8 @@
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "ad290536-3148-4b53-80cc-c21791d92be5",
-      "preview_id": "enpitsulin-dev-preview"
+      "id": "ad29053631484b5380ccc21791d92be5",
+      "preview_id": "enpitsulin-dev"
     }
   ],
   "r2_buckets": [
