@@ -10,7 +10,7 @@ defineProps<{
     <div
       absolute z-0 op="0 group-hover:100"
       bg="zinc-200/50 dark:zinc-800/50"
-      class="scale-95 transition -inset-x-4 -inset-y-6 group-hover:scale-100 sm:rounded-2xl sm:-inset-x-6"
+      class="scale-95 transition -inset-x-4 -inset-y-6 group-hover:scale-100 rounded-xl sm:rounded-2xl sm:-inset-x-6"
     />
     <NuxtLink :to="{ name: 'blog-slug', params: { slug } }">
       <span
