@@ -81,9 +81,6 @@ export default defineNuxtConfig({
       deployConfig: true,
     },
     moduleSideEffects: ['reflect-metadata'],
-    rollupConfig: {
-      external: ['cloudflare:email', 'mimetext'],
-    },
     esbuild: {
       options: {
         target: 'esnext',
