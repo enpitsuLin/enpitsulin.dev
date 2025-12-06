@@ -29,12 +29,12 @@ const { article } = defineProps<Props>()
       <p>{{ article.description || article.data.description || '这篇文章没有什么内容摘要捏...' }}</p>
     </div>
 
-    <div
-      aria-hidden="true"
+    <NuxtLink
+      :to="{ name: 'blog-slug', params: { slug: article.slug } }"
       relative z-10 mt-1 flex items-center text-sm text-accent font-medium
     >
       立即阅读
       <i inline-block class="i-mingcute:right-small-line ml-1 size-4" />
-    </div>
+    </NuxtLink>
   </article>
 </template>
