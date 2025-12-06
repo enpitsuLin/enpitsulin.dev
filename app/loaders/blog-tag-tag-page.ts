@@ -1,4 +1,4 @@
-import { normalizPage } from '#shared/utils/normalize-page'
+import { normalizePage } from '#shared/utils/normalize-page'
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
 
 const POSTS_LIMIT = 10
@@ -6,7 +6,7 @@ const POSTS_LIMIT = 10
 export const useTagPostsData = defineColadaLoader('blog-tag-tag-page', {
   key: to => ['tag-posts', to.params.tag, to.params.page ?? '1'],
   async query(to, { signal }) {
-    const page = normalizPage(to.params.page)
+    const page = normalizePage(to.params.page)
     return $fetch(`/api/post/tag/${to.params.tag}`, {
       query: {
         limit: POSTS_LIMIT,

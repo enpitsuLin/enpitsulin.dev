@@ -1,12 +1,12 @@
-import { normalizPage } from '#shared/utils/normalize-page'
+import { normalizePage } from '#shared/utils/normalize-page'
 import { defineColadaLoader } from 'unplugin-vue-router/data-loaders/pinia-colada'
 
 const POSTS_LIMIT = 5
 
 export const usePostsData = defineColadaLoader('blog-page', {
-  key: to => ['posts', normalizPage(to.params.page)],
+  key: to => ['posts', normalizePage(to.params.page)],
   async query(to, { signal }) {
-    const page = normalizPage(to.params.page)
+    const page = normalizePage(to.params.page)
 
     return $fetch('/api/post', {
       query: {

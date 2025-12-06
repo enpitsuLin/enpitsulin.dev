@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
-import { normalizPage } from '#shared/utils/normalize-page'
+import { normalizePage } from '#shared/utils/normalize-page'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
 definePageMeta({
@@ -24,7 +24,7 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
   },
   count: posts.total,
   pageSize: posts.limit,
-  page: normalizPage(route.params.page),
+  page: normalizePage(route.params.page),
   siblingCount: 2,
 }))
 
