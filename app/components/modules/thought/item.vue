@@ -4,14 +4,21 @@ import type { Thought } from '~~/shared/types/thought'
 
 interface Props {
   thought: SerializeObject<Thought>
-  isLast?: boolean
+  delay?: number
 }
 
-const { thought } = defineProps<Props>()
+const { thought, delay = 0 } = defineProps<Props>()
 </script>
 
 <template>
-  <div relative pl="8 md:0" class="group">
+  <div
+    relative pl="8 md:0"
+    :style="{
+      '--delay': `${Math.floor(delay * 1000)}ms`,
+    }"
+    op="100 [@starting-style]:0" transition-all
+    class="group translate-y-0 [@starting-style]:translate-y-50px duration-800 ease-$spring-easing not-[.v-enter-to]:delay-$delay"
+  >
     <!-- Timeline Line -->
     <div
       absolute bg="zinc-200/50 dark:zinc-800/50"

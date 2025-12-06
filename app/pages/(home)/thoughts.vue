@@ -1,43 +1,39 @@
 <script setup lang="ts">
-import type { SerializeObject } from 'nitropack/types'
-import type { Thought } from '~~/shared/types/thought'
-
 definePageMeta({
+  loaders: [useThoughts],
   layout: 'home',
 })
 
-const THOUGHTS_LIMIT = 8
+const initialThoughts = await useThoughts()
 
-const _thoughts = useState<SerializeObject<Thought>[]>('thoughts', () => [])
-const nextCursor = useState<number | null>('thoughts.nextCursor', () => null)
+const thoughts = ref(initialThoughts.data)
+const nextCursor = ref(initialThoughts.nextCursor)
 
-const { data: thoughts, pending, refresh } = await useAsyncData(
-  'thoughts',
-  async () => {
+const { mutateAsync: loadMore, isLoading: pending } = useMutation({
+  key: ['thoughts', 'inifinite-load'],
+  async mutation() {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    const data = await $fetch('/api/thought', {
+    return $fetch('/api/thought', {
       query: {
         limit: THOUGHTS_LIMIT,
         ...(nextCursor.value && { cursor: nextCursor.value }),
       },
     })
-
-    nextCursor.value = data.nextCursor
-
-    _thoughts.value.push(...data.data)
-
-    return _thoughts.value as SerializeObject<Thought>[]
   },
-)
+  onSuccess(data) {
+    thoughts.value.push(...data.data)
+    nextCursor.value = data.nextCursor
+  },
+})
 
 onMounted(() => {
   useInfiniteScroll(
     window,
     async () => {
-      await refresh()
+      await loadMore()
     },
     {
-      distance: 100,
+      distance: 200,
       canLoadMore: () => {
         return !!nextCursor.value && !pending.value
       },
@@ -45,9 +41,24 @@ onMounted(() => {
   )
 })
 
-onUnmounted(() => {
-  clearNuxtState(['thoughts', 'thoughts.nextCursor'])
-})
+function onAdd() {
+  thoughts.value?.unshift({
+    id: window.crypto.randomUUID(),
+    content: `test${window.crypto.randomUUID()}`,
+    mood: 'test',
+    publishedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    body: {
+      type: 'root',
+      children: [
+        {
+          type: 'text',
+          value: `test${window.crypto.randomUUID()}`,
+        },
+      ],
+    },
+  })
+}
 </script>
 
 <template>
@@ -55,16 +66,22 @@ onUnmounted(() => {
     title="想法"
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
-    <div relative w-full>
+    <UiButton @click="onAdd">
+      Append a new thought
+    </UiButton>
+    <ThoughtList>
       <ThoughtItem
-        v-for="thought in thoughts || []"
+        v-for="(thought, index) in thoughts || []"
         :key="thought.id"
+        :delay="(index % THOUGHTS_LIMIT) * 0.1"
         :thought="thought"
       />
-      <div v-if="thoughts?.length === 0">
-        <ListEmpty type="thoughts" />
-      </div>
-    </div>
+      <template #append>
+        <div v-if="thoughts?.length === 0">
+          <ListEmpty type="thoughts" />
+        </div>
+      </template>
+    </ThoughtList>
 
     <div
       v-if="thoughts && thoughts.length > 0"
