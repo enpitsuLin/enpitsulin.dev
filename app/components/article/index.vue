@@ -23,6 +23,7 @@ const { article, delay = 0 } = defineProps<Props>()
       class="group md:col-span-3"
     >
       <ArticleCardTitle :title="article.title" :slug="article.slug" />
+      <ArticleCardTags :tags="article.tags" />
       <ArticleCardTime :date="article.publishedAt" class="md:hidden" />
 
       <MDCRenderer
@@ -37,13 +38,13 @@ const { article, delay = 0 } = defineProps<Props>()
         <p>{{ article.description || article.data.description || '这篇文章没有什么内容摘要捏...' }}</p>
       </div>
 
-      <div
-        aria-hidden="true"
-        relative z-10 mt-4 flex items-center text-sm text-accent font-medium
+      <NuxtLink
+        :to="{ name: 'blog-slug', params: { slug: article.slug } }"
+        relative z-10 mt-1 flex items-center text-sm text-accent font-medium
       >
         立即阅读
         <i inline-block class="i-mingcute:right-small-line ml-1 size-4" />
-      </div>
+      </NuxtLink>
     </div>
     <div relative z-10 order-first class="hidden md:flex" flex="col items-start">
       <NuxtTime

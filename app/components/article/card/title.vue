@@ -13,10 +13,6 @@ defineProps<{
       class="scale-95 transition -inset-x-4 -inset-y-6 group-hover:scale-100 rounded-xl sm:rounded-2xl sm:-inset-x-6"
     />
     <NuxtLink :to="{ name: 'blog-slug', params: { slug } }">
-      <span
-        absolute z-20
-        class="-inset-x-4 -inset-y-6 sm:rounded-2xl sm:-inset-x-6"
-      />
       <span relative z-10>{{ title ?? "Untitled Post" }}</span>
     </NuxtLink>
   </h2>
