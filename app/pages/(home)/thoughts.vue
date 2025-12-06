@@ -44,6 +44,10 @@ onMounted(() => {
     },
   )
 })
+
+onUnmounted(() => {
+  clearNuxtState(['thoughts', 'thoughts.nextCursor'])
+})
 </script>
 
 <template>

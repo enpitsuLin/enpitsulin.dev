@@ -18,10 +18,8 @@ const toast = useToast()
 const router = useRouter()
 
 const DEFAULT_VALUES: z.infer<typeof thoughtSchema> = {
-  id: crypto.randomUUID(),
   content: '',
   mood: '',
-  publishedAt: new Date(),
 }
 
 const form = useForm({
@@ -105,21 +103,6 @@ const submitting = computed(() => form.state.isSubmitting)
             placeholder="写下你的想法..."
             @input="onInput"
             @blur="onBlur"
-          />
-        </UiFormField>
-      </form.Field>
-      <form.Field
-        v-slot="{ field }"
-        name="publishedAt"
-      >
-        <UiFormField
-          v-slot="{ value, handleChange }"
-          :field
-          label="发布时间"
-        >
-          <UiFormDatetimePicker
-            :value="value"
-            @update:value="handleChange"
           />
         </UiFormField>
       </form.Field>

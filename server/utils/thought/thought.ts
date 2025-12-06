@@ -7,13 +7,13 @@ import { parseMarkdownForThought } from '../markdown'
 export async function insertThought(
   data: z.infer<typeof thoughtSchema>,
 ): Promise<Thought> {
-  const thoughtId = data.id || crypto.randomUUID()
+  const thoughtId = crypto.randomUUID()
   const kvKey = `thought:${thoughtId}`
   const parsed = await parseMarkdownForThought(data.content)
 
   const drizzle = useDrizzle()
 
-  const publishedAt = data.publishedAt || new Date()
+  const publishedAt = new Date()
 
   // Insert or update thought metadata in database
   await drizzle
