@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useInfiniteQuery } from '@pinia/colada'
+
 definePageMeta({
   loaders: [useThoughts],
   layout: 'home',
@@ -6,23 +8,31 @@ definePageMeta({
 
 const initialThoughts = await useThoughts()
 
-const thoughts = ref(initialThoughts.data)
-const nextCursor = ref(initialThoughts.nextCursor)
-
-const { mutateAsync: loadMore, isLoading: pending } = useMutation({
-  key: ['thoughts', 'inifinite-load'],
-  async mutation() {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+const {
+  state: thoughts,
+  loadMore,
+  asyncStatus,
+} = useInfiniteQuery({
+  key: ['thoughts', 'infinite-load'],
+  async query({ nextCursor }) {
+    if (!nextCursor)
+      return null
     return $fetch('/api/thought', {
       query: {
         limit: THOUGHTS_LIMIT,
-        ...(nextCursor.value && { cursor: nextCursor.value }),
+        ...(nextCursor && { cursor: nextCursor }),
       },
     })
   },
-  onSuccess(data) {
-    thoughts.value.push(...data.data)
-    nextCursor.value = data.nextCursor
+  initialPage: initialThoughts,
+  merge(data, newThoughts) {
+    if (!newThoughts)
+      return data
+    return {
+      data: data.data.concat(newThoughts.data),
+      nextCursor: newThoughts.nextCursor,
+      limit: data.limit,
+    }
   },
 })
 
@@ -35,14 +45,15 @@ onMounted(() => {
     {
       distance: 200,
       canLoadMore: () => {
-        return !!nextCursor.value && !pending.value
+        return !!thoughts.value.data.nextCursor && asyncStatus.value !== 'loading'
       },
     },
   )
 })
 
+const queryCache = useQueryCache()
 function onAdd() {
-  thoughts.value?.unshift({
+  thoughts.value?.data.data.unshift({
     id: window.crypto.randomUUID(),
     content: `test${window.crypto.randomUUID()}`,
     mood: 'test',
@@ -59,6 +70,12 @@ function onAdd() {
     },
   })
 }
+
+function onClear() {
+  queryCache.invalidateQueries({
+    key: ['thoughts', 'infinite-load'],
+  })
+}
 </script>
 
 <template>
@@ -66,30 +83,42 @@ function onAdd() {
     title="想法"
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
-    <UiButton v-if="$user?.role === 'admin'" @click="onAdd">
-      发表一条新的想法
-    </UiButton>
+    <div v-if="$user?.role === 'admin'" flex="~ gap-2">
+      <UiButton
+        @click="() => {
+          console.log(queryCache.getQueryData(['thoughts']))
+        }"
+      >
+        debug
+      </UiButton>
+      <UiButton @click="onClear">
+        清空缓存
+      </UiButton>
+      <UiButton @click="onAdd">
+        发表一条新的想法
+      </UiButton>
+    </div>
     <ThoughtList>
       <ThoughtItem
-        v-for="(thought, index) in thoughts || []"
+        v-for="(thought, index) in thoughts.data.data || []"
         :key="thought.id"
         :delay="(index % THOUGHTS_LIMIT) * 0.1"
         :thought="thought"
       />
       <template #append>
-        <div v-if="thoughts?.length === 0">
+        <div v-if="thoughts?.data.data.length === 0">
           <ListEmpty type="thoughts" />
         </div>
       </template>
     </ThoughtList>
 
     <div
-      v-if="thoughts && thoughts.length > 0"
+      v-if="thoughts && thoughts.data.data.length > 0"
       flex="~ flex-col items-center justify-center "
       class="py-4 min-h-[80px]"
     >
       <div
-        v-if="pending"
+        v-if="asyncStatus === 'loading'"
         bg="dark:zinc-900/50"
         border="~ dark:zinc-800 rounded-full"
         flex="~ items-center gap-3"
@@ -99,7 +128,7 @@ function onAdd() {
         <span class="text-xs font-medium">加载更多...</span>
       </div>
       <div
-        v-if="!nextCursor && !pending"
+        v-if="!thoughts.data.nextCursor && asyncStatus !== 'loading'"
         flex="~ items-center gap-4"
         un-text="zinc-400 dark:zinc-700"
         class=" w-full justify-center opacity-60"
