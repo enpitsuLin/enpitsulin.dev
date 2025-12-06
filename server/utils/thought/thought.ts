@@ -34,7 +34,7 @@ export async function insertThought(
     })
 
   // Store content and parsed result in KV
-  await hubKV().set<ThoughtInKV>(kvKey, { content: data.content, parsed })
+  await useKV().set<ThoughtInKV>(kvKey, { content: data.content, parsed })
 
   return {
     id: thoughtId,

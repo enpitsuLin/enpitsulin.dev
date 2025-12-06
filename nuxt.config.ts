@@ -1,6 +1,7 @@
+import { fileURLToPath } from 'node:url'
+
 export default defineNuxtConfig({
   modules: [
-    '@nuxthub/core',
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxtjs/mdc',
@@ -75,20 +76,35 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'cloudflare-module',
-  },
-
-  hub: {
-    kv: true,
-    blob: true,
-    database: true,
-    databaseMigrationsDirs: [
-      'server/database/migrations',
-    ],
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: true,
+    },
+    moduleSideEffects: ['reflect-metadata'],
+    rollupConfig: {
+      external: ['cloudflare:email', 'mimetext'],
+    },
+    esbuild: {
+      options: {
+        target: 'esnext',
+      },
+    },
+    typescript: {
+      tsConfig: {
+        compilerOptions: {
+          types: [fileURLToPath(new URL('./worker-configuration.d.ts', import.meta.url))],
+        },
+      },
+    },
   },
 
   eslint: {
     config: {
       standalone: false,
     },
+  },
+
+  typescript: {
+
   },
 })

@@ -1,8 +1,23 @@
+catalog:
+  unstorage: ^1.17.3
+
 catalogMode: prefer
+
 cleanupUnusedCatalogs: true
 
-shellEmulator: true
-trustPolicy: no-downgrade
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - esbuild
+  - unrs-resolver
 
 patchedDependencies:
   nuxt-auth-utils: patches/nuxt-auth-utils.patch
+
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+trustPolicyExclude:
+  - semver@6.3.1
+  - chokidar@4.0.3
+  - '@unocss/webpack@66.5.10'

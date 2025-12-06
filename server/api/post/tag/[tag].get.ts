@@ -84,7 +84,7 @@ export default eventHandler(async (event) => {
   const posts = await Promise.all(
     dbPosts.map(async (dbPost) => {
       const kvKey = `post:${dbPost.slug}`
-      const kvPost = await hubKV().get<PostInKV>(kvKey)
+      const kvPost = await useKV().get<PostInKV>(kvKey)
 
       if (!kvPost) {
         // Skip posts that don't exist in KV

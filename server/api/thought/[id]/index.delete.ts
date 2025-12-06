@@ -30,7 +30,7 @@ export default eventHandler(async (event) => {
 
   // Delete thought content from KV storage
   const kvKey = `thought:${id}`
-  await hubKV().remove(kvKey)
+  await useKV().remove(kvKey)
 
   return { success: true, message: 'Thought deleted successfully' }
 })

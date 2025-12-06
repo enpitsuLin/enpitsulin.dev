@@ -30,7 +30,7 @@ export default eventHandler(async (event) => {
   const thoughts = await Promise.all(
     thoughtsToProcess.map(async (dbThought) => {
       const kvKey = `thought:${dbThought.id}`
-      const kvThought = await hubKV().get<ThoughtInKV>(kvKey)
+      const kvThought = await useKV().get<ThoughtInKV>(kvKey)
 
       if (!kvThought) {
         // Skip thoughts that don't exist in KV

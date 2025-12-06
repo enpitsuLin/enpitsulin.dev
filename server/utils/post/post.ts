@@ -32,7 +32,7 @@ export async function insertOrUpdatePost(
     await createPost(data, tagIds)
   }
 
-  await hubKV().set<PostInKV>(kvKey, { content: data.content, parsed })
+  await useKV().set<PostInKV>(kvKey, { content: data.content, parsed })
 
   return {
     tags: data.tags || [],

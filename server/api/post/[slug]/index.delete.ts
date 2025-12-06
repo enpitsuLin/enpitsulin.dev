@@ -30,7 +30,7 @@ export default eventHandler(async (event) => {
 
   // Delete post content from KV storage
   const kvKey = `post:${slug}`
-  await hubKV().remove(kvKey)
+  await useKV().remove(kvKey)
 
   return { success: true, message: 'Post deleted successfully' }
 })

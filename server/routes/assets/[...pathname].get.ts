@@ -1,3 +1,5 @@
+import { env } from 'cloudflare:workers'
+
 export default eventHandler(async (event) => {
   const { pathname } = event.context.params || {}
   if (!pathname) {
@@ -7,5 +9,5 @@ export default eventHandler(async (event) => {
     })
   }
 
-  return hubBlob().serve(event, pathname)
+  return env.BLOB.get(pathname)
 })

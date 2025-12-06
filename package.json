@@ -18,7 +18,7 @@
     "db:studio": "DATABASE_URL=\"$(ls -t ./.data/hub/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^6.4.1",
+    "@antfu/eslint-config": "^6.4.2",
     "@ark-ui/vue": "^5.29.1",
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "2.0.0",
@@ -34,6 +34,7 @@
     "remark-lesetid": "^2.0.7",
     "ua-parser-js": "^2.0.6",
     "ufo": "^1.6.1",
+    "unstorage": "catalog:",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3",
     "zod": "^4.1.13"
@@ -44,7 +45,6 @@
     "@iconify-json/mingcute": "^1.2.5",
     "@libsql/client": "^0.15.15",
     "@nuxt/devtools": "^3.1.1",
-    "@nuxthub/core": "^0.9.1",
     "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/mdc": "^0.19.1",
     "@pinia/nuxt": "^0.11.3",
@@ -66,7 +66,15 @@
     "typescript": "^5.9.3",
     "unocss": "^66.5.10",
     "unplugin-vue-router": "^0.19.0",
-    "wrangler": "^4.52.1"
+    "wrangler": "^4.53.0"
+  },
+  "resolutions": {
+    "@nuxt/devtools": "^3.1.1",
+    "@nuxt/kit": "^4.2.0",
+    "nuxt": "^4.2.1",
+    "sharp": "^0.33.5",
+    "unplugin": "^2.3.11",
+    "vite": "^7.2.4"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"

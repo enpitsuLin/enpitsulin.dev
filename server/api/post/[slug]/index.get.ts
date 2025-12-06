@@ -33,7 +33,7 @@ export default eventHandler(async (event) => {
   }
 
   const kvKey = `post:${slug}`
-  const kvPost = await hubKV().get<PostInKV>(kvKey)
+  const kvPost = await useKV().get<PostInKV>(kvKey)
 
   if (!kvPost) {
     throw createError({ statusCode: 404, message: 'Post not found' })
