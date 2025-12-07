@@ -6,15 +6,20 @@ definePageMeta({
   layout: 'home',
 })
 
-const initialThoughts = await useThoughts()
+const { data: initialThoughts } = useThoughts()
 
-const {
-  state: thoughts,
-  loadMore,
-  asyncStatus,
-} = useInfiniteQuery({
+type ThoughtResponse = Awaited<ReturnType<typeof useThoughts>>
+
+interface InfiniteLoadData {
+  pages: ThoughtResponse[]
+  pagesMap: Map<number, ThoughtResponse>
+  nextCursor: number | null
+}
+
+const { data: thoughtsData, loadMore, asyncStatus } = useInfiniteQuery({
   key: ['thoughts', 'infinite-load'],
-  async query({ nextCursor }) {
+  async query(page) {
+    const nextCursor = page?.nextCursor
     if (!nextCursor)
       return null
     return $fetch('/api/thought', {
@@ -24,16 +29,27 @@ const {
       },
     })
   },
-  initialPage: initialThoughts,
+  initialPage: {
+    pages: [initialThoughts.value] as ThoughtResponse[],
+    pagesMap: new Map<number, ThoughtResponse>([
+      [0, initialThoughts.value],
+    ]),
+    nextCursor: initialThoughts.value.nextCursor,
+  } as InfiniteLoadData,
   merge(data, newThoughts) {
-    if (!newThoughts)
-      return data
-    return {
-      data: data.data.concat(newThoughts.data),
-      nextCursor: newThoughts.nextCursor,
-      limit: data.limit,
+    if (newThoughts) {
+      const lastPage = data.pages.at(-1)!
+      data.pages.push(newThoughts)
+      if (lastPage.nextCursor)
+        data.pagesMap.set(lastPage.nextCursor, newThoughts)
     }
+    data.nextCursor = newThoughts?.nextCursor ?? null
+    return data
   },
+})
+
+const thoughts = computed(() => {
+  return thoughtsData.value?.pages.flatMap(page => page.data)
 })
 
 onMounted(() => {
@@ -45,36 +61,61 @@ onMounted(() => {
     {
       distance: 200,
       canLoadMore: () => {
-        return !!thoughts.value.data.nextCursor && asyncStatus.value !== 'loading'
+        return !!thoughtsData.value?.nextCursor && asyncStatus.value !== 'loading'
       },
     },
   )
 })
 
 const queryCache = useQueryCache()
+
+const { mutateAsync: postThought } = useMutation({
+  mutation(vars: Pick<Thought, 'mood' | 'content'>) {
+    return $fetch('/api/thought', { method: 'POST', body: vars })
+  },
+  async onMutate(vars) {
+    const oldData = queryCache.getQueryData<InfiniteLoadData>(['thoughts', 'infinite-load'])!
+    const parsed = await parseMarkdown(vars.content)
+    const newThought: ThoughtResponse['data'][number] = {
+      ...vars,
+      id: crypto.randomUUID(),
+      publishedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      body: parsed.body,
+    }
+
+    const firstPage = oldData.pages[0]!
+    firstPage.data.unshift(newThought)
+    oldData.pagesMap.set(0, firstPage)
+
+    queryCache.setQueryData(['thoughts', 'infinite-load'], oldData)
+
+    triggerRef(thoughtsData)
+
+    return {
+      oldData,
+      newThought,
+    }
+  },
+})
+
 function onAdd() {
-  thoughts.value?.data.data.unshift({
-    id: window.crypto.randomUUID(),
+  const insert = {
     content: `test${window.crypto.randomUUID()}`,
     mood: 'test',
-    publishedAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    body: {
-      type: 'root',
-      children: [
-        {
-          type: 'text',
-          value: `test${window.crypto.randomUUID()}`,
-        },
-      ],
-    },
-  })
+  }
+  postThought(insert)
 }
 
 function onClear() {
   queryCache.invalidateQueries({
     key: ['thoughts', 'infinite-load'],
   })
+}
+
+function onDebug() {
+  // eslint-disable-next-line no-console
+  console.log(queryCache.getQueryData(['thoughts', 'infinite-load']))
 }
 </script>
 
@@ -84,11 +125,7 @@ function onClear() {
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
     <div v-if="$user?.role === 'admin'" flex="~ gap-2">
-      <UiButton
-        @click="() => {
-          console.log(queryCache.getQueryData(['thoughts']))
-        }"
-      >
+      <UiButton @click="onDebug">
         debug
       </UiButton>
       <UiButton @click="onClear">
@@ -100,37 +137,29 @@ function onClear() {
     </div>
     <ThoughtList>
       <ThoughtItem
-        v-for="(thought, index) in thoughts.data.data || []"
-        :key="thought.id"
-        :delay="(index % THOUGHTS_LIMIT) * 0.1"
+        v-for="(thought, index) in thoughts || []" :key="thought.id" :delay="(index % THOUGHTS_LIMIT) * 0.1"
         :thought="thought"
       />
       <template #append>
-        <div v-if="thoughts?.data.data.length === 0">
+        <div v-if="thoughts.length === 0">
           <ListEmpty type="thoughts" />
         </div>
       </template>
     </ThoughtList>
 
     <div
-      v-if="thoughts && thoughts.data.data.length > 0"
-      flex="~ flex-col items-center justify-center "
+      v-if="thoughts && thoughts.length > 0" flex="~ flex-col items-center justify-center "
       class="py-4 min-h-[80px]"
     >
       <div
-        v-if="asyncStatus === 'loading'"
-        bg="dark:zinc-900/50"
-        border="~ dark:zinc-800 rounded-full"
-        flex="~ items-center gap-3"
-        class="px-4 py-2 text-zinc-500 animate-in fade-in zoom-in duration-200"
+        v-if="asyncStatus === 'loading'" bg="dark:zinc-900/50" border="~ dark:zinc-800 rounded-full"
+        flex="~ items-center gap-3" class="px-4 py-2 text-zinc-500 animate-in fade-in zoom-in duration-200"
       >
         <i class="i-mingcute:loading-line w-4 h-4 animate-spin" />
         <span class="text-xs font-medium">加载更多...</span>
       </div>
       <div
-        v-if="!thoughts.data.nextCursor && asyncStatus !== 'loading'"
-        flex="~ items-center gap-4"
-        un-text="zinc-400 dark:zinc-700"
+        v-if="!thoughtsData.nextCursor && asyncStatus !== 'loading'" flex="~ items-center gap-4" un-text="zinc-400 dark:zinc-700"
         class=" w-full justify-center opacity-60"
       >
         <span class="h-px w-12 bg-zinc-200 dark:bg-zinc-800" />
