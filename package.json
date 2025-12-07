@@ -15,7 +15,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply enpitsulin-dev --local",
     "db:migrate:remote": "wrangler d1 migrations apply enpitsulin-dev --remote",
-    "db:studio": "DATABASE_URL=\"$(ls -t ./.data/hub/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
+    "db:studio": "DATABASE_URL=\"$(ls -t ./.wrangler/state/v3/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
   },
   "dependencies": {
     "@antfu/eslint-config": "^6.4.2",
