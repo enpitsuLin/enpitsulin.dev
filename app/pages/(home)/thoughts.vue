@@ -135,11 +135,13 @@ function onDebug() {
         发表一条新的想法
       </UiButton>
     </div>
-    <ThoughtList>
-      <ThoughtItem
-        v-for="(thought, index) in thoughts || []" :key="thought.id" :delay="(index % THOUGHTS_LIMIT) * 0.1"
-        :thought="thought"
-      />
+    <ThoughtList :thoughts="thoughts || []">
+      <template #default="{ thought, index }">
+        <ThoughtItem
+          :delay="(index % THOUGHTS_LIMIT) * 0.1"
+          :thought="thought"
+        />
+      </template>
       <template #append>
         <div v-if="thoughts.length === 0">
           <ListEmpty type="thoughts" />
