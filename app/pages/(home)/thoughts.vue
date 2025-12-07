@@ -1,5 +1,11 @@
 <script setup lang="ts">
+import type z from 'zod'
+import { Dialog } from '@ark-ui/vue/dialog'
 import { useInfiniteQuery } from '@pinia/colada'
+import { useForm } from '@tanstack/vue-form'
+import { thoughtSchema } from '~~/shared/schema/thought'
+import { useToast } from '~/components/ui/toast/use-toast'
+import { validatorsFromSchema } from '~/composables/form'
 
 definePageMeta({
   loaders: [useThoughts],
@@ -68,6 +74,9 @@ onMounted(() => {
 })
 
 const queryCache = useQueryCache()
+const toast = useToast()
+
+const showModal = ref(false)
 
 const { mutateAsync: postThought } = useMutation({
   mutation(vars: Pick<Thought, 'mood' | 'content'>) {
@@ -99,23 +108,45 @@ const { mutateAsync: postThought } = useMutation({
   },
 })
 
+const DEFAULT_VALUES: z.infer<typeof thoughtSchema> = {
+  content: '',
+  mood: '',
+}
+
+const form = useForm({
+  defaultValues: DEFAULT_VALUES,
+  validators: validatorsFromSchema(thoughtSchema, 'submit'),
+  onSubmit: async ({ value }) => {
+    try {
+      await postThought({
+        content: value.content,
+        mood: value.mood || null,
+      })
+      toast.success({
+        title: '成功',
+        description: '想法已发表',
+      })
+      showModal.value = false
+      form.reset()
+    }
+    catch (error: any) {
+      toast.error({
+        title: '错误',
+        description: error.message || '发表失败',
+      })
+    }
+  },
+})
+
+const submitting = computed(() => form.state.isSubmitting)
+
 function onAdd() {
-  const insert = {
-    content: `test${window.crypto.randomUUID()}`,
-    mood: 'test',
-  }
-  postThought(insert)
+  showModal.value = true
 }
 
-function onClear() {
-  queryCache.invalidateQueries({
-    key: ['thoughts', 'infinite-load'],
-  })
-}
-
-function onDebug() {
-  // eslint-disable-next-line no-console
-  console.log(queryCache.getQueryData(['thoughts', 'infinite-load']))
+function onClose() {
+  showModal.value = false
+  form.reset()
 }
 </script>
 
@@ -125,16 +156,92 @@ function onDebug() {
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
     <div v-if="$user?.role === 'admin'" flex="~ gap-2">
-      <UiButton @click="onDebug">
-        debug
-      </UiButton>
-      <UiButton @click="onClear">
-        清空缓存
-      </UiButton>
       <UiButton @click="onAdd">
         发表一条新的想法
       </UiButton>
     </div>
+
+    <!-- Add Thought Modal -->
+    <ClientOnly>
+      <Dialog.Root v-model:open="showModal">
+        <Teleport to="#teleports">
+          <Dialog.Backdrop
+            bg="zinc-800/40 dark:bg-black/40"
+            class="fixed inset-0 z-99 backdrop-blur data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0"
+          />
+          <Dialog.Positioner>
+            <Dialog.Content
+              class="fixed inset-x-4 top-8 z-100 max-h-[80vh] origin-top rounded-3xl from-zinc-100/75 to-white bg-gradient-to-b p-8 ring-1 ring-zinc-900/5 dark:from-zinc-900/50 dark:to-zinc-900 dark:ring-zinc-800 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
+            >
+              <div flex="~ row-reverse items-center justify-between" mb-4>
+                <Dialog.CloseTrigger @click="onClose">
+                  <div class="i-mingcute:close-line size-4" />
+                </Dialog.CloseTrigger>
+                <h2 un-text="sm font-medium zinc-600 dark:zinc-400">
+                  发表新想法
+                </h2>
+              </div>
+              <div role="form" space-y-4>
+                <form.Field
+                  v-slot="{ field }"
+                  name="mood"
+                >
+                  <UiFormField
+                    v-slot="{ value, onInput, onBlur }"
+                    :field
+                    label="心情 (Emoji)"
+                  >
+                    <input
+                      :value="value"
+                      type="text"
+                      w="full" p="x4 y2"
+                      border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+                      bg="transparent"
+                      :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+                      class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400"
+                      placeholder="😊"
+                      @input="onInput"
+                      @blur="onBlur"
+                    >
+                  </UiFormField>
+                </form.Field>
+                <form.Field
+                  v-slot="{ field }"
+                  name="content"
+                >
+                  <UiFormField
+                    v-slot="{ value, onInput, onBlur }"
+                    :field
+                    label="内容"
+                  >
+                    <textarea
+                      :value="value"
+                      rows="8"
+                      w="full" p="x4 y2"
+                      border="~ border focus:blue-500 data-[invalid]:red-500 data-[invalid]:focus:red-500 rounded-lg"
+                      bg="transparent"
+                      :data-invalid="field.state.meta.errors.length > 0 ? '' : undefined"
+                      class="text-xs text-zinc-900 outline-none transition-all placeholder:text-xs dark:text-white focus:ring-2 focus:ring-blue-500/20 placeholder-zinc-500 dark:placeholder-zinc-400 resize-none"
+                      placeholder="写下你的想法..."
+                      @input="onInput"
+                      @blur="onBlur"
+                    />
+                  </UiFormField>
+                </form.Field>
+              </div>
+              <div flex="~ gap-2 justify-end" mt-6>
+                <UiButton variant="ghost" @click="onClose">
+                  取消
+                </UiButton>
+                <UiButton :disabled="submitting" @click="() => form.handleSubmit()">
+                  {{ submitting ? '发表中...' : '发表' }}
+                </UiButton>
+              </div>
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Teleport>
+      </Dialog.Root>
+    </ClientOnly>
     <ThoughtList :thoughts="thoughts || []">
       <template #default="{ thought, index }">
         <ThoughtItem
