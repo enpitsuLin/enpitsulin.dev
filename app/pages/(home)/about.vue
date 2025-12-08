@@ -29,7 +29,7 @@ Hi，这里是 <ruby>enpitsu<rp>(</rp><rt>えんぴつ</rt><rp>)</rp>lin</ruby>�
 
 全网同 ID，所以如果有什么地方见到这个 ID 那就是我咯😆 或者可以通过下面几个方式找到我：
 
-<HomeIntroLinks class="not-prose" :excludes="['RSS']" />
+:home-intro-links{.not-prose :excludes='["RSS"]'}
 `
 </script>
 
@@ -39,10 +39,8 @@ Hi，这里是 <ruby>enpitsu<rp>(</rp><rt>えんぴつ</rt><rp>)</rp>lin</ruby>�
   >
     <template #header>
       <MDC
-        w-full
-        text-14px
         tag="article"
-        class="animate-delay-100 prose animate-in fade-in max-w-unset! animate-duration-800! animate-ease-$spring-easing! dark:prose-invert"
+        class="w-full text-14px animate-delay-100 prose animate-in fade-in max-w-unset! animate-duration-800! animate-ease-$spring-easing! dark:prose-invert"
         :value="value"
       />
     </template>
