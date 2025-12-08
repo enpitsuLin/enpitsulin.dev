@@ -33,5 +33,13 @@
       "binding": "BLOB",
       "bucket_name": "enpitsulin-dev"
     }
-  ]
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "$DurableObject",
+        "class_name": "$DurableObject"
+      }
+    ]
+  }
 }
