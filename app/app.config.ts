@@ -38,6 +38,11 @@ export default defineAppConfig({
       href: '/thoughts',
       match: ['thoughts'],
     },
+    {
+      label: '关于',
+      href: '/about',
+      match: ['about'],
+    },
   ] as NavigationItem[],
 
   adminNavigation: [
