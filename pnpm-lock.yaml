@@ -4,12 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    unstorage:
-      specifier: ^1.17.3
-      version: 1.17.3
-
 overrides:
   '@nuxt/devtools': ^3.1.1
   '@nuxt/kit': ^4.2.1
@@ -76,7 +70,7 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1
       unstorage:
-        specifier: 'catalog:'
+        specifier: ^1.17.3
         version: 1.17.3(db0@0.3.4(@libsql/client@0.15.15)(drizzle-orm@0.45.0(@cloudflare/workers-types@4.20251202.0)(@libsql/client@0.15.15)(kysely@0.28.8)))(ioredis@5.8.2)
       vue:
         specifier: ^3.5.25
