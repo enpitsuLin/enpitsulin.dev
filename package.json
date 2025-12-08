@@ -8,7 +8,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "pnpm run build && wrangler dev",
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && simple-git-hooks",
     "deploy": "pnpm run build && wrangler deploy",
     "lint": "eslint .",
     "cf-typegen": "wrangler types",
@@ -18,7 +18,7 @@
     "db:studio": "DATABASE_URL=\"$(ls -t ./.wrangler/state/v3/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^6.4.2",
+    "@antfu/eslint-config": "^6.5.1",
     "@ark-ui/vue": "^5.29.1",
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "2.0.0",
@@ -61,7 +61,7 @@
     "prettier": "^3.7.4",
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.21.0",
-    "type-fest": "^5.3.0",
+    "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
     "unocss": "^66.5.10",
     "unplugin-vue-router": "^0.19.0",
@@ -69,11 +69,11 @@
   },
   "resolutions": {
     "@nuxt/devtools": "^3.1.1",
-    "@nuxt/kit": "^4.2.0",
+    "@nuxt/kit": "^4.2.1",
     "nuxt": "^4.2.1",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.5",
     "unplugin": "^2.3.11",
-    "vite": "^7.2.4"
+    "vite": "^7.2.7"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
