@@ -72,9 +72,18 @@ export default defineConfig<Theme>({
     }),
     presetTypography({
       cssExtend: {
-        pre: {
+        'pre': {
           'margin-top': '.875em',
           'margin-bottom': '.875em',
+        },
+        'blockquote': {
+          quotes: 'none',
+        },
+        'blockquote p:first-of-type::before': {
+          content: '',
+        },
+        'blockquote p:last-of-type::after': {
+          content: '',
         },
       },
     }),
