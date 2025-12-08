@@ -37,12 +37,10 @@ Hi，这里是 <ruby>enpitsu<rp>(</rp><rt>えんぴつ</rt><rp>)</rp>lin</ruby>�
   <HomePageContainer
     title="关于"
   >
-    <template #header>
-      <MDC
-        tag="article"
-        class="w-full text-14px animate-delay-100 prose animate-in fade-in max-w-unset! animate-duration-800! animate-ease-$spring-easing! dark:prose-invert"
-        :value="value"
-      />
-    </template>
+    <MDC
+      tag="article"
+      class="w-full text-14px animate-delay-100 prose animate-in fade-in max-w-unset! animate-duration-800! animate-ease-$spring-easing! dark:prose-invert"
+      :value="value"
+    />
   </HomePageContainer>
 </template>
