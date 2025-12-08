@@ -54,7 +54,7 @@ if (import.meta.client) {
 }
 
 .docs-toc-links a {
-  --at-apply: block py-1 text-sm text-gray-500 truncate;
+  --at-apply: block py-1 text-sm text-gray-500;
 }
 
 .dark .docs-toc-links a {
