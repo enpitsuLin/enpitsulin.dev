@@ -93,6 +93,10 @@ export default defineNuxtConfig({
         },
       },
     },
+    experimental: {
+      websocket: true,
+    },
+    // minify: false,
   },
 
   eslint: {

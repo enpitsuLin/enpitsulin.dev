@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const { navigation } = useAppConfig()
+
+const { visitors, status } = useVisitors()
 </script>
 
 <template>
@@ -16,6 +18,9 @@ const { navigation } = useAppConfig()
         </NuxtLink>
       </div>
       <div space-y-1>
+        <p class="text-sm text-zinc-600 dark:text-zinc-300">
+          {{ status === 'OPEN' ? `visitors: ${visitors}` : '连接中...' }}
+        </p>
         <p class="text-sm text-zinc-600 dark:text-zinc-300">
           © {{ new Date().getFullYear() }} - enpitsulin
         </p>
