@@ -53,6 +53,7 @@
     "@unocss/preset-mini": "^66.5.10",
     "@unocss/preset-uno": "^66.5.10",
     "@vueuse/nuxt": "^14.1.0",
+    "crossws": "catalog:",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.1",
     "eslint-plugin-format": "^1.1.0",
