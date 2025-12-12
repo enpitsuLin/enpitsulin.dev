@@ -79,6 +79,25 @@ export default defineNuxtConfig({
     cloudflare: {
       nodeCompat: true,
       deployConfig: true,
+      wrangler: {
+        // configurate durable here to avoid dev warning
+        durable_objects: {
+          bindings: [
+            {
+              name: '$DurableObject',
+              class_name: '$DurableObject',
+            },
+          ],
+        },
+        migrations: [
+          {
+            tag: 'v1',
+            new_classes: [
+              '$DurableObject',
+            ],
+          },
+        ],
+      },
     },
     moduleSideEffects: ['reflect-metadata'],
     esbuild: {
