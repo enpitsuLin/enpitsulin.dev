@@ -2,7 +2,7 @@ import type { Peer } from 'crossws'
 
 export default defineWebSocketHandler({
   open(peer) {
-    const count = uniquePeers(peer).size
+    const count = uniquePeers([...peer.peers]).size
 
     peer.subscribe('visitors')
     peer.send(count)
@@ -10,14 +10,14 @@ export default defineWebSocketHandler({
   },
 
   close(peer) {
-    const count = uniquePeers(peer).size
+    const count = uniquePeers([...peer.peers]).size
     peer.publish('visitors', count)
     peer.unsubscribe('visitors')
   },
 })
 
-function uniquePeers(peer: Peer) {
-  return new Set(Array.from(peer.peers).map(p => getClientIP(p.request as Request)))
+function uniquePeers(peers: Peer[]) {
+  return new Set(peers.map(p => getClientIP(p.request as Request)))
 }
 
 function getClientIP(request: Request) {
