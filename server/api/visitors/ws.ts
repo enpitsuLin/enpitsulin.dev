@@ -1,27 +1,31 @@
+import type { Peer } from 'crossws'
+
 export default defineWebSocketHandler({
   open(peer) {
-    // console.log('open', peer, peer.remoteAddress, Object.fromEntries(peer._internal.request.headers.entries()))
+    const count = uniquePeers(peer).size
+
     peer.subscribe('visitors')
-    peer.send(peer.peers.size)
-    peer.publish('visitors', peer.peers.size)
+    peer.send(count)
+    peer.publish('visitors', count)
   },
 
   close(peer) {
-    peer.publish('visitors', peer.peers.size)
+    const count = uniquePeers(peer).size
+    peer.publish('visitors', count)
     peer.unsubscribe('visitors')
   },
-  // upgrade(request) {
-  //   const xForwardedFor = request.headers.get('x-forwarded-for')
-  //   const realIp = request.headers.get('x-real-ip')
-  //   const cfConnectingIp = request.headers.get('cf-connecting-ip')
-
-  //   request.context.ip = [xForwardedFor, realIp, cfConnectingIp].filter(Boolean).join(', ')
-
-  //   return {
-  //     headers: {
-  //       'x-powered-by': 'cross-ws',
-  //       'x-forwarded-for': [xForwardedFor, realIp, cfConnectingIp].filter(Boolean).join(', '),
-  //     },
-  //   }
-  // },
 })
+
+function uniquePeers(peer: Peer) {
+  return new Set(Array.from(peer.peers).map(p => getClientIP(p.request as Request)))
+}
+
+function getClientIP(request: Request) {
+  const xForwardedFor = request.headers.get('x-forwarded-for')
+  if (xForwardedFor) {
+    // 'x-forwarded-for' may contain a list of addresses, grab the first one
+    return xForwardedFor.split(',')[0].trim()
+  }
+
+  return request.headers.get('cf-connecting-ipv6') || request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip')
+}
