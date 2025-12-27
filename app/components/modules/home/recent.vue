@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/post', {
-  query: {
-    limit: '2',
-  },
-})
+const { data } = await useAsyncData('recent-post', () =>
+  queryCollection('blog')
+    .limit(2)
+    .order('publishedAt', 'DESC')
+    .all())
 </script>
 
 <template>
@@ -25,8 +25,8 @@ const { data } = await useFetch('/api/post', {
     </h1>
     <div w-full grid="~ cols-1 md:cols-2 gap-16">
       <HomeRecentArticle
-        v-for="article in data?.data"
-        :key="article.slug"
+        v-for="article in data"
+        :key="article.path"
         :article="article"
       />
     </div>

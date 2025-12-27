@@ -25,10 +25,10 @@ const { article, delay = 0 } = defineProps<Props>()
       <ArticleCardTags :tags="article.tags" />
       <ArticleCardTime :date="article.publishedAt" class="md:hidden" />
 
-      <MDCRenderer
+      <ContentRenderer
         v-if="article.excerpt"
         class="relative z-10 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
-        :body="article.excerpt"
+        :value="article.excerpt"
       />
       <div
         v-else

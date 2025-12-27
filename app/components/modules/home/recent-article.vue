@@ -16,10 +16,10 @@ const { article } = defineProps<Props>()
     <ArticleCardTitle :title="article.title" :path="article.path" />
     <ArticleCardTime :date="article.publishedAt" />
 
-    <MDCRenderer
+    <ContentRenderer
       v-if="article.excerpt" flex-1
       class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
-      :body="article.excerpt"
+      :value="article.excerpt"
     />
     <div
       v-else flex-1

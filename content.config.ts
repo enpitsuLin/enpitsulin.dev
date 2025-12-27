@@ -9,7 +9,7 @@ const blog = defineCollection({
     updatedAt: z.date().optional(),
     tags: z.array(z.string()),
     excerpt: z.object({
-      type: z.enum(['root']),
+      type: z.string(),
       children: z.any(),
     }),
     meta: z.object({
