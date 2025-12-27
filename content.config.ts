@@ -24,8 +24,14 @@ const blog = defineCollection({
   }),
 })
 
+const about = defineCollection({
+  type: 'page',
+  source: 'about.md',
+})
+
 export default defineContentConfig({
   collections: {
     blog,
+    about,
   },
 })

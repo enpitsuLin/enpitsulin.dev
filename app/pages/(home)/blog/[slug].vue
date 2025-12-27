@@ -4,7 +4,6 @@ defineOptions({
 })
 
 definePageMeta({
-  loaders: [usePostData, useSurroundPostData],
   layout: 'home',
 })
 
