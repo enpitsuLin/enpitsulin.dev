@@ -9,7 +9,7 @@ estimation:
   text: 1 min read
 ---
 
-Hi，这里是 enpitsu(えんぴつ)lin，你可以叫我铅笔。
+Hi，这里是 :owner-name ，你可以叫我铅笔。
 
 > ~~rose are red, violets are blue, i'm the guy ENPITSULIN, so who the hell are you~~
 
