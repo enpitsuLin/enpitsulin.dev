@@ -4,8 +4,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
-    '@pinia/nuxt',
-    '@pinia/colada-nuxt',
     '@vueuse/nuxt',
     '@nuxthub/core',
     '@nuxt/content',
