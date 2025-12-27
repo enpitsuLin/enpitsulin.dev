@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers'
+import { blob } from 'hub:blob'
 
 export default eventHandler(async (event) => {
   const { pathname } = event.context.params || {}
@@ -9,5 +9,5 @@ export default eventHandler(async (event) => {
     })
   }
 
-  return env.BLOB.get(pathname)
+  return blob.get(pathname)
 })
