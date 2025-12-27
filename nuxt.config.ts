@@ -1,5 +1,3 @@
-import { fileURLToPath } from 'node:url'
-
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
@@ -110,13 +108,6 @@ export default defineNuxtConfig({
     esbuild: {
       options: {
         target: 'esnext',
-      },
-    },
-    typescript: {
-      tsConfig: {
-        compilerOptions: {
-          types: [fileURLToPath(new URL('./worker-configuration.d.ts', import.meta.url))],
-        },
       },
     },
     experimental: {
