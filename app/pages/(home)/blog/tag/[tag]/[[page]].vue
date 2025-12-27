@@ -4,13 +4,27 @@ import { normalizePage } from '#shared/utils/normalize-page'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
 definePageMeta({
-  loaders: [useTagPostsData],
   alias: '/blog/tag/:tag/:page(\\d+)?',
   layout: 'home',
 })
 
 const route = useRoute('blog-tag-tag-page')
-const posts = await useTagPostsData()
+
+const { data: posts } = await useAsyncData(
+  () => `blog-page-${route.params.page || 1}`,
+  () => {
+    return queryCollection('blog')
+      .where('tags', '=', route.params.tag)
+      .order('publishedAt', 'DESC')
+      .limit(10)
+      .skip((normalizePage(route.params.page) - 1) * 10)
+      .all()
+  },
+)
+
+const { data: count } = await useAsyncData(`blog-count`, () => {
+  return queryCollection('blog').where('tags', '=', route.params.tag).count()
+})
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
   onPageChange(details) {
@@ -22,8 +36,8 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
       },
     })
   },
-  count: posts.total,
-  pageSize: posts.limit,
+  count: count.value,
+  pageSize: 10,
   page: normalizePage(route.params.page),
   siblingCount: 2,
 }))
@@ -36,9 +50,9 @@ const pagination = usePagination(paginationOptions)
     :title="`标签: ${route.params.tag}`"
     :description="`关于标签: ${route.params.tag} 的文章`"
   >
-    <div v-if="posts && posts?.data?.length > 0 " pl="md:6" border="md:l border" w-full>
+    <div v-if="posts && posts?.length > 0 " pl="md:6" border="md:l border" w-full>
       <ul flex="~ col gap-16" pb-16>
-        <li v-for="(article, index) in posts?.data" :key="article.slug">
+        <li v-for="(article, index) in posts" :key="article.path">
           <Article :article="article" :delay="index * 0.1" />
         </li>
       </ul>

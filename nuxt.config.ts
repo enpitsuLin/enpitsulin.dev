@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     '@pinia/colada-nuxt',
     '@vueuse/nuxt',
     '@nuxthub/core',
+    '@nuxt/content',
+    'nuxt-studio',
   ],
 
   devtools: { enabled: true },
@@ -18,6 +20,23 @@ export default defineNuxtConfig({
     db: 'sqlite',
     kv: true,
     blob: true,
+  },
+
+  content: {
+    build: {
+      markdown: {
+        remarkPlugins: {
+          'remark-lesetid': { options: { dataKey: 'estimation' } },
+        },
+        rehypePlugins: {
+          'rehype-unwrap-images': {},
+        },
+        toc: {
+          depth: 3,
+          searchDepth: 3,
+        },
+      },
+    },
   },
 
   components: {
@@ -37,32 +56,6 @@ export default defineNuxtConfig({
 
   imports: {
     dirs: ['loaders'],
-  },
-
-  mdc: {
-    remarkPlugins: {
-      'remark-lesetid': {},
-    },
-    rehypePlugins: {
-      'rehype-unwrap-images': {},
-    },
-    headings: {
-      anchorLinks: true,
-    },
-    highlight: {
-      theme: {
-        default: 'github-light',
-        dark: 'github-dark',
-      },
-      langs: ['js', 'jsx', 'json', 'ts', 'tsx', 'vue', 'css', 'html', 'vue', 'bash', 'md', 'mdc', 'yaml', 'toml', 'rust', 'sql'],
-      shikiEngine: 'javascript',
-    },
-    components: {
-      map: {
-        details: 'prose-details',
-        summary: 'prose-summary',
-      },
-    },
   },
 
   experimental: {
