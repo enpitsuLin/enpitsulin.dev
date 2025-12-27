@@ -3,9 +3,9 @@ defineProps<{ id?: string }>()
 </script>
 
 <template>
-  <h1 :id="id" class="group flex items-center">
+  <h3 :id="id" class="group flex items-center">
     <span>
-      <MDCSlot />
+      <slot />
     </span>
     <a
       flex="inline"
@@ -19,5 +19,5 @@ defineProps<{ id?: string }>()
     >
       <i class="i-mingcute:hashtag-line" size-1em aria-hidden="true" />
     </a>
-  </h1>
+  </h3>
 </template>

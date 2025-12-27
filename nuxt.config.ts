@@ -2,7 +2,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
-    '@nuxtjs/mdc',
     'nuxt-auth-utils',
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
@@ -20,6 +19,15 @@ export default defineNuxtConfig({
     db: 'sqlite',
     kv: true,
     blob: true,
+  },
+
+  mdc: {
+    components: {
+      map: {
+        details: 'prose-details',
+        summary: 'prose-summary',
+      },
+    },
   },
 
   content: {
@@ -43,19 +51,10 @@ export default defineNuxtConfig({
     global: true,
     dirs: [
       {
-        path: '~/components/prose',
-        prefix: 'prose',
-        isAsync: false,
-      },
-      {
         path: '~/components/modules',
       },
       '~/components',
     ],
-  },
-
-  imports: {
-    dirs: ['loaders'],
   },
 
   experimental: {
