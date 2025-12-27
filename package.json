@@ -33,9 +33,7 @@
     "nuxt": "^4.2.2",
     "rehype-unwrap-images": "^1.0.0",
     "remark-lesetid": "^2.0.7",
-    "ua-parser-js": "^2.0.7",
     "ufo": "^1.6.1",
-    "unstorage": "^1.17.3",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
     "zod": "^4.2.1"
@@ -62,8 +60,6 @@
     "nuxt-auth-utils": "^0.5.26",
     "prettier": "^3.7.4",
     "simple-git-hooks": "^2.13.1",
-    "tsx": "^4.21.0",
-    "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
     "unocss": "^66.5.11",
     "unplugin-vue-router": "^0.19.1",
