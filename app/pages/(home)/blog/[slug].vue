@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { estimate } from 'lesetid'
+
 defineOptions({
   name: 'BlogSlug',
 })
@@ -35,6 +37,34 @@ const surroundData = computed(() => ({
   previous: surround.value?.at(1) ?? null,
   next: surround.value?.at(0) ?? null,
 }))
+import { visit } from '@nuxt/content/runtime'
+
+const estimation = computed(() => {
+  if (!page.value?.body)
+    return { minutes: 0 }
+
+  let text = ''
+  visit(
+    page.value?.body,
+    (node) => {
+      if (Array.isArray(node)) {
+        return false
+      }
+      return true
+    },
+    (node) => {
+      if (Array.isArray(node))
+        return node
+      text += node
+
+      return node
+    },
+  )
+
+  const estimation = estimate(text)
+
+  return { minutes: estimation.minutes }
+})
 </script>
 
 <template>
@@ -50,10 +80,10 @@ const surroundData = computed(() => ({
             <i inline-block class="i-mingcute:calendar-fill" />
             <NuxtTime :datetime="page.publishedAt" />
           </div>
-          <div v-if="page.meta.estimation.minutes" flex="~ items-center gap-2">
+          <div v-if="estimation.minutes" flex="~ items-center gap-2">
             <span class="sr-only">阅读时间</span>
             <i inline-block class="i-mingcute:time-fill" />
-            <span>约 {{ Math.ceil(page.meta.estimation.minutes) }} 分钟</span>
+            <span>约 {{ Math.ceil(estimation.minutes) }} 分钟</span>
           </div>
         </section>
         <h1 text-4xl font-semibold>

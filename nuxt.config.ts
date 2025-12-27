@@ -44,9 +44,6 @@ export default defineNuxtConfig({
   content: {
     build: {
       markdown: {
-        remarkPlugins: {
-          'remark-lesetid': { options: { dataKey: 'estimation' } },
-        },
         rehypePlugins: {
           'rehype-unwrap-images': {},
         },

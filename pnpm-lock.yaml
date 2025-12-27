@@ -52,6 +52,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@cloudflare/workers-types@4.20251225.0)(@libsql/client@0.15.15)(better-sqlite3@12.5.0)(kysely@0.28.8)
+      lesetid:
+        specifier: ^2.0.7
+        version: 2.0.7
       motion-v:
         specifier: ^1.7.4
         version: 1.7.4(@vueuse/core@14.1.0(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3))
@@ -64,9 +67,6 @@ importers:
       rehype-unwrap-images:
         specifier: ^1.0.0
         version: 1.0.0
-      remark-lesetid:
-        specifier: ^2.0.7
-        version: 2.0.7
       ufo:
         specifier: ^1.6.1
         version: 1.6.1
@@ -6220,10 +6220,6 @@ packages:
 
   remark-gfm@4.0.1:
     resolution: {integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==}
-
-  remark-lesetid@2.0.7:
-    resolution: {integrity: sha512-vGCtvzLrj8uB0MNziIakBt6lviwsMIIT2r31+GO16hpH140PdS5sio7IYfwqGHw6mkKt+H/FcgRKKUjMP2KfGA==}
-    engines: {node: '>=20'}
 
   remark-mdc@3.10.0:
     resolution: {integrity: sha512-gJhrSs4bGyqr7eSuLoaLlpmiDZrJ9fP/8gTA/w1CnKnW/mfxc9VKM+ndzpOxHQnpAU4tjD8QqF6SMLiOvIVTYA==}
@@ -14622,12 +14618,6 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
-
-  remark-lesetid@2.0.7:
-    dependencies:
-      lesetid: 2.0.7
-      mdast-util-to-string: 4.0.0
-      unist-util-visit: 5.0.0
 
   remark-mdc@3.10.0:
     dependencies:
