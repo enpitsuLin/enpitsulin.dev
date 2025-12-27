@@ -28,7 +28,7 @@ if (!data) {
   <div v-if="data" mt-16 text-14px flex="~ justify-between">
     <div text="1.1em" class="w-full md:w-80%" pb-20 pr="0 md:7.5" border="md:r border">
       <header
-        pb-10 space-y-10 bg="gradient-to-r [position:bottom] [size:10px_1px] repeat-x"
+        pb-6 space-y-10 bg="gradient-to-r [position:bottom] [size:10px_1px] repeat-x"
         class="from-border to-transparent"
       >
         <section flex="~ items-center wrap gap-2" text-sm op-80>
@@ -46,9 +46,9 @@ if (!data) {
         <h1 text-4xl font-semibold>
           {{ data.title }}
         </h1>
-        <section>
+        <section v-if="data.tags.length">
           <ul flex="~ wrap items-center gap-2" tracking-tight>
-            <li v-for="tag in data.tags ?? []" :key="tag">
+            <li v-for="tag in data.tags" :key="tag">
               <ArticleTag :tag="tag" />
             </li>
           </ul>

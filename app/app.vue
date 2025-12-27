@@ -38,7 +38,7 @@ useHead({
     },
   ],
   bodyAttrs: {
-    class: 'text-gray-950 dark:text-gray-50 bg-slate-50 dark:bg-black bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]',
+    class: 'text-gray-950 dark:text-gray-50 bg-[#f4f4f5] dark:bg-[#121213] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-[size:16px_16px] dark:bg-[radial-gradient(#e5e7eb20_1px,transparent_1px)]',
   },
 })
 </script>
