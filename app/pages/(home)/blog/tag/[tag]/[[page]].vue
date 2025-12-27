@@ -14,7 +14,7 @@ const { data: posts } = await useAsyncData(
   () => `blog-page-${route.params.page || 1}`,
   () => {
     return queryCollection('blog')
-      .where('tags', '=', route.params.tag)
+      .where('tags', 'LIKE', `%${route.params.tag}%`)
       .order('publishedAt', 'DESC')
       .limit(10)
       .skip((normalizePage(route.params.page) - 1) * 10)
@@ -23,7 +23,7 @@ const { data: posts } = await useAsyncData(
 )
 
 const { data: count } = await useAsyncData(`blog-count`, () => {
-  return queryCollection('blog').where('tags', '=', route.params.tag).count()
+  return queryCollection('blog').where('tags', 'LIKE', `%${route.params.tag}%`).count()
 })
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
