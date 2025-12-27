@@ -1,12 +1,12 @@
 ---
 title: 新增一个live2d插件
-slug: add-live2d-model
 description: 感觉一个页面白白净净的似乎也有些无趣, 遂增加一个有生气的物件
+publishedAt: 2019-03-26T16:00:00.000Z
 tags:
   - Blog
   - Hexo
   - Live2d
-publishedAt: 2019-03-26T16:00:00.000Z
+slug: add-live2d-model
 ---
 
 基于这几天对于 hexo 这个简单强大的框架的热度,折腾了一些时间,暂时就成了现在的样子.
@@ -17,13 +17,13 @@ publishedAt: 2019-03-26T16:00:00.000Z
 
 使用终端命令在项目内安装模块
 
-```shell
+```bash
 npm install --save hexo-helper-live2d
 ```
 
 以及安装所需的 live2d 模型,这里我选用的是一个简单的黑猫模型.
 
-```shell
+```bash
 npm install live2d-widget-model-hijiki
 ```
 
@@ -53,7 +53,7 @@ live2d:
 
 然后直接
 
-```shell
+```bash
 hexo s -g
 ```
 
@@ -61,4 +61,4 @@ hexo s -g
 
 ---
 
-[原作者仓库 hexo-helper-live2d](https://github.com/EYHN/hexo-helper-live2d){rel="&#x22;nofollow&#x22;"}[所用模型仓库](https://github.com/xiazeyu/live2d-widget-models){rel="&#x22;nofollow&#x22;"}
+[原作者仓库 hexo-helper-live2d](https://github.com/EYHN/hexo-helper-live2d)[所用模型仓库](https://github.com/xiazeyu/live2d-widget-models)

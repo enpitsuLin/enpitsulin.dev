@@ -54,6 +54,13 @@ export default defineNuxtConfig({
           depth: 3,
           searchDepth: 3,
         },
+        highlight: {
+          theme: {
+            default: 'github-light',
+            dark: 'github-dark',
+          },
+          langs: ['js', 'jsx', 'json', 'ts', 'tsx', 'vue', 'css', 'html', 'vue', 'bash', 'md', 'mdc', 'yaml', 'toml', 'rust', 'sql'],
+        },
       },
     },
   },
