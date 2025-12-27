@@ -1,17 +1,9 @@
-catalog:
-  crossws: ^0.3.5
-
-catalogMode: prefer
-
 cleanupUnusedCatalogs: true
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
   - unrs-resolver
-
-patchedDependencies:
-  nuxt-auth-utils: patches/nuxt-auth-utils.patch
 
 shellEmulator: true
 

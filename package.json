@@ -2,7 +2,7 @@
   "name": "enpitsulin-dev",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.25.0",
+  "packageManager": "pnpm@10.26.2",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -18,14 +18,14 @@
     "db:studio": "DATABASE_URL=\"$(ls -t ./.wrangler/state/v3/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
   },
   "dependencies": {
-    "@antfu/eslint-config": "^6.6.1",
+    "@antfu/eslint-config": "^6.7.3",
     "@ark-ui/vue": "^5.30.0",
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "2.0.0",
-    "@pinia/colada": "^0.18.1",
+    "@pinia/colada": "^0.20.0",
     "@pinia/colada-nuxt": "0.2.4",
-    "@tanstack/vue-form": "^1.27.3",
-    "@unocss/reset": "^66.5.10",
+    "@tanstack/vue-form": "^1.27.6",
+    "@unocss/reset": "^66.5.11",
     "@vueuse/core": "^14.1.0",
     "drizzle-orm": "^0.45.1",
     "motion-v": "^1.7.4",
@@ -35,27 +35,27 @@
     "ua-parser-js": "^2.0.7",
     "ufo": "^1.6.1",
     "unstorage": "^1.17.3",
-    "vue": "^3.5.25",
+    "vue": "^3.5.26",
     "vue-router": "^4.6.4",
-    "zod": "^4.1.13"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.15",
     "@iconify-json/logos": "^1.2.10",
-    "@iconify-json/mingcute": "^1.2.5",
+    "@iconify-json/mingcute": "^1.2.6",
     "@libsql/client": "^0.15.15",
     "@nuxt/devtools": "^3.1.1",
     "@nuxtjs/color-mode": "^4.0.0",
-    "@nuxtjs/mdc": "^0.19.1",
+    "@nuxtjs/mdc": "^0.19.2",
     "@pinia/nuxt": "^0.11.3",
-    "@types/node": "^25.0.1",
-    "@unocss/nuxt": "^66.5.10",
-    "@unocss/preset-mini": "^66.5.10",
-    "@unocss/preset-uno": "^66.5.10",
+    "@types/node": "^25.0.3",
+    "@unocss/nuxt": "^66.5.11",
+    "@unocss/preset-mini": "^66.5.11",
+    "@unocss/preset-uno": "^66.5.11",
     "@vueuse/nuxt": "^14.1.0",
-    "crossws": "catalog:",
+    "crossws": "^0.4.1",
     "drizzle-kit": "^0.31.8",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-plugin-format": "^1.1.0",
     "lint-staged": "^16.2.7",
     "nuxt-auth-utils": "^0.5.26",
@@ -64,8 +64,8 @@
     "tsx": "^4.21.0",
     "type-fest": "^5.3.1",
     "typescript": "^5.9.3",
-    "unocss": "^66.5.10",
-    "unplugin-vue-router": "^0.19.0",
+    "unocss": "^66.5.11",
+    "unplugin-vue-router": "^0.19.1",
     "wrangler": "^4.54.0"
   },
   "resolutions": {
@@ -74,7 +74,7 @@
     "nuxt": "^4.2.2",
     "sharp": "^0.34.5",
     "unplugin": "^2.3.11",
-    "vite": "^7.2.7"
+    "vite": "^7.3.0"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
