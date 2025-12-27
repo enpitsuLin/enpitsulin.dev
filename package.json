@@ -11,10 +11,10 @@
     "postinstall": "nuxt prepare && simple-git-hooks",
     "deploy": "pnpm run build && wrangler deploy",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "cf-typegen": "wrangler types",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply enpitsulin-dev --local",
-    "db:migrate:remote": "wrangler d1 migrations apply enpitsulin-dev --remote",
+    "db:generate": "nuxt db generate",
+    "db:migrate": "nuxt db migrate",
     "db:studio": "DATABASE_URL=\"$(ls -t ./.wrangler/state/v3/d1/**/*.sqlite | head -n 1)\" drizzle-kit studio"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "@ark-ui/vue": "^5.30.0",
     "@nuxt/eslint": "1.10.0",
     "@nuxt/image": "2.0.0",
+    "@nuxthub/core": "0.10.4",
     "@pinia/colada": "^0.20.0",
     "@pinia/colada-nuxt": "0.2.4",
     "@tanstack/vue-form": "^1.27.6",

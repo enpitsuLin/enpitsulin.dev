@@ -1,4 +1,6 @@
 import { eq } from 'drizzle-orm'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 import { z } from 'zod'
 
 const paramsSchema = z.object({
@@ -13,9 +15,8 @@ export default eventHandler(async (event) => {
   }
   const { slug } = validateParams.data
 
-  const drizzle = useDrizzle()
-  const existingPost = await drizzle.query.post.findFirst({
-    where: eq(tables.post.slug, slug),
+  const existingPost = await db.query.post.findFirst({
+    where: eq(schema.post.slug, slug),
   })
 
   if (!existingPost) {
@@ -23,14 +24,14 @@ export default eventHandler(async (event) => {
   }
 
   // Soft delete post from database
-  await drizzle
-    .update(tables.post)
+  await db
+    .update(schema.post)
     .set({ isDelete: true })
-    .where(eq(tables.post.id, existingPost.id))
+    .where(eq(schema.post.id, existingPost.id))
 
   // Delete post content from KV storage
   const kvKey = `post:${slug}`
-  await useKV().remove(kvKey)
+  await kv.remove(kvKey)
 
   return { success: true, message: 'Post deleted successfully' }
 })

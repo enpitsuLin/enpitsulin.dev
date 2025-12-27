@@ -1,6 +1,7 @@
 import type { Post } from '~~/shared/types/post'
 import { and, desc, eq, inArray, isNotNull, sql } from 'drizzle-orm'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 
 export default eventHandler(async (event) => {
   const tagName = getRouterParam(event, 'tag')
@@ -12,11 +13,9 @@ export default eventHandler(async (event) => {
   const limit = query.limit ? Number.parseInt(query.limit as string) : 10
   const offset = query.offset ? Number.parseInt(query.offset as string) : 0
 
-  const drizzle = useDrizzle()
-
   // Find tag by name
-  const tag = await drizzle.query.tag.findFirst({
-    where: eq(tables.tag.name, decodeURIComponent(tagName)),
+  const tag = await db.query.tag.findFirst({
+    where: eq(schema.tag.name, decodeURIComponent(tagName)),
   })
 
   if (!tag) {
@@ -29,8 +28,8 @@ export default eventHandler(async (event) => {
   }
 
   // Get all post IDs that have this tag
-  const postTags = await drizzle.query.postTag.findMany({
-    where: eq(tables.postTag.tagId, tag.id),
+  const postTags = await db.query.postTag.findMany({
+    where: eq(schema.postTag.tagId, tag.id),
     columns: {
       postId: true,
     },
@@ -48,13 +47,13 @@ export default eventHandler(async (event) => {
   }
 
   // Query posts from database with pagination
-  const dbPosts = await drizzle.query.post.findMany({
+  const dbPosts = await db.query.post.findMany({
     where: and(
-      inArray(tables.post.id, postIds),
-      isNotNull(tables.post.publishedAt),
-      eq(tables.post.isDelete, false),
+      inArray(schema.post.id, postIds),
+      isNotNull(schema.post.publishedAt),
+      eq(schema.post.isDelete, false),
     ),
-    orderBy: desc(tables.post.publishedAt),
+    orderBy: desc(schema.post.publishedAt),
     limit,
     offset,
     with: {
@@ -67,14 +66,14 @@ export default eventHandler(async (event) => {
   })
 
   // Get total count for pagination
-  const totalResult = await drizzle
+  const totalResult = await db
     .select({ count: sql<number>`count(*)` })
-    .from(tables.post)
+    .from(schema.post)
     .where(
       and(
-        inArray(tables.post.id, postIds),
-        isNotNull(tables.post.publishedAt),
-        eq(tables.post.isDelete, false),
+        inArray(schema.post.id, postIds),
+        isNotNull(schema.post.publishedAt),
+        eq(schema.post.isDelete, false),
       ),
     )
 
@@ -84,7 +83,7 @@ export default eventHandler(async (event) => {
   const posts = await Promise.all(
     dbPosts.map(async (dbPost) => {
       const kvKey = `post:${dbPost.slug}`
-      const kvPost = await useKV().get<PostInKV>(kvKey)
+      const kvPost = await kv.get<PostInKV>(kvKey)
 
       if (!kvPost) {
         // Skip posts that don't exist in KV

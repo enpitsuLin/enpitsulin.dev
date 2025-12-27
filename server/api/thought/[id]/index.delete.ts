@@ -1,4 +1,6 @@
 import { eq } from 'drizzle-orm'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 import { z } from 'zod'
 
 const paramsSchema = z.object({
@@ -13,9 +15,8 @@ export default eventHandler(async (event) => {
   }
   const { id } = validateParams.data
 
-  const drizzle = useDrizzle()
-  const existingThought = await drizzle.query.thoughts.findFirst({
-    where: eq(tables.thoughts.id, id),
+  const existingThought = await db.query.thoughts.findFirst({
+    where: eq(schema.thoughts.id, id),
   })
 
   if (!existingThought) {
@@ -23,14 +24,14 @@ export default eventHandler(async (event) => {
   }
 
   // Soft delete thought from database
-  await drizzle
-    .update(tables.thoughts)
+  await db
+    .update(schema.thoughts)
     .set({ isDelete: true })
-    .where(eq(tables.thoughts.id, id))
+    .where(eq(schema.thoughts.id, id))
 
   // Delete thought content from KV storage
   const kvKey = `thought:${id}`
-  await useKV().remove(kvKey)
+  await kv.remove(kvKey)
 
   return { success: true, message: 'Thought deleted successfully' }
 })

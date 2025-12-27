@@ -1,10 +1,11 @@
+import type { InsertPost } from 'hub:db:schema'
 import type z from 'zod'
-import type { InsertPost } from '~~/server/database/schema'
 import type { postSchema } from '~~/shared/schema/post'
 import type { Post, PostInKV } from '~~/shared/types/post'
 import { parseMarkdown } from '@nuxtjs/mdc/runtime'
 import { eq } from 'drizzle-orm'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 import { insertTags } from './tag'
 
 export async function insertOrUpdatePost(
@@ -17,9 +18,8 @@ export async function insertOrUpdatePost(
     throw createError({ statusCode: 400, message: 'Missing title' })
   }
 
-  const drizzle = useDrizzle()
-  const existingPost = await drizzle.query.post.findFirst({
-    where: eq(tables.post.slug, data.slug),
+  const existingPost = await db.query.post.findFirst({
+    where: eq(schema.post.slug, data.slug),
   })
 
   const tags = data.tags || []
@@ -32,7 +32,7 @@ export async function insertOrUpdatePost(
     await createPost(data, tagIds)
   }
 
-  await useKV().set<PostInKV>(kvKey, { content: data.content, parsed })
+  await kv.set<PostInKV>(kvKey, { content: data.content, parsed })
 
   return {
     tags: data.tags || [],
@@ -53,10 +53,8 @@ async function createPost(
   data: z.infer<typeof postSchema>,
   tagIds: string[],
 ) {
-  const drizzle = useDrizzle()
-
-  const [newPost] = await drizzle
-    .insert(tables.post)
+  const [newPost] = await db
+    .insert(schema.post)
     .values({
       id: crypto.randomUUID(),
       slug: data.slug,
@@ -64,7 +62,7 @@ async function createPost(
       description: data.description,
       publishedAt: data.publishedAt ? new Date(data.publishedAt) : undefined,
     })
-    .returning({ id: tables.post.id })
+    .returning({ id: schema.post.id })
 
   await syncPostTags(newPost.id, tagIds)
 }
@@ -74,8 +72,6 @@ async function updatePost(
   tagIds: string[],
   data: z.infer<typeof postSchema>,
 ) {
-  const drizzle = useDrizzle()
-
   // Update post metadata
   const updateData: Omit<InsertPost, 'id'> = {
     slug: data.slug,
@@ -83,10 +79,10 @@ async function updatePost(
     publishedAt: data.publishedAt ? new Date(data.publishedAt) : undefined,
     description: data.description,
   }
-  await drizzle
-    .update(tables.post)
+  await db
+    .update(schema.post)
     .set(updateData)
-    .where(eq(tables.post.id, postId))
+    .where(eq(schema.post.id, postId))
 
   // Sync tags (delete old associations and insert new ones)
   await syncPostTags(postId, tagIds)
@@ -96,16 +92,14 @@ async function syncPostTags(
   postId: string,
   tagIds: string[],
 ) {
-  const drizzle = useDrizzle()
-
   // Delete all existing tag associations for this post
-  await drizzle
-    .delete(tables.postTag)
-    .where(eq(tables.postTag.postId, postId))
+  await db
+    .delete(schema.postTag)
+    .where(eq(schema.postTag.postId, postId))
 
   // Insert new tag associations
   if (tagIds.length > 0) {
-    await drizzle.insert(tables.postTag).values(
+    await db.insert(schema.postTag).values(
       tagIds.map(tagId => ({ postId, tagId })),
     )
   }
