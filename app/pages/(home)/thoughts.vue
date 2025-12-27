@@ -16,58 +16,46 @@ const { data: initialThoughts } = useThoughts()
 
 type ThoughtResponse = Awaited<ReturnType<typeof useThoughts>>
 
-interface InfiniteLoadData {
-  pages: ThoughtResponse[]
-  pagesMap: Map<number, ThoughtResponse>
-  nextCursor: number | null
-}
-
-const { data: thoughtsData, loadMore, asyncStatus } = useInfiniteQuery({
+const { data: thoughtsData, loadNextPage, asyncStatus, hasNextPage } = useInfiniteQuery({
   key: ['thoughts', 'infinite-load'],
-  async query(page) {
-    const nextCursor = page?.nextCursor
-    if (!nextCursor)
-      return null
+  async query(context) {
+    const cursor = context.pageParam
+    // 如果 cursor 为 null，说明是第一页，返回预加载的数据
+    if (cursor === null) {
+      return initialThoughts.value
+    }
+    // 否则从服务器获取数据
     return $fetch('/api/thought', {
       query: {
         limit: THOUGHTS_LIMIT,
-        ...(nextCursor && { cursor: nextCursor }),
+        cursor,
       },
     })
   },
-  initialPage: {
-    pages: [initialThoughts.value] as ThoughtResponse[],
-    pagesMap: new Map<number, ThoughtResponse>([
-      [0, initialThoughts.value],
-    ]),
-    nextCursor: initialThoughts.value.nextCursor,
-  } as InfiniteLoadData,
-  merge(data, newThoughts) {
-    if (newThoughts) {
-      const lastPage = data.pages.at(-1)!
-      data.pages.push(newThoughts)
-      if (lastPage.nextCursor)
-        data.pagesMap.set(lastPage.nextCursor, newThoughts)
-    }
-    data.nextCursor = newThoughts?.nextCursor ?? null
-    return data
+  initialPageParam: null as number | null,
+  getNextPageParam: (lastPage) => {
+    // 如果 lastPage 有 nextCursor，返回它作为下一页参数；否则返回 null 表示没有更多页面
+    return lastPage?.nextCursor ?? null
   },
 })
 
 const thoughts = computed(() => {
-  return thoughtsData.value?.pages.flatMap(page => page.data)
+  // 新版本中，thoughtsData.value 结构是 { pages: TData[], pageParams: TPageParam[] }
+  // pages 包含所有页面的数据（包括第一页的预加载数据）
+  const pages = thoughtsData.value?.pages ?? []
+  return pages.flatMap(page => page.data)
 })
 
 onMounted(() => {
   useInfiniteScroll(
     window,
     async () => {
-      await loadMore()
+      await loadNextPage()
     },
     {
       distance: 200,
       canLoadMore: () => {
-        return !!thoughtsData.value?.nextCursor && asyncStatus.value !== 'loading'
+        return hasNextPage.value && asyncStatus.value !== 'loading'
       },
     },
   )
@@ -83,7 +71,12 @@ const { mutateAsync: postThought } = useMutation({
     return $fetch('/api/thought', { method: 'POST', body: vars })
   },
   async onMutate(vars) {
-    const oldData = queryCache.getQueryData<InfiniteLoadData>(['thoughts', 'infinite-load'])!
+    // 获取当前的无限查询数据
+    const oldData = queryCache.getQueryData<{
+      pages: ThoughtResponse[]
+      pageParams: (number | null)[]
+    }>(['thoughts', 'infinite-load'])!
+
     const parsed = await parseMarkdown(vars.content)
     const newThought: ThoughtResponse['data'][number] = {
       ...vars,
@@ -93,13 +86,19 @@ const { mutateAsync: postThought } = useMutation({
       body: parsed.body,
     }
 
-    const firstPage = oldData.pages[0]!
-    firstPage.data.unshift(newThought)
-    oldData.pagesMap.set(0, firstPage)
+    // 创建新的数据对象以保持不可变性
+    const newData = {
+      pages: [...oldData.pages],
+      pageParams: [...oldData.pageParams],
+    }
 
-    queryCache.setQueryData(['thoughts', 'infinite-load'], oldData)
+    // 将新想法添加到第一页的开头
+    const firstPage = { ...newData.pages[0]! }
+    firstPage.data = [newThought, ...firstPage.data]
+    newData.pages[0] = firstPage
 
-    triggerRef(thoughtsData)
+    // 更新缓存
+    queryCache.setQueryData(['thoughts', 'infinite-load'], newData)
 
     return {
       oldData,
@@ -268,7 +267,7 @@ function onClose() {
         <span class="text-xs font-medium">加载更多...</span>
       </div>
       <div
-        v-if="!thoughtsData.nextCursor && asyncStatus !== 'loading'" flex="~ items-center gap-4" un-text="zinc-400 dark:zinc-700"
+        v-if="!hasNextPage && asyncStatus !== 'loading'" flex="~ items-center gap-4" un-text="zinc-400 dark:zinc-700"
         class=" w-full justify-center opacity-60"
       >
         <span class="h-px w-12 bg-zinc-200 dark:bg-zinc-800" />
