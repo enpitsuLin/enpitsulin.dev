@@ -88,7 +88,7 @@ publishedAt: 2025-12-09T18:21:00.000Z
 
 > 这也是视频主要攻击的问题，当然，他不仅没理解举例的作用，还要再后面评价 BEM 很糟也是无端。
 
-![](assets/3VVDD_8tgiJoVP46NMNC_1bNrrI4EiO1Umpny7fYdXE=.png)
+![](https://enpitsulin.dev/assets/3VVDD_8tgiJoVP46NMNC_1bNrrI4EiO1Umpny7fYdXE=.png)
 
 ## **Phase 2: Decoupling styles from structure**
 
@@ -96,7 +96,7 @@ publishedAt: 2025-12-09T18:21:00.000Z
 
 这确实是一个巨大的进步，起码冲突不会那么容易出现，**表现**不在关注实际\*&#x2A;结构。*\*
 
-![](assets/gOMEzQSdTGnvNt3jB72ukYPBElenF13t1Wi4_JyUPKI=.png)
+![](https://enpitsulin.dev/assets/gOMEzQSdTGnvNt3jB72ukYPBElenF13t1Wi4_JyUPKI=.png)
 
 > 我觉得哪怕以现在的眼光来看，BEM 通过约定命名层面类似一种手动组织作用域的方式解决了：该如何分离**结构**和**表现**、如何避免样式冲突，甚至时至今日现代 CSS 的 @layer、@scope 本质也是解决这一类问题。
 > 当然我也不知道所谓的第三方工具是什么，如果早就有这个东西我想也不至于出现 BEM，甚至也没必要加 @layer @scope 了
@@ -146,4 +146,4 @@ publishedAt: 2025-12-09T18:21:00.000Z
 
 当然最后，此人的观点整体来说就是狗屁不通，属于完全没看明白文章内容就急着抓住一个看起来像问题的点就输出，着实可笑。最后也是喜提拉黑🤣
 
-![](assets/qTNn73RvLddbeGJvN29LyBj7Hil5eJBdywyHAoM9vPg=.png)
+![](https://enpitsulin.dev/assets/qTNn73RvLddbeGJvN29LyBj7Hil5eJBdywyHAoM9vPg=.png)
