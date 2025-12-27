@@ -23,10 +23,6 @@ export default defineNuxtConfig({
     blob: true,
   },
 
-  studio: {
-    dev: false,
-  },
-
   ogImage: {
     fonts: [
       'Noto+Sans+SC:400',
@@ -34,17 +30,15 @@ export default defineNuxtConfig({
     zeroRuntime: true,
   },
 
-  $production: {
-    studio: {
-      repository: {
-        provider: 'github', // 'github' or 'gitlab'
-        owner: 'enpitsuLin',
-        repo: 'enpitsulin.dev',
-        branch: 'main',
-      },
-      i18n: {
-        defaultLocale: 'zh',
-      },
+  studio: {
+    repository: {
+      provider: 'github', // 'github' or 'gitlab'
+      owner: 'enpitsuLin',
+      repo: 'enpitsulin.dev',
+      branch: 'main',
+    },
+    i18n: {
+      defaultLocale: 'zh',
     },
   },
 
