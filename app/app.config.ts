@@ -10,6 +10,7 @@ interface NavigationItem {
 }
 
 export default defineAppConfig({
+  author: 'enpitsulin',
   siteUrl,
   title: 'Promise { <pending> }',
   description: 'What are you looking for?',
