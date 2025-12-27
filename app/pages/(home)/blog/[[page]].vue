@@ -4,14 +4,26 @@ import { normalizePage } from '#shared/utils/normalize-page'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
 
 definePageMeta({
-  loaders: [usePostsData],
   alias: '/blog/:page(\\d+)?',
   layout: 'home',
 })
 
 const route = useRoute('blog-page')
 
-const posts = await usePostsData()
+const { data: posts } = await useAsyncData(
+  () => `blog-page-${route.params.page || 1}`,
+  () => {
+    return queryCollection('blog')
+      .order('publishedAt', 'DESC')
+      .limit(10)
+      .skip((normalizePage(route.params.page) - 1) * 10)
+      .all()
+  },
+)
+
+const { data: count } = await useAsyncData(`blog-count`, () => {
+  return queryCollection('blog').count()
+})
 
 const paginationOptions = computed<UsePaginationProps>(() => ({
   onPageChange(details) {
@@ -22,8 +34,8 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
       },
     })
   },
-  count: posts.total,
-  pageSize: posts.limit,
+  count: count.value,
+  pageSize: 10,
   page: normalizePage(route.params.page),
   siblingCount: 2,
 }))
@@ -36,9 +48,9 @@ const pagination = usePagination(paginationOptions)
     title="全部文章"
     description="一般写博客文章是随心所欲的，想到什么就有可能会写一些，会希望能够把好用的技术知识传递给更多的人。喜欢围绕着技术为主的话题，但是也会写一些非技术的奇奇怪怪的话题。"
   >
-    <div v-if="posts && posts?.data?.length > 0" pl="md:6" border="md:l border" w-full>
+    <div v-if="posts && posts?.length > 0" pl="md:6" border="md:l border" w-full>
       <ul flex="~ col gap-16" pb-16>
-        <li v-for="(article, index) in posts?.data" :key="article.slug">
+        <li v-for="(article, index) in posts" :key="article.path">
           <Article :article="article" :delay="index * 0.1" />
         </li>
       </ul>

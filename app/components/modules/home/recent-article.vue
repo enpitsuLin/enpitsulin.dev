@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { SerializeObject } from 'nitropack/types'
-import type { Post } from '~~/shared/types/post'
+import type { BlogCollectionItem } from '@nuxt/content'
 
 interface Props {
-  article: SerializeObject<Post>
+  article: BlogCollectionItem
 }
 const { article } = defineProps<Props>()
 </script>
@@ -14,23 +13,23 @@ const { article } = defineProps<Props>()
     relative
     class="group"
   >
-    <ArticleCardTitle :title="article.title" :slug="article.slug" />
+    <ArticleCardTitle :title="article.title" :path="article.path" />
     <ArticleCardTime :date="article.publishedAt" />
 
-    <MDCRenderer
+    <ContentRenderer
       v-if="article.excerpt" flex-1
       class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
-      :body="article.excerpt"
+      :value="article.excerpt"
     />
     <div
       v-else flex-1
       class="relative z-10 mt-2 w-full text-sm text-zinc-600 dark:text-zinc-400 max-w-80ch prose dark:prose-invert"
     >
-      <p>{{ article.description || article.data.description || '这篇文章没有什么内容摘要捏...' }}</p>
+      <p>{{ article.description || '这篇文章没有什么内容摘要捏...' }}</p>
     </div>
 
     <NuxtLink
-      :to="{ name: 'blog-slug', params: { slug: article.slug } }"
+      :to="{ name: 'blog-slug', params: { slug: article.meta.slug } }"
       relative z-10 mt-1 flex items-center text-sm text-accent font-medium
     >
       立即阅读
