@@ -54,7 +54,7 @@
     "@unocss/preset-mini": "^66.5.11",
     "@unocss/preset-uno": "^66.5.11",
     "@vueuse/nuxt": "^14.1.0",
-    "crossws": "^0.4.1",
+    "crossws": "0.3.5",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "eslint-plugin-format": "^1.1.0",
