@@ -27,6 +27,9 @@ export default defineNuxtConfig({
       repo: 'enpitsulin.dev',
       branch: 'main',
     },
+    i18n: {
+      defaultLocale: 'zh',
+    },
   },
 
   mdc: {
