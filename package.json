@@ -11,6 +11,7 @@
     "postinstall": "nuxt prepare && simple-git-hooks",
     "deploy": "pnpm run build && wrangler deploy",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "cf-typegen": "wrangler types",
     "db:generate": "nuxt db generate",
     "db:migrate": "nuxt db migrate",
