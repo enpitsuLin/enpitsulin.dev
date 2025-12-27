@@ -22,7 +22,6 @@ const { article, delay = 0 } = defineProps<Props>()
       class="group md:col-span-3"
     >
       <ArticleCardTitle :title="article.title" :path="article.path" />
-      <ArticleCardTags :tags="article.tags" />
       <ArticleCardTime :date="article.publishedAt" class="md:hidden" />
 
       <ContentRenderer
@@ -52,7 +51,7 @@ const { article, delay = 0 } = defineProps<Props>()
         :datetime="article.publishedAt"
       />
       <div flex="~ gap-1 wrap" pr-10>
-        <ArticleTag v-for="tag in []" :key="tag" :tag text-xs />
+        <ArticleTag v-for="tag in article.tags" :key="tag" :tag text-xs />
       </div>
     </div>
   </article>
