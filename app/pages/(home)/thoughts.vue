@@ -154,7 +154,7 @@ function onClose() {
     title="想法"
     description="这里记录着一些稍纵即逝的灵感、技术碎片以及生活中的碎碎念。比起完整的文章，这里更像是一个公开的备忘录"
   >
-    <div v-if="$user?.role === 'admin'" flex="~ gap-2">
+    <div v-if="$user?.role === 'admin'" flex="~ justify-center gap-2" py-2 w-full>
       <UiButton @click="onAdd">
         发表一条新的想法
       </UiButton>
