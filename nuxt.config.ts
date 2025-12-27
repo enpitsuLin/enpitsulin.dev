@@ -2,7 +2,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
-    'nuxt-auth-utils',
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
