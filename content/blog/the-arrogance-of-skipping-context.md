@@ -15,7 +15,7 @@ publishedAt: 2025-12-09T18:21:00.000Z
 
 为什么这么说呢，先来看看一开始说的一些内容。
 
-![](assets/H3X3wK1PlNTybERJnyjX9L-H3BMgupOMAiZzU2f1b-k=.png)
+![](https://enpitsulin.dev/assets/H3X3wK1PlNTybERJnyjX9L-H3BMgupOMAiZzU2f1b-k=.png)
 
 首先就说了自己没耐心看完啊，本身我确实也对 tailwind 的好感一般，但是单纯从文章角度来说没什么问题，然后我们看下文章一开头其实就已经把 Adam 本文结构已经阐明。
 
@@ -23,7 +23,7 @@ publishedAt: 2025-12-09T18:21:00.000Z
 
 所以整篇文章是一个什么样的结构？是以一个历史发展的角度去剖析 css 的发展并最终引出原子化 css 和自荐基于 postcss 的 tailwind。所以如果能看完整篇文章并且能理解这篇文章，根本不会有如此傲慢的问题。
 
-![](assets/et9mItWbQeOxSeSPzaBOixr8w0sKA4kYwVfJpIFptP4=.png)
+![](https://enpitsulin.dev/assets/et9mItWbQeOxSeSPzaBOixr8w0sKA4kYwVfJpIFptP4=.png)
 
 首先我们要尝试理解这篇文章的叙事和讨论内容，不可避免的需要先了解为什么网页开发有“关注点分离”这个概念
 

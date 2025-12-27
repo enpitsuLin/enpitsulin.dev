@@ -1,10 +1,13 @@
 ---
 title: Window下配置你的shell
-slug: config-powershell
+description: |-
+  终端，是用户与操作系统进行交互的最原始的输入输出环境，也是一些高级系统操作必要工具。
+  经常调试脚本，使用 git 频率多，于是今天决定配一个好用的 shell 来当做学习环境。
+publishedAt: 2019-03-27T16:00:00.000Z
 tags:
   - Shell
   - Windows
-publishedAt: 2019-03-27T16:00:00.000Z
+slug: config-powershell
 ---
 
 **终端**，是用户与操作系统进行交互的最原始的输入输出环境，也是一些高级系统操作必要工具。
@@ -16,7 +19,7 @@ publishedAt: 2019-03-27T16:00:00.000Z
 
 微软官方提供了一个更换 PowerShell 配色的小工具：ColorTool.exe，我们可以利用它来更换 PowerShell 的主题颜色。
 
-我们可以从 ColorTool 的 [GitHub 页面](https://github.com/Microsoft/console/releases){rel="&#x22;nofollow&#x22;"} 下载这个小工具。当然，如果你使用 Scoop 或者 Chocolatey，也可以这样安装：
+我们可以从 ColorTool 的 [GitHub 页面](https://github.com/Microsoft/console/releases) 下载这个小工具。当然，如果你使用 Scoop 或者 Chocolatey，也可以这样安装：
 
 Scoop
 
@@ -79,7 +82,7 @@ colortool OneHalfDark
 > - 如果不是 TrueType 字体，字体名必须是“Terminal”。
 > - 如果它是亚洲的 TrueType 字体，它还必须使用亚洲语言的字符集。
 
-可能大多数人喜欢使用适合于编程的等宽字体如 Consolas 作为 Powershell 的字体,但这里推荐一款`Sarasa Gothic / 更纱黑体 / 更紗黑體 / 更紗ゴシック`(更纱黑体)，可以从更纱黑体的 [GitHub 页面](https://github.com/be5invis/Sarasa-Gothic/releases){rel="&#x22;nofollow&#x22;"}下载。
+可能大多数人喜欢使用适合于编程的等宽字体如 Consolas 作为 Powershell 的字体,但这里推荐一款`Sarasa Gothic / 更纱黑体 / 更紗黑體 / 更紗ゴシック`(更纱黑体)，可以从更纱黑体的 [GitHub 页面](https://github.com/be5invis/Sarasa-Gothic/releases)下载。
 
 下载解压安装更纱黑体之后，我们重新启动一个 PowerShell 终端，就可以在菜单栏右键，选择`属性-字体`，并在字体中选择更纱黑体。适合终端使用的等宽字体是`等距更纱黑体 T SC`或`Sarasa Mono T SC`。
 
@@ -132,7 +135,7 @@ notepad $PROFILE
 
 然后再打开的记事本文档中添加下列内容
 
-```text
+```bash
 Import-Module posh-git
 Import-Module oh-my-posh
 Set-Theme Agnoster
@@ -142,7 +145,7 @@ Set-Theme Agnoster
 
 ---
 
-PS：配置文件的最后一句`Set-Theme Agnoster`的作用就是配置主题。我们可以在配置文件里面修改这个命令中的 Agnoster 即「主题名」来更换主题。更多的主题可以[oh-my-posh 的文档#主题](https://github.com/JanDeDobbeleer/oh-my-posh#themes){rel="&#x22;nofollow&#x22;"}中查看。
+PS：配置文件的最后一句`Set-Theme Agnoster`的作用就是配置主题。我们可以在配置文件里面修改这个命令中的 Agnoster 即「主题名」来更换主题。更多的主题可以[oh-my-posh 的文档#主题](https://github.com/JanDeDobbeleer/oh-my-posh#themes)中查看。
 
 ## 使用第三方终端与 Powershell 协同工作
 

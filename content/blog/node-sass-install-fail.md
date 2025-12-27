@@ -1,13 +1,13 @@
 ---
 title: node-sass 安装失败解决方案
-slug: node-sass-install-fail
 description: 由于某些不可描述的原因,使用node包管理器安装node-sass无论什么环境下总是会出现下载安装失败...
+publishedAt: 2020-08-14T22:12:00.000Z
 tags:
   - Node.js
-publishedAt: 2020-08-14T22:12:00.000Z
+slug: node-sass-install-fail
 ---
 
-> node-sass \*[已经被废弃](https://sass-lang.com/blog/libsass-is-deprecated){rel="&#x22;nofollow&#x22;"}\*，dart-sass 是官方推荐的选择，也不会遇到本文的问题 现在 npm 上安装 sass 默认已经是 dart-sass 了 —— 2022-3-29
+> node-sass \*[已经被废弃](https://sass-lang.com/blog/libsass-is-deprecated)\*，dart-sass 是官方推荐的选择，也不会遇到本文的问题 现在 npm 上安装 sass 默认已经是 dart-sass 了 —— 2022-3-29
 
 # node-sass
 
@@ -85,9 +85,9 @@ node -p "[process.platform, process.arch, process.versions.modules].join('-')"
 
 然后会弹出`win32-x64-83`形式的系统版本,然后在下面两个地址中选择一个去下载对应系统版本的后缀为 .node 的 node-sass 文件
 
-> cnpm <https://npm.taobao.org/mirrors/node-sass/>{rel="&#x22;nofollow&#x22;"}{rel=""nofollow""}
+> cnpm <https://npm.taobao.org/mirrors/node-sass/>{rel=""nofollow""}
 >
-> github <https://github.com/sass/node-sass/releases>{rel="&#x22;nofollow&#x22;"}{rel=""nofollow""}
+> github <https://github.com/sass/node-sass/releases>{rel=""nofollow""}
 
 然后我们需要手动指定 node-sass 二进制文件的下载源为下载的那个文件.
 

@@ -1,12 +1,11 @@
 ---
 title: 什么是JSX
-slug: what-is-jsx
-description: 在过去的一年中，Vue 团队一直都在开发 Vue.js 的下一个主要版本，从各方面来看JSX 在 Vue3 的语境下更契合 Vue
-  的发展方向，所以接触一下JSX并开始React的学习。
+description: 在过去的一年中，Vue 团队一直都在开发 Vue.js 的下一个主要版本，从各方面来看JSX 在 Vue3 的语境下更契合 Vue 的发展方向，所以接触一下JSX并开始React的学习。
+publishedAt: 2020-10-12T19:52:00.000Z
 tags:
   - React
   - JavaScript
-publishedAt: 2020-10-12T19:52:00.000Z
+slug: what-is-jsx
 ---
 
 在过去的一年中，Vue 团队一直都在开发 Vue.js 的下一个主要版本，从各方面来看JSX 在 Vue3 的语境下更契合 Vue 的发展方向，所以接触一下JSX并开始React的学习。
@@ -21,7 +20,7 @@ JSX 到底是什么，我们先来看看 React 官网给出的一段定义：
 
 ## JSX 语法和 JavaScript 关系
 
-实际上答案很简单 ，见[React 官网](https://reactjs.org/docs/glossary.html#jsx){rel="&#x22;nofollow&#x22;"}
+实际上答案很简单 ，见[React 官网](https://reactjs.org/docs/glossary.html#jsx)
 
 > JSX 会被编译为 React.createElement()， React.createElement() 将返回一个叫作“React Element”的 JS 对象。
 
@@ -43,7 +42,7 @@ let text = 'World'
 console.log('Hello'.concat(text, '!')) // Hello World!
 ```
 
-类似的，\*&#x2A;Babel 也具备将 JSX 语法转换为 JavaScript 代码的能力。*\* 那么 Babel 具体会将 JSX 处理成什么样子呢？[【例子】](https://www.babeljs.cn/repl#?browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=DwEwlgbgBAxgNgQwM5IHIILYFMC8AiBAB0LwD4AoKKUSWRFdbfAFzGbizOAHpwIKqNaPGRpMuPDAD2AO2ZY5XXpAo8-pIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.11.6&externalPlugins=){rel="&#x22;nofollow&#x22;"}
+类似的，**Babel 也具备将 JSX 语法转换为 JavaScript 代码的能力。** 那么 Babel 具体会将 JSX 处理成什么样子呢？[【例子】](https://www.babeljs.cn/repl#?browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=DwEwlgbgBAxgNgQwM5IHIILYFMC8AiBAB0LwD4AoKKUSWRFdbfAFzGbizOAHpwIKqNaPGRpMuPDAD2AO2ZY5XXpAo8-pIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.11.6&externalPlugins=)
 
 ![Babel编译|1622x173](https://images-enpitsulin.oss-cn-beijing.aliyuncs.com/images/20220905165642.png)
 

@@ -31,7 +31,7 @@ npm install live2d-widget-model-hijiki
 
 往`_config.yml`文件中添加下列语句
 
-```yaml
+```yaml [_config.yml]
 # Live2D
 live2d:
   enable: true
