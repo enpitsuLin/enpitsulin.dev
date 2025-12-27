@@ -11,9 +11,16 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia/colada-nuxt',
     '@vueuse/nuxt',
+    '@nuxthub/core',
   ],
 
   devtools: { enabled: true },
+
+  hub: {
+    db: 'sqlite',
+    kv: true,
+    blob: true,
+  },
 
   components: {
     global: true,

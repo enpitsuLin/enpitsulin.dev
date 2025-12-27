@@ -1,7 +1,8 @@
 import type z from 'zod'
 import type { thoughtSchema } from '~~/shared/schema/thought'
 import type { Thought, ThoughtInKV } from '~~/shared/types/thought'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 import { parseMarkdownForThought } from '../markdown'
 
 export async function insertThought(
@@ -11,13 +12,11 @@ export async function insertThought(
   const kvKey = `thought:${thoughtId}`
   const parsed = await parseMarkdownForThought(data.content)
 
-  const drizzle = useDrizzle()
-
   const publishedAt = new Date()
 
   // Insert or update thought metadata in database
-  await drizzle
-    .insert(tables.thoughts)
+  await db
+    .insert(schema.thoughts)
     .values({
       id: thoughtId,
       mood: data.mood || null,
@@ -25,7 +24,7 @@ export async function insertThought(
       updatedAt: new Date(),
     })
     .onConflictDoUpdate({
-      target: tables.thoughts.id,
+      target: schema.thoughts.id,
       set: {
         mood: data.mood || null,
         publishedAt,
@@ -34,7 +33,7 @@ export async function insertThought(
     })
 
   // Store content and parsed result in KV
-  await useKV().set<ThoughtInKV>(kvKey, { content: data.content, parsed })
+  await kv.set<ThoughtInKV>(kvKey, { content: data.content, parsed })
 
   return {
     id: thoughtId,

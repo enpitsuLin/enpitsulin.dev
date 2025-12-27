@@ -1,6 +1,7 @@
 import type { Post } from '~~/shared/types/post'
+import { db } from 'hub:db'
+import { kv } from 'hub:kv'
 import { z } from 'zod'
-import { useDrizzle } from '~~/server/utils/drizzle'
 import { exportPostToMarkdown } from '~~/shared/utils/post-export'
 
 const paramsSchema = z.object({
@@ -18,7 +19,7 @@ export default eventHandler(async (event) => {
   const { slug } = validateParams.data
 
   // Get post from database (no publishedAt check for admin)
-  const dbPost = await useDrizzle().query.post.findFirst({
+  const dbPost = await db.query.post.findFirst({
     where: (post, { eq: eqFn }) => eqFn(post.slug, slug),
     with: {
       postTags: {
@@ -35,7 +36,7 @@ export default eventHandler(async (event) => {
 
   // Get content from KV
   const kvKey = `post:${slug}`
-  const kvPost = await useKV().get<PostInKV>(kvKey)
+  const kvPost = await kv.get<PostInKV>(kvKey)
 
   if (!kvPost) {
     throw createError({ statusCode: 404, message: 'Post content not found' })

@@ -1,24 +1,24 @@
 import { and, desc, eq, lt } from 'drizzle-orm'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 
 export default eventHandler(async (event) => {
   const query = getQuery(event)
   const limit = query.limit ? Number.parseInt(query.limit as string) : 10
   const cursor = query.cursor ? Number.parseInt(query.cursor as string) : null
 
-  const drizzle = useDrizzle()
-
   // Build where condition for cursor-based pagination
   const whereConditions = cursor
     ? and(
-        eq(tables.thoughts.isDelete, false),
-        lt(tables.thoughts.publishedAt, new Date(cursor * 1000)),
+        eq(schema.thoughts.isDelete, false),
+        lt(schema.thoughts.publishedAt, new Date(cursor * 1000)),
       )
-    : eq(tables.thoughts.isDelete, false)
+    : eq(schema.thoughts.isDelete, false)
 
   // Query thoughts from database with cursor-based pagination
-  const dbThoughts = await drizzle.query.thoughts.findMany({
+  const dbThoughts = await db.query.thoughts.findMany({
     where: whereConditions,
-    orderBy: desc(tables.thoughts.publishedAt),
+    orderBy: desc(schema.thoughts.publishedAt),
     limit: limit + 1, // Fetch one extra to check if there's more
   })
 
@@ -30,7 +30,7 @@ export default eventHandler(async (event) => {
   const thoughts = await Promise.all(
     thoughtsToProcess.map(async (dbThought) => {
       const kvKey = `thought:${dbThought.id}`
-      const kvThought = await useKV().get<ThoughtInKV>(kvKey)
+      const kvThought = await kv.get<ThoughtInKV>(kvKey)
 
       if (!kvThought) {
         // Skip thoughts that don't exist in KV

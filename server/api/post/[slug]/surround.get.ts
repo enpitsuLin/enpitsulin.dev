@@ -1,5 +1,6 @@
-import type { SelectPost } from '~~/server/utils/drizzle'
+import type { SelectPost } from 'hub:db:schema'
 import { asc, desc } from 'drizzle-orm'
+import { db, schema } from 'hub:db'
 import { z } from 'zod'
 
 const paramsSchema = z.object({
@@ -13,10 +14,8 @@ export default eventHandler(async (event) => {
   }
   const { slug } = validateParams.data
 
-  const drizzle = useDrizzle()
-
   // Find current post
-  const currentPost = await drizzle.query.post.findFirst({
+  const currentPost = await db.query.post.findFirst({
     where: (post, { and: andFn, eq: eqFn }) =>
       andFn(
         eqFn(post.slug, slug),
@@ -31,25 +30,25 @@ export default eventHandler(async (event) => {
   const currentPublishedAt = currentPost.publishedAt
 
   // Find previous post (published before current, ordered by publishedAt desc)
-  const previousPost = await drizzle.query.post.findFirst({
+  const previousPost = await db.query.post.findFirst({
     where: (post, { and, eq: eqFn, isNotNull: isNotNullFn, lt: ltFn }) =>
       and(
         isNotNullFn(post.publishedAt),
         eqFn(post.isDelete, false),
         ltFn(post.publishedAt, currentPublishedAt),
       ),
-    orderBy: desc(tables.post.publishedAt),
+    orderBy: desc(schema.post.publishedAt),
   })
 
   // Find next post (published after current, ordered by publishedAt asc)
-  const nextPost = await drizzle.query.post.findFirst({
+  const nextPost = await db.query.post.findFirst({
     where: (post, { and, eq: eqFn, isNotNull: isNotNullFn, gt: gtFn }) =>
       and(
         isNotNullFn(post.publishedAt),
         eqFn(post.isDelete, false),
         gtFn(post.publishedAt, currentPublishedAt),
       ),
-    orderBy: asc(tables.post.publishedAt),
+    orderBy: asc(schema.post.publishedAt),
   })
 
   // Get post info from database (title is now in database)

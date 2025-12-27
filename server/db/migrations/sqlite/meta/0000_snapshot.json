@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "9cb6be1f-f30f-44c9-a27b-5b509bf1d959",
-  "prevId": "9dfc4b53-d23a-4ae9-abc8-6a3636cb9841",
+  "id": "26803f66-a497-485c-9063-62f77559a946",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "posts": {
       "name": "posts",
@@ -58,6 +58,14 @@
           "notNull": false,
           "autoincrement": false,
           "default": "(unixepoch('now'))"
+        },
+        "is_delete": {
+          "name": "is_delete",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         }
       },
       "indexes": {
@@ -235,6 +243,14 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(unixepoch('now'))"
+        },
+        "is_delete": {
+          "name": "is_delete",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         }
       },
       "indexes": {

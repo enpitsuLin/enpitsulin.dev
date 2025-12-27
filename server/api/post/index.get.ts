@@ -1,21 +1,20 @@
 import type { Post } from '~~/shared/types/post'
 import { and, desc, eq, isNotNull, sql } from 'drizzle-orm'
-import { tables, useDrizzle } from '~~/server/utils/drizzle'
+import { db, schema } from 'hub:db'
+import { kv } from 'hub:kv'
 
 export default eventHandler(async (event) => {
   const query = getQuery(event)
   const limit = query.limit ? Number.parseInt(query.limit as string) : 10
   const offset = query.offset ? Number.parseInt(query.offset as string) : 0
 
-  const drizzle = useDrizzle()
-
   // Query posts from database with pagination
-  const dbPosts = await drizzle.query.post.findMany({
+  const dbPosts = await db.query.post.findMany({
     where: and(
-      isNotNull(tables.post.publishedAt),
-      eq(tables.post.isDelete, false),
+      isNotNull(schema.post.publishedAt),
+      eq(schema.post.isDelete, false),
     ),
-    orderBy: desc(tables.post.publishedAt),
+    orderBy: desc(schema.post.publishedAt),
     limit,
     offset,
     with: {
@@ -28,13 +27,13 @@ export default eventHandler(async (event) => {
   })
 
   // Get total count for pagination
-  const totalResult = await drizzle
+  const totalResult = await db
     .select({ count: sql<number>`count(*)` })
-    .from(tables.post)
+    .from(schema.post)
     .where(
       and(
-        isNotNull(tables.post.publishedAt),
-        eq(tables.post.isDelete, false),
+        isNotNull(schema.post.publishedAt),
+        eq(schema.post.isDelete, false),
       ),
     )
 
@@ -44,7 +43,7 @@ export default eventHandler(async (event) => {
   const posts = await Promise.all(
     dbPosts.map(async (dbPost) => {
       const kvKey = `post:${dbPost.slug}`
-      const kvPost = await useKV().get<PostInKV>(kvKey)
+      const kvPost = await kv.get<PostInKV>(kvKey)
 
       if (!kvPost) {
         // Skip posts that don't exist in KV
