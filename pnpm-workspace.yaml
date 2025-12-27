@@ -1,9 +1,15 @@
 cleanupUnusedCatalogs: true
 
+ignoredBuiltDependencies:
+  - vue-demi
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
+  - sharp
+  - simple-git-hooks
   - unrs-resolver
+  - workerd
 
 shellEmulator: true
 

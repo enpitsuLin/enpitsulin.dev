@@ -64,6 +64,9 @@ importers:
       ufo:
         specifier: ^1.6.1
         version: 1.6.1
+      unstorage:
+        specifier: ^1.17.3
+        version: 1.17.3(db0@0.3.4(@libsql/client@0.15.15)(drizzle-orm@0.45.1(@cloudflare/workers-types@4.20251225.0)(@libsql/client@0.15.15)(kysely@0.28.8)))(ioredis@5.8.2)
       vue:
         specifier: ^3.5.26
         version: 3.5.26(typescript@5.9.3)
