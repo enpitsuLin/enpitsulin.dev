@@ -7,10 +7,15 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@nuxthub/core',
     '@nuxt/content',
+    'nuxt-og-image',
     'nuxt-studio',
   ],
 
   devtools: { enabled: true },
+
+  routeRules: {
+    'feed.xml': { prerender: true },
+  },
 
   hub: {
     db: 'sqlite',
@@ -19,14 +24,27 @@ export default defineNuxtConfig({
   },
 
   studio: {
-    repository: {
-      provider: 'github', // 'github' or 'gitlab'
-      owner: 'enpitsuLin',
-      repo: 'enpitsulin.dev',
-      branch: 'main',
-    },
-    i18n: {
-      defaultLocale: 'zh',
+    dev: false,
+  },
+
+  ogImage: {
+    fonts: [
+      'Noto+Sans+SC:400',
+    ],
+    zeroRuntime: true,
+  },
+
+  $production: {
+    studio: {
+      repository: {
+        provider: 'github', // 'github' or 'gitlab'
+        owner: 'enpitsuLin',
+        repo: 'enpitsulin.dev',
+        branch: 'main',
+      },
+      i18n: {
+        defaultLocale: 'zh',
+      },
     },
   },
 
@@ -73,6 +91,7 @@ export default defineNuxtConfig({
   experimental: {
     typedPages: true,
     viewTransition: true,
+    inlineRouteRules: true,
   },
 
   runtimeConfig: {
@@ -109,7 +128,7 @@ export default defineNuxtConfig({
         ],
       },
     },
-    moduleSideEffects: ['reflect-metadata'],
+
     esbuild: {
       options: {
         target: 'esnext',
@@ -120,6 +139,10 @@ export default defineNuxtConfig({
     },
     unenv: {
       external: ['cloudflare:workers'],
+    },
+    prerender: {
+      crawlLinks: true,
+      routes: ['/'],
     },
     // minify: false,
   },
