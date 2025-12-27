@@ -11,7 +11,7 @@ definePageMeta({
 const route = useRoute('blog-tag-tag-page')
 
 const { data: posts } = await useAsyncData(
-  () => `blog-page-${route.params.page || 1}`,
+  () => `blog-tag-page-${route.params.page || 1}`,
   () => {
     return queryCollection('blog')
       .where('tags', 'LIKE', `%${route.params.tag}%`)
