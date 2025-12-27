@@ -6,6 +6,8 @@ defineOptions({
 definePageMeta({
   layout: 'home',
 })
+
+defineRouteRules({ prerender: true })
 </script>
 
 <template>

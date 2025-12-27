@@ -7,6 +7,8 @@ const { data: value } = await useAsyncData('about-page', () => queryCollection('
 
 if (!value.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
+
+defineRouteRules({ prerender: true })
 </script>
 
 <template>

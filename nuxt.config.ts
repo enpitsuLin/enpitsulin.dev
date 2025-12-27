@@ -92,6 +92,8 @@ export default defineNuxtConfig({
     typedPages: true,
     viewTransition: true,
     inlineRouteRules: true,
+    payloadExtraction: false,
+    renderJsonPayloads: true,
   },
 
   runtimeConfig: {

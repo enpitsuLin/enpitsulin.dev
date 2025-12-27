@@ -8,6 +8,8 @@ definePageMeta({
   layout: 'home',
 })
 
+defineRouteRules({ prerender: true })
+
 const route = useRoute('blog-tag-tag-page')
 
 const { data: posts } = await useAsyncData(
