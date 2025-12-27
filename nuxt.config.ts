@@ -20,6 +20,15 @@ export default defineNuxtConfig({
     blob: true,
   },
 
+  studio: {
+    repository: {
+      provider: 'github', // 'github' or 'gitlab'
+      owner: 'enpitsuLin',
+      repo: 'enpitsulin.dev',
+      branch: 'main',
+    },
+  },
+
   mdc: {
     components: {
       map: {
