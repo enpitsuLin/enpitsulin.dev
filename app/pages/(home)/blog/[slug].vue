@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { visit } from '@nuxt/content/runtime'
 import { estimate } from 'lesetid'
 
 defineOptions({
@@ -41,7 +42,6 @@ const surroundData = computed(() => ({
   previous: surround.value?.at(1) ?? null,
   next: surround.value?.at(0) ?? null,
 }))
-import { visit } from '@nuxt/content/runtime'
 
 const estimation = computed(() => {
   if (!page.value?.body)
