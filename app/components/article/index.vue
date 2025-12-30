@@ -51,7 +51,7 @@ const { article, delay = 0 } = defineProps<Props>()
         :datetime="article.publishedAt"
       />
       <div flex="~ gap-1 wrap" pr-10>
-        <ArticleTag v-for="tag in article.tags" :key="tag" :tag text-xs />
+        <ArticleTag v-for="tag in article.tags" :key="tag" :tag text-xs! />
       </div>
     </div>
   </article>
