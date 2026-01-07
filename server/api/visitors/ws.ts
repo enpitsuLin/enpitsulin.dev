@@ -17,10 +17,14 @@ export default defineWebSocketHandler({
 })
 
 function uniquePeers(peers: Peer[]) {
-  return new Set(peers.map(p => getClientIP(p.request as Request)))
+  return new Set(peers.map(p => getClientIP(p.request as Request)).filter(Boolean))
 }
 
 function getClientIP(request: Request) {
+  if (!request.headers) {
+    console.error('No headers found in request', request)
+    return null
+  }
   const xForwardedFor = request.headers.get('x-forwarded-for')
   if (xForwardedFor) {
     // 'x-forwarded-for' may contain a list of addresses, grab the first one
