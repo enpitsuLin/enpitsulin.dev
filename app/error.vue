@@ -8,7 +8,7 @@ const isDev = import.meta.env.DEV
 </script>
 
 <template>
-  <NuxtLayout>
+  <NuxtLayout name="home">
     <div flex="~ col items-center justify-center">
       <h2 pb-4 text-3xl>
         {{ error.statusCode }}
@@ -19,7 +19,7 @@ const isDev = import.meta.env.DEV
         </code>
       </pre>
       <UiButton @click="handleError">
-        Clear errors
+        返回首页
       </UiButton>
     </div>
   </NuxtLayout>

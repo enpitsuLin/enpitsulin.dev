@@ -32,7 +32,7 @@
     "lesetid": "^2.0.7",
     "motion-v": "^1.7.6",
     "nuxt": "^4.2.2",
-    "nuxt-studio": "1.0.0-beta.3",
+    "nuxt-studio": "^1.0.0",
     "rehype-unwrap-images": "^1.0.0",
     "ufo": "^1.6.2",
     "unstorage": "^1.17.3",
