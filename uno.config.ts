@@ -104,4 +104,7 @@ export default defineConfig<Theme>({
     transformerDirectives(),
     transformerVariantGroup(),
   ],
+  blocklist: [
+    'm[pascalCase(component)]',
+  ],
 })
