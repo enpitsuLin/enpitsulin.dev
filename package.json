@@ -2,7 +2,7 @@
   "name": "enpitsulin-dev",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.26.2",
+  "packageManager": "pnpm@10.27.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -30,15 +30,15 @@
     "drizzle-orm": "^0.45.1",
     "feed": "^5.1.0",
     "lesetid": "^2.0.7",
-    "motion-v": "^1.7.4",
+    "motion-v": "^1.7.6",
     "nuxt": "^4.2.2",
     "nuxt-studio": "1.0.0-beta.3",
     "rehype-unwrap-images": "^1.0.0",
-    "ufo": "^1.6.1",
+    "ufo": "^1.6.2",
     "unstorage": "^1.17.3",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
@@ -57,7 +57,7 @@
     "crossws": "0.3.5",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
-    "eslint-plugin-format": "^1.1.0",
+    "eslint-plugin-format": "^1.2.0",
     "lint-staged": "^16.2.7",
     "nuxt-og-image": "^5.1.13",
     "prettier": "^3.7.4",
