@@ -29,7 +29,7 @@ const { article } = defineProps<Props>()
     </div>
 
     <NuxtLink
-      :to="{ name: 'blog-slug', params: { slug: article.meta.slug } }"
+      :to="article.path"
       relative z-10 mt-1 flex items-center text-sm text-accent font-medium
     >
       立即阅读

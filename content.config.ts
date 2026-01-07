@@ -12,7 +12,6 @@ const blog = defineCollection({
       children: z.any(),
     }),
     meta: z.object({
-      slug: z.string(),
       estimation: z.object({
         text: z.string(),
         minutes: z.number(),
