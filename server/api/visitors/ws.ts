@@ -28,7 +28,7 @@ function getClientIP(request: Request) {
   const xForwardedFor = request.headers.get('x-forwarded-for')
   if (xForwardedFor) {
     // 'x-forwarded-for' may contain a list of addresses, grab the first one
-    return xForwardedFor.split(',')[0].trim()
+    return xForwardedFor.split(',')[0]!.trim()
   }
 
   return request.headers.get('cf-connecting-ipv6') || request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip')
