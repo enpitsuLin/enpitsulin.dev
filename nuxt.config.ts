@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     'nuxt-og-image',
     'nuxt-studio',
+    '@nuxt/fonts',
   ],
 
   devtools: { enabled: true },
@@ -97,7 +98,7 @@ export default defineNuxtConfig({
   },
 
   future: { compatibilityVersion: 4 },
-  compatibilityDate: '2025-12-02',
+  compatibilityDate: '2026-04-03',
 
   nitro: {
     preset: 'cloudflare-durable',

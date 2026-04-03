@@ -29,7 +29,7 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () =>
 const title = page.value?.seo?.title || page.value?.title
 const description = page.value?.seo?.description || page.value?.description
 
-defineOgImageComponent('BlogPost', { title })
+defineOgImage('BlogPost', { title })
 
 useSeoMeta({
   title,
