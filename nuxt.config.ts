@@ -25,10 +25,13 @@ export default defineNuxtConfig({
   },
 
   ogImage: {
-    fonts: [
-      'Noto+Sans+SC:400',
-    ],
     zeroRuntime: true,
+  },
+
+  fonts: {
+    families: [
+      { name: 'Noto+Sans+SC', weights: [400], global: true },
+    ],
   },
 
   studio: {
@@ -142,6 +145,16 @@ export default defineNuxtConfig({
       routes: ['/'],
     },
     // minify: false,
+  },
+
+  vite: {
+    optimizeDeps: {
+      include: [
+        '@ark-ui/vue/*',
+        '@ark-ui/vue',
+        'motion-v',
+      ],
+    },
   },
 
   eslint: {
