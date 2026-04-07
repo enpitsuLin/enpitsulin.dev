@@ -1,5 +1,5 @@
-import type { DataLoaderPluginOptions } from 'unplugin-vue-router/data-loaders'
-import { DataLoaderPlugin } from 'unplugin-vue-router/data-loaders'
+import type { DataLoaderPluginOptions } from 'vue-router/experimental'
+import { DataLoaderPlugin } from 'vue-router/experimental'
 
 export default defineNuxtPlugin({
   name: 'data-loaders',
