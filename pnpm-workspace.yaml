@@ -1,3 +1,13 @@
+allowBuilds:
+  '@parcel/watcher': true
+  better-sqlite3: true
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+  unrs-resolver: false
+  vue-demi: false
+  workerd: true
+
 cleanupUnusedCatalogs: true
 
 ignoredBuiltDependencies:
