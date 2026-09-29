@@ -5,7 +5,6 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
-    '@nuxthub/core',
     '@nuxt/content',
     'nuxt-og-image',
     'nuxt-studio',
@@ -16,12 +15,6 @@ export default defineNuxtConfig({
 
   routeRules: {
     'feed.xml': { prerender: true },
-  },
-
-  hub: {
-    db: 'sqlite',
-    kv: true,
-    blob: true,
   },
 
   ogImage: {
@@ -104,6 +97,13 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'cloudflare-durable',
+    typescript: {
+      tsConfig: {
+        compilerOptions: {
+          types: ['@cloudflare/workers-types'],
+        },
+      },
+    },
     cloudflare: {
       nodeCompat: true,
       deployConfig: true,
@@ -163,6 +163,10 @@ export default defineNuxtConfig({
   },
 
   typescript: {
-
+    tsConfig: {
+      compilerOptions: {
+        types: ['@cloudflare/workers-types'],
+      },
+    },
   },
 })

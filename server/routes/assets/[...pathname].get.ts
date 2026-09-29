@@ -1,4 +1,5 @@
-import { blob } from 'hub:blob'
+import { env } from 'cloudflare:workers'
+import mime from 'mime'
 
 export default eventHandler(async (event) => {
   const { pathname } = event.context.params || {}
@@ -9,5 +10,19 @@ export default eventHandler(async (event) => {
     })
   }
 
-  return blob.get(pathname)
+  const object = await env.BLOB.get(decodeURIComponent(pathname))
+  if (!object) {
+    throw createError({
+      status: 404,
+      message: 'Asset not found',
+    })
+  }
+
+  const headers = new Headers()
+  object.writeHttpMetadata(headers)
+  headers.set('content-length', object.size.toString())
+  headers.set('content-type', object.httpMetadata?.contentType || mime.getType(pathname) || 'application/octet-stream')
+  headers.set('etag', object.httpEtag)
+
+  return new Response(object.body, { headers })
 })

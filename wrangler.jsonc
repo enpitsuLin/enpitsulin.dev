@@ -17,15 +17,7 @@
     {
       "binding": "DB",
       "database_name": "enpitsulin-dev",
-      "database_id": "f8e5abb4-4eaa-4104-a8c9-f80877b93840",
-      "migrations_dir": "server/database/migrations"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "KV",
-      "id": "ad29053631484b5380ccc21791d92be5",
-      "preview_id": "enpitsulin-dev"
+      "database_id": "f8e5abb4-4eaa-4104-a8c9-f80877b93840"
     }
   ],
   "r2_buckets": [
