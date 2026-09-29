@@ -15,7 +15,7 @@ const { adChild = false, tag } = defineProps<{
   >
     <ark.a
       :as-child="adChild"
-      :href
+      :href="href ?? undefined"
       flex="inline items-center gap-1"
       p="x-2 y-1" rounded-md text-sm
       bg="zinc-100/50 dark:zinc-800/50 hover:zinc-200/50 dark:hover:zinc-700/50"

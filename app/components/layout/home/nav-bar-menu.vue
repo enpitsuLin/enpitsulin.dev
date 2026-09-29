@@ -42,9 +42,9 @@ const { navigation } = useAppConfig()
                 un-text="base text-zinc-800 dark:text-zinc-300"
                 class="-my-2 divide-y divide-zinc-500/20 dark:divide-zinc-100/5"
               >
-                <li v-for="{ href, label } in navigation" :key="label">
+                <li v-for="{ href: href, label } in navigation" :key="label">
                   <NuxtLink :to="href" custom block py-2>
-                    <template #default="{ navigate, href }">
+                    <template #default="{ navigate }">
                       <Dialog.CloseTrigger as-child @click="navigate">
                         <a :href="href">
                           {{ label }}

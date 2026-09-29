@@ -7,7 +7,8 @@ export default defineEventHandler(async (event) => {
       .order('publishedAt', 'DESC')
       .all()
 
-    const { title, description, siteUrl, author } = useAppConfig(event)
+    const { title, description, siteUrl, author } = useAppConfig()
+    const feedAuthor = { name: author }
 
     const feed = new Feed({
       title,
@@ -19,9 +20,9 @@ export default defineEventHandler(async (event) => {
       favicon: `${siteUrl}/favicon.ico`,
       copyright: `All rights reserved ${new Date().getFullYear()}, enpitsulin`,
       feedLinks: {
-        rss2: `${siteUrl}/feed.xml`,
+        rss: `${siteUrl}/feed.xml`,
       },
-      author,
+      author: feedAuthor,
     })
 
     posts.forEach((post) => {
@@ -32,7 +33,7 @@ export default defineEventHandler(async (event) => {
         id: link,
         date: new Date(post.publishedAt),
         link,
-        author: [author],
+        author: [feedAuthor],
         category: post.tags?.map((tag: string) => ({ name: tag })) || [],
       })
     })

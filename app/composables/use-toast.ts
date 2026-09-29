@@ -1,7 +1,7 @@
 import type { createToaster } from '@ark-ui/vue/toast'
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, VNodeChild } from 'vue'
 
-export const toastInjectionKey = Symbol('toast') as InjectionKey<ReturnType<typeof createToaster>>
+export const toastInjectionKey = Symbol('toast') as InjectionKey<ReturnType<typeof createToaster<VNodeChild>>>
 
 export function useToast() {
   const toast = inject(toastInjectionKey)
