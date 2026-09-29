@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { createToaster, Toast, Toaster } from '@ark-ui/vue/toast'
-import { toastInjectionKey } from './use-toast'
+import { toastInjectionKey } from '~/composables/use-toast'
 
 const toaster = createToaster({
   max: 5,

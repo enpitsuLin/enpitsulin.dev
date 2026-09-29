@@ -77,7 +77,6 @@ export default defineNuxtConfig({
   },
 
   components: {
-    global: true,
     dirs: [
       {
         path: '~/components/modules',
