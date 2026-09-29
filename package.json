@@ -12,6 +12,7 @@
     "deploy": "pnpm run build && wrangler deploy",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "typecheck": "nuxt typecheck",
     "cf-typegen": "wrangler types",
     "db:generate": "nuxt db generate",
     "db:migrate": "nuxt db migrate",
@@ -67,6 +68,7 @@
     "simple-git-hooks": "^2.14.0",
     "typescript": "^6.0.3",
     "unocss": "^66.10.5",
+    "vue-tsc": "^3.3.11",
     "wrangler": "^4.142.0"
   },
   "simple-git-hooks": {
