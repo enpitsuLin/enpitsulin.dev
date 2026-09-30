@@ -35,10 +35,10 @@ npm install -D @vue/runtime-dom
 
 然后在项目的 jsconfig.json 中增加下面两个设置
 
-```json [tsconfig.json]
+```jsonc [tsconfig.json]
 {
   "compilerOptions": {
-    "types": ["unplugin-vue2-script-setup/types"] // [!code++]
+    "types": ["unplugin-vue2-script-setup/types"] // [!code ++]
   },
   "vueCompilerOptions": {
     "experimentalCompatMode": 2
@@ -52,7 +52,7 @@ npm install -D @vue/runtime-dom
 
 对于 setup 语法糖引入的组件 Volar 不能很好的对其做出正确的代码染色和类型补全,所以我建议将对组件的命名和子组件引入分开到另一个 script 代码块，如
 
-```html
+```vue
 <script>
   import { defineComponent } from '@vue/composition-api'
   import HelloWorld from './components/HelloWorld.vue'

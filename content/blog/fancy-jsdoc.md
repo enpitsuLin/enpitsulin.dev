@@ -19,7 +19,7 @@ jsdoc 提供了一种非侵入式的手段为项目增加类型检查，但是�
 
 其实大多数时候我们写注释的时候总会用到 Jsdoc 例如
 
-```javascript
+```js
 /**
  * @desc 删除用户
  * @param id 用户id
@@ -50,7 +50,7 @@ function deleteUser(id) {
 
 ### 启用类型错误提示
 
-```javascript
+```js
 // @ts-check
 ```
 
@@ -76,7 +76,7 @@ function deleteUser(id) {
 
 这可能是最常用的一个标签了,一般用于声明一个变量的类型
 
-```javascript
+```js
 /** @type {number} */
 const CURRENT_YEAR = 2021
 /** @type {{name:string;sex:'male'|'female'}} */
@@ -92,17 +92,17 @@ const onePerson: { name: string, sex: 'male' | 'female' } = { name: 'unknown', s
 
 大多数 ts 的用法都是支持的 比如 tagName 为 HTML 标签的类型
 
-```javascript {0}
+```js
 /** @type {keyof HTMLElementTagNameMap} */
-- let tagName = 'adsad'; //wrong
-+ let tagName = 'div';
+let tagName = 'adsad'; // wrong // [!code --]
+let tagName = 'div'; // [!code ++]
 ```
 
 ### 定义可复用的类型
 
 jsdoc 中可以使用仅使用注释编写的文件来完成自定义类型的复用为虚拟注释,
 
-```javascript
+```js
 // Person.js
 /**
  * 定义Person类型
@@ -124,7 +124,7 @@ interface Person {
 
 而且得益于 VSCode 的强大，在使用 `@type` 标签的时候会自动使用项目中经过 `@typedef` 的类型,但是对于重名的可能会需要手动导入使用(不开启//ts-check 时)
 
-```javascript
+```js
 /** @type {import('./src/typings/ELement').Element} */
 ```
 
@@ -134,7 +134,7 @@ interface Person {
 
 与 Typescript 的命名空间类似 jsdoc 也同样能提供避免与其他第三方库中类型声明重复的方法就是命名空间
 
-```javascript
+```js
 /**
  * @namespace React
  */
@@ -153,7 +153,7 @@ interface Person {
 
 基础类型无法满足需求可以使用`@template`来定义泛型
 
-```javascript
+```js
 /**
  * @template T
  * @typedef {object} generics
@@ -164,7 +164,7 @@ interface Person {
 
 对于一些可能需要泛型的函数可以直接使用typescript 的方式
 
-```javascript
+```js
 /**
  * @typedef {<T>(a:T,a:T)=>T} Add
  */
@@ -174,13 +174,13 @@ interface Person {
 
 对于更精细的类型我们甚至可以放在typescript文件中并通过导入功能导入
 
-```javascript:import.js
+```js [import.js]
 /**
  * @typedef {import('./test').Toc} Toc
  */
 ```
 
-```typescript:export.js
+```ts [test.ts]
 export type Toc = {
   value: string
   depth: number

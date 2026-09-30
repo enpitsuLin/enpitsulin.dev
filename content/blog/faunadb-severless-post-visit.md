@@ -108,7 +108,7 @@ function visitPage(request) {
 
 首先我们为项目引入依赖
 
-```sh
+```bash
 pnpm add faunadb
 ```
 

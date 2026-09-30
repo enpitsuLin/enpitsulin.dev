@@ -30,14 +30,14 @@ JSX 到底是什么，我们先来看看 React 官网给出的一段定义：
 
 比如`ES2015+`中很好用的模板字符串语法糖：
 
-```javascript
+```js
 let text = 'World'
 console.log(`Hello ${text}!`) // Hello World!
 ```
 
 Babel 就可以帮我们把这段代码转换为大部分低版本浏览器也能够识别的 ES5 代码：
 
-```javascript
+```js
 let text = 'World'
 console.log('Hello'.concat(text, '!')) // Hello World!
 ```
@@ -58,7 +58,7 @@ console.log('Hello'.concat(text, '!')) // Hello World!
 
 先来看看 createElement 源码，这里是一段抄来的有注释的源码
 
-```javascript
+```js
 export function createElement(type, config, children) {
   var propName
   //提取保留名称
@@ -159,7 +159,7 @@ export function createElement(type, config, children) {
 
 比如下面的调用示例
 
-```javascript
+```js
 React.createElement(
   'ul',
   {
@@ -186,7 +186,7 @@ React.createElement(
 
 它对应的 DOM 结构如下
 
-```html
+```jsx
 <ul className="list">
   <li key="1">1</li>
   <li key="2">2</li>
@@ -197,7 +197,7 @@ React.createElement(
 
 ### 拆解 config 参数
 
-```javascript
+```js
 if (config != null) {
   // 有合理的ref
   if (hasValidRef(config)) {
@@ -226,7 +226,7 @@ if (config != null) {
 
 从上面分解 config 之后是处理子元素的代码，此处将第二个参数以后的所有参数都存入`props.children`数组
 
-```javascript
+```js
 // Children can be more than one argument, and those are transferred onto
 // the newly allocated props object.
 // 子元素数量（第三个参数以及之后参数都是子元素 兄弟节点）
@@ -253,7 +253,7 @@ else if (childrenLength > 1) {
 
 接下来就是处理当父组件给 children 传入 props 情况，如果子组件设置了默认值并且父组件未传入 props(即值为`undefined`) 时使用提供的默认值。
 
-```javascript
+```js
 // 为子组件设置默认值 一般针对的是组件
 // class com extends React.component 则com.defaultProps获取当前组件自己的静态方法
 if (type && type.defaultProps) {

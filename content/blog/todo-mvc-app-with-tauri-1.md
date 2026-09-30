@@ -17,7 +17,7 @@ Rust 学的一头雾水？错，是太难了根本学不会，直接上实践就
 
 不过我是用 pnpm 做包管理，pnpm 创建项目运行如下
 
-```sh
+```bash
 pnpm create tauri-app
 ```
 
@@ -35,7 +35,7 @@ pnpm create tauri-app
 
 首先我们直接使用 TodoMVC 这个项目提供的 css，安装`todomvc-app-css`
 
-```sh
+```bash
 pnpm add todomvc-app-css
 ```
 
@@ -135,7 +135,7 @@ export default App
 
 然后启动 tauri，就可以看到效果了
 
-```sh
+```bash
 pnpm tauri dev
 ```
 
@@ -160,7 +160,7 @@ pnpm tauri dev
 ```toml [Cargo.toml]
 [dependencies]
 # ...
-rusqlite = { version = "0.27.0", features = ["bundled"] } // [!code ++]
+rusqlite = { version = "0.27.0", features = ["bundled"] } # [!code ++]
 ```
 
 ### 对 sqlite 数据库的操作
@@ -452,7 +452,7 @@ fn toggle_done(id: String) -> bool {
 
 以及别忘了在 generate\_handler 中增加
 
-```rust [main.rs] {0}
+```rust [main.rs]
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![

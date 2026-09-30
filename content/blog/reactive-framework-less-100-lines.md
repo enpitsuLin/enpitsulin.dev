@@ -32,7 +32,7 @@ publishedAt: 2023-05-30T14:39:00.000Z
 
 但是他这一部分的实现是比较巧妙的，不需要声明所有的tag作为属性，而是通过 Proxy包装一个函数做 target 和设置了一个 handler 来处理获取属性
 
-```javascript
+```js
 // name形参实际上是解构的 properties name, ...args 才是最终实际上使用的函数参数
 let tags = new Proxy((name, ...args) => {
   // 由于允许不传标签 props/attrs 所以处理下使props有一个值
@@ -70,7 +70,7 @@ vanjs 提供了 state 函数来提供状态,其实本质就是实现一个响应
 
 首先是定义了 `stateProto` 作为state的原型
 
-```javascript
+```js
 let stateProto = {
   get "val"() { return this._val },
 
@@ -112,7 +112,7 @@ vanjs 提供了[`bind`](https://vanjs.org/tutorial#api-bind){rel="&#x22;nofollow
 
 PS:我给vanjs贡献的就是这个函数的签名类型,简单的跳了个类型体操解决原先手写10个函数重载但实际上还是不够用的的签名😁
 
-```javascript
+```js
 let bind = (...deps) => {
   let [func] = deps.splice(-1, 1)
   let result = func(...deps.map(d => d._val))
@@ -134,7 +134,7 @@ let bind = (...deps) => {
 
 然后就是当对 `State.val`进行修改的时候会触发调度任务来进行副作用的执行通过 `updateDoms`这个函数,回到`stateProto`这个原型对象中可以看到 val 的 setter 函数中的逻辑是当 setter 传入的值与当前值`_val`不同时会进行一系列逻辑
 
-```javascript
+```js
 set "val"(value) {
   // Aliasing `this` to reduce the bundle size.
   let self = this, currentVal = self._val
@@ -169,7 +169,7 @@ PS:不过这里还是有引用类型比较的问题,还是造成shlldowRef的效
 
 ### 执行副作用
 
-```javascript
+```js
 let updateDoms = () => {
   let changedStatesArray = [...changedStates]
   changedStates = _undefined

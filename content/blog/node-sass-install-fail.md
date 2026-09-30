@@ -49,13 +49,13 @@ npm config set sass-binary-site http://npm.taobao.org/mirrors/node-sass
 
 node-sass 除了 npm 部分的代码，还会下载二进制文件，但是默认源是 github，总所周知,github 国内访问较慢,特殊时期甚至无法访问。我们也可以将其改成国内源,直接添加一条环境变量:
 
-```bash
+```bat
 set SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass/ && npm install node-sass
 ```
 
 或者可以在项目内添加一条`.npmrc` 文件然后添加
 
-```text
+```ini [.npmrc]
 sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
 ```
 
@@ -93,7 +93,7 @@ node -p "[process.platform, process.arch, process.versions.modules].join('-')"
 
 ```bash
 npm config set sass-binary-path 你存放刚才下载的二进制文件的目录
-// 例如 npm config set sass-binary-path e:/web/win32-x64-48_binding.node
+# 例如 npm config set sass-binary-path e:/web/win32-x64-48_binding.node
 ```
 
 然后`npm i`应该就完事了,但是这个方法的确定就是无法更新 node-sass 的版本了,建议前面的方法都解决不了在尝试.
