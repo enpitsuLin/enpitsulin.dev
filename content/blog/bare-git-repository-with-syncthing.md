@@ -52,6 +52,6 @@ In conclusion, leveraging the power of Git and Syncthing together can simplify t
 
 ## Related
 
-- [Git bare repository](https://git-scm.com/book/en/v2/Git-on-the-Server-Getting-Git-on-a-Server){rel="&#x22;nofollow&#x22;"}
-- [Ignoring files in Git](https://git-scm.com/docs/gitignore){rel="&#x22;nofollow&#x22;"}
-- [Syncthing ignoring-files](https://docs.syncthing.net/users/ignoring.html#ignoring-files){rel="&#x22;nofollow&#x22;"}
+- [Git bare repository](https://git-scm.com/book/en/v2/Git-on-the-Server-Getting-Git-on-a-Server){rel="nofollow"}
+- [Ignoring files in Git](https://git-scm.com/docs/gitignore){rel="nofollow"}
+- [Syncthing ignoring-files](https://docs.syncthing.net/users/ignoring.html#ignoring-files){rel="nofollow"}

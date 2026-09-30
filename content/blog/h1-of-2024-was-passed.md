@@ -40,9 +40,9 @@ publishedAt: 2024-07-01T16:00:00.000Z
 
 因为 CSB 给我打开了视野~~还给我带来了人生第一笔空投的机会~~，所以有在关注 RSS3 ~~的价格，最近走势不太行啊，团队做做事啊😭~~
 
-之前也有一个想[基于 CSB 重构博客的想法](https://github.com/enpitsuLin/enpitsuLin.xyz-nuxt){rel="&#x22;nofollow&#x22;"}，但是因为 yak shaving 去看 TON 生态了暂时搁置一下，过段时间应该会把这个想法完善。
+之前也有一个想[基于 CSB 重构博客的想法](https://github.com/enpitsuLin/enpitsuLin.xyz-nuxt){rel="nofollow"}，但是因为 yak shaving 去看 TON 生态了暂时搁置一下，过段时间应该会把这个想法完善。
 
-还有就是 TON 生态，也为尝试了使用 Tact 开发 TON 智能合约还有简单搞了个 [prettier 插件](https://github.com/enpitsuLin/prettier-plugin-tact){rel="&#x22;nofollow&#x22;"}（也算是了解了 prettier 插件的开发XD）
+还有就是 TON 生态，也为尝试了使用 Tact 开发 TON 智能合约还有简单搞了个 [prettier 插件](https://github.com/enpitsuLin/prettier-plugin-tact){rel="nofollow"}（也算是了解了 prettier 插件的开发XD）
 
 ## 下半年的计划
 

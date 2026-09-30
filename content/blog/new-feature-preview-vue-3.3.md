@@ -10,7 +10,7 @@ publishedAt: 2023-04-26T16:00:00.000Z
 
 ## 泛型组件支持
 
-Vue[一直以来](https://github.com/vuejs/core/issues/3102){rel="&#x22;nofollow&#x22;"}都是没办法很好的实现泛型组件，终于在3.3版本增加了这一功能
+Vue[一直以来](https://github.com/vuejs/core/issues/3102){rel="nofollow"}都是没办法很好的实现泛型组件，终于在3.3版本增加了这一功能
 
 首先是面向TSX用户为`defineComponent` 工具函数增加了泛型支持，当参数传入一个泛型函数时类型会提示正常，比如我们可以基于这个特性使用tsx简单构造一个表格组件
 
@@ -91,7 +91,7 @@ const { columns, data } = defineProps<{
 
 ## defineProps 宏支持引入的类型
 
-[这个需求](https://github.com/vuejs/core/issues/4294){rel="&#x22;nofollow&#x22;"}已经2年过去了，不过大部分开发者都有使用一些社区插件来达到这个用法，现在官方终于提供了，在3.3我们可以轻松的使用外部导入的类型创建`Props`
+[这个需求](https://github.com/vuejs/core/issues/4294){rel="nofollow"}已经2年过去了，不过大部分开发者都有使用一些社区插件来达到这个用法，现在官方终于提供了，在3.3我们可以轻松的使用外部导入的类型创建`Props`
 
 ```vue
 <script setup lang="ts">
@@ -127,7 +127,7 @@ defineEmits<{
 
 ## 为v-model带来新的工具
 
-这是来自[智子君](https://github.com/sxzz){rel="&#x22;nofollow&#x22;"}的[新特性](https://github.com/vuejs/core/pull/8018){rel="&#x22;nofollow&#x22;"}，可以在`<script setup/>`中使用`defineModel`和非`<script setup/>`中使用的`useModel`工具
+这是来自[智子君](https://github.com/sxzz){rel="nofollow"}的[新特性](https://github.com/vuejs/core/pull/8018){rel="nofollow"}，可以在`<script setup/>`中使用`defineModel`和非`<script setup/>`中使用的`useModel`工具
 
 ```typescript
 // 默认的model (通过 `v-model`)
@@ -175,11 +175,11 @@ export default {
 }
 ```
 
-> 评价: 又一提升DX的利器，定义一个`v-model`的属性确实比较繁琐，而且在sfc内实用性不强，一般需要搭配[`vueuse/useVModels`](https://vueuse.org/core/useVModels/#usevmodels){rel="&#x22;nofollow&#x22;"}使用，官方加入这个宏和工具函数确实是很不错
+> 评价: 又一提升DX的利器，定义一个`v-model`的属性确实比较繁琐，而且在sfc内实用性不强，一般需要搭配[`vueuse/useVModels`](https://vueuse.org/core/useVModels/#usevmodels){rel="nofollow"}使用，官方加入这个宏和工具函数确实是很不错
 
 ## defineOptions
 
-又是智子君的pr，早前来自[RFC](https://github.com/vuejs/rfcs/discussions/430){rel="&#x22;nofollow&#x22;"}，这个内容的话应该不少人都在`Vue Macro`中用过了
+又是智子君的pr，早前来自[RFC](https://github.com/vuejs/rfcs/discussions/430){rel="nofollow"}，这个内容的话应该不少人都在`Vue Macro`中用过了
 
 本来Vue如果你需要在`<script setup>`中定义一些原先`Option Api`的属性比如`inheritAttrs/name`是需要创建一个`<script>`单独导出这两个属性的，现在有了`defineOptions`就可以省去这一步骤
 
@@ -204,11 +204,11 @@ defineOptions({
 </script>
 ```
 
-> 评价: 这个特性可以在[`Vue Macro`](https://vue-macros.sxzz.moe/macros/define-options.html){rel="&#x22;nofollow&#x22;"}使用到，先行体验，反正我是用上了很爽
+> 评价: 这个特性可以在[`Vue Macro`](https://vue-macros.sxzz.moe/macros/define-options.html){rel="nofollow"}使用到，先行体验，反正我是用上了很爽
 
 ## defineSlots 宏以及 slots 属性
 
-还是来自[智子君](https://github.com/vuejs/core/pull/7982){rel="&#x22;nofollow&#x22;"}，TQL
+还是来自[智子君](https://github.com/vuejs/core/pull/7982){rel="nofollow"}，TQL
 
 允许定义`slots`的具体类型，首先是新增了一个`SlotsType`以及`slots`属性可以`options api`中使用
 
@@ -265,7 +265,7 @@ const slots = defineSlots<{
 
 ### 对Suspense的改进
 
-个人觉得vue的`<Suspense>`可以暂时不用关注，实验性特性好久了，pr在[这里](https://github.com/vuejs/core/pull/6736){rel="&#x22;nofollow&#x22;"}
+个人觉得vue的`<Suspense>`可以暂时不用关注，实验性特性好久了，pr在[这里](https://github.com/vuejs/core/pull/6736){rel="nofollow"}
 
 ### 废弃和修改的特性
 
@@ -303,4 +303,4 @@ app.runWithContext(() => inject('foo')) // should return 1
 
 ## 需要注意的
 
-对于TSX用户,vue3.3不在默认注册全局JSX命名空间，需要手动在tsconfig.json中修改[jsxImportSource](https://www.typescriptlang.org/tsconfig#jsxImportSource){rel="&#x22;nofollow&#x22;"}或者使用魔法注释`/* @jsxImportSource vue */`这是避免全局jsx类型冲突。
+对于TSX用户,vue3.3不在默认注册全局JSX命名空间，需要手动在tsconfig.json中修改[jsxImportSource](https://www.typescriptlang.org/tsconfig#jsxImportSource){rel="nofollow"}或者使用魔法注释`/* @jsxImportSource vue */`这是避免全局jsx类型冲突。

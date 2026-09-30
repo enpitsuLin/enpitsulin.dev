@@ -13,7 +13,7 @@ Rust 学的一头雾水？错，是太难了根本学不会，直接上实践就
 
 ## 创建 Tauri 项目
 
-虽然根据[官方文档](https://tauri.studio/docs/getting-started/beginning-tutorial#1-start-a-new-tauri-project){rel="&#x22;nofollow&#x22;"}新建一个项目很简单。
+虽然根据[官方文档](https://tauri.studio/docs/getting-started/beginning-tutorial#1-start-a-new-tauri-project){rel="nofollow"}新建一个项目很简单。
 
 不过我是用 pnpm 做包管理，pnpm 创建项目运行如下
 
@@ -147,7 +147,7 @@ pnpm tauri dev
 
 实现 web 界面功能先放到一边，先来考虑下 rust 后端操作，先了解下 tauri 怎么通信的
 
-根据[官方文档](https://tauri.studio/docs/guides/command){rel="&#x22;nofollow&#x22;"}我们可以通过 TauriAPI 包或者设置`tauri.conf.json > build > withGlobalTauri`为 true 来将 invoke 挂载到 window.\_\_TAURI\_\_ 对象上，比较建议开启`withGlobalTauri`让一会的调试更简单，虽然 tauri 官方有 test 但是我觉得直接在控制台测试更简单
+根据[官方文档](https://tauri.studio/docs/guides/command){rel="nofollow"}我们可以通过 TauriAPI 包或者设置`tauri.conf.json > build > withGlobalTauri`为 true 来将 invoke 挂载到 window.\_\_TAURI\_\_ 对象上，比较建议开启`withGlobalTauri`让一会的调试更简单，虽然 tauri 官方有 test 但是我觉得直接在控制台测试更简单
 
 然后我们就可以使用 invoke 调用 rust 后端提供的方法了
 
@@ -155,7 +155,7 @@ pnpm tauri dev
 
 ### 使用 sqlite
 
-首先添加 [rusqlite](https://github.com/rusqlite/rusqlite){rel="&#x22;nofollow&#x22;"} 依赖来获得操作 sqlite 的能力
+首先添加 [rusqlite](https://github.com/rusqlite/rusqlite){rel="nofollow"} 依赖来获得操作 sqlite 的能力
 
 ```toml [Cargo.toml]
 [dependencies]
@@ -165,7 +165,7 @@ rusqlite = { version = "0.27.0", features = ["bundled"] } # [!code ++]
 
 ### 对 sqlite 数据库的操作
 
-参考 [rusqlite](https://github.com/rusqlite/rusqlite#readme){rel="&#x22;nofollow&#x22;"}的用法，我们创建一个方法来创建数据库连接。
+参考 [rusqlite](https://github.com/rusqlite/rusqlite#readme){rel="nofollow"}的用法，我们创建一个方法来创建数据库连接。
 
 ```rust
 fn connect() -> Result<()>{

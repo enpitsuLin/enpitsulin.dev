@@ -7,7 +7,7 @@ tags:
 publishedAt: 2025-11-27T16:00:00.000Z
 ---
 
-随着我的程序员生涯逐渐一年一年的经过，以及不停得在社交媒体上看过太多关于框架、语言这方面的讨论——诸如 Vue 和 React 的对比，后端语言的选择，Rustaceans vs Gophers——这种陈词滥调，最近看到 [Steve Francia](https://x.com/spf13){rel="&#x22;nofollow&#x22;"} 的一篇 [Why Engineers Can't Be Rational About Programming Languages](https://spf13.com/p/the-hidden-conversation/){rel="&#x22;nofollow&#x22;"} 激活了我对这方面的困惑和思考。
+随着我的程序员生涯逐渐一年一年的经过，以及不停得在社交媒体上看过太多关于框架、语言这方面的讨论——诸如 Vue 和 React 的对比，后端语言的选择，Rustaceans vs Gophers——这种陈词滥调，最近看到 [Steve Francia](https://x.com/spf13){rel="nofollow"} 的一篇 [Why Engineers Can't Be Rational About Programming Languages](https://spf13.com/p/the-hidden-conversation/){rel="nofollow"} 激活了我对这方面的困惑和思考。
 
 > 为什么技术选型会导致人们对其他选项理性看待的缺失？
 

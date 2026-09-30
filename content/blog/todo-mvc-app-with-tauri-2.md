@@ -10,7 +10,7 @@ publishedAt: 2022-05-02T17:32:00.000Z
 
 ## 使用 jotai 控制应用状态
 
-[jotai](https://github.com/pmndrs/jotai){rel="&#x22;nofollow&#x22;"} 是一个原子状态管理工具，名字其实就是日语的`状態`的罗马音，api 非常简洁，我们的前端项目就使用这个库来做状态管理。
+[jotai](https://github.com/pmndrs/jotai){rel="nofollow"} 是一个原子状态管理工具，名字其实就是日语的`状態`的罗马音，api 非常简洁，我们的前端项目就使用这个库来做状态管理。
 
 ### 前端项目中用到的类型声明
 
@@ -25,7 +25,7 @@ export interface Todo {
 }
 ```
 
-这里其实有一个[rust 包](https://github.com/Aleph-Alpha/ts-rs){rel="&#x22;nofollow&#x22;"}能够在编译的自动生成 ts 类型绑定，但是我们的项目不大直接自己写也没啥问题。
+这里其实有一个[rust 包](https://github.com/Aleph-Alpha/ts-rs){rel="nofollow"}能够在编译的自动生成 ts 类型绑定，但是我们的项目不大直接自己写也没啥问题。
 
 ### 定义原子
 
@@ -413,7 +413,7 @@ export default TodoItem
 
 ## 打包和分发
 
-我们只需要执行`pnpm tarui build`然后就可以在`tauri-src/target/release/bundle/msi`里找到 window 平台 的安装包了，想要自定义安装程序可以[参考](https://tauri.studio/docs/distribution/windows#customizing-the-windows-installer){rel="&#x22;nofollow&#x22;"}，至于 MacOS 和 linux 我也没尝试过~~所以鸽了~~理论上应该是可以跨平台运行的，但是不太清楚具体操作\_(:3」∠)\_
+我们只需要执行`pnpm tarui build`然后就可以在`tauri-src/target/release/bundle/msi`里找到 window 平台 的安装包了，想要自定义安装程序可以[参考](https://tauri.studio/docs/distribution/windows#customizing-the-windows-installer){rel="nofollow"}，至于 MacOS 和 linux 我也没尝试过~~所以鸽了~~理论上应该是可以跨平台运行的，但是不太清楚具体操作\_(:3」∠)\_
 
 ## 关于学习 rust 的讨论
 
@@ -425,7 +425,7 @@ export default TodoItem
 
 ## 参考资料
 
-- [tarui](https://tauri.studio/){rel="&#x22;nofollow&#x22;"} - 跨平台桌面程序开发框架，瘦身版的 electron
-- [TodoMVC](https://todomvc.com/){rel="&#x22;nofollow&#x22;"} - 经典的 web 框架开发实例
-- [rusqlite](https://github.com/rusqlite/rusqlite){rel="&#x22;nofollow&#x22;"} - sqlite with rust
-- [jotai](https://github.com/pmndrs/jotai){rel="&#x22;nofollow&#x22;"} - React 的一款 api 简洁用法灵活的状态管理工具
+- [tarui](https://tauri.studio/){rel="nofollow"} - 跨平台桌面程序开发框架，瘦身版的 electron
+- [TodoMVC](https://todomvc.com/){rel="nofollow"} - 经典的 web 框架开发实例
+- [rusqlite](https://github.com/rusqlite/rusqlite){rel="nofollow"} - sqlite with rust
+- [jotai](https://github.com/pmndrs/jotai){rel="nofollow"} - React 的一款 api 简洁用法灵活的状态管理工具

@@ -13,7 +13,7 @@ publishedAt: 2023-05-30T14:39:00.000Z
 ::github-repo{repo="vanjs-org/van"}
 ::
 
-简单预览了一下，发现确实很小，而且很适合研究它的底层实现方式，虽然代码风格过于极简主义导致可读性比较差(作者本人也[指出](https://vanjs.org/about#coding-style){rel="&#x22;nofollow&#x22;"})
+简单预览了一下，发现确实很小，而且很适合研究它的底层实现方式，虽然代码风格过于极简主义导致可读性比较差(作者本人也[指出](https://vanjs.org/about#coding-style){rel="nofollow"})
 
 但是通过一定的整理还是比较容易搞懂的，毕竟本体就不到100行（事实上只有94行）
 
@@ -27,7 +27,7 @@ publishedAt: 2023-05-30T14:39:00.000Z
 
 这个基于函数是单纯的通过一系列的函数构建标签而非使用vdom之流(但其实体验和jsx很相像)，因为作者把这个库定义为前端的bash脚本（甚至是要你下载源码引入使用的 😄不过发布到npm在计划中 ）所以使用vdom或者什么jsx不太符合它的设计哲学
 
-库提供了[`van.tags`](https://vanjs.org/tutorial#api-tags){rel="&#x22;nofollow&#x22;"}通过解构出的属性可以作为函数直接创建dom标签，其本质就是`document.createElement`
+库提供了[`van.tags`](https://vanjs.org/tutorial#api-tags){rel="nofollow"}通过解构出的属性可以作为函数直接创建dom标签，其本质就是`document.createElement`
 
 但是他这一部分的实现是比较巧妙的，不需要声明所有的tag作为属性，而是通过 Proxy包装一个函数做 target 和设置了一个 handler 来处理获取属性
 
@@ -107,7 +107,7 @@ PS:如果有手写过原型链的朋友应该很熟悉这样的写法,但是脱�
 
 ### 绑定状态
 
-vanjs 提供了[`bind`](https://vanjs.org/tutorial#api-bind){rel="&#x22;nofollow&#x22;"}函数来将状态和一些有副作用的调度任务进行绑定,内部如之前的 tags 中处理 props/attrs 更新的地方也是用到这个函数
+vanjs 提供了[`bind`](https://vanjs.org/tutorial#api-bind){rel="nofollow"}函数来将状态和一些有副作用的调度任务进行绑定,内部如之前的 tags 中处理 props/attrs 更新的地方也是用到这个函数
 
 PS:我给vanjs贡献的就是这个函数的签名类型,简单的跳了个类型体操解决原先手写10个函数重载但实际上还是不够用的的签名😁
 
@@ -198,8 +198,8 @@ let updateDoms = () => {
 
 其实说到底构建一个响应式前端框架的核心难度并不高,其生态构建和周边配套设施的开发才是难点,特别是你直接使用一些浏览器现有的api而不是什么虚拟dom,难度是非常低的,不过这个库的特点是尺寸十分轻量,虽然导致一些东西明显看着会有问题~~XD~~
 
-但是这样的工具构建的[网页](https://vanjs.org/){rel="&#x22;nofollow&#x22;"}(vanjs的官网)其实也是不输vue/react构建的,我也顺手做了个[ todomvc ](https://github.com/enpitsuLin/vanjs-todomvc){rel="&#x22;nofollow&#x22;"}感觉还不错,还会继续关注这个项目有机会提提pr
+但是这样的工具构建的[网页](https://vanjs.org/){rel="nofollow"}(vanjs的官网)其实也是不输vue/react构建的,我也顺手做了个[ todomvc ](https://github.com/enpitsuLin/vanjs-todomvc){rel="nofollow"}感觉还不错,还会继续关注这个项目有机会提提pr
 
-最后贴个 [gist: 扩展+类型标注 版本 导入的类型参考官方仓库 ](https://gist.github.com/enpitsuLin/cc51f3b326708a04f76caf797eaf46d6){rel="&#x22;nofollow&#x22;"}供学习
+最后贴个 [gist: 扩展+类型标注 版本 导入的类型参考官方仓库 ](https://gist.github.com/enpitsuLin/cc51f3b326708a04f76caf797eaf46d6){rel="nofollow"}供学习
 
 希望看完本文你会学到一些什么❤️

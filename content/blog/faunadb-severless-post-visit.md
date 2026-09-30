@@ -10,9 +10,9 @@ publishedAt: 2022-04-12T15:04:00.000Z
 
 博客由于全站都是静态导出的页面，没有后台服务器的接口支持，所以增加阅读计数这种简单的功能也无法实现
 
-但是由于 [JAMStack](https://jamstack.org/){rel="&#x22;nofollow&#x22;"} 概念的普及以及 Serverless 这个概念的出现一些网站托管平台如 Vercel/Netlify 均提供了 Serverless 函数服务，可以让我们的静态网站更简单的去集成一些 BaaS 来增加网站功能。
+但是由于 [JAMStack](https://jamstack.org/){rel="nofollow"} 概念的普及以及 Serverless 这个概念的出现一些网站托管平台如 Vercel/Netlify 均提供了 Serverless 函数服务，可以让我们的静态网站更简单的去集成一些 BaaS 来增加网站功能。
 
-比如博客的评论功能就是集成了[giscus](https://giscus.app/){rel="&#x22;nofollow&#x22;"}这个使用 Github Discussions 驱动的评论系统
+比如博客的评论功能就是集成了[giscus](https://giscus.app/){rel="nofollow"}这个使用 Github Discussions 驱动的评论系统
 
 # Firebase vs Faunadb
 
@@ -24,7 +24,7 @@ Faunadb 只是提供了一个简单的无服务器应用框架，可以提供 Gr
 
 # 从 Fauna 开始
 
-首先时[注册](https://dashboard.fauna.com/accounts/register){rel="&#x22;nofollow&#x22;"}一个 Fauna 账户，
+首先时[注册](https://dashboard.fauna.com/accounts/register){rel="nofollow"}一个 Fauna 账户，
 
 创建一个新的数据库，按照你喜欢的方式命名一下，然后新建一个 collection，命名为`visit`，过期时间和 TTL 可以就保持默认。
 
@@ -63,12 +63,12 @@ interface Visit {
 
 # 项目中增加获取数据的逻辑
 
-对于 Netlify 或者 Vercel 我们都可以使用 nextjs 的 [api 路由](https://nextjs.org/docs/api-routes/introduction){rel="&#x22;nofollow&#x22;"}来访问到这两个平台的 serverless 函数功能
+对于 Netlify 或者 Vercel 我们都可以使用 nextjs 的 [api 路由](https://nextjs.org/docs/api-routes/introduction){rel="nofollow"}来访问到这两个平台的 serverless 函数功能
 
 > 如果你的静态博客程序并不是使用 Nextjs 如 Hugo,Hexo,Nuxtjs,甚至 Vanilla 应该可以参考：
 >
-> - [Vercel docs](https://vercel.com/docs/concepts/functions/serverless-functions){rel="&#x22;nofollow&#x22;"}
-> - [Netlify docs](https://docs.netlify.com/functions/overview/){rel="&#x22;nofollow&#x22;"}
+> - [Vercel docs](https://vercel.com/docs/concepts/functions/serverless-functions){rel="nofollow"}
+> - [Netlify docs](https://docs.netlify.com/functions/overview/){rel="nofollow"}
 
 ## api 路由
 

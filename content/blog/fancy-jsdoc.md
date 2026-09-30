@@ -54,7 +54,7 @@ function deleteUser(id) {
 // @ts-check
 ```
 
-在 js 文件第一行加上就可以直接看到错误提示,这是 Typescript 对 jsdoc 的[额外支持](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html){rel="&#x22;nofollow&#x22;"}
+在 js 文件第一行加上就可以直接看到错误提示,这是 Typescript 对 jsdoc 的[额外支持](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html){rel="nofollow"}
 
 类型错误提示仅支持 jsdoc 的下列代码块
 

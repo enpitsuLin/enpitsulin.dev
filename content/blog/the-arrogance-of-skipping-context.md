@@ -6,12 +6,12 @@ tags:
 publishedAt: 2025-12-09T18:21:00.000Z
 ---
 
-最近看到一个[观点](https://www.bilibili.com/video/BV1cAKUzMEW7){rel="&#x22;nofollow&#x22;"}实在觉得难以苟同，所以花了点时间记录一下，
+最近看到一个[观点](https://www.bilibili.com/video/BV1cAKUzMEW7){rel="nofollow"}实在觉得难以苟同，所以花了点时间记录一下，
 
 > 本身是对别人视频的抨击，但是整体来说还是变成了对 CSS 发展的回顾。
 > 整体来说原子化 CSS 已经在 AI 时代不可阻挡了，无论是否有偏见，多学多用，保证不亏
 
-他一开始就抛出了他的观点，就是[这篇文章](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/){rel="&#x22;nofollow&#x22;"}内容可笑，但殊不知是自己根本没有理解文章内容的情况下，把其中一小部分的内容作为文章整体观点进行批判。突出自己没有阅读能力的同时，理解力也很低下，以及个人素质不太达标。
+他一开始就抛出了他的观点，就是[这篇文章](https://adamwathan.me/css-utility-classes-and-separation-of-concerns/){rel="nofollow"}内容可笑，但殊不知是自己根本没有理解文章内容的情况下，把其中一小部分的内容作为文章整体观点进行批判。突出自己没有阅读能力的同时，理解力也很低下，以及个人素质不太达标。
 
 为什么这么说呢，先来看看一开始说的一些内容。
 

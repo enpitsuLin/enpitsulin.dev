@@ -13,13 +13,13 @@ publishedAt: 2021-10-17T22:32:00.000Z
 
 在 Vue3 还没正式发布的时候 vue2 就有`@vue/composition-api`来支持在 vue2 中使用组合式 api 了。
 
-[@vue/composition-api](https://github.com/vuejs/composition-api){rel="&#x22;nofollow&#x22;"}
+[@vue/composition-api](https://github.com/vuejs/composition-api){rel="nofollow"}
 
 按照文档中的给出的配置就可以使用了
 
 ## 增加对 Vue2 的 setup 语法糖支持
 
-[unplugin-vue2-script-setup](https://github.com/antfu/unplugin-vue2-script-setup/){rel="&#x22;nofollow&#x22;"}是 vue 团队核心成员[Anthony Fu](https://antfu.me/){rel="&#x22;nofollow&#x22;"}基于他自己开发的对 Rollup 和 webpack 插件的兼容工具开发的一个让 Vue2 项目也能使用 setup 语法糖甚至于 ref 语法糖的插件，具体使用方法可以去仓库里看。
+[unplugin-vue2-script-setup](https://github.com/antfu/unplugin-vue2-script-setup/){rel="nofollow"}是 vue 团队核心成员[Anthony Fu](https://antfu.me/){rel="nofollow"}基于他自己开发的对 Rollup 和 webpack 插件的兼容工具开发的一个让 Vue2 项目也能使用 setup 语法糖甚至于 ref 语法糖的插件，具体使用方法可以去仓库里看。
 
 但是使用上这个插件后，Vetur 的提示功能基本就下线了 而且会提示没有默认导出，开发体验不是很好,接下来就是请出 Vue3 推荐的 Volar 了
 
