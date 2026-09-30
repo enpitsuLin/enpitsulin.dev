@@ -10,8 +10,7 @@ publishedAt: 2023-05-30T14:39:00.000Z
 
 在 Github 的时间线上看到了一个非常厉害的项目，自称是世界上最小的响应式UI框架
 
-::div{.flex.justify-center}
-<https://github.com/vanjs-org/van>{rel=""nofollow""}{rel=""nofollow""}
+::github-repo{repo="vanjs-org/van"}
 ::
 
 简单预览了一下，发现确实很小，而且很适合研究它的底层实现方式，虽然代码风格过于极简主义导致可读性比较差(作者本人也[指出](https://vanjs.org/about#coding-style){rel="&#x22;nofollow&#x22;"})
