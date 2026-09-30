@@ -78,13 +78,15 @@ async function toSpark(echo: Echo, baseUrl: string): Promise<Spark> {
   }
 }
 
-export async function fetchSparks(options: { baseUrl: string, tag: string, page: number }): Promise<SparksPage> {
+export async function fetchSparks(options: { baseUrl: string, tag: string, page: number, token?: string }): Promise<SparksPage> {
   const baseUrl = `${options.baseUrl.replace(/\/+$/, '')}/`
   const { tag, page } = options
+  const token = options.token?.trim()
 
   const request = $fetch.create({
     baseURL: baseUrl,
     timeout: 8000,
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
   })
 
   const { data: tags } = await request<{ data: EchoTag[] }>('api/tags')
@@ -94,6 +96,7 @@ export async function fetchSparks(options: { baseUrl: string, tag: string, page:
   if (!selectedTag?.id)
     return empty
 
+  // Leave private unset to include both public and private posts when authorized.
   const { data } = await request<{ data: { items: Echo[], total: number } }>('api/echo/query', {
     method: 'POST',
     body: {
@@ -102,11 +105,10 @@ export async function fetchSparks(options: { baseUrl: string, tag: string, page:
       tagIds: [selectedTag.id],
       sortBy: 'created_at',
       sortOrder: 'desc',
-      private: false,
     },
   })
-  if (data.items.some(echo => echo.private !== false || !echo.tags?.some(item => item.id === selectedTag.id)))
-    throw new Error('Ech0 returned posts outside the public tag filter')
+  if (data.items.some(echo => !echo.tags?.some(item => item.id === selectedTag.id)))
+    throw new Error('Ech0 returned posts outside the tag filter')
 
   return {
     ...empty,

@@ -122,6 +122,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     ech0BaseUrl: 'https://ech0.enpitsulin.dev',
     ech0Tag: '想法',
+    ech0Token: '',
     public: {
 
     },

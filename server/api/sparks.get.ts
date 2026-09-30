@@ -8,7 +8,7 @@ export default defineCachedEventHandler(async (event) => {
 
   const config = useRuntimeConfig(event)
   try {
-    return await fetchSparks({ baseUrl: config.ech0BaseUrl, tag: config.ech0Tag, page })
+    return await fetchSparks({ baseUrl: config.ech0BaseUrl, tag: config.ech0Tag, page, token: config.ech0Token })
   }
   catch (error) {
     console.error('[sparks] Failed to load Ech0 posts', error)
