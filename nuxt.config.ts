@@ -1,3 +1,7 @@
+import { fileURLToPath } from 'node:url'
+
+const siteUrl = 'https://enpitsulin.dev'
+
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
@@ -12,6 +16,29 @@ export default defineNuxtConfig({
   ],
 
   devtools: { enabled: true },
+
+  // Inline app config is shared with Nuxt 5's server runtime.
+  appConfig: {
+    author: 'enpitsulin',
+    siteUrl,
+    title: 'Promise { <pending> }',
+    description: 'What are you looking for?',
+    defaultOgImage: new URL('/placeholder-social.png', siteUrl).href,
+  },
+
+  hooks: {
+    'nitro:config': function (config) {
+      // Older modules register global middleware without Nitro 3's required route.
+      for (const handler of config.handlers || []) {
+        if (handler.middleware && !handler.route)
+          handler.route = '/**'
+      }
+      // Keep the virtual server entry from resolving below the client file alias.
+      const componentMeta = config.alias?.['#nuxt-component-meta']
+      if (componentMeta)
+        config.alias!['#nuxt-component-meta/nitro'] = componentMeta
+    },
+  },
 
   routeRules: {
     'feed.xml': { prerender: true },
@@ -79,6 +106,10 @@ export default defineNuxtConfig({
   },
 
   content: {
+    experimental: {
+      // Nitro 3 bundles the old native addon; use Node's SQLite for prerendering.
+      sqliteConnector: 'native',
+    },
     build: {
       markdown: {
         rehypePlugins: {
@@ -112,11 +143,11 @@ export default defineNuxtConfig({
   },
 
   experimental: {
+    nitroViteEnvironment: true,
     typedPages: true,
     viewTransition: true,
     inlineRouteRules: true,
     payloadExtraction: false,
-    renderJsonPayloads: true,
   },
 
   runtimeConfig: {
@@ -128,18 +159,10 @@ export default defineNuxtConfig({
     },
   },
 
-  future: { compatibilityVersion: 4 },
   compatibilityDate: '2026-04-03',
 
   nitro: {
     preset: 'cloudflare-durable',
-    typescript: {
-      tsConfig: {
-        compilerOptions: {
-          types: ['@cloudflare/workers-types'],
-        },
-      },
-    },
     cloudflare: {
       nodeCompat: true,
       deployConfig: true,
@@ -164,16 +187,8 @@ export default defineNuxtConfig({
       },
     },
 
-    esbuild: {
-      options: {
-        target: 'esnext',
-      },
-    },
-    experimental: {
+    features: {
       websocket: true,
-    },
-    unenv: {
-      external: ['cloudflare:workers'],
     },
     prerender: {
       crawlLinks: true,
@@ -199,7 +214,19 @@ export default defineNuxtConfig({
   },
 
   typescript: {
+    serverTsConfig: {
+      // These generated augmentations are not yet registered in the server context.
+      include: [
+        fileURLToPath(new URL('./.nuxt/content/types.d.ts', import.meta.url)),
+        fileURLToPath(new URL('./.nuxt/types/shared-app.config.d.ts', import.meta.url)),
+      ],
+      compilerOptions: {
+        types: ['@cloudflare/workers-types'],
+      },
+    },
     tsConfig: {
+      // Generated API route types also bring server handlers into the app context.
+      include: [fileURLToPath(new URL('./.nuxt/types/shared-app.config.d.ts', import.meta.url))],
       compilerOptions: {
         types: ['@cloudflare/workers-types'],
       },

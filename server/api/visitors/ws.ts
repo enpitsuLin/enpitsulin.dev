@@ -1,5 +1,6 @@
 import type { Peer } from 'crossws'
 import type { VisitorsMessage } from '#shared/types/visitors'
+import { defineWebSocketHandler } from 'nitro'
 import { visitorPageMessageSchema } from '#shared/schemas/visitors'
 import { getVisitorState, setVisitorState } from '../../utils/visitor-state'
 
@@ -25,6 +26,8 @@ export default defineWebSocketHandler({
   },
 
   close(peer) {
+    // Durable Objects require the server to acknowledge the close frame.
+    peer.close()
     broadcastVisitors(peer, peer.id)
   },
 

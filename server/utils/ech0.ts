@@ -1,4 +1,5 @@
 import type { Spark, SparkMedia, SparksPage } from '#shared/types/sparks'
+import { $fetch } from 'ofetch'
 
 interface EchoTag {
   id: string

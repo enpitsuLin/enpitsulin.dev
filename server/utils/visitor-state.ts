@@ -38,9 +38,15 @@ export function getVisitorState(peer: Peer): VisitorState {
 export function setVisitorState(peer: Peer, state: VisitorState) {
   const socket = getAttachmentSocket(peer)
   if (socket) {
-    const attachment: unknown = socket.deserializeAttachment()
+    const cachedAttachment: unknown = Reflect.get(socket, '_crosswsState')
+    const storedAttachment: unknown = socket.deserializeAttachment()
+    const attachment = isRecord(cachedAttachment)
+      ? cachedAttachment
+      : isRecord(storedAttachment) ? storedAttachment : {}
     // Preserve crossws's connection ID, upgrade URL and subscriptions.
-    socket.serializeAttachment({ ...(isRecord(attachment) ? attachment : {}), visitorState: state })
+    // Update its cached object too, so subscribing cannot overwrite visitor state.
+    attachment.visitorState = state
+    socket.serializeAttachment(attachment)
   }
   peer.context.visitorState = state
 }
@@ -51,7 +57,7 @@ function normalizeVisitorPath(path: unknown): string | null {
 }
 
 function getAttachmentSocket(peer: Peer): AttachmentSocket | undefined {
-  // crossws 0.3's public websocket is a Proxy. Cloudflare's attachment methods
+  // crossws's public websocket is a Proxy. Cloudflare's attachment methods
   // require the underlying native socket as `this`, otherwise they throw.
   const internal: unknown = Reflect.get(peer, '_internal')
   if (!isRecord(internal))

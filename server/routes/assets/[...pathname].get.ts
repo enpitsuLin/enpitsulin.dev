@@ -1,12 +1,13 @@
 import { env } from 'cloudflare:workers'
 import mime from 'mime'
+import { createError, defineEventHandler } from 'nuxt/server'
 
-export default eventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   const { pathname } = event.context.params || {}
   if (!pathname) {
     throw createError({
       status: 400,
-      message: 'Invalid path',
+      statusText: 'Invalid path',
     })
   }
 
@@ -14,7 +15,7 @@ export default eventHandler(async (event) => {
   if (!object) {
     throw createError({
       status: 404,
-      message: 'Asset not found',
+      statusText: 'Asset not found',
     })
   }
 

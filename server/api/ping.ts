@@ -1,1 +1,3 @@
-export default eventHandler(() => 'pong')
+import { defineEventHandler } from 'nuxt/server'
+
+export default defineEventHandler(() => 'pong')

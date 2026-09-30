@@ -1,4 +1,7 @@
 import type { GitHubRepo } from '#shared/types/github'
+import { defineCachedHandler } from 'nitro/cache'
+import { createError, getRouterParam } from 'nuxt/server'
+import { $fetch } from 'ofetch'
 import { normalizeGitHubRepo } from '#shared/utils/github-repo'
 
 interface GitHubRepoResponse {
@@ -11,10 +14,10 @@ interface GitHubRepoResponse {
   license: { spdx_id: string, name: string } | null
 }
 
-export default defineCachedEventHandler(async (event): Promise<GitHubRepo> => {
+export default defineCachedHandler(async (event): Promise<GitHubRepo> => {
   const repo = normalizeGitHubRepo(getRouterParam(event, 'repo') || '')
   if (!repo)
-    throw createError({ statusCode: 400, statusMessage: 'Repository must use owner/name format' })
+    throw createError({ status: 400, statusText: 'Repository must use owner/name format' })
 
   try {
     const data = await $fetch<GitHubRepoResponse>(`https://api.github.com/repos/${repo}`, {
@@ -38,10 +41,10 @@ export default defineCachedEventHandler(async (event): Promise<GitHubRepo> => {
     }
   }
   catch (error) {
-    const statusCode = (error as { statusCode?: number }).statusCode === 404 ? 404 : 502
+    const status = (error as { status?: number }).status === 404 ? 404 : 502
     throw createError({
-      statusCode,
-      statusMessage: statusCode === 404 ? 'Repository not found' : 'Unable to load GitHub repository',
+      status,
+      statusText: status === 404 ? 'Repository not found' : 'Unable to load GitHub repository',
     })
   }
 }, {

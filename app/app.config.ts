@@ -1,8 +1,6 @@
 // @unocss-include
 import type { RouteMap } from 'vue-router'
 
-const siteUrl = 'https://enpitsulin.dev'
-
 interface NavigationItem {
   label: string
   href: string
@@ -10,11 +8,6 @@ interface NavigationItem {
 }
 
 export default defineAppConfig({
-  author: 'enpitsulin',
-  siteUrl,
-  title: 'Promise { <pending> }',
-  description: 'What are you looking for?',
-  defaultOgImage: new URL('/placeholder-social.png', siteUrl).href,
   navigation: [
     {
       label: '首页',

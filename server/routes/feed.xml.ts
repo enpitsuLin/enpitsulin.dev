@@ -1,7 +1,9 @@
 import { queryCollection } from '@nuxt/content/server'
 import { Feed } from 'feed'
+import { defineHandler } from 'nitro'
+import { useAppConfig } from 'nuxt/server'
 
-export default defineEventHandler(async (event) => {
+export default defineHandler(async (event) => {
   try {
     const posts = await queryCollection(event, 'blog')
       .order('publishedAt', 'DESC')
@@ -38,7 +40,7 @@ export default defineEventHandler(async (event) => {
       })
     })
 
-    setHeader(event, 'Content-Type', 'text/xml')
+    event.res.headers.set('Content-Type', 'text/xml')
     return feed.rss2()
   }
   catch (e) {

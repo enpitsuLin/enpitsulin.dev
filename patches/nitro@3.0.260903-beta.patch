@@ -1,0 +1,47 @@
+diff --git a/dist/_build/vite.dev.mjs b/dist/_build/vite.dev.mjs
+index 96c006264b3e34a189a51c5663f31d5310196c63..c4065b146fa07e364e6659d2814a4f7d5af5b830 100644
+--- a/dist/_build/vite.dev.mjs
++++ b/dist/_build/vite.dev.mjs
+@@ -11,6 +11,7 @@ import "node:http";
+ import { createViteHotChannel } from "env-runner/vite";
+ const ASSET_EXT_RE = /^(?:[jt]sx?|mjs|cjs|css|s[ac]ss|less|styl|vue|svelte|astro|mdx?|map|wasm|png|jpe?g|gif|svg|webp|avif|ico|bmp|woff2?|ttf|otf|eot|mp[34]|webm|wav|ogg|m4a)$/i;
+ const WORKERD_BUILTIN_RE = /^(?:cloudflare|workerd):/;
++const websocketListeners = /* @__PURE__ */ new WeakMap();
+ async function createFetchableDevEnvironment(name, config, devServer, entry, opts) {
+ 	const context = {
+ 		hot: true,
+@@ -77,14 +78,26 @@ async function configureViteDevServer(ctx, server) {
+ 	const viteBase = server.config.base || "/";
+ 	const nitroConfigFile = nitro.options._c12.configFile;
+ 	if (nitroConfigFile) server.config.configFileDependencies.push(nitroConfigFile);
+-	if (nitro.options.features.websocket ?? nitro.options.experimental.websocket) server.httpServer.on("upgrade", (req, socket, head) => {
+-		if (req.headers["sec-websocket-protocol"]?.startsWith("vite-")) return;
+-		getEnvRunner(ctx).upgrade?.({ node: {
+-			req,
+-			socket,
+-			head
+-		} });
+-	});
++	const httpServer = server.httpServer || server.config.server.ws?.server || server.config.server.hmr?.server;
++	if ((nitro.options.features.websocket ?? nitro.options.experimental.websocket) && httpServer) {
++		const previousListener = websocketListeners.get(httpServer);
++		if (previousListener) httpServer.off("upgrade", previousListener);
++		const upgradeListener = (req, socket, head) => {
++			if (req.headers["sec-websocket-protocol"]?.startsWith("vite-")) return;
++			getEnvRunner(ctx).upgrade?.({ node: {
++				req,
++				socket,
++				head
++			} });
++		};
++		httpServer.on("upgrade", upgradeListener);
++		websocketListeners.set(httpServer, upgradeListener);
++		nitro.hooks.hook("close", () => {
++			if (websocketListeners.get(httpServer) !== upgradeListener) return;
++			httpServer.off("upgrade", upgradeListener);
++			websocketListeners.delete(httpServer);
++		});
++	}
+ 	const reload = debounce(async () => {
+ 		await scanHandlers(nitro);
+ 		nitro.routing.sync();
