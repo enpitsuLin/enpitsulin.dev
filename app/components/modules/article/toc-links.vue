@@ -16,7 +16,9 @@ const { links = [], activeHeadings = [] } = defineProps<{
     >
       <a
         :href="`#${link.id}`"
+        un-text-xs
         :class="[activeHeadings.includes(link.id) && 'active']"
+        :aria-current="activeHeadings.includes(link.id) ? 'location' : undefined"
       >
         {{ link.text }}
       </a>
@@ -40,6 +42,8 @@ const { links = [], activeHeadings = [] } = defineProps<{
 
 .docs-toc-links a {
   --at-apply: block py-1 text-sm text-gray-500;
+  overflow-wrap: anywhere;
+  transition: color 150ms;
 }
 
 .dark .docs-toc-links a {
@@ -53,9 +57,20 @@ const { links = [], activeHeadings = [] } = defineProps<{
 }
 
 .docs-toc-links a:not(.active):hover {
-  --at-apply: text-accent/30;
+  --at-apply: text-accent;
 }
 .docs-toc-links a.active {
   --at-apply: text-accent;
+}
+
+.docs-toc-links a:focus-visible {
+  outline: 2px solid hsl(var(--theme-accent));
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-toc-links a {
+    transition: none;
+  }
 }
 </style>

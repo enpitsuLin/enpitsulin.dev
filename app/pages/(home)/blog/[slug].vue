@@ -75,7 +75,24 @@ const estimation = computed(() => {
 })
 
 const articleContent = useTemplateRef<HTMLElement>('articleContent')
+const articleBody = useTemplateRef<HTMLElement>('articleBody')
+const { top: articleTop, bottom: articleBottom, height: articleHeight } = useElementBounding(articleBody)
+const { height: viewportHeight } = useWindowSize({ initialHeight: 0 })
 const { activeHeadings, updateHeadings } = useScrollspy()
+
+const readingProgress = computed(() => {
+  if (!articleHeight.value || !viewportHeight.value)
+    return 0
+
+  // Start below the sticky header; finish when the article's end enters the viewport.
+  const readingOffset = 80
+  const readingDistance = articleHeight.value - viewportHeight.value + readingOffset
+  if (readingDistance <= 0)
+    return articleBottom.value <= viewportHeight.value ? 100 : 0
+
+  const progress = (readingOffset - articleTop.value) / readingDistance
+  return Math.round(Math.min(1, Math.max(0, progress)) * 100)
+})
 
 watch(articleContent, (content, _, onCleanup) => {
   if (!content)
@@ -124,20 +141,17 @@ watch(articleContent, (content, _, onCleanup) => {
           </ul>
         </section>
       </header>
-      <ContentRenderer
-        :value="page.body"
-        tag="article"
-        text-15px
-        class="max-w-unset prose dark:prose-invert"
-      />
+      <div ref="articleBody">
+        <ContentRenderer
+          :value="page.body"
+          tag="article"
+          text-15px
+          class="max-w-unset prose dark:prose-invert"
+        />
+      </div>
     </div>
-    <aside sticky top-80px ml-4 w="20%" h-full pb-20 class="hidden md:block">
-      <h2 class="m-[20px_0_10px]">
-        目录
-      </h2>
-      <nav pl-4>
-        <ArticleTocLinks :links="page.body.toc?.links" :active-headings="activeHeadings" />
-      </nav>
+    <aside sticky top-80px ml-4 w="20%" self-start min-w-0 pt-1 pb-20 class="hidden md:block">
+      <ArticleToc :links="page.body.toc?.links" :active-headings="activeHeadings" :progress="readingProgress" />
     </aside>
   </div>
   <footer mx="-8 sm:-12" px="8 sm:12" border="t border">
