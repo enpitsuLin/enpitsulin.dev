@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UsePaginationProps } from '@ark-ui/vue/pagination'
-import { normalizePage } from '#shared/utils/normalize-page'
 import { Pagination, usePagination } from '@ark-ui/vue/pagination'
+import { normalizePage } from '#shared/utils/normalize-page'
 
 definePageMeta({
   alias: '/blog/:page(\\d+)?',
@@ -69,8 +69,8 @@ const pagination = usePagination(paginationOptions)
         上一页
       </Pagination.PrevTrigger>
       <div flex="~ row items-center gap-1">
-        <Pagination.Context v-slot="pagination">
-          <template v-for="(page, index) in pagination.pages">
+        <Pagination.Context v-slot="{ pages }">
+          <template v-for="(page, index) in pages">
             <Pagination.Item
               v-if="page.type === 'page'" :key="index" :value="page.value" :type="page.type"
               flex="inline items-center justify-center" un-text="sm"
