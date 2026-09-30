@@ -1,5 +1,4 @@
 import type { Spark, SparkMedia, SparksPage } from '#shared/types/sparks'
-import { parseMarkdown } from '@nuxtjs/mdc/runtime'
 
 interface EchoTag {
   id: string
@@ -58,19 +57,10 @@ function toMedia(files: Echo['echo_files'], baseUrl: string): SparkMedia[] {
   return media
 }
 
-async function toSpark(echo: Echo, baseUrl: string): Promise<Spark> {
-  // Reuse Nuxt's Markdown parser, but treat remote posts as Markdown only.
-  const { body } = await parseMarkdown(echo.content, {
-    toc: false,
-    contentHeading: false,
-    highlight: false,
-    remark: { plugins: { 'remark-mdc': false } },
-    rehype: { options: { allowDangerousHtml: false }, plugins: { 'rehype-raw': false } },
-  })
-
+function toSpark(echo: Echo, baseUrl: string): Spark {
   return {
     id: echo.id,
-    body,
+    content: echo.content,
     createdAt: new Date(echo.created_at * 1000).toISOString(),
     tags: (echo.tags || []).map(tag => tag.name),
     media: toMedia(echo.echo_files, baseUrl),
@@ -112,7 +102,7 @@ export async function fetchSparks(options: { baseUrl: string, tag: string, page:
 
   return {
     ...empty,
-    items: await Promise.all(data.items.map(echo => toSpark(echo, baseUrl))),
+    items: data.items.map(echo => toSpark(echo, baseUrl)),
     total: data.total,
     hasMore: data.items.length > 0 && page * PAGE_SIZE < data.total,
   }

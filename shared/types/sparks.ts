@@ -9,7 +9,7 @@ export interface SparkMedia {
 
 export interface Spark {
   id: string
-  body: MDCRoot
+  content: string
   createdAt: string
   tags: string[]
   media: SparkMedia[]
@@ -24,4 +24,3 @@ export interface SparksPage {
   sourceUrl: string
   tag: string
 }
-import type { MDCRoot } from '@nuxtjs/mdc'

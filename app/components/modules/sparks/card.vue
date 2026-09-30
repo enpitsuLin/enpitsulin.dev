@@ -1,7 +1,17 @@
 <script setup lang="ts">
+import type { MDCParseOptions } from '@nuxtjs/mdc'
 import type { Spark } from '#shared/types/sparks'
 
 defineProps<{ spark: Spark }>()
+
+// Treat remote posts as Markdown only.
+const parserOptions: MDCParseOptions = {
+  toc: false,
+  contentHeading: false,
+  highlight: false,
+  remark: { plugins: { 'remark-mdc': false } },
+  rehype: { options: { allowDangerousHtml: false }, plugins: { 'rehype-raw': false } },
+}
 
 const dateFormat = new Intl.DateTimeFormat('zh-CN', {
   timeZone: 'Asia/Shanghai',
@@ -30,7 +40,9 @@ const dateFormat = new Intl.DateTimeFormat('zh-CN', {
       un-text="sm zinc-700 dark:zinc-200" leading-6
       overflow-x="[&_pre]:auto" max-w="[&_img]:full"
     >
-      <MDCRenderer :body="spark.body" :components="{ img: 'img' }" />
+      <MDC v-slot="{ body }" :value="spark.content" :parser-options="parserOptions">
+        <MDCRenderer v-if="body" :body="body" :components="{ img: 'img' }" />
+      </MDC>
     </div>
 
     <div v-if="spark.media.length" flex="~ col gap-2" mt-3>
