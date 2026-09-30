@@ -1,35 +1,65 @@
 import type { Peer } from 'crossws'
+import type { VisitorsMessage } from '#shared/types/visitors'
+import { visitorPageMessageSchema } from '#shared/schemas/visitors'
+import { getVisitorState, setVisitorState } from '../../utils/visitor-state'
 
 export default defineWebSocketHandler({
   open(peer) {
-    const count = uniquePeers([...peer.peers]).size
+    broadcastVisitors(peer)
+  },
 
-    peer.subscribe('visitors')
-    peer.send(count)
-    peer.publish('visitors', count)
+  message(peer, message) {
+    let payload: unknown
+    try {
+      payload = message.json()
+    }
+    catch {
+      return
+    }
+    const result = visitorPageMessageSchema.safeParse(payload)
+    if (!result.success)
+      return
+
+    setVisitorState(peer, { ...getVisitorState(peer), path: result.data.path })
+    broadcastVisitors(peer)
   },
 
   close(peer) {
-    const count = uniquePeers([...peer.peers]).size
-    peer.publish('visitors', count)
-    peer.unsubscribe('visitors')
+    broadcastVisitors(peer, peer.id)
+  },
+
+  error(peer) {
+    broadcastVisitors(peer, peer.id)
   },
 })
 
-function uniquePeers(peers: Peer[]) {
-  return new Set(peers.map(p => getClientIP(p.request as Request)).filter(Boolean))
-}
+function broadcastVisitors(peer: Peer, excludedPeerId?: string) {
+  const peers = [...peer.peers]
+    .filter(p => p.id !== excludedPeerId && p.websocket.readyState === 1)
+    .map(p => ({ peer: p, state: getVisitorState(p) }))
+  const visitors = new Set<string>()
+  const pages = new Map<string, Set<string>>()
 
-function getClientIP(request: Request) {
-  if (!request.headers) {
-    console.error('No headers found in request', request)
-    return null
-  }
-  const xForwardedFor = request.headers.get('x-forwarded-for')
-  if (xForwardedFor) {
-    // 'x-forwarded-for' may contain a list of addresses, grab the first one
-    return xForwardedFor.split(',')[0]!.trim()
+  for (const { state: { visitor, path } } of peers) {
+    visitors.add(visitor)
+    if (path === null)
+      continue
+
+    const pageVisitors = pages.get(path) ?? new Set<string>()
+
+    pageVisitors.add(visitor)
+    pages.set(path, pageVisitors)
   }
 
-  return request.headers.get('cf-connecting-ipv6') || request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip')
+  for (const { peer: connectedPeer, state: { path } } of peers) {
+    if (path === null)
+      continue
+
+    const message: VisitorsMessage = {
+      visitors: visitors.size,
+      pageVisitors: pages.get(path)!.size,
+      path,
+    }
+    connectedPeer.send(message)
+  }
 }

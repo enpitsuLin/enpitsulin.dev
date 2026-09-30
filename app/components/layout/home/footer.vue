@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const { navigation } = useAppConfig()
-
-const { visitors, status } = useVisitors()
 </script>
 
 <template>
@@ -23,15 +21,7 @@ const { visitors, status } = useVisitors()
         </p>
       </div>
       <div flex="~ col gap-2 items-center sm:items-end">
-        <div flex="~ gap-2 items-center">
-          <span relative flex size-2>
-            <span animate-ping absolute inline-flex size-full rounded-full bg-green-400 opacity-75 />
-            <span relative inline-flex rounded-full size-2 bg-green-500 />
-          </span>
-          <span class="text-xs text-zinc-600 dark:text-zinc-300">
-            {{ status === 'OPEN' ? `在线伙伴: ${visitors}` : '连接中...' }}
-          </span>
-        </div>
+        <Visitors />
         <p class="text-xs text-zinc-500 dark:text-zinc-400">
           🚧 这个站点还在建设中...
         </p>

@@ -34,7 +34,8 @@
     "rehype-unwrap-images": "^1.0.0",
     "ufo": "^1.6.4",
     "vue": "^3.5.43",
-    "vue-router": "^5.3.1"
+    "vue-router": "^5.3.1",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
