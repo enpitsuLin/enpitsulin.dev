@@ -70,7 +70,7 @@ useEventListener('wheel', () => {
       @click="toggleImageZoom"
     />
     <figcaption v-if="alt" mt-1 flex="~ col items-center justify-center">
-      <hr op-80 class="my-3 h-[0.5px] w-[80px] border-0 bg-black/30 dark:bg-white/30">
+      <hr op-80 class="my-1 h-[0.5px] w-[80px] border-0 bg-black/30 dark:bg-white/30">
       <span>{{ alt }}</span>
     </figcaption>
   </figure>
