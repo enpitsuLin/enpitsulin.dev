@@ -34,3 +34,8 @@ trustPolicyExclude:
 
 overrides:
   '@nuxt/content>nuxt-component-meta': 0.17.2
+
+packageExtensions:
+  h3@2.0.1-rc.32:
+    optionalDependencies:
+      crossws: ^0.4.12
