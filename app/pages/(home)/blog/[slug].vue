@@ -73,11 +73,30 @@ const estimation = computed(() => {
 
   return { minutes: estimation.minutes }
 })
+
+const articleContent = useTemplateRef<HTMLElement>('articleContent')
+const { activeHeadings, updateHeadings } = useScrollspy()
+
+watch(articleContent, (content, _, onCleanup) => {
+  if (!content)
+    return
+
+  const syncHeadings = () => updateHeadings(content.querySelectorAll('.prose :is(h1, h2, h3, h4)[id]'))
+  // ContentRenderer can resolve headings asynchronously after the page mounts.
+  const observer = new MutationObserver(syncHeadings)
+  observer.observe(content, { childList: true, subtree: true })
+  syncHeadings()
+
+  onCleanup(() => {
+    observer.disconnect()
+    updateHeadings([])
+  })
+}, { flush: 'post' })
 </script>
 
 <template>
   <div v-if="page" mt-16 text-14px flex="~ justify-between">
-    <div text="1.1em" class="w-full md:w-80%" pb-20 pr="0 md:7.5" border="md:r border">
+    <div ref="articleContent" text="1.1em" class="w-full md:w-80%" pb-20 pr="0 md:7.5" border="md:r border">
       <header
         pb-6 space-y-10 bg="gradient-to-r [position:bottom] [size:10px_1px] repeat-x"
         class="from-border to-transparent"
@@ -117,7 +136,7 @@ const estimation = computed(() => {
         目录
       </h2>
       <nav pl-4>
-        <ArticleTocLinks :links="page.body.toc?.links" />
+        <ArticleTocLinks :links="page.body.toc?.links" :active-headings="activeHeadings" />
       </nav>
     </aside>
   </div>

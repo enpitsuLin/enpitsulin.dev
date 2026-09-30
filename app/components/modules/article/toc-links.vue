@@ -1,26 +1,10 @@
 <script setup lang="ts">
 import type { TocLink } from '@nuxtjs/mdc'
-import type { PropType } from 'vue'
 
-defineProps({
-  links: {
-    type: Array as PropType<TocLink[]>,
-    default: () => [],
-  },
-})
-
-const { activeHeadings, updateHeadings } = useScrollspy()
-
-if (import.meta.client) {
-  setTimeout(() => {
-    updateHeadings([
-      ...document.querySelectorAll('.prose h1'),
-      ...document.querySelectorAll('.prose h2'),
-      ...document.querySelectorAll('.prose h3'),
-      ...document.querySelectorAll('.prose h4'),
-    ])
-  }, 300)
-}
+const { links = [], activeHeadings = [] } = defineProps<{
+  links?: TocLink[]
+  activeHeadings?: string[]
+}>()
 </script>
 
 <template>
@@ -39,6 +23,7 @@ if (import.meta.client) {
       <ArticleTocLinks
         v-if="link.children"
         :links="link.children"
+        :active-headings="activeHeadings"
       />
     </li>
   </ul>
