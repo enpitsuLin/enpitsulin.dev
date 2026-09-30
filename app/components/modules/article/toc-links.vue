@@ -5,6 +5,10 @@ const { links = [], activeHeadings = [] } = defineProps<{
   links?: TocLink[]
   activeHeadings?: string[]
 }>()
+
+function isActiveBranch(link: TocLink): boolean {
+  return activeHeadings.includes(link.id) || Boolean(link.children?.some(isActiveBranch))
+}
 </script>
 
 <template>
@@ -19,14 +23,20 @@ const { links = [], activeHeadings = [] } = defineProps<{
         un-text-xs
         :class="[activeHeadings.includes(link.id) && 'active']"
         :aria-current="activeHeadings.includes(link.id) ? 'location' : undefined"
+        :aria-expanded="link.children?.length ? isActiveBranch(link) : undefined"
       >
         {{ link.text }}
       </a>
-      <ArticleTocLinks
-        v-if="link.children"
-        :links="link.children"
-        :active-headings="activeHeadings"
-      />
+      <Transition
+        enter-active-class="transition-property-[grid-template-rows,opacity] duration-150 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none"
+        leave-active-class="transition-property-[grid-template-rows,opacity] duration-150 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none"
+        enter-from-class="grid-rows-[0fr]! op-0"
+        leave-to-class="grid-rows-[0fr]! op-0"
+      >
+        <div v-if="link.children?.length && isActiveBranch(link)" class="grid grid-rows-[1fr]">
+          <ArticleTocLinks :links="link.children" :active-headings="activeHeadings" class="min-h-0 of-hidden" />
+        </div>
+      </Transition>
     </li>
   </ul>
 </template>
