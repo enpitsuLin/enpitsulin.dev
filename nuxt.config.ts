@@ -25,7 +25,7 @@ export default defineNuxtConfig({
 
   fonts: {
     families: [
-      { name: 'Noto Sans SC', weights: [400], global: true },
+      { name: 'Noto Sans SC', weights: [400, 600], global: true },
     ],
   },
 

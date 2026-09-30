@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-/**
- * @credits Pergel <https://nuxtlabs.com/>
- */
-import { computed } from 'vue'
-
-const props = withDefaults(defineProps<{ title?: string, description?: string, headline?: string }>(), {
-  title: 'title',
-  description: 'description',
-  headline: 'headline',
-})
+defineProps<{ title?: string, description?: string, headline?: string }>()
 
 const { siteUrl, title: siteTitle, description: siteDescription } = useAppConfig()
-const title = computed(() => props.title.slice(0, 60))
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col justify-center bg-[#212121]">
-    <svg class="absolute top-0 right-0" width="1200" height="675" viewBox="0 0 1200 675" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div
+    class="w-full h-full flex flex-col justify-center bg-[#212121]"
+    style="font-family: 'Noto Sans SC', sans-serif;"
+  >
+    <svg
+      class="absolute top-0 right-0"
+      width="1200"
+      height="675"
+      viewBox="0 0 1200 675"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g style="mix-blend-mode:overlay" opacity="0.7" filter="url(#filter0_f_448_25)">
         <circle cx="901.5" cy="45.5" r="199.5" fill="#5BA3C0" />
         <circle cx="600.5" cy="216.5" r="199.5" fill="#337C95" />
@@ -35,15 +35,24 @@ const title = computed(() => props.title.slice(0, 60))
       <p class="text-[16px] text-[#E4E4E7] mb-4 font-semibold">
         {{ siteUrl }}
       </p>
-      <h1 class="w-[700px] m-0 text-[48px] font-semibold mb-4 text-white" style="display: block; line-clamp: 3; text-overflow: ellipsis;">
-        {{ title }}
+      <h1
+        class="w-[700px] m-0 text-[48px] font-semibold mb-4 text-white"
+        style="display: block; line-clamp: 3; text-overflow: ellipsis;"
+      >
+        {{ title ?? 'Un-title Post' }}
       </h1>
       <p class="text-[18px] text-[#E4E4E7] leading-tight">
         {{ siteTitle }} - {{ siteDescription }}
       </p>
     </div>
 
-    <svg class="absolute top-[200px] right-[100px]" height="200" width="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+    <svg
+      class="absolute top-[200px] right-[100px]"
+      height="200"
+      width="200"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 128 128"
+    >
       <defs>
         <linearGradient id="prefix__c" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#5ba3c0" />

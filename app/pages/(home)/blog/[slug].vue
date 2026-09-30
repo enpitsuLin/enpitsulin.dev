@@ -26,10 +26,14 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () =>
     { fields: ['description'] },
   ).order('publishedAt', 'DESC'))
 
-const title = page.value?.seo?.title || page.value?.title
-const description = page.value?.seo?.description || page.value?.description
+const title = computed(() => page.value?.seo?.title || page.value?.title)
+const description = computed(() => page.value?.seo?.description || page.value?.description)
 
-defineOgImage('BlogPost', { title })
+defineOgImage('BlogPost.takumi', {
+  title() {
+    return title.value
+  },
+})
 
 useSeoMeta({
   title,
