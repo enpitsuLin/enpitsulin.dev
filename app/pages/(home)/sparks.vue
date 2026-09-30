@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SparksPage } from '#shared/types/sparks'
+import { Masonry, MasonryItem } from '~/components/ui/masonry'
 
 definePageMeta({ layout: 'home' })
 
@@ -79,7 +80,16 @@ function loadMore() {
       </button>
     </div>
     <template v-else-if="feed?.items.length">
-      <SparksMasonry :items="feed.items" />
+      <Masonry as="ul" aria-label="想法列表" grid="cols-1 md:cols-2 xl:cols-3" w-full>
+        <MasonryItem
+          v-for="(spark, index) in feed.items" :key="spark.id" as="li"
+          fade-in slide-in-from-bottom-6
+          animate="in duration-800! ease-$spring-easing! delay-$spark-enter-delay! fill-both! motion-reduce:none!"
+          :style="{ '--spark-enter-delay': `${120 + Math.min(index, 5) * 60}ms` }"
+        >
+          <SparksCard :spark="spark" />
+        </MasonryItem>
+      </Masonry>
       <div flex="~ col items-center gap-2" pt-4 fade-in animate="in delay-300! duration-700! fill-both! motion-reduce:none!">
         <p role="status" aria-live="polite" un-text="xs zinc-500 dark:zinc-400">
           {{ loadMoreError ? '后面的想法暂时没能加载，已显示的内容仍然保留。' : `已展示 ${feed.items.length} 条想法` }}

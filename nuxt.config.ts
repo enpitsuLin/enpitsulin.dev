@@ -76,7 +76,10 @@ export default defineNuxtConfig({
       {
         path: '~/components/modules',
       },
-      '~/components',
+      {
+        path: '~/components',
+        ignore: ['ui/masonry/*.ts'],
+      },
     ],
   },
 
