@@ -17,7 +17,7 @@ publishedAt: 2023-05-30T14:39:00.000Z
 
 但是通过一定的整理还是比较容易搞懂的，毕竟本体就不到100行（事实上只有94行）
 
-![image](https://oss.enpitsulin.xyz/images/vanjs-lines.webp)
+![image](https://images-enpitsulin.oss-cn-beijing.aliyuncs.com/images/vanjs-lines.webp)
 
 简单研究了下帮忙跳了个类型体操完善了下类型定义，本身我是比较讨厌那套研究各种源码的卷劲的，但是基于这个库的轻量我觉得可以简单解析下
 

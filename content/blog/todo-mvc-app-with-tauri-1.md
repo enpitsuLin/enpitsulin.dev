@@ -23,7 +23,7 @@ pnpm create tauri-app
 
 我们选择使用从`create-vite` 然后使用 react-ts 模板
 
-![创建项目|1481x785](https://oss.enpitsulin.xyz/images/Snipaste_2022-05-02_17-35-03.png)
+![创建项目|1481x785](https://images-enpitsulin.oss-cn-beijing.aliyuncs.com/images/Snipaste_2022-05-02_17-35-03.png)
 
 然后等待 cli 安装完依赖，用 VSCode 打开项目，这里建议你安装`rust-analyzer`不过我估计学习 rust 应该早都推荐安装了,然后我们的项目目录就如下
 
