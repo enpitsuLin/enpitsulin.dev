@@ -42,7 +42,7 @@ const mr = Math.ceil((getBaseLog(languageLength) + 1) * 16) + 4
           '--mr': `${languageLength * 14 + 4}px`,
         }"
       >
-        <pre max-h-100 bg-transparent px-4 pb-2 class="scroll-track-mr shiki"><slot /></pre>
+        <pre max-h-100 bg-transparent px-4 pb-2 font-mono class="scroll-track-mr shiki"><slot /></pre>
       </div>
     </div>
   </div>

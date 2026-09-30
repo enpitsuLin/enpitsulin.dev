@@ -6,9 +6,9 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
     '@nuxt/content',
+    '@nuxt/fonts',
     'nuxt-og-image',
     'nuxt-studio',
-    '@nuxt/fonts',
   ],
 
   devtools: { enabled: true },
@@ -24,8 +24,36 @@ export default defineNuxtConfig({
   },
 
   fonts: {
+    providers: {
+      cdn: '~~/providers/cdn',
+    },
     families: [
-      { name: 'Noto Sans SC', weights: [400, 600], global: true },
+      {
+        name: 'HarmonyOS Sans SC',
+        provider: 'cdn',
+        weights: [400, 500, 700],
+        styles: ['normal'],
+        // The upstream Chinese fonts are full files, so load them only when used.
+        preload: false,
+      },
+      { name: 'Inter', provider: 'google', weights: ['400 700'], styles: ['normal'] },
+      {
+        name: 'MonaspiceArNerdFont',
+        provider: 'local',
+        weights: [500],
+        styles: ['normal'],
+        preload: false,
+      },
+      {
+        name: 'Noto Sans SC',
+        provider: 'fontsource',
+        weights: [400, 600],
+        styles: ['normal'],
+        // Use complete Chinese faces so Takumi can render every title character.
+        subsets: ['chinese-simplified'],
+        global: true,
+        preload: false,
+      },
     ],
   },
 

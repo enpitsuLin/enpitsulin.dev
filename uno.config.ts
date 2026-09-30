@@ -5,7 +5,6 @@ import {
   presetAttributify,
   presetIcons,
   presetTypography,
-  presetWebFonts,
   presetWind3,
   transformerDirectives,
   transformerVariantGroup,
@@ -18,6 +17,10 @@ const handleMatchRem = (v: string, defaultVal = 'full') => handler.bracket.cssva
 
 export default defineConfig<Theme>({
   theme: {
+    fontFamily: {
+      sans: '"Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      mono: '"MonaspiceArNerdFont", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    },
     colors: {
       background: 'hsl(var(--theme-background))',
       accent: 'hsl(var(--theme-accent))',
@@ -84,18 +87,6 @@ export default defineConfig<Theme>({
         },
         'blockquote p:last-of-type::after': {
           content: '',
-        },
-      },
-    }),
-    presetWebFonts({
-      fonts: {
-        sans: {
-          name: 'Inter',
-          weights: ['400', '500', '700'],
-        },
-        mono: {
-          provider: 'none',
-          name: 'MonaspiceArNerdFont',
         },
       },
     }),
