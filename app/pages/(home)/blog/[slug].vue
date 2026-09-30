@@ -113,7 +113,7 @@ const estimation = computed(() => {
         目录
       </h2>
       <nav pl-4>
-        <TocLinks :links="page.body.toc?.links" />
+        <ArticleTocLinks :links="page.body.toc?.links" />
       </nav>
     </aside>
   </div>

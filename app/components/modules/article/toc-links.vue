@@ -36,7 +36,7 @@ if (import.meta.client) {
       >
         {{ link.text }}
       </a>
-      <TocLinks
+      <ArticleTocLinks
         v-if="link.children"
         :links="link.children"
       />

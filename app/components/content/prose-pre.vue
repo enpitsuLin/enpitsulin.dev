@@ -34,7 +34,7 @@ const mr = Math.ceil((getBaseLog(languageLength) + 1) * 16) + 4
       <span uppercase class="pointer-events-none shrink-0 grow-0" aria-hidden="true">{{ language }}</span>
     </div>
     <div relative bg="zinc-200 dark:zinc-800">
-      <CodeCopyButton :source="code" />
+      <ContentCodeCopyButton :source="code" />
       <div
         relative of-hidden
         :style="language && !filename && {
