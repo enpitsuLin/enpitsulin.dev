@@ -15,6 +15,8 @@ export default defineNuxtConfig({
 
   routeRules: {
     'feed.xml': { prerender: true },
+    '/sparks': { prerender: false },
+    '/api/sparks': { prerender: false },
   },
 
   ogImage: {
@@ -87,6 +89,8 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    ech0BaseUrl: 'https://ech0.enpitsulin.dev',
+    ech0Tag: '想法',
     public: {
 
     },

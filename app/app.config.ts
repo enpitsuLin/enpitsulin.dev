@@ -27,6 +27,11 @@ export default defineAppConfig({
       match: ['blog-page', 'blog-tag-tag', 'blog-slug', 'blog-tag-tag-page'],
     },
     {
+      label: '想法',
+      href: '/sparks',
+      match: ['sparks'],
+    },
+    {
       label: '关于',
       href: '/about',
       match: ['about'],
