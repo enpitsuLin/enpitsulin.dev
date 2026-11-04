@@ -18,7 +18,9 @@ function openImage(event: MouseEvent, index = 0) {
   if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0 || !props.images[index])
     return
   event.preventDefault()
-  trigger = event.currentTarget instanceof HTMLElement ? event.currentTarget : null
+  trigger = event.currentTarget instanceof HTMLElement
+    ? event.currentTarget
+    : null
   activeIndex.value = index
   open.value = true
 }
@@ -27,7 +29,10 @@ function changeImage(step: number) {
   activeIndex.value = Math.min(props.images.length - 1, Math.max(0, activeIndex.value + step))
 }
 
-watch([open, () => current.value?.src], () => {
+watch([
+  open,
+  () => current.value?.src,
+], () => {
   zoomed.value = false
   loaded.value = false
   failed.value = false
@@ -44,7 +49,9 @@ function onKeydown(event: KeyboardEvent) {
     return
   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault()
-    changeImage(event.key === 'ArrowLeft' ? -1 : 1)
+    changeImage(event.key === 'ArrowLeft'
+      ? -1
+      : 1)
   }
 }
 
@@ -53,8 +60,11 @@ useSwipe(viewport, {
   onSwipeEnd(event, direction) {
     if (zoomed.value || event.touches.length)
       return
-    if (direction === 'left' || direction === 'right')
-      changeImage(direction === 'left' ? 1 : -1)
+    if (direction === 'left' || direction === 'right') {
+      changeImage(direction === 'left'
+        ? 1
+        : -1)
+    }
   },
 })
 </script>

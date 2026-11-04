@@ -40,7 +40,9 @@ export function useVisitors() {
 
   async function handleMessage(socket: NonNullable<typeof ws.value>, event: MessageEvent) {
     try {
-      const data = typeof event.data === 'string' ? event.data : await event.data.text()
+      const data = typeof event.data === 'string'
+        ? event.data
+        : await event.data.text()
       const result = visitorsMessageSchema.safeParse(JSON.parse(data))
       if (socket !== ws.value || status.value !== 'OPEN' || !result.success || result.data.path !== route.path)
         return

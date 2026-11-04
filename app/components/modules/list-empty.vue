@@ -5,13 +5,23 @@ const { type } = defineProps<{
   type: 'posts' | 'thoughts'
 }>()
 
-const icon = type === 'posts' ? ' i-mingcute:teacup-line' : 'i-mingcute:sparkles-line'
+const icon = type === 'posts'
+  ? ' i-mingcute:teacup-line'
+  : 'i-mingcute:sparkles-line'
 
-const tipIcon = type === 'posts' ? 'i-mingcute:pen-line' : 'i-mingcute:bulb-2-line'
+const tipIcon = type === 'posts'
+  ? 'i-mingcute:pen-line'
+  : 'i-mingcute:bulb-2-line'
 
-const title = type === 'posts' ? '这里暂时空空如也' : '灵感还在潜水'
-const description = type === 'posts' ? '博主正在努力码字中，或许你可以稍后再来看看。' : '现在的脑袋空空如也，没有任何想法。'
-const hint = type === 'posts' ? '（好灵感总是在洗澡时才出现 🚿）' : '（或许去散散步能捕捉到一些灵感 ✨）'
+const title = type === 'posts'
+  ? '这里暂时空空如也'
+  : '灵感还在潜水'
+const description = type === 'posts'
+  ? '博主正在努力码字中，或许你可以稍后再来看看。'
+  : '现在的脑袋空空如也，没有任何想法。'
+const hint = type === 'posts'
+  ? '（好灵感总是在洗澡时才出现 🚿）'
+  : '（或许去散散步能捕捉到一些灵感 ✨）'
 </script>
 
 <template>

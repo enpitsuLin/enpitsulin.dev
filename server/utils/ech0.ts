@@ -31,7 +31,9 @@ const PAGE_SIZE = 20
 function publicUrl(value: string, baseUrl: string) {
   try {
     const url = new URL(value, baseUrl)
-    return ['https:', 'http:'].includes(url.protocol) ? url.href : undefined
+    return ['https:', 'http:'].includes(url.protocol)
+      ? url.href
+      : undefined
   }
   catch {
     return undefined
@@ -45,14 +47,20 @@ function toMedia(files: Echo['echo_files'], baseUrl: string): SparkMedia[] {
     if (!file || !url)
       continue
     const category = file.category || file.content_type?.split('/')[0]
-    const kind = category === 'image' || category === 'video' || category === 'audio' ? category : 'file'
+    const kind = category === 'image' || category === 'video' || category === 'audio'
+      ? category
+      : 'file'
     media.push({
       id,
       url,
       name: file.name || '贴文附件',
       kind,
-      width: file.width && file.width > 0 ? file.width : undefined,
-      height: file.height && file.height > 0 ? file.height : undefined,
+      width: file.width && file.width > 0
+        ? file.width
+        : undefined,
+      height: file.height && file.height > 0
+        ? file.height
+        : undefined,
     })
   }
   return media
@@ -78,12 +86,21 @@ export async function fetchSparks(options: { baseUrl: string, tag: string, page:
   const request = $fetch.create({
     baseURL: baseUrl,
     timeout: 8000,
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    headers: token
+      ? { Authorization: `Bearer ${token}` }
+      : undefined,
   })
 
   const { data: tags } = await request<{ data: EchoTag[] }>('api/tags')
   const selectedTag = tags.find(item => item.name === tag)
-  const empty: SparksPage = { items: [], total: 0, page, hasMore: false, sourceUrl: baseUrl, tag }
+  const empty: SparksPage = {
+    items: [],
+    total: 0,
+    page,
+    hasMore: false,
+    sourceUrl: baseUrl,
+    tag,
+  }
   // An empty tagIds array means ALL posts in Ech0, not an empty result.
   if (!selectedTag?.id)
     return empty

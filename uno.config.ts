@@ -51,20 +51,70 @@ export default defineConfig<Theme>({
       'animate-out',
       { animation: 'animate-exit .2s ease-out' },
     ],
-    [/^fade-in-?(.+)?$/, ([, d]) => ({ '--un-enter-opacity': `${Number(handleMatchNumber(d) || 0) / 100}` })],
-    [/^fade-out-?(.+)?$/, ([, d]) => ({ '--un-exit-opacity': `${Number(handleMatchNumber(d) || 0) / 100}` })],
-    [/^zoom-in-?(.+)?$/, ([, d]) => ({ '--un-enter-scale': `${Number(handleMatchNumber(d) || 0) / 100}` })],
-    [/^zoom-out-?(.+)?$/, ([, d]) => ({ '--un-exit-scale': `${Number(handleMatchNumber(d) || 0) / 100}` })],
-    [/^spin-in-?(.+)?$/, ([, d]) => ({ '--un-enter-rotate': `${Number(handleMatchNumber(d) || 0)}deg` })],
-    [/^spin-out-?(.+)?$/, ([, d]) => ({ '--un-exit-rotate': `${Number(handleMatchNumber(d) || 0)}deg` })],
-    [/^slide-in-from-top-?(.+)?$/, ([, d]) => ({ '--un-enter-translate-y': `-${handleMatchRem(d)}` })],
-    [/^slide-in-from-bottom-?(.+)?$/, ([, d]) => ({ '--un-enter-translate-y': handleMatchRem(d) })],
-    [/^slide-in-from-left-?(.+)?$/, ([, d]) => ({ '--un-enter-translate-x': `-${handleMatchRem(d)}` })],
-    [/^slide-in-from-right-?(.+)?$/, ([, d]) => ({ '--un-enter-translate-x': handleMatchRem(d) })],
-    [/^slide-out-to-top-?(.+)?$/, ([, d]) => ({ '--un-exit-translate-y': `-${handleMatchRem(d)}` })],
-    [/^slide-out-to-bottom-?(.+)?$/, ([, d]) => ({ '--un-exit-translate-y': handleMatchRem(d) })],
-    [/^slide-out-to-left-?(.+)?$/, ([, d]) => ({ '--un-exit-translate-x': `-${handleMatchRem(d)}` })],
-    [/^slide-out-to-right-?(.+)?$/, ([, d]) => ({ '--un-exit-translate-x': handleMatchRem(d) })],
+    [
+      /^fade-in-?(.+)?$/,
+      ([, d]) => ({ '--un-enter-opacity': `${Number(handleMatchNumber(d) || 0) / 100}` }),
+    ],
+    [
+      /^fade-out-?(.+)?$/,
+      ([, d]) => ({ '--un-exit-opacity': `${Number(handleMatchNumber(d) || 0) / 100}` }),
+    ],
+    [
+      /^zoom-in-?(.+)?$/,
+      ([, d]) => ({ '--un-enter-scale': `${Number(handleMatchNumber(d) || 0) / 100}` }),
+    ],
+    [
+      /^zoom-out-?(.+)?$/,
+      ([, d]) => ({ '--un-exit-scale': `${Number(handleMatchNumber(d) || 0) / 100}` }),
+    ],
+    [
+      /^spin-in-?(.+)?$/,
+      ([, d]) => ({ '--un-enter-rotate': `${Number(handleMatchNumber(d) || 0)}deg` }),
+    ],
+    [
+      /^spin-out-?(.+)?$/,
+      ([, d]) => ({ '--un-exit-rotate': `${Number(handleMatchNumber(d) || 0)}deg` }),
+    ],
+    [
+      /^slide-in-from-top-?(.+)?$/,
+      ([, d]) => ({ '--un-enter-translate-y': `-${handleMatchRem(d)}` }),
+    ],
+    [
+      /^slide-in-from-bottom-?(.+)?$/,
+      ([, d]) => ({
+        '--un-enter-translate-y': handleMatchRem(d),
+      }),
+    ],
+    [
+      /^slide-in-from-left-?(.+)?$/,
+      ([, d]) => ({ '--un-enter-translate-x': `-${handleMatchRem(d)}` }),
+    ],
+    [
+      /^slide-in-from-right-?(.+)?$/,
+      ([, d]) => ({
+        '--un-enter-translate-x': handleMatchRem(d),
+      }),
+    ],
+    [
+      /^slide-out-to-top-?(.+)?$/,
+      ([, d]) => ({ '--un-exit-translate-y': `-${handleMatchRem(d)}` }),
+    ],
+    [
+      /^slide-out-to-bottom-?(.+)?$/,
+      ([, d]) => ({
+        '--un-exit-translate-y': handleMatchRem(d),
+      }),
+    ],
+    [
+      /^slide-out-to-left-?(.+)?$/,
+      ([, d]) => ({ '--un-exit-translate-x': `-${handleMatchRem(d)}` }),
+    ],
+    [
+      /^slide-out-to-right-?(.+)?$/,
+      ([, d]) => ({
+        '--un-exit-translate-x': handleMatchRem(d),
+      }),
+    ],
   ],
   presets: [
     presetWind3(),

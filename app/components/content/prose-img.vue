@@ -18,7 +18,14 @@ const refinedSrc = computed(() => {
   }
   return props.src
 })
-const images = computed(() => [{ src: refinedSrc.value, alt: props.alt, width: props.width, height: props.height }])
+const images = computed(() => [
+  {
+    src: refinedSrc.value,
+    alt: props.alt,
+    width: props.width,
+    height: props.height,
+  },
+])
 </script>
 
 <template>

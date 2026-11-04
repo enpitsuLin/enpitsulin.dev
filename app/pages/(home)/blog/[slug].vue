@@ -21,7 +21,9 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () =>
   queryCollectionItemSurroundings(
     'blog',
     route.path,
-    { fields: ['description'] },
+    {
+      fields: ['description'],
+    },
   ).order('publishedAt', 'DESC'))
 
 const title = computed(() => page.value?.seo?.title || page.value?.title)
@@ -85,8 +87,11 @@ const readingProgress = computed(() => {
   // Start below the sticky header; finish when the article's end enters the viewport.
   const readingOffset = 80
   const readingDistance = articleHeight.value - viewportHeight.value + readingOffset
-  if (readingDistance <= 0)
-    return articleBottom.value <= viewportHeight.value ? 100 : 0
+  if (readingDistance <= 0) {
+    return articleBottom.value <= viewportHeight.value
+      ? 100
+      : 0
+  }
 
   const progress = (readingOffset - articleTop.value) / readingDistance
   return Math.round(Math.min(1, Math.max(0, progress)) * 100)

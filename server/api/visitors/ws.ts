@@ -20,7 +20,10 @@ export default defineWebSocketHandler({
     if (!result.success)
       return
 
-    setVisitorState(peer, { ...getVisitorState(peer), path: result.data.path })
+    setVisitorState(peer, {
+      ...getVisitorState(peer),
+      path: result.data.path,
+    })
     broadcastVisitors(peer)
   },
 
@@ -36,7 +39,10 @@ export default defineWebSocketHandler({
 function broadcastVisitors(peer: Peer, excludedPeerId?: string) {
   const peers = [...peer.peers]
     .filter(p => p.id !== excludedPeerId && p.websocket.readyState === 1)
-    .map(p => ({ peer: p, state: getVisitorState(p) }))
+    .map(p => ({
+      peer: p,
+      state: getVisitorState(p),
+    }))
   const visitors = new Set<string>()
   const pages = new Map<string, Set<string>>()
 

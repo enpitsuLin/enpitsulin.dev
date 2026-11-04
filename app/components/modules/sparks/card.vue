@@ -5,7 +5,12 @@ import type { Spark } from '#shared/types/sparks'
 const props = defineProps<{ spark: Spark }>()
 const images = computed(() => props.spark.media
   .filter(media => media.kind === 'image')
-  .map(media => ({ src: media.url, alt: media.name, width: media.width, height: media.height })))
+  .map(media => ({
+    src: media.url,
+    alt: media.name,
+    width: media.width,
+    height: media.height,
+  })))
 const attachments = computed(() => props.spark.media.filter(media => media.kind !== 'image'))
 
 // Treat remote posts as Markdown only.
@@ -13,8 +18,13 @@ const parserOptions: MDCParseOptions = {
   toc: false,
   contentHeading: false,
   highlight: false,
-  remark: { plugins: { 'remark-mdc': false } },
-  rehype: { options: { allowDangerousHtml: false }, plugins: { 'rehype-raw': false } },
+  remark: {
+    plugins: { 'remark-mdc': false },
+  },
+  rehype: {
+    options: { allowDangerousHtml: false },
+    plugins: { 'rehype-raw': false },
+  },
 }
 
 const dateFormat = new Intl.DateTimeFormat('zh-CN', {

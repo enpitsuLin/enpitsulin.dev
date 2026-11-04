@@ -1,6 +1,17 @@
 <script setup lang="ts">
 const easterEgg = ref(false)
-const inputQueue = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA']
+const inputQueue = [
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'KeyB',
+  'KeyA',
+]
 const currentIndex = ref(0)
 
 function handleKeyDown(e: KeyboardEvent) {

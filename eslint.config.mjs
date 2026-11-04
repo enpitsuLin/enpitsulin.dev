@@ -11,11 +11,12 @@ export default withNuxt(
         vueVersion: 3,
       },
       rules: {
-        'antfu/reasonable-newline': 'off',
         'vue/no-multiple-template-root': 'off',
         'import-lite/first': 'off',
       },
     },
-    { ignores: ['content/**/*.md'] },
+    {
+      ignores: ['content/**/*.md'],
+    },
   ),
 )

@@ -11,7 +11,9 @@ const root = useTemplateRef<HTMLElement>('root')
 const content = useTemplateRef<HTMLElement>('content')
 onClickOutside(root, () => {
   open.value = false
-}, { ignore: [content] })
+}, {
+  ignore: [content],
+})
 </script>
 
 <template>

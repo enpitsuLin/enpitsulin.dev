@@ -30,7 +30,9 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
     navigateTo({
       name: 'blog-page',
       params: {
-        page: details.page === 1 ? undefined : details.page,
+        page: details.page === 1
+          ? undefined
+          : details.page,
       },
     })
   },

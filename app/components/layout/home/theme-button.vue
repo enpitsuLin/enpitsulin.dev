@@ -3,7 +3,9 @@ const colorMode = useColorMode()
 
 function onClick() {
   const toggle = () => {
-    colorMode.preference = colorMode.value === 'light' ? 'dark' : 'light'
+    colorMode.preference = colorMode.value === 'light'
+      ? 'dark'
+      : 'light'
   }
   if (!document.startViewTransition) {
     toggle()

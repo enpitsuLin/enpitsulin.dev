@@ -12,16 +12,28 @@ useSeoMeta({
   ogDescription: '一些尚未写成文章的想法，和生活里偶尔闪过的火花。',
   ogUrl: `${siteUrl}/sparks`,
 })
-useHead({ link: [{ rel: 'canonical', href: `${siteUrl}/sparks` }] })
+useHead({
+  link: [
+    { rel: 'canonical', href: `${siteUrl}/sparks` },
+  ],
+})
 
 const { data, error, status, refresh } = await useFetch<SparksPage>('/api/sparks', { key: 'sparks' })
 const { state: feed, isLoading: loadingMore, error: loadMoreError, executeImmediate: fetchNextPage } = useAsyncState(async (): Promise<SparksPage | undefined> => {
   const current = feed.value
   if (!current?.hasMore)
     return current
-  const next = await $fetch<SparksPage>('/api/sparks', { query: { page: current.page + 1 } })
+  const next = await $fetch<SparksPage>('/api/sparks', {
+    query: { page: current.page + 1 },
+  })
   const ids = new Set(current.items.map(item => item.id))
-  return { ...next, items: [...current.items, ...next.items.filter(item => !ids.has(item.id))] }
+  return {
+    ...next,
+    items: [
+      ...current.items,
+      ...next.items.filter(item => !ids.has(item.id)),
+    ],
+  }
 }, data.value, {
   immediate: false,
   resetOnExecute: false,

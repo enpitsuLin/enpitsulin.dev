@@ -32,7 +32,9 @@ const paginationOptions = computed<UsePaginationProps>(() => ({
       name: 'blog-tag-tag-page',
       params: {
         tag: route.params.tag,
-        page: details.page === 1 ? undefined : details.page,
+        page: details.page === 1
+          ? undefined
+          : details.page,
       },
     })
   },

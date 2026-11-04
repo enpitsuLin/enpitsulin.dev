@@ -40,7 +40,12 @@ export function setVisitorState(peer: Peer, state: VisitorState) {
   if (socket) {
     const attachment: unknown = socket.deserializeAttachment()
     // Preserve crossws's connection ID, upgrade URL and subscriptions.
-    socket.serializeAttachment({ ...(isRecord(attachment) ? attachment : {}), visitorState: state })
+    socket.serializeAttachment({
+      ...(isRecord(attachment)
+        ? attachment
+        : {}),
+      visitorState: state,
+    })
   }
   peer.context.visitorState = state
 }

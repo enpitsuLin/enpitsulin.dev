@@ -33,7 +33,11 @@ provide(masonryContextKey, {
 })
 
 // Native grid lanes also lay out server-rendered content before hydration.
-useResizeObserver(() => supportsGridLanes.value ? [] : [...items.keys()], (entries) => {
+useResizeObserver(() => supportsGridLanes.value
+  ? []
+  : [
+      ...items.keys(),
+    ], (entries) => {
   for (const { target, borderBoxSize } of entries) {
     if (!(target instanceof HTMLElement))
       continue

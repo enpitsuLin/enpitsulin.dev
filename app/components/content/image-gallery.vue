@@ -4,7 +4,14 @@ import ImagePreview from '~/components/ui/image-preview.vue'
 
 const props = defineProps<{ images: GalleryImage[], layout?: string }>()
 
-const layouts = ['waterfall', 'grid', 'horizontal', 'carousel', 'stack', 'none'] as const
+const layouts = [
+  'waterfall',
+  'grid',
+  'horizontal',
+  'carousel',
+  'stack',
+  'none',
+] as const
 const carouselIndex = shallowRef(0)
 const layout = computed(() => layouts.find(layout => layout === props.layout) || 'waterfall')
 const visibleImages = computed(() => {

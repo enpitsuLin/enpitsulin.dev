@@ -9,17 +9,23 @@ const fontMapping: Record<string, Array<FontFaceData & { weight: number, style: 
     {
       weight: 400,
       style: 'normal',
-      src: [{ url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Regular.woff2`, format: 'woff2' }],
+      src: [
+        { url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Regular.woff2`, format: 'woff2' },
+      ],
     },
     {
       weight: 500,
       style: 'normal',
-      src: [{ url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Medium.woff2`, format: 'woff2' }],
+      src: [
+        { url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Medium.woff2`, format: 'woff2' },
+      ],
     },
     {
       weight: 700,
       style: 'normal',
-      src: [{ url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Bold.woff2`, format: 'woff2' }],
+      src: [
+        { url: `${harmonyOSBaseURL}/HarmonyOS_Sans_SC_Bold.woff2`, format: 'woff2' },
+      ],
     },
   ],
 }

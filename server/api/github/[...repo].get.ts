@@ -34,14 +34,20 @@ export default defineCachedEventHandler(async (event): Promise<GitHubRepo> => {
       language: data.language,
       stars: data.stargazers_count,
       forks: data.forks_count,
-      license: data.license?.spdx_id === 'NOASSERTION' ? data.license.name : data.license?.spdx_id || null,
+      license: data.license?.spdx_id === 'NOASSERTION'
+        ? data.license.name
+        : data.license?.spdx_id || null,
     }
   }
   catch (error) {
-    const statusCode = (error as { statusCode?: number }).statusCode === 404 ? 404 : 502
+    const statusCode = (error as { statusCode?: number }).statusCode === 404
+      ? 404
+      : 502
     throw createError({
       statusCode,
-      statusMessage: statusCode === 404 ? 'Repository not found' : 'Unable to load GitHub repository',
+      statusMessage: statusCode === 404
+        ? 'Repository not found'
+        : 'Unable to load GitHub repository',
     })
   }
 }, {
