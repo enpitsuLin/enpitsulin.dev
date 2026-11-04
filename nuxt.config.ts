@@ -14,16 +14,21 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   routeRules: {
+    '/blog': { prerender: true },
+    '/blog/**': { prerender: true },
     'feed.xml': { prerender: true },
     '/sparks': { prerender: false },
     '/api/sparks': { prerender: false },
   },
+
+  site: { url: 'https://enpitsulin.dev' },
 
   ogImage: {
     zeroRuntime: true,
   },
 
   fonts: {
+    // Resolve site-wide faces before Vite builds so client asset IDs cannot leak into SSR CSS.
     providers: {
       cdn: '~~/providers/cdn',
     },
@@ -31,15 +36,17 @@ export default defineNuxtConfig({
       {
         name: 'HarmonyOS Sans SC',
         provider: 'cdn',
+        global: true,
         weights: [400, 500, 700],
         styles: ['normal'],
         // The upstream Chinese fonts are full files, so load them only when used.
         preload: false,
       },
-      { name: 'Inter', provider: 'google', weights: ['400 700'], styles: ['normal'] },
+      { name: 'Inter', provider: 'google', weights: ['400 700'], styles: ['normal'], global: true },
       {
         name: 'MonaspiceArNerdFont',
         provider: 'local',
+        global: true,
         weights: [500],
         styles: ['normal'],
         preload: false,

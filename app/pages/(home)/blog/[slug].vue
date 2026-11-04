@@ -6,8 +6,6 @@ defineOptions({
   name: 'BlogSlug',
 })
 
-defineRouteRules({ prerender: true })
-
 definePageMeta({
   layout: 'home',
 })

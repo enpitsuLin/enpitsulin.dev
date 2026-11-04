@@ -33,9 +33,13 @@ trustPolicyExclude:
   - '@unocss/webpack@66.5.10'
 
 overrides:
-  '@nuxt/content>nuxt-component-meta': 0.17.2
+  # Content and Studio still pin metadata tooling with outdated unplugin/oxc peers.
+  nuxt-component-meta: 0.19.0
 
 packageExtensions:
-  h3@2.0.1-rc.32:
+  h3@2.0.8:
     optionalDependencies:
-      crossws: ^0.4.12
+      crossws: ^0.4.17
+  vite-plugin-vue-devtools@9.0.0-rc.2:
+    optionalDependencies:
+      '@vitejs/devtools': ^0.7.6
