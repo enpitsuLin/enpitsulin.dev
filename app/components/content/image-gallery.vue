@@ -30,49 +30,33 @@ watch(() => props.images, () => carouselIndex.value = 0)
   <div v-if="images.length && layout !== 'none'" class="not-prose">
     <ImagePreview v-slot="{ openImage, imageStyle }" :images="images">
       <div
-        class="image-gallery" :data-layout="layout" :data-single="images.length === 1"
-        :grid="layout === 'horizontal' ? undefined : '~'"
-        :grid-cols="layout === 'stack' ? '[repeat(5,48px)]' : images.length === 1 || layout === 'carousel' ? '1' : layout === 'grid' ? '3' : '2'"
-        :flex="layout === 'horizontal' ? '~' : undefined" items-start
-        :gap="layout === 'stack' ? '0' : '2'" :justify="layout === 'stack' ? 'center' : undefined"
-        :isolate="layout === 'stack' ? '' : undefined"
-        :overflow-x="layout === 'horizontal' ? 'auto' : undefined"
-        :snap="layout === 'horizontal' ? 'x mandatory' : undefined"
-        :class="{ '[scrollbar-width:thin]': layout === 'horizontal' }"
-        :p="layout === 'horizontal' ? '1 b-3' : layout === 'stack' ? 'x-3 y-4' : undefined"
+        class="image-gallery group/gallery data-[layout=waterfall]:data-[single=false]:grid-cols-2 data-[layout=grid]:data-[single=false]:grid-cols-3 data-[layout=stack]:(grid-cols-[repeat(5,48px)] gap-0 justify-center isolate px-3 py-4) data-[layout=horizontal]:(flex overflow-x-auto snap-x snap-mandatory [scrollbar-width:thin] p-1 pb-3)"
+        :data-layout="layout" :data-single="images.length === 1" :data-odd="images.length % 2 !== 0"
+        grid="~ cols-1" items-start gap-2
       >
         <a
           v-for="{ image, index } in visibleImages" :key="`${index}-${image.src}`"
           :href="image.src" target="_blank" rel="noopener noreferrer"
           :data-image-index="index"
-          :col-span="layout === 'waterfall' && images.length % 2 !== 0 && index === 0 ? 'full' : undefined"
-          :aspect="layout === 'grid' || layout === 'stack' ? 'square' : undefined"
-          :flex="layout === 'horizontal' ? 'none' : undefined" :snap="layout === 'horizontal' ? 'start' : undefined"
-          :w="layout === 'stack' ? '15' : undefined" :border="layout === 'stack' ? '2 white' : undefined"
-          :shadow="layout === 'stack' ? '[0_2px_5px_rgb(0,0,0,0.15)]' : undefined"
-          :rotate="layout === 'stack' ? '$image-rotation' : undefined"
-          :transition="layout === 'stack' ? 'transform duration-200 motion-reduce:none' : undefined"
-          :z="layout === 'stack' ? 'hover:1 focus-visible:1' : undefined"
-          :scale="layout === 'stack' ? 'hover:125 focus-visible:125' : undefined"
-          :style="layout === 'stack' ? { '--image-rotation': `${index % 2 ? 6 : -6}deg` } : undefined"
-          class="image-gallery-image"
-          relative block min-w-0 overflow-hidden :rounded="layout === 'stack' ? '2px' : 'lg'" bg="zinc-100 dark:zinc-800"
+          class="image-gallery-image group-data-[layout=waterfall]/gallery:group-data-[odd=true]/gallery:first:col-span-full group-data-[layout=grid]/gallery:aspect-square group-data-[layout=horizontal]/gallery:flex-none group-data-[layout=horizontal]/gallery:snap-start group-data-[layout=stack]/gallery:aspect-square group-data-[layout=stack]/gallery:w-15 group-data-[layout=stack]/gallery:border-2 group-data-[layout=stack]/gallery:border-white group-data-[layout=stack]/gallery:rounded-2px group-data-[layout=stack]/gallery:shadow-[0_2px_5px_rgb(0,0,0,0.15)] group-data-[layout=stack]/gallery:odd:-rotate-6 group-data-[layout=stack]/gallery:even:rotate-6 group-data-[layout=stack]/gallery:transition-transform group-data-[layout=stack]/gallery:duration-200 group-data-[layout=stack]/gallery:motion-reduce:transition-none group-data-[layout=stack]/gallery:hover:z-1 group-data-[layout=stack]/gallery:focus-visible:z-1 group-data-[layout=stack]/gallery:hover:scale-125 group-data-[layout=stack]/gallery:focus-visible:scale-125"
+          relative block min-w-0
+          overflow-hidden rounded-lg bg="zinc-100 dark:zinc-800"
           ring="focus-visible:2 focus-visible:accent" ring-offset-2
           :aria-label="`查看图片 ${index + 1} / ${images.length}：${image.alt || '图片'}${layout === 'grid' && index === 8 && images.length > 9 ? `，另有 ${images.length - 9} 张` : ''}`"
           @click="openImage($event, index)"
         >
           <img
-            :src="image.src" :alt="image.alt || ''" :width="image.width" :height="image.height"
+            :src="image.src" :alt="image.alt || ''"
+            :width="image.width" :height="image.height"
             :style="imageStyle(index)"
             loading="lazy" decoding="async" block
-            :w="layout === 'horizontal' ? 'auto' : 'full'"
-            :h="layout === 'horizontal' ? '50' : layout === 'grid' || layout === 'stack' ? 'full' : 'auto'"
-            :max-w="layout === 'horizontal' ? 'none' : undefined"
-            :object="layout === 'grid' || layout === 'stack' ? 'cover' : undefined"
+            class="group-data-[layout=horizontal]/gallery:w-auto group-data-[layout=horizontal]/gallery:h-50 group-data-[layout=horizontal]/gallery:max-w-none group-data-[layout=grid]/gallery:h-full group-data-[layout=grid]/gallery:object-cover group-data-[layout=stack]/gallery:h-full group-data-[layout=stack]/gallery:object-cover"
+            w-full h-auto
           >
           <span
             v-if="layout === 'grid' && index === 8 && images.length > 9"
-            absolute inset-0 flex="~ items-center justify-center" bg="black/55" un-text="white xl" aria-hidden="true"
+            absolute inset-0 flex="~ items-center justify-center"
+            bg="black/55" un-text="white xl" aria-hidden="true"
           >
             +{{ images.length - 9 }}
           </span>
@@ -82,7 +66,8 @@ watch(() => props.images, () => carouselIndex.value = 0)
     <div v-if="layout === 'carousel' && images.length > 1" flex="~ items-center justify-center gap-3" mt-2>
       <button
         type="button" aria-label="上一张" :disabled="carouselIndex === 0"
-        flex="~ items-center justify-center" size-9 rounded-full cursor="pointer disabled:default"
+        flex="~ items-center justify-center" size-9 rounded-full
+        cursor="pointer disabled:default"
         bg="hover:zinc-100 dark:hover:zinc-700" op="disabled:40" ring="focus-visible:2 focus-visible:accent"
         @click="carouselIndex--"
       >
@@ -91,7 +76,8 @@ watch(() => props.images, () => carouselIndex.value = 0)
       <span aria-live="polite" aria-atomic="true" un-text="sm zinc-500 dark:zinc-400">{{ carouselIndex + 1 }} / {{ images.length }}</span>
       <button
         type="button" aria-label="下一张" :disabled="carouselIndex === images.length - 1"
-        flex="~ items-center justify-center" size-9 rounded-full cursor="pointer disabled:default"
+        flex="~ items-center justify-center" size-9 rounded-full
+        cursor="pointer disabled:default"
         bg="hover:zinc-100 dark:hover:zinc-700" op="disabled:40" ring="focus-visible:2 focus-visible:accent"
         @click="carouselIndex++"
       >
