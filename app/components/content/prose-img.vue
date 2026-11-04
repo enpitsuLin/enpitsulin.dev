@@ -29,7 +29,7 @@ const images = computed(() => [
 </script>
 
 <template>
-  <ImagePreview v-slot="{ openImage }" :images="images">
+  <ImagePreview v-slot="{ openImage, imageStyle }" :images="images">
     <figure flex="~ col items-center">
       <a
         :href="refinedSrc" target="_blank" rel="noopener noreferrer"
@@ -39,6 +39,7 @@ const images = computed(() => [
       >
         <NuxtImg
           :src="refinedSrc" :alt="alt || ''" :width="width" :height="height"
+          :style="imageStyle()"
           loading="lazy" decoding="async" max-w-full h-auto
         />
       </a>

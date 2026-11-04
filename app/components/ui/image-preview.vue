@@ -4,7 +4,28 @@ import { Dialog } from '@ark-ui/vue/dialog'
 
 const props = defineProps<{ images: GalleryImage[] }>()
 
-const open = shallowRef(false)
+const isOpen = shallowRef(false)
+const previewImage = useTemplateRef<HTMLImageElement>('previewImage')
+const open = computed({
+  get: () => isOpen.value,
+  set(value: boolean) {
+    if (value === isOpen.value)
+      return
+    if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      isOpen.value = value
+      return
+    }
+
+    const transition = document.startViewTransition(async () => {
+      isOpen.value = value
+      await nextTick()
+      if (value)
+        await previewImage.value?.decode().catch(() => {})
+    })
+    // A newer transition may skip this animation without cancelling the state update.
+    transition.ready.catch(() => {})
+  },
+})
 const activeIndex = shallowRef(0)
 const zoomed = shallowRef(false)
 const loaded = shallowRef(false)
@@ -12,7 +33,18 @@ const failed = shallowRef(false)
 const viewport = useTemplateRef<HTMLDivElement>('viewport')
 const title = useTemplateRef<HTMLHeadingElement>('title')
 const current = computed(() => props.images[activeIndex.value])
+const transitionName = `image-preview-${useId()}`
+const previewSrc = shallowRef<string>()
 let trigger: HTMLElement | null = null
+
+function imageStyle(index = 0) {
+  return {
+    viewTransitionName: !open.value && activeIndex.value === index
+      ? transitionName
+      : 'none',
+    viewTransitionClass: 'image-preview',
+  }
+}
 
 function openImage(event: MouseEvent, index = 0) {
   if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0 || !props.images[index])
@@ -22,11 +54,14 @@ function openImage(event: MouseEvent, index = 0) {
     ? event.currentTarget
     : null
   activeIndex.value = index
+  // Reuse the decoded thumbnail, including NuxtImg's optimized URL, for the snapshot.
+  previewSrc.value = trigger?.querySelector('img')?.currentSrc || props.images[index]?.src
   open.value = true
 }
 
 function changeImage(step: number) {
   activeIndex.value = Math.min(props.images.length - 1, Math.max(0, activeIndex.value + step))
+  previewSrc.value = current.value?.src
 }
 
 watch([
@@ -75,7 +110,7 @@ useSwipe(viewport, {
     :initial-focus-el="() => title"
     :final-focus-el="() => trigger"
   >
-    <slot :open-image="openImage" />
+    <slot :open-image="openImage" :image-style="imageStyle" />
     <Teleport to="#teleports">
       <Dialog.Backdrop fixed inset-0 z-100 bg="black/80" />
       <Dialog.Positioner fixed inset-0 z-101>
@@ -140,8 +175,10 @@ useSwipe(viewport, {
                 图片加载失败，可打开原图重试。
               </p>
               <img
-                v-else-if="current" :key="current.src" :src="current.src" :alt="current.alt || ''"
+                v-else-if="current" :key="current.src" ref="previewImage" :src="previewSrc || current.src"
+                :alt="current.alt || ''"
                 class="preview-image" :data-zoomed="zoomed" decoding="async"
+                :style="{ viewTransitionName: open ? transitionName : 'none', viewTransitionClass: 'image-preview' }"
                 block w-auto h-auto object-contain
                 :max-w="zoomed ? 'none' : '[100cqw]'" :max-h="zoomed ? 'none' : '[100cqh]'"
                 @load="loaded = true" @error="failed = true"
@@ -175,3 +212,10 @@ useSwipe(viewport, {
     </Teleport>
   </Dialog.Root>
 </template>
+
+<style>
+::view-transition-group(*.image-preview) {
+  animation-duration: 300ms;
+  animation-timing-function: ease-in-out;
+}
+</style>

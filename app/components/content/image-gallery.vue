@@ -28,7 +28,7 @@ watch(() => props.images, () => carouselIndex.value = 0)
 
 <template>
   <div v-if="images.length && layout !== 'none'" class="not-prose">
-    <ImagePreview v-slot="{ openImage }" :images="images">
+    <ImagePreview v-slot="{ openImage, imageStyle }" :images="images">
       <div
         class="image-gallery" :data-layout="layout" :data-single="images.length === 1"
         :grid="layout === 'horizontal' ? undefined : '~'"
@@ -63,6 +63,7 @@ watch(() => props.images, () => carouselIndex.value = 0)
         >
           <img
             :src="image.src" :alt="image.alt || ''" :width="image.width" :height="image.height"
+            :style="imageStyle(index)"
             loading="lazy" decoding="async" block
             :w="layout === 'horizontal' ? 'auto' : 'full'"
             :h="layout === 'horizontal' ? '50' : layout === 'grid' || layout === 'stack' ? 'full' : 'auto'"
