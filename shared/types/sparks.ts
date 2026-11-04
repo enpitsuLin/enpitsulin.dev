@@ -13,6 +13,7 @@ export interface Spark {
   createdAt: string
   tags: string[]
   media: SparkMedia[]
+  layout?: string
   url: string
 }
 

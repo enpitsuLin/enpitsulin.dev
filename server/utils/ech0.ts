@@ -10,6 +10,7 @@ interface Echo {
   content: string
   private: boolean
   created_at: number
+  layout?: string
   tags?: EchoTag[]
   echo_files?: {
     file_id: string
@@ -64,6 +65,7 @@ function toSpark(echo: Echo, baseUrl: string): Spark {
     createdAt: new Date(echo.created_at * 1000).toISOString(),
     tags: (echo.tags || []).map(tag => tag.name),
     media: toMedia(echo.echo_files, baseUrl),
+    layout: echo.layout,
     url: new URL(`echo/${encodeURIComponent(echo.id)}`, baseUrl).href,
   }
 }

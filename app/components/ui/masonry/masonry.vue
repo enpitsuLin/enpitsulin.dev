@@ -9,10 +9,22 @@ const { as = 'div', gap = '1rem' } = defineProps<{
 
 const items = shallowReactive(new Map<HTMLElement, HTMLElement>())
 const measured = ref(false)
+const supportsGridLanes = useSupported(() => typeof CSS !== 'undefined' && CSS.supports('display', 'grid-lanes'))
+
+function updateSpan(item: HTMLElement, height: number) {
+  const span = `span ${Math.max(1, Math.ceil(height))}`
+  if (item.style.gridRowEnd !== span)
+    item.style.gridRowEnd = span
+}
 
 provide(masonryContextKey, {
   registerItem(item, content) {
     items.set(content, item)
+    if (!supportsGridLanes.value) {
+      // offsetHeight is unaffected by the card's entrance animation.
+      updateSpan(item, content.offsetHeight)
+      measured.value = true
+    }
     return () => {
       items.delete(content)
       item.style.removeProperty('grid-row-end')
@@ -21,29 +33,25 @@ provide(masonryContextKey, {
 })
 
 // Native grid lanes also lay out server-rendered content before hydration.
-if (import.meta.client && !CSS.supports('display', 'grid-lanes')) {
-  useResizeObserver(() => [...items.keys()], (entries) => {
-    for (const { target, borderBoxSize } of entries) {
-      if (!(target instanceof HTMLElement))
-        continue
-      const item = items.get(target)
-      if (!item)
-        continue
-      // Measure natural content plus its gutter, independent of the grid span.
-      const height = borderBoxSize[0]?.blockSize ?? target.getBoundingClientRect().height
-      const span = `span ${Math.max(1, Math.ceil(height))}`
-      if (item.style.gridRowEnd !== span)
-        item.style.gridRowEnd = span
-    }
-    measured.value = true
-  }, { box: 'border-box' })
-}
+useResizeObserver(() => supportsGridLanes.value ? [] : [...items.keys()], (entries) => {
+  for (const { target, borderBoxSize } of entries) {
+    if (!(target instanceof HTMLElement))
+      continue
+    const item = items.get(target)
+    if (!item)
+      continue
+    // Measure natural content plus its gutter, independent of the grid span.
+    const height = borderBoxSize[0]?.blockSize ?? target.offsetHeight
+    updateSpan(item, height)
+  }
+  measured.value = true
+}, { box: 'border-box' })
 </script>
 
 <template>
   <component
     :is="as"
-    class="grid grid-gap-col-$masonry-gap [@support_(dispaly:_grid-lanes)]:([display:grid-lanes] [flow-tolerance:0])"
+    class="grid grid-gap-col-$masonry-gap"
     data-slot="masonry"
     grid="cols-1"
     :auto-rows="measured ? '1px' : 'auto'"
@@ -52,3 +60,12 @@ if (import.meta.client && !CSS.supports('display', 'grid-lanes')) {
     <slot />
   </component>
 </template>
+
+<style scoped>
+@supports (display: grid-lanes) {
+  [data-slot='masonry'] {
+    display: grid-lanes;
+    flow-tolerance: 0;
+  }
+}
+</style>

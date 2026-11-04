@@ -2,7 +2,11 @@
 import type { MDCParseOptions } from '@nuxtjs/mdc'
 import type { Spark } from '#shared/types/sparks'
 
-defineProps<{ spark: Spark }>()
+const props = defineProps<{ spark: Spark }>()
+const images = computed(() => props.spark.media
+  .filter(media => media.kind === 'image')
+  .map(media => ({ src: media.url, alt: media.name, width: media.width, height: media.height })))
+const attachments = computed(() => props.spark.media.filter(media => media.kind !== 'image'))
 
 // Treat remote posts as Markdown only.
 const parserOptions: MDCParseOptions = {
@@ -45,20 +49,12 @@ const dateFormat = new Intl.DateTimeFormat('zh-CN', {
       </MDC>
     </div>
 
-    <div v-if="spark.media.length" flex="~ col gap-2" mt-3>
-      <template v-for="media in spark.media" :key="media.id">
-        <a
-          v-if="media.kind === 'image'" :href="media.url" target="_blank" rel="noopener noreferrer"
-          block overflow-hidden rounded-xl ring="focus-visible:2 focus-visible:accent" ring-offset-2
-          :aria-label="`查看图片：${media.name}`"
-        >
-          <img
-            :src="media.url" :alt="media.name" :width="media.width" :height="media.height"
-            loading="lazy" decoding="async" w-full h-auto bg="zinc-100 dark:zinc-800"
-          >
-        </a>
+    <ImageGallery v-if="images.length" :images="images" :layout="spark.layout" mt-3 />
+
+    <div v-if="attachments.length" flex="~ col gap-2" mt-3>
+      <template v-for="media in attachments" :key="media.id">
         <video
-          v-else-if="media.kind === 'video'" :src="media.url" controls preload="metadata"
+          v-if="media.kind === 'video'" :src="media.url" controls preload="metadata"
           :width="media.width" :height="media.height" :aria-label="media.name"
           w-full rounded-xl
         />
