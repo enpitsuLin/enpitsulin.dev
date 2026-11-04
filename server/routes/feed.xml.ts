@@ -1,5 +1,7 @@
 import { queryCollection } from '@nuxt/content/server'
 import { Feed } from 'feed'
+import { defineEventHandler, setHeader } from 'h3'
+import { useAppConfig } from '#imports'
 
 export default defineEventHandler(async (event) => {
   try {

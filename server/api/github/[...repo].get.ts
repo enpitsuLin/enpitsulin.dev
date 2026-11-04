@@ -1,4 +1,7 @@
 import type { GitHubRepo } from '#shared/types/github'
+import { createError, getRouterParam } from 'h3'
+import { defineCachedEventHandler } from 'nitropack/runtime'
+import { $fetch } from 'ofetch'
 import { normalizeGitHubRepo } from '#shared/utils/github-repo'
 
 interface GitHubRepoResponse {

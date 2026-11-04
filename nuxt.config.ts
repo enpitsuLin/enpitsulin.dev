@@ -161,7 +161,7 @@ export default defineNuxtConfig({
     },
   },
 
-  future: { compatibilityVersion: 4 },
+  future: { compatibilityVersion: 5 },
   compatibilityDate: '2026-04-03',
 
   nitro: {

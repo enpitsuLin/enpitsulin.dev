@@ -43,3 +43,8 @@ packageExtensions:
   vite-plugin-vue-devtools@9.0.0-rc.2:
     optionalDependencies:
       '@vitejs/devtools': ^0.7.6
+
+patchedDependencies:
+  '@nuxt/content@3.16.2': patches/@nuxt__content@3.16.2.patch
+  '@nuxtjs/mdc@0.23.2': patches/@nuxtjs__mdc@0.23.2.patch
+  nuxt-studio@1.8.0: patches/nuxt-studio@1.8.0.patch

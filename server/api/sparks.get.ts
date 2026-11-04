@@ -1,3 +1,5 @@
+import { createError, getQuery } from 'h3'
+import { defineCachedEventHandler, useRuntimeConfig } from 'nitropack/runtime'
 import { fetchSparks } from '../utils/ech0'
 
 export default defineCachedEventHandler(async (event) => {

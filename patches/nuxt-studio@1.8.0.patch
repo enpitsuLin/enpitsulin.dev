@@ -1,0 +1,196 @@
+diff --git a/dist/module/runtime/server/middleware/studio-env.js b/dist/module/runtime/server/middleware/studio-env.js
+index a1fe067f751de91c4ac9d6b94fd207f58573f927..179d9c65d598c81f5ab598ef9bf117c5bf646fa2 100644
+--- a/dist/module/runtime/server/middleware/studio-env.js
++++ b/dist/module/runtime/server/middleware/studio-env.js
+@@ -1,5 +1,5 @@
+ import { defineEventHandler } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { createHash } from "node:crypto";
+ import { defu } from "defu";
+ import { detectRepositoryFromCI } from "../utils/repository.js";
+diff --git a/dist/module/runtime/server/routes/admin.js b/dist/module/runtime/server/routes/admin.js
+index 252c1ec0396f64fb303b62838a3362ef00042672..39fa2c441e8e5ad2278e211fbfb620098638db28 100644
+--- a/dist/module/runtime/server/routes/admin.js
++++ b/dist/module/runtime/server/routes/admin.js
+@@ -1,5 +1,5 @@
+-import { eventHandler, getQuery, setCookie, sendRedirect, getRequestProtocol } from "h3";
+-import { createError, useRuntimeConfig } from "#imports";
++import { eventHandler, getQuery, setCookie, sendRedirect, getRequestProtocol, createError } from "h3";
++import { useRuntimeConfig } from "nitropack/runtime";
+ export default eventHandler((event) => {
+   const { redirect } = getQuery(event);
+   if (redirect) {
+diff --git a/dist/module/runtime/server/routes/ai/analyze.post.js b/dist/module/runtime/server/routes/ai/analyze.post.js
+index 56648f0f00363d40863da6bab661b2809dd86771..5253e3c68392a96d32824b5fe72a06d6db92bc8a 100644
+--- a/dist/module/runtime/server/routes/ai/analyze.post.js
++++ b/dist/module/runtime/server/routes/ai/analyze.post.js
+@@ -2,7 +2,7 @@ import { createTextStreamResponse, streamText } from "ai";
+ import { createGateway } from "@ai-sdk/gateway";
+ import { eventHandler, createError, readBody } from "h3";
+ import { consola } from "consola";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { requireStudioAuth } from "../../utils/auth.js";
+ import { queryCollection } from "@nuxt/content/server";
+ import {
+diff --git a/dist/module/runtime/server/routes/ai/commit.post.js b/dist/module/runtime/server/routes/ai/commit.post.js
+index ee32882860dd66318c242c1474d19f4b4eb5839f..055bc9048a40aa5904f204119124304dfa19a032 100644
+--- a/dist/module/runtime/server/routes/ai/commit.post.js
++++ b/dist/module/runtime/server/routes/ai/commit.post.js
+@@ -1,7 +1,7 @@
+ import { createTextStreamResponse, streamText } from "ai";
+ import { createGateway } from "@ai-sdk/gateway";
+ import { eventHandler, readBody, createError } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { getCommitSystem } from "../../utils/ai/generate.js";
+ import { requireStudioAuth } from "../../utils/auth.js";
+ export default eventHandler(async (event) => {
+diff --git a/dist/module/runtime/server/routes/ai/generate.post.js b/dist/module/runtime/server/routes/ai/generate.post.js
+index 457997095d3e9531133b163f5d737f44441609c0..45b8d1f23706a1ad8c73d16f3a0fe704a344e58b 100644
+--- a/dist/module/runtime/server/routes/ai/generate.post.js
++++ b/dist/module/runtime/server/routes/ai/generate.post.js
+@@ -1,7 +1,7 @@
+ import { createTextStreamResponse, streamText } from "ai";
+ import { createGateway } from "@ai-sdk/gateway";
+ import { eventHandler, readBody, createError } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import {
+   buildAIContext,
+   calculateMaxTokens,
+diff --git a/dist/module/runtime/server/routes/auth/github.get.js b/dist/module/runtime/server/routes/auth/github.get.js
+index 1d1104c4d8cf3f6c0611bfd39ca284c63287815f..5ff6c270cc1411b9080187d7ad242d13ef661166 100644
+--- a/dist/module/runtime/server/routes/auth/github.get.js
++++ b/dist/module/runtime/server/routes/auth/github.get.js
+@@ -1,4 +1,4 @@
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { createError, deleteCookie, eventHandler, getCookie, getQuery, getRequestURL, sendRedirect } from "h3";
+ import { withQuery, withoutTrailingSlash } from "ufo";
+ import { generateOAuthState, requestAccessToken, validateOAuthState } from "../../utils/auth.js";
+diff --git a/dist/module/runtime/server/routes/auth/gitlab.get.js b/dist/module/runtime/server/routes/auth/gitlab.get.js
+index 5d5ad544335ff2d2b62e50f4dcdf97267da05fb5..3a41f513dd9276cd8cc029a56dad1811b6bb18f6 100644
+--- a/dist/module/runtime/server/routes/auth/gitlab.get.js
++++ b/dist/module/runtime/server/routes/auth/gitlab.get.js
+@@ -1,4 +1,4 @@
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { createError, deleteCookie, eventHandler, getCookie, getQuery, getRequestURL, sendRedirect } from "h3";
+ import { FetchError } from "ofetch";
+ import { withQuery, withoutTrailingSlash } from "ufo";
+diff --git a/dist/module/runtime/server/routes/auth/google.get.js b/dist/module/runtime/server/routes/auth/google.get.js
+index 453a211d36e77c7050120a5a314e5a8fe143d527..108c46ac8739c2ec7375e53c129769e94f124e54 100644
+--- a/dist/module/runtime/server/routes/auth/google.get.js
++++ b/dist/module/runtime/server/routes/auth/google.get.js
+@@ -1,4 +1,4 @@
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { consola } from "consola";
+ import { createError, deleteCookie, eventHandler, getCookie, getQuery, getRequestURL, sendRedirect } from "h3";
+ import { withQuery } from "ufo";
+diff --git a/dist/module/runtime/server/routes/auth/session.get.js b/dist/module/runtime/server/routes/auth/session.get.js
+index 2905abb46f1a9c4675d961ebe69f9c9f694fb142..55de9234b36d32a56b44d8f9a77b35c5357605ee 100644
+--- a/dist/module/runtime/server/routes/auth/session.get.js
++++ b/dist/module/runtime/server/routes/auth/session.get.js
+@@ -1,5 +1,5 @@
+ import { eventHandler, useSession, deleteCookie, getRequestProtocol } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ export default eventHandler(async (event) => {
+   const session = await useSession(event, {
+     name: "studio-session",
+diff --git a/dist/module/runtime/server/routes/auth/sso.get.js b/dist/module/runtime/server/routes/auth/sso.get.js
+index c972e9399eb9c7aec8c0127acb12f6e27b8913e5..24c184aa06153d83286f3743a305e03ffc429621 100644
+--- a/dist/module/runtime/server/routes/auth/sso.get.js
++++ b/dist/module/runtime/server/routes/auth/sso.get.js
+@@ -1,4 +1,4 @@
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { createError, deleteCookie, eventHandler, getCookie, getQuery, getRequestURL, sendRedirect } from "h3";
+ import { withQuery } from "ufo";
+ import { consumePKCECodeVerifier, generateCodeChallenge, generateOAuthState, generatePKCECodeVerifier, requestAccessToken, validateOAuthState } from "../../utils/auth.js";
+diff --git a/dist/module/runtime/server/routes/dev/content/[...path].js b/dist/module/runtime/server/routes/dev/content/[...path].js
+index 7a1a2e210b464bc51831cfc3993c3607dc908fe9..f8d3215d1782adaaa1e95beb60206571e303e477 100644
+--- a/dist/module/runtime/server/routes/dev/content/[...path].js
++++ b/dist/module/runtime/server/routes/dev/content/[...path].js
+@@ -1,5 +1,5 @@
+ import { createError, eventHandler, getRequestHeader, readRawBody, setResponseHeader } from "h3";
+-import { useStorage } from "#imports";
++import { useStorage } from "nitropack/runtime";
+ export default eventHandler(async (event) => {
+   const path = event.path.replace("/__nuxt_studio/dev/content/", "");
+   const key = path.replace(/\//g, ":").replace(/^content:/, "");
+diff --git a/dist/module/runtime/server/routes/dev/public/[...path].js b/dist/module/runtime/server/routes/dev/public/[...path].js
+index 054fb76c752e49ecc944771287c8f4f875252f0e..96b3841d53339fe09b9d61d22aa9b0648424198e 100644
+--- a/dist/module/runtime/server/routes/dev/public/[...path].js
++++ b/dist/module/runtime/server/routes/dev/public/[...path].js
+@@ -1,5 +1,5 @@
+ import { createError, eventHandler, getRequestHeader, readRawBody, setResponseHeader } from "h3";
+-import { useStorage } from "#imports";
++import { useStorage } from "nitropack/runtime";
+ import { VIRTUAL_MEDIA_COLLECTION_NAME } from "../../../../utils/constants.js";
+ import { mediaItemFieldsFromKey } from "../../../../utils/media.js";
+ export default eventHandler(async (event) => {
+diff --git a/dist/module/runtime/server/routes/medias/[...path].js b/dist/module/runtime/server/routes/medias/[...path].js
+index c813dd95a51b76bd0d92158a861390ecb337e4dc..ab6180e39675748cff84f9279ff02e40a0a9dccc 100644
+--- a/dist/module/runtime/server/routes/medias/[...path].js
++++ b/dist/module/runtime/server/routes/medias/[...path].js
+@@ -1,6 +1,6 @@
+ import { joinURL, withLeadingSlash } from "ufo";
+ import { createError, eventHandler, readBody } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { VIRTUAL_MEDIA_COLLECTION_NAME } from "../../../utils/constants.js";
+ import { isSafeStorageKey } from "../../../utils/media.js";
+ import { requireStudioAuth } from "../../utils/auth.js";
+diff --git a/dist/module/runtime/server/routes/meta.js b/dist/module/runtime/server/routes/meta.js
+index ce921cd9b53c925bc2a613aa96620682e039f6f6..ab4d43cf04ee418368370af3903af76202daee67 100644
+--- a/dist/module/runtime/server/routes/meta.js
++++ b/dist/module/runtime/server/routes/meta.js
+@@ -1,5 +1,5 @@
+ import { eventHandler } from "h3";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import components from "#nuxt-component-meta/nitro";
+ import { highlight } from "#mdc-imports";
+ import { filterComponents } from "../utils/meta.js";
+diff --git a/dist/module/runtime/server/utils/auth.js b/dist/module/runtime/server/utils/auth.js
+index 557b4328cc3ca5bf038a24941b4fec0614367501..12cdf7d0c94ada5c29ddb13f716f1c4ce974955f 100644
+--- a/dist/module/runtime/server/utils/auth.js
++++ b/dist/module/runtime/server/utils/auth.js
+@@ -1,7 +1,7 @@
+ import { getRandomValues } from "uncrypto";
+ import { getCookie, deleteCookie, setCookie, useSession, getRequestProtocol, createError } from "h3";
+ import { FetchError } from "ofetch";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ export async function requireStudioAuth(event) {
+   if (import.meta.dev) {
+     return;
+diff --git a/dist/module/runtime/server/utils/media/ipx.js b/dist/module/runtime/server/utils/media/ipx.js
+index f63ceb9ed31c2531c8310ff024c0d19d5e100a31..78afbe1c6d66ec9c8fdbb106f849ff0f5b7675cd 100644
+--- a/dist/module/runtime/server/utils/media/ipx.js
++++ b/dist/module/runtime/server/utils/media/ipx.js
+@@ -2,7 +2,7 @@ import { createError } from "h3";
+ import { readFile } from "node:fs/promises";
+ import { extname, resolve } from "node:path";
+ import { hasProtocol, parseURL } from "ufo";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ export const IPX_PREFIX = "/__nuxt_studio/ipx";
+ export const DAY_IN_SECONDS = 60 * 60 * 24;
+ const mediaConfig = useRuntimeConfig().public.studio.media;
+diff --git a/dist/module/runtime/server/utils/session.js b/dist/module/runtime/server/utils/session.js
+index 095414ab0ae47419e64e4b909fcbd3eff8159954..d99bc42cc966f9d117cb1daf865d08bbe02c4298 100644
+--- a/dist/module/runtime/server/utils/session.js
++++ b/dist/module/runtime/server/utils/session.js
+@@ -1,6 +1,6 @@
+ import { createError, deleteCookie, setCookie, useSession, getRequestProtocol } from "h3";
+ import { defu } from "defu";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ import { useNitroApp } from "nitropack/runtime";
+ const requiredUserFields = ["name", "email"];
+ export async function setStudioUserSession(event, userSession) {

@@ -1,5 +1,6 @@
 import type { Peer } from 'crossws'
 import type { VisitorsMessage } from '#shared/types/visitors'
+import { defineWebSocketHandler } from 'h3'
 import { visitorPageMessageSchema } from '#shared/schemas/visitors'
 import { getVisitorState, setVisitorState } from '../../utils/visitor-state'
 

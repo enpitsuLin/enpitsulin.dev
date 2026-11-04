@@ -1,0 +1,25 @@
+diff --git a/dist/runtime/api/preview.js b/dist/runtime/api/preview.js
+index c9faf3ab940c7c58dadfed715108785e377572f8..3cc30e75d59ff7b6d49b31218f213f16dda25503 100644
+--- a/dist/runtime/api/preview.js
++++ b/dist/runtime/api/preview.js
+@@ -1,5 +1,6 @@
+ import { eventHandler } from "h3";
+-import { useRuntimeConfig, useAppConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
++import { useAppConfig } from "#imports";
+ import components from "#nuxt-component-meta/nitro";
+ import { collections, gitInfo, appConfigSchema } from "#content/preview";
+ export default eventHandler(async () => {
+diff --git a/dist/runtime/api/query.post.js b/dist/runtime/api/query.post.js
+index 2e47a87678cc693ae43b6acf16b7d2843b6063b7..c26dfa6e818d47c2cf9226f070f273f492a052b3 100644
+--- a/dist/runtime/api/query.post.js
++++ b/dist/runtime/api/query.post.js
+@@ -1,7 +1,7 @@
+ import { eventHandler, getRouterParam, readBody, getHeader, createError } from "h3";
+ import loadDatabaseAdapter, { checkAndImportDatabaseIntegrity } from "../internal/database.server.js";
+ import { assertSafeQuery, MAX_SQL_QUERY_LENGTH } from "../internal/security.js";
+-import { useRuntimeConfig } from "#imports";
++import { useRuntimeConfig } from "nitropack/runtime";
+ const JSON_WRAPPER_OVERHEAD = 16;
+ const MAX_BODY_BYTES = MAX_SQL_QUERY_LENGTH * 6 + JSON_WRAPPER_OVERHEAD;
+ export default eventHandler(async (event) => {

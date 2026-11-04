@@ -1,0 +1,18 @@
+diff --git a/dist/runtime/highlighter/rehype-nuxt.js b/dist/runtime/highlighter/rehype-nuxt.js
+index 3a49642950f1d3761e5a69a852563b4b69d288f1..c71e079b8d6afe4c7e28ee364f7f2f71b32192d5 100644
+--- a/dist/runtime/highlighter/rehype-nuxt.js
++++ b/dist/runtime/highlighter/rehype-nuxt.js
+@@ -1,5 +1,4 @@
+ import { rehypeHighlight as rehypeHighlightUniversal } from "./rehype.js";
+-import { useRuntimeConfig } from "#imports";
+ class HighlighterError extends Error {
+   constructor(message, httpStatus) {
+     super(message);
+@@ -19,6 +18,7 @@ const defaults = {
+         return import("#mdc-highlighter").then((h) => h.default(code, lang, theme, options)).catch(() => ({}));
+       }
+       if (import.meta.client) {
++        const { useRuntimeConfig } = await import("#imports");
+         const highlight = useRuntimeConfig().public.mdc.highlight;
+         if (highlight === false) {
+           return Promise.resolve({ tree: [{ type: "text", value: code }], className: "", style: "" });

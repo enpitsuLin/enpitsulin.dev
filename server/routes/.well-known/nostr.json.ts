@@ -1,3 +1,5 @@
+import { defineEventHandler, setHeaders } from 'h3'
+
 export default defineEventHandler((event) => {
   setHeaders(event, {
     'Content-Type': 'application/json',

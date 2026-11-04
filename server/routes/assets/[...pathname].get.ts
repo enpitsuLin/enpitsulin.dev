@@ -1,4 +1,5 @@
 import { env } from 'cloudflare:workers'
+import { createError, eventHandler } from 'h3'
 import mime from 'mime'
 
 export default eventHandler(async (event) => {
